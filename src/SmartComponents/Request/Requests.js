@@ -7,7 +7,6 @@ import { Section } from '@red-hat-insights/insights-frontend-components';
 import RequestList from './RequestList';
 import RequestsFilterToolbar from '../../PresentationalComponents/Request/RequestsFilterToolbar';
 import { fetchRequests } from '../../redux/Actions/RequestActions';
-import { fetchWorkflows } from '../../redux/Actions/WorkflowActions';
 import AddRequest from './add-request-modal';
 import './request.scss';
 import { scrollToTop } from '../../Helpers/Shared/helpers';
@@ -21,7 +20,6 @@ class Requests extends Component {
 
     fetchData = () => {
       this.props.fetchRequests();
-      this.props.fetchWorkflows();
     };
 
     componentDidMount() {
@@ -47,7 +45,6 @@ class Requests extends Component {
 
     return (
       <Fragment>
-        <Route exact path="/requests/add-request" component={ AddRequest } />
         <Route exact path="/requests/edit/:id" component={ AddRequest } />
         <Section type='content'>
           { this.renderToolbar() }
@@ -70,7 +67,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchRequests: apiProps => dispatch(fetchRequests(apiProps)),
-    fetchWorkflows: apiProps => dispatch(fetchWorkflows(apiProps))
   };
 };
 
@@ -80,7 +76,6 @@ Requests.propTypes = {
   isLoading: propTypes.bool,
   searchFilter: propTypes.string,
   fetchRequests: propTypes.func.isRequired,
-  fetchWorkflows: propTypes.func.isRequired
 };
 
 Requests.defaultProps = {

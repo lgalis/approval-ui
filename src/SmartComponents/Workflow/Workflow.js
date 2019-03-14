@@ -56,8 +56,8 @@ class Workflow extends Component {
     );
   };
 
-  fetchRequestListForWorkflow = (workflow) => {
-    return `Details for ${workflow.name}`;
+  fetchDetailsForWorkflow = (workflow) => {
+    return `Stages for ${workflow.name}`;
   };
 
   render() {
@@ -79,7 +79,7 @@ class Workflow extends Component {
           <span id={ item.id }>{ item.name } </span>
         </DataListCell>
         <DataListCell>
-          { this.fetchRequestListForWorkflow(item) }
+          { item.description }
         </DataListCell>
         <DataListCell
           class="pf-c-data-list__action"
@@ -102,11 +102,11 @@ class Workflow extends Component {
             <StackItem>
             </StackItem>
             <StackItem>
-              <Title size="md">Details</Title>
+              <Title size="md">Stages</Title>
             </StackItem>
             <StackItem>
               <TextContent component={ TextVariants.h6 }>
-                { this.fetchRequestListForWorkflow(item) }
+                { this.fetchDetailsForWorkflow(item) }
               </TextContent>
             </StackItem>
           </Stack>

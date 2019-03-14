@@ -14,7 +14,7 @@ import { scrollToTop } from '../../Helpers/Shared/helpers';
 
 class Workflows extends Component {
     state = {
-      filteredItems: [{name: 'Test', description: 'desc' }],
+      filteredItems: [],
       isOpen: false,
       filterValue: ''
     };
@@ -73,8 +73,7 @@ class Workflows extends Component {
 const mapStateToProps = (state) => {
   return {
     workflows: state.workflowReducer.workflows,
-    isLoading: state.workflowReducer.isLoading,
-    searchFilter: state.requestReducer.filterValue
+    isLoading: state.workflowReducer.isLoading
   };
 };
 

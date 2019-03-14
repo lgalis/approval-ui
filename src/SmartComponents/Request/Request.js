@@ -56,12 +56,8 @@ class Request extends Component {
     );
   };
 
-  fetchWorkflowListForRequest = (request) => {
-    if (!request.workflows) {
-      return '';
-    }
-
-    return request.workflows.map(workflow => workflow.name).join(', ');
+  fetchRequestDetails = (request) => {
+    return `Details for ${request.name}`;
   };
 
   render() {
@@ -81,24 +77,24 @@ class Request extends Component {
         <DataListCheck aria-labelledby={ `check-request-${item.id}` } name={ `check-request-${item.id}` }/>
         <DataListCell>
           <StackItem>
-            <span id={ item.id }>{ `${item.requestname}` } </span>
+            <span id={ item.id }>{ `${item.name}` } </span>
           </StackItem>
           <StackItem>
-            <span id={ item.email }>{ `${item.email}` } </span>
+            <span id={ item.description }>{ `${item.description}` } </span>
           </StackItem>
         </DataListCell>
         <DataListCell>
-          { this.fetchWorkflowListForRequest(item) }
+          { this.fetchRequestDetails(item) }
         </DataListCell>
         <DataListContent aria-label="Request Content Details"
           isHidden={ !this.props.isExpanded(`request-${item.id}`) }>
           <Stack gutter="md">
             <StackItem>
-              <Title size="md">Workflows</Title>
+              <Title size="md">Details</Title>
             </StackItem>
             <StackItem>
               <TextContent component={ TextVariants.h6 }>
-                { this.fetchWorkflowListForRequest(item) }
+                { this.fetchRequestDetails(item) }
               </TextContent>
             </StackItem>
           </Stack>

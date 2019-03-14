@@ -1,11 +1,11 @@
-import { getRequesterApi } from '../Shared/userLogin';
+import { getUserApi } from '../Shared/userLogin';
+import { APPROVAL_API_BASE } from '../../Utilities/Constants';
 
 const userApi = getUserApi();
 
-export async function fetchRequests() {
-  let requestData = await userApi.fetchRequests();
-  let requests = requestData.data;
-  return requests;
+export function fetchRequests() {
+  //return userApi.fetchRequests();
+  return fetch(`${APPROVAL_API_BASE}/requests`).then(data => data.json());
 }
 
 export async function updateRequest(data) {
