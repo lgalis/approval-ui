@@ -1,37 +1,24 @@
 
-import { getWorkflowApi } from '../Shared/userLogin';
+import { getApprovalApi } from '../Shared/userLogin';
+import { WorkflowIn } from 'approval_api_jsclient';
+import { APPROVAL_API_BASE } from '../../Utilities/Constants';
 
-const workflowApi = getWorkflowApi();
+const approvalApi = getApprovalApi();
 
-export async function fetchWorkflows() {
-  let workflowsData = await workflowApi.listWorkflows();
-  let workflows = workflowsData.data;
-  return Promise.all(workflows.map(async workflow => { let workflowWithRequests = await workflowApi.getWorkflow(workflow.uuid);
-    return { ...workflow, members: workflowWithRequests.principals };}));
+export function fetchWorkflows() {
+  //approvalApi.fetchWorkflows();
+  return fetch(`${APPROVAL_API_BASE}/workflows`).then(data => data.json());
 }
 
 export async function updateWorkflow(data) {
-  await workflowApi.updateWorkflow(data.uuid, data);
-  const members_list = data.members.map(user => user.username);
-  //update the user members here - adding users and removing users from the workflow should be a separate action in the UI
-  let addRequests = data.user_list.filter(item => !members_list.includes(item.username));
-  let removeRequests = members_list.filter(item => !(data.user_list.map(user => user.username).includes(item)));
-  if (addRequests.length > 0) {
-    await workflowApi.addPrincipalToWorkflow(data.uuid, { principals: addRequests });
-  }
-
-  if (removeRequests.length > 0) {
-    await workflowApi.deletePrincipalFromWorkflow(data.uuid, removeRequests.join(','));
-  }
+  await approvalApi.updateWorkflow(data.id, data);
 }
 
 export async function addWorkflow(data) {
-  let newWorkflow = await workflowApi.createWorkflow(data);
-  if (data.user_list && data.user_list.length > 0) {
-    workflowApi.addPrincipalToWorkflow(newWorkflow.uuid, { principals: data.user_list });
-  }
+  let workflowIn = new WorkflowIn();
+  await approvalApi.addWorkflow(data, workflowIn);
 }
 
 export async function removeWorkflow(workflowId) {
-  await workflowApi.deleteWorkflow(workflowId);
+  await approvalApi.removeWorkflow(workflowId);
 }

@@ -6,24 +6,21 @@ import { Toolbar, ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-co
 import { Section } from '@red-hat-insights/insights-frontend-components';
 import WorkflowsFilterToolbar from '../../PresentationalComponents/Workflow/WorkflowsFilterToolbar';
 import { fetchWorkflows } from '../../redux/Actions/WorkflowActions';
-import { fetchRequests } from '../../redux/Actions/RequestActions';
 import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import WorkflowList from './WorkflowList';
 import './workflow.scss';
 import { scrollToTop } from '../../Helpers/Shared/helpers';
-import { fetchRequestsByWorkflowId } from '../../redux/Actions/WorkflowActions';
 
 class Workflows extends Component {
     state = {
-      filteredItems: [],
+      filteredItems: [{name: 'Test', description: 'desc' }],
       isOpen: false,
       filterValue: ''
     };
 
     fetchData = () => {
       this.props.fetchWorkflows();
-      this.props.fetchRequests();
     };
 
     componentDidMount() {
@@ -31,7 +28,7 @@ class Workflows extends Component {
       scrollToTop();
     }
 
-    onFilterChange = filterValue => this.setState({ filterValue })
+    onFilterChange = filterValue => this.setState({ filterValue });
 
     renderToolbar() {
       return (
@@ -55,8 +52,7 @@ class Workflows extends Component {
 
     render() {
       let filteredItems = {
-        items: this.props.workflows
-        .filter(({ name }) => name.toLowerCase().includes(this.state.filterValue.trim().toLowerCase())),
+        items: this.props.workflows,
         isLoading: this.props.isLoading && this.props.workflows.length === 0
       };
 
@@ -67,7 +63,7 @@ class Workflows extends Component {
           <Route exact path="/workflows/remove/:id" component={ RemoveWorkflow } />
           <Section type='content'>
             { this.renderToolbar() }
-            <WorkflowList { ...filteredItems } noItems={ 'No Workflows' } fetchRequestsBYWorkflowId={ this.props.fetchRequestsByWorkflowId} />
+            <WorkflowList { ...filteredItems } noItems={ 'No Workflows' }/>
           </Section>
         </Fragment>
       );
@@ -77,7 +73,6 @@ class Workflows extends Component {
 const mapStateToProps = (state) => {
   return {
     workflows: state.workflowReducer.workflows,
-    requests: state.requestReducer.requests,
     isLoading: state.workflowReducer.isLoading,
     searchFilter: state.requestReducer.filterValue
   };
@@ -85,9 +80,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchWorkflows: apiProps => dispatch(fetchWorkflows(apiProps)),
-    fetchRequestsByWorkflowId: apiProps => dispatch(fetchRequestsByWorkflowId(apiProps)),
-    fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
+    fetchWorkflows: apiProps => dispatch(fetchWorkflows(apiProps))
   };
 };
 
@@ -97,9 +90,7 @@ Workflows.propTypes = {
   platforms: propTypes.array,
   isLoading: propTypes.bool,
   searchFilter: propTypes.string,
-  fetchWorkflows: propTypes.func.isRequired,
-  fetchRequests: propTypes.func.isRequired,
-  fetchRequestsByWorkflowId: propTypes.func.isRequired
+  fetchWorkflows: propTypes.func.isRequired
 };
 
 Workflows.defaultProps = {

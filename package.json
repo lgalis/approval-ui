@@ -1,5 +1,5 @@
 {
-  "name": "approval_ui",
+  "name": "approval-ui",
   "version": "0.1.0",
   "private": false,
   "dependencies": {
@@ -9,11 +9,12 @@
     "@patternfly/react-core": "^1.51.6",
     "@patternfly/react-icons": "^2.10.0",
     "@patternfly/react-tokens": "^1.10.0",
-    "@red-hat-insights/insights-frontend-components": "^3.33.65",
+    "@red-hat-insights/insights-frontend-components": "^3.39.1",
+    "approval_api_jsclient": "^1.0.1",
+    "awesome-debounce-promise": "^2.1.0",
     "font-awesome": "^4.7.0",
-    "lodash": "^4.17.10",
     "patternfly-react": "^2.13.1",
-    "approval_api_jsclient": "^1.0.0",
+    "rbac_api_jsclient": "^1.0.0",
     "react": "^16.8.3",
     "react-content-loader": "^3.4.2",
     "react-dom": "^16.7.0",
@@ -45,7 +46,7 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/test/__mocks__/fileMock.js",
       "\\.(css|scss)$": "identity-obj-proxy"
     },
-    "testURL": "http://localhost:5000/"
+    "testURL": "http://localhost:4000/"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

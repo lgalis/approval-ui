@@ -56,12 +56,12 @@ export const Routes = props => {
   return (
     <Suspense fallback={ <AppPlaceholder /> }>
       <Switch>
-        <InsightsRoute path={ paths.users } component={ Requests } rootClass="users"/>
-        <InsightsRoute path={ paths.user } component={ Request } rootClass="user"/>
+        <InsightsRoute path={ paths.requests } component={ Requests } rootClass="requests"/>
+        <InsightsRoute path={ paths.request } component={ Request } rootClass="request"/>
         <InsightsRoute path={ paths.workflows } component={ Workflows } rootClass="workflows" />
         <InsightsRoute path={ paths.workflow } component={ Workflow } rootClass="workflow" />
         { /* Finally, catch all unmatched routes */ }
-        <Route render={ () => (some(paths, p => p === path) ? null : <Redirect to={ paths.users } />) } />
+        <Route render={ () => (some(paths, p => p === path) ? null : <Redirect to={ paths.workflows } />) } />
       </Switch>
     </Suspense>
   );

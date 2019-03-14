@@ -38,15 +38,15 @@ class Workflow extends Component {
         position={ DropdownPosition.right }
         onSelect={ this.onKebabSelect }
         toggle={ <KebabToggle onToggle={ this.onKebabToggle }/> }
-        isOpen = { this.state.isKebabOpen}
+        isOpen = { this.state.isKebabOpen }
         dropdownItems={ [
           <DropdownItem aria-label="Edit Workflow" key="edit-workflow">
-            <Link to={ `/workflows/edit/${workflow.uuid}` }>
+            <Link to={ `/workflows/edit/${workflow.id}` }>
               Edit
             </Link>
           </DropdownItem>,
           <DropdownItem component="link" aria-label="Remove Workflow" key="remove-workflow">
-            <Link to={ `/workflows/remove/${workflow.uuid}` }>
+            <Link to={ `/workflows/remove/${workflow.id}` }>
               Delete
             </Link>
           </DropdownItem>
@@ -57,42 +57,39 @@ class Workflow extends Component {
   };
 
   fetchRequestListForWorkflow = (workflow) => {
-    if (!workflow.members) {
-      return '';
-    }
-    return workflow.members.map(request => ` ${request.requestname}`).join(', ');
+    return `Details for ${workflow.name}`;
   };
 
   render() {
     let { item } = this.props;
 
     return (
-      <DataListItem key={ `workflow-${item.uuid}` }
-        aria-labelledby={ `check-workflow-${item.uuid}` }
-        isExpanded={ this.props.isExpanded(`workflow-${item.uuid}`) }>
+      <DataListItem key={ `workflow-${item.id}` }
+        aria-labelledby={ `check-workflow-${item.id}` }
+        isExpanded={ this.props.isExpanded(`workflow-${item.id}`) }>
         <DataListToggle
-          onClick={ () => this.props.toggleExpand(`workflow-${item.uuid}`) }
-          isExpanded={ this.props.isExpanded(`workflow-${item.uuid}`) }
-          id={ `workflow-${item.uuid}` }
-          aria-labelledby={ `workflow-${item.uuid} workflow-${item.uuid}` }
+          onClick={ () => this.props.toggleExpand(`workflow-${item.id}`) }
+          isExpanded={ this.props.isExpanded(`workflow-${item.id}`) }
+          id={ `workflow-${item.id}` }
+          aria-labelledby={ `workflow-${item.id} workflow-${item.id}` }
           aria-label="Toggle details for"
         />
-        <DataListCheck aria-labelledby={ `check-workflow-${item.uuid}` } name={ `check-workflow-${item.uuid}` }/>
+        <DataListCheck aria-labelledby={ `check-workflow-${item.id}` } name={ `check-workflow-${item.id}` }/>
         <DataListCell>
-          <span id={ item.uuid }>{ item.name } </span>
+          <span id={ item.id }>{ item.name } </span>
         </DataListCell>
         <DataListCell>
           { this.fetchRequestListForWorkflow(item) }
         </DataListCell>
         <DataListCell
           class="pf-c-data-list__action"
-          aria-labelledby={ `workflow-${item.uuid} check-workflow-action${item.uuid}` }
-          id={ `workflow-${item.uuid}` }
+          aria-labelledby={ `workflow-${item.id} check-workflow-action${item.id}` }
+          id={ `workflow-${item.id}` }
           aria-label="Actions">
           { this.buildWorkflowActionKebab(item) }
         </DataListCell>
         <DataListContent aria-label="Workflow Content Details"
-          isHidden={ !this.props.isExpanded(`workflow-${item.uuid}`) }>
+          isHidden={ !this.props.isExpanded(`workflow-${item.id}`) }>
           <Stack gutter="md">
             <StackItem>
               <Title size="md">Description</Title>
@@ -105,7 +102,7 @@ class Workflow extends Component {
             <StackItem>
             </StackItem>
             <StackItem>
-              <Title size="md">Members</Title>
+              <Title size="md">Details</Title>
             </StackItem>
             <StackItem>
               <TextContent component={ TextVariants.h6 }>

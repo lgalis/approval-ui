@@ -14,7 +14,7 @@ const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware(), notificat
 }), reduxLogger ]);
 
 registry.register({
-  userReducer: applyReducerHash(userReducer, userInitialState),
+  requestReducer: applyReducerHash(requestReducer, requestInitialState),
   workflowReducer: applyReducerHash(workflowReducer, workflowInitialState),
   notifications
 });

@@ -41,7 +41,7 @@ class WorkflowList extends Component {
           <DataList aria-label="Expandable data list">
             { this.props.items.map((item) => {
               return (
-                <Workflow key= { item.uuid } item={ item } isExpanded={ this.isExpanded } toggleExpand={ this.toggleExpand }/>);
+                <Workflow key= { item.id } item={ item } isExpanded={ this.isExpanded } toggleExpand={ this.toggleExpand }/>);
             }
             )
             }

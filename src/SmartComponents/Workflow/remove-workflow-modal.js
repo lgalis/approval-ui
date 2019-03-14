@@ -24,7 +24,7 @@ const RemoveWorkflowModal = ({
     addNotification({
       variant: 'warning',
       title: 'Removing workflow',
-      description: 'Removing workflow was cancelled by the request.'
+      description: 'Removing workflow was cancelled by the user.'
     }),
     goBack()
   );
@@ -67,12 +67,12 @@ RemoveWorkflowModal.propTypes = {
 };
 
 const workflowDetailsFromState = (state, id) =>
-  state.workflowReducer.workflows.find(workflow => workflow.uuid  === id);
+  state.workflowReducer.workflows.find(workflow => workflow.id  === id);
 
 const mapStateToProps = (state, { match: { params: { id }}}) => {
   let workflow = workflowDetailsFromState(state, id);
   return {
-    workflowId: workflow.uuid,
+    workflowId: workflow.id,
     workflowName: workflow.name
   };
 };

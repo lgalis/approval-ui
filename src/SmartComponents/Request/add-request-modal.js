@@ -7,12 +7,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal, Grid, GridItem, TextContent, Text, TextVariants } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { addRequest, fetchRequests, updateRequest } from '../../redux/Actions/RequestActions';
+import { fetchRequests } from '../../redux/Actions/RequestActions';
 import { pipe } from 'rxjs';
 
 const AddRequestModal = ({
   history: { goBack },
-  addRequest,
   addNotification,
   fetchRequests,
   initialValues,
@@ -20,17 +19,14 @@ const AddRequestModal = ({
   updateRequest
 }) => {
   const onSubmit = data => {
-    data.workflow_ids = selectedWorkflows;
-    initialValues
-      ? updateRequest(data).then(() => fetchRequests()).then(goBack)
-      : addRequest(data).then(() => fetchRequests()).then(goBack);
+    updateRequest(data).then(() => fetchRequests()).then(goBack);
   };
 
   const onCancel = () => pipe(
     addNotification({
       variant: 'warning',
-      title: initialValues ? 'Editing approver' : 'Adding approver',
-      description: initialValues ? 'Edit approver was cancelled by the request.' : 'Adding approver was cancelled by the request.'
+      title: 'Editing request',
+      description: 'Edit request was cancelled by the user.'
     }),
     goBack()
   );
@@ -91,7 +87,6 @@ AddRequestModal.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func.isRequired
   }).isRequired,
-  addRequest: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
   fetchRequests: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
@@ -110,7 +105,6 @@ const mapStateToProps = (state, { match: { params: { id }}}) => {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
-  addRequest,
   updateRequest,
   fetchRequests
 }, dispatch);

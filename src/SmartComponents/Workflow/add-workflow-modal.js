@@ -104,7 +104,7 @@ const mapStateToProps = (state, { match: { params: { id }}}) => {
   let workflows = state.workflowReducer.workflows;
   return {
     requests: state.requestReducer.requests,
-    initialValues: id && workflows.find(item => item.uuid === id),
+    initialValues: id && workflows.find(item => item.id === id),
     workflowId: id
   };
 };

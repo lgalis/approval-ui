@@ -19,7 +19,7 @@ class App extends Component {
 
   componentDidMount () {
     insights.chrome.init();
-    insights.chrome.auth.getRequest().then(() => this.setState({ auth: true }));
+    insights.chrome.auth.getUser().then(() => this.setState({ auth: true }));
     try {
       insights.chrome.identifyApp('approval');
     } catch (error) {
@@ -47,7 +47,7 @@ class App extends Component {
         <NotificationsPortal />
         <PageHeader>
           <Title size={ 'xl' }  style = { { margin: 12, padding: 12 } }>
-            Role Based Access Control
+            Approval
           </Title>
         </PageHeader>
         <Main style={ { backgroundColor: 'd3d3d3', margin: '0', padding: '0' } }>

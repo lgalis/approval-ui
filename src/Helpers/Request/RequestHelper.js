@@ -1,14 +1,14 @@
-import { getPrincipalApi } from '../Shared/userLogin';
+import { getRequesterApi } from '../Shared/userLogin';
 
-const principalApi = getPrincipalApi();
+const userApi = getUserApi();
 
 export async function fetchRequests() {
-  let usersData = await principalApi.listPrincipals();
-  let users = usersData.data;
-  return users;
+  let requestData = await userApi.fetchRequests();
+  let requests = requestData.data;
+  return requests;
 }
 
 export async function updateRequest(data) {
-  await principalApi.updateRequest(data.id, data);
+  await userApi.updateRequest(data.id, data);
 }
 

@@ -1,28 +1,36 @@
-import { APPROVAL_API_BASE, APPROVAL_USER, APPROVAL_PWD } from '../../Utilities/Constants';
-import { AccessApi, PrincipalApi, WorkflowApi, ApiClient } from 'approval_api_jsclient';
+import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../Utilities/Constants';
+import { AdminsApi as ApprovalApi, RequestersApi, UsersApi, ApiClient as ApprovalApiClient  } from 'approval_api_jsclient';
+import { AccessApi, GroupApi, ApiClient as RbacApiClient } from 'rbac_api_jsclient';
 
-const defaultApprovalClient = ApiClient.instance;
-defaultApprovalClient.basePath = APPROVAL_API_BASE;
+const approvalClient = ApprovalApiClient.instance;
+approvalClient.basePath = APPROVAL_API_BASE;
 
-let approval_basic_auth = defaultApprovalClient.authentications.basic_auth;
-
-if (APPROVAL_USER && APPROVAL_PWD) {
-  approval_basic_auth.username = APPROVAL_USER;
-  approval_basic_auth.password = APPROVAL_PWD;
-}
-
-let approvalApi = new AccessApi();
-let principalApi = new PrincipalApi();
-let workflowApi = new WorkflowApi();
+let approvalApi = new ApprovalApi();
+let requesterApi = new RequestersApi();
+let userApi = new UsersApi();
 
 export function getApprovalApi() {
   return approvalApi;
 }
 
-export function getPrincipalApi() {
-  return principalApi;
+export function getUserApi() {
+  return userApi;
 }
 
-export function getWorkflowApi() {
-  return workflowApi;
+export function getRequesterApi() {
+  return requesterApi;
+}
+
+const rbacClient = RbacApiClient.instance;
+rbacClient.basePath = RBAC_API_BASE;
+
+const rbacApi = new AccessApi();
+const groupApi = new GroupApi();
+
+export function getRbacApi() {
+  return rbacApi;
+}
+
+export function getGroupApi() {
+  return groupApi;
 }
