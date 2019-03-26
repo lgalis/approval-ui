@@ -28,7 +28,7 @@ class Request extends Component {
     });
   };
 
-  onKebabSelect = (event) => {
+  onKebabSelect = () => {
     this.setState({ isKebabOpen: !this.state.isKebabOpen });
   };
 

@@ -31,10 +31,8 @@ const AddRequestModal = ({
     goBack()
   );
 
-  let selectedWorkflows = [];
-
-  const onOptionSelect = (selectedValues = []) =>
-  { selectedWorkflows = selectedValues.map(val => val.value); };
+  const onOptionSelect = () =>
+  { };
 
   const dropdownItems = workflows.map(workflow => ({ value: workflow.id, label: workflow.name, id: workflow.id }));
 
@@ -105,7 +103,6 @@ const mapStateToProps = (state, { match: { params: { id }}}) => {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
-  updateRequest,
   fetchRequests
 }, dispatch);
 

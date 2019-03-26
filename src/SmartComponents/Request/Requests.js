@@ -66,7 +66,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchRequests: apiProps => dispatch(fetchRequests(apiProps)),
+    fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
   };
 };
 
@@ -75,7 +75,7 @@ Requests.propTypes = {
   requests: propTypes.array,
   isLoading: propTypes.bool,
   searchFilter: propTypes.string,
-  fetchRequests: propTypes.func.isRequired,
+  fetchRequests: propTypes.func.isRequired
 };
 
 Requests.defaultProps = {

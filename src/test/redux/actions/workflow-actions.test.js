@@ -1,7 +1,6 @@
 import configureStore from 'redux-mock-store' ;
 import thunk from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
-import { Workflow } from 'approval_api_jsclient';
 import { notificationsMiddleware, ADD_NOTIFICATION } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import {
   FETCH_WORKFLOWS
@@ -31,20 +30,25 @@ describe('Workflow actions', () => {
         isLoading: false
       }
     });
-    const expectedWorkflow = new Workflow('Name', 'Description');
 
     const expectedActions = [{
       type: `${FETCH_WORKFLOWS}_PENDING`
     }, {
-      type: `${FETCH_WORKFLOWS}_FULFILLED`,
-      payload: [ expectedWorkflow ]
+      payload: [{
+        label: 'workflow',
+        value: '11'
+      }],
+      type: `${FETCH_WORKFLOWS}_FULFILLED`
     }];
-    apiClientMock.get(APPROVAL_API_BASE + '/workflows', mockOnce({
-      body: { data: [ expectedWorkflow ]}
-    }));
 
-    return store.dispatch(fetchWorkflows())
-    .then(() => {
+    fetchMock.getOnce(`${APPROVAL_API_BASE}/workflows`, {
+      data: [{
+        label: 'workflow',
+        value: '11'
+      }]
+    });
+
+    return store.dispatch(fetchWorkflows()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
