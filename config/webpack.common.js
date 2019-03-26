@@ -10,8 +10,9 @@ const entry = process.env.NODE_ENV === 'production' ?
   path.resolve(__dirname, '../src/entry-dev.js');
 
 let insightsDeployment = 'insights';
-const gitBranch = process.env.BRANCH || gitRevisionPlugin.branch();
+const gitBranch = process.env.TRAVIS_BRANCH || process.env.BRANCH || gitRevisionPlugin.branch();
 const betaBranch =
+    gitBranch === 'master' ||
     gitBranch === 'ci-beta' ||
     gitBranch === 'qa-beta' ||
     gitBranch === 'prod-beta';
