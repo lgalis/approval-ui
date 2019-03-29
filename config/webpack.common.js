@@ -5,11 +5,14 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const gitRevisionPlugin = new GitRevisionPlugin({
   branch: true
 });
+
 const entry = process.env.NODE_ENV === 'production' ?
   path.resolve(__dirname, '../src/entry.js') :
   path.resolve(__dirname, '../src/entry-dev.js');
 
-let insightsDeployment = 'insights';
+const { insights } = require('../package.json');
+
+let appDeployment = 'apps';
 const gitBranch = process.env.TRAVIS_BRANCH || process.env.BRANCH || gitRevisionPlugin.branch();
 const betaBranch =
     gitBranch === 'master' ||
@@ -17,10 +20,10 @@ const betaBranch =
     gitBranch === 'qa-beta' ||
     gitBranch === 'prod-beta';
 if (process.env.NODE_ENV === 'production' && betaBranch) {
-  insightsDeployment = 'insightsbeta';
+  appDeployment = 'beta/apps';
 }
 
-const publicPath = `/${insightsDeployment}/platform/approval/`;
+const publicPath = `/${appDeployment}/${insights.appname}/`;
 
 module.exports = {
   paths: {
@@ -33,5 +36,5 @@ module.exports = {
     static: path.resolve(__dirname, '../static'),
     publicPath
   },
-  insightsDeployment
+  appDeployment
 };
