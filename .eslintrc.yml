@@ -50,7 +50,6 @@ rules:
     - 2
     - SwitchCase: 1
       MemberExpression: 0
-      ImportDeclaration: 1
       ObjectExpression: 1
   react/jsx-curly-spacing:
     - error
