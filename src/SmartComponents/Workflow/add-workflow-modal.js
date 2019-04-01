@@ -1,12 +1,15 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
-import FormRenderer from '../Common/FormRenderer';
-import { Modal, Grid, GridItem } from '@patternfly/react-core';
+import { withRouter } from 'react-router-dom';
+import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { addWorkflow, fetchWorkflows, updateWorkflow } from '../../redux/Actions/WorkflowActions';
+
+import FormRenderer from '../common/form-renderer';
+import { fetchWorkflows } from '../../redux/actions/approval-actions';
+import { createWorkflowSchema } from '../../forms/workflow-form.schema';
+import { addWorkflow, updateWorkflow } from '../../redux/Actions/WorkflowActions';
 
 const AddWorkflowModal = ({
   history: { goBack },
@@ -14,14 +17,16 @@ const AddWorkflowModal = ({
   addNotification,
   fetchWorkflows,
   initialValues,
-  updateWorkflow
+  updateWorkflow,
+  fetchRbacGroups,
+  rbacGroups
 }) => {
-  const onSubmit = data => {
-    const request_data = { ...data, request_list: selectedRequests.map(request => ({ requestname: request })) };
-    initialValues
-      ? updateWorkflow(request_data).then(() => fetchWorkflows()).then(goBack)
-      : addWorkflow(request_data).then(() => fetchWorkflows()).then(goBack);
-  };
+  useEffect(() => {
+    fetchWorkflows();
+  }, []);
+  const onSubmit = data => initialValues
+    ? updateWorkflow(data).then(goBack).then(() => fetchWorkflows())
+    : addWorkflow(data).then(goBack).then(() => fetchWorkflows());
 
   const onCancel = () => {
     addNotification({
@@ -32,36 +37,24 @@ const AddWorkflowModal = ({
     goBack();
   };
 
-  let selectedRequests = [];
-
-  const schema = {
-    type: 'object',
-    properties: {
-      name: { title: initialValues ? 'Workflow Name' : 'New Workflow Name', type: 'string' },
-      description: { title: 'Description', type: 'string' }
-    },
-    required: [ 'name' ]
-  };
-
   return (
     <Modal
-      isLarge
       title={ initialValues ? 'Edit workflow' : 'Create workflow' }
       isOpen
       onClose={ onCancel }
+      isSmall
     >
-      <Grid gutter="md" style={ { minWidth: '800px' } }>
-        <GridItem sm={ 6 }>
-          <FormRenderer
-            schema={ schema }
-            schemaType="mozilla"
-            onSubmit={ onSubmit }
-            onCancel={ onCancel }
-            formContainer="modal"
-            initialValues={ { ...initialValues } }
-          />
-        </GridItem>
-      </Grid>
+      <div style={ { padding: 8 } }>
+        <FormRenderer
+          schema={ createWorkflowSchema(!initialValues, rbacGroups) }
+          schemaType="default"
+          onSubmit={ onSubmit }
+          onCancel={ onCancel }
+          initialValues={ { ...initialValues } }
+          formContainer="modal"
+          buttonsLabels={ { submitLabel: 'Confirm' } }
+        />
+      </div>
     </Modal>
   );
 };
@@ -70,26 +63,27 @@ AddWorkflowModal.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func.isRequired
   }).isRequired,
-  addWorkflow: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
-  fetchWorkflows: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
-  updateWorkflow: PropTypes.func.isRequired
+  fetchWorkflows: PropTypes.func.isRequired,
+  rbacGroups: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
+    label: PropTypes.string.isRequired
+  })).isRequired
 };
 
-const mapStateToProps = (state, { match: { params: { id }}}) => {
-  let workflows = state.workflowReducer.workflows;
-  return {
-    initialValues: id && workflows.find(item => item.id === id),
-    workflowId: id
-  };
-};
+const mapStateToProps = ({ rbacReducer: { rbacGroups }, workflowReducer: { workflows }}, { match: { params: { id }}}) => ({
+  initialValues: id && workflows.find(item => item.id === id),
+  workflowId: id,
+  rbacGroups
+});
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchWorkflows
+  fetchWorkflows,
+  fetchRbacGroups
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddWorkflowModal));
