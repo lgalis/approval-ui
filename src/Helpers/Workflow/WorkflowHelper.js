@@ -1,24 +1,29 @@
 
-import { getApprovalApi } from '../Shared/userLogin';
-import { WorkflowIn } from 'approval_api_jsclient';
-import { APPROVAL_API_BASE } from '../../Utilities/Constants';
+import { getWorkflowApi, getTemplateApi } from '../Shared/userLogin';
 
-const approvalApi = getApprovalApi();
+const workflowApi = getWorkflowApi();
+const templateApi = getTemplateApi();
 
 export function fetchWorkflows() {
-  //approvalApi.fetchWorkflows();
-  return fetch(`${APPROVAL_API_BASE}/workflows`).then(data => data.json());
+  return workflowApi.listWorkflows();
 }
 
 export async function updateWorkflow(data) {
-  await approvalApi.updateWorkflow(data.id, data);
+  await workflowApi.updateWorkflow(data.id, data);
 }
 
-export async function addWorkflow(data) {
-  let workflowIn = new WorkflowIn();
-  await approvalApi.addWorkflow(data, workflowIn);
+export  function addWorkflow(workflow) {
+  return templateApi.listTemplates().then(({ data }) => {
+    // workaround for v1. Need to pass template ID with the workflow. Assigning to first template
+    if (!data[0]) {
+      throw new Error('No template exists');
+    }
+
+    return data[0].id;
+
+  }).then(id => workflowApi.addWorkflowToTemplate(id, workflow, {}));
 }
 
 export async function removeWorkflow(workflowId) {
-  await approvalApi.removeWorkflow(workflowId);
+  await workflowApi.destroyWorkflow(workflowId);
 }
