@@ -1,4 +1,4 @@
-import { getWorkflowApi } from '../../../helpers/shared/userLogin';
+import { getWorkflowApi } from '../../../helpers/shared/user-login';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 
 describe('user login', () => {

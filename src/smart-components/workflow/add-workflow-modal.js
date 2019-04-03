@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
+import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
 
 import FormRenderer from '../common/form-renderer';
 import { fetchRbacGroups } from '../../redux/actions/rbac-actions';
@@ -39,8 +40,11 @@ const AddWorkflowModal = ({
     goBack();
   };
 
-  return (
-    <Modal
+  const Summary = () => <div>Custom summary component.</div>;
+  const groupOptions = [ ...rbacGroups, { value: '', label: 'None' }];
+
+  return(
+      <Modal
       title={ initialValues ? 'Edit workflow' : 'Create workflow' }
       isOpen
       onClose={ onCancel }
@@ -48,12 +52,17 @@ const AddWorkflowModal = ({
     >
       <div style={ { padding: 8 } }>
         <FormRenderer
-          schema={ createWorkflowSchema(!initialValues, rbacGroups) }
+          schema={ createWorkflowSchema(!initialValues, groupOptions) }
           schemaType="default"
           onSubmit={ onSubmit }
           onCancel={ onCancel }
           initialValues={ { ...initialValues } }
+          formFieldsMapper={ {
+            ...formFieldsMapper,
+            summary: Summary
+          } }
           formContainer="modal"
+          showFormControls={ false }
           buttonsLabels={ { submitLabel: 'Confirm' } }
         />
       </div>
