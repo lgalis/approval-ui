@@ -20,6 +20,7 @@ checks:
     enabled: false
 plugins:
   eslint:
+    channel: "eslint-5"
     enabled: true
   stylelint:
     enabled: true

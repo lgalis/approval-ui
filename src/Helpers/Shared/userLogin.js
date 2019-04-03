@@ -1,24 +1,28 @@
+import axios from 'axios';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../Utilities/Constants';
-import { AdminsApi as ApprovalApi, RequestersApi, UsersApi, ApiClient as ApprovalApiClient  } from 'approval_api_jsclient';
 import { AccessApi, GroupApi, ApiClient as RbacApiClient } from 'rbac_api_jsclient';
 
-const approvalClient = ApprovalApiClient.instance;
-approvalClient.basePath = APPROVAL_API_BASE;
+import { WorkflowApi, RequestApi, TemplateApi } from '@redhat-cloud-services/approval-client';
 
-let approvalApi = new ApprovalApi();
-let requesterApi = new RequestersApi();
-let userApi = new UsersApi();
+const responseInterceptor = response => response.data ? response.data : response;
 
-export function getApprovalApi() {
-  return approvalApi;
+const axiosInstance = axios.create();
+axiosInstance.interceptors.response.use(responseInterceptor);
+
+let workflowApi = new WorkflowApi(undefined, APPROVAL_API_BASE, axiosInstance);
+let requestApi = new RequestApi(undefined, APPROVAL_API_BASE, axiosInstance);
+let templateApi = new TemplateApi(undefined, APPROVAL_API_BASE, axiosInstance);
+
+export function getTemplateApi() {
+  return templateApi;
 }
 
-export function getUserApi() {
-  return userApi;
+export function getWorkflowApi() {
+  return workflowApi;
 }
 
-export function getRequesterApi() {
-  return requesterApi;
+export function getRequestApi() {
+  return requestApi;
 }
 
 const rbacClient = RbacApiClient.instance;

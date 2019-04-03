@@ -41,12 +41,14 @@ describe('Workflow actions', () => {
       type: `${FETCH_WORKFLOWS}_FULFILLED`
     }];
 
-    fetchMock.getOnce(`${APPROVAL_API_BASE}/workflows`, {
-      data: [{
-        label: 'workflow',
-        value: '11'
-      }]
-    });
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows', mockOnce({
+      body: {
+        data: [{
+          label: 'workflow',
+          value: '11'
+        }]
+      }
+    }));
 
     return store.dispatch(fetchWorkflows()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
