@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FilterToolbarItem from '../Shared/FilterToolbarItem';
-import '../Shared/toolbarschema.scss';
+import FilterToolbarItem from '../shared/FilterToolbarItem';
+import '../shared/toolbarschema.scss';
 
 const RequestsFilterToolbar = ({ onFilterChange, filterValue, ...props }) => {
   return (

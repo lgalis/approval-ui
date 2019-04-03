@@ -2,7 +2,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { lazy, Suspense } from 'react';
 import some from 'lodash/some';
-import { AppPlaceholder } from './PresentationalComponents/Shared/LoaderPlaceholders';
+import { AppPlaceholder } from './PresentationalComponents/shared/LoaderPlaceholders';
 
 /**
  * Aysnc imports of components
@@ -18,10 +18,10 @@ import { AppPlaceholder } from './PresentationalComponents/Shared/LoaderPlacehol
  *         see the difference with DashboardMap and InventoryDeployments.
  *
  */
-const Requests = lazy(() => import('./SmartComponents/Request/Requests'));
-const Request = lazy(() => import('./SmartComponents/Request/Request'));
-const Workflows = lazy(() => import('./SmartComponents/Workflow/Workflows'));
-const Workflow = lazy(() => import('./SmartComponents/Workflow/Workflow'));
+const Requests = lazy(() => import('./smart-components/request/requests'));
+const Request = lazy(() => import('./smart-components/request/request'));
+const Workflows = lazy(() => import('./smart-components/workflow/workflows'));
+const Workflow = lazy(() => import('./smart-components/workflow/workflow'));
 
 const paths = {
   approval: '/',

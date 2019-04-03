@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../Utilities/Constants';
+import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../utilities/constants';
 import { AccessApi, GroupApi, ApiClient as RbacApiClient } from 'rbac_api_jsclient';
 
 import { WorkflowApi, RequestApi, TemplateApi } from '@redhat-cloud-services/approval-client';

@@ -4,13 +4,13 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware, ADD_NOTIFICATION } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import {
   FETCH_WORKFLOWS
-} from '../../../redux/ActionTypes';
+} from '../../../redux/action-types';
 import {
   fetchWorkflows
-} from '../../../redux/Actions/WorkflowActions';
+} from '../../../redux/actions/workflow-actions';
 import {
   APPROVAL_API_BASE
-} from '../../../Utilities/Constants';
+} from '../../../utilities/constants';
 
 describe('Workflow actions', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];

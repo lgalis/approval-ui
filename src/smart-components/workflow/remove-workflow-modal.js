@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal, Button, Title, Bullseye } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { fetchWorkflows, removeWorkflow } from '../../redux/Actions/WorkflowActions';
+import { fetchWorkflows, removeWorkflow } from '../../redux/actions/workflow-actions';
 import './workflow.scss';
 
 const RemoveWorkflowModal = ({

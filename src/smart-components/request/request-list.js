@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { PageHeader, PageHeaderTitle } from '@red-hat-insights/insights-frontend-components';
 import { DataList } from '@patternfly/react-core';
-import Request from './Request';
+import Request from './request';
 
 class RequestList extends Component {
 

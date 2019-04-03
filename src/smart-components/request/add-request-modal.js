@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import FormRenderer from '../Common/FormRenderer';
+import FormRenderer from '../common/form-renderer';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal, Grid, GridItem, TextContent, Text, TextVariants } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { fetchRequests } from '../../redux/Actions/RequestActions';
+import { fetchRequests } from '../../redux/actions/request-actions';
 
 const AddRequestModal = ({
   history: { goBack },

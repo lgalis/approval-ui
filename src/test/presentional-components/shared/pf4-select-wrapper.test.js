@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import { FormSelectOption } from '@patternfly/react-core';
-import Pf4SelectWrapper from '../../../PresentationalComponents/Shared/pf4-select-wrapper';
+import Pf4SelectWrapper from '../../../PresentationalComponents/shared/pf4-select-wrapper';
 
 describe('<Pf4SelectWrapper />', () => {
   let initialProps;

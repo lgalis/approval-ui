@@ -1,5 +1,5 @@
-import * as ActionTypes from '../ActionTypes';
-import * as WorkflowHelper from '../../Helpers/Workflow/WorkflowHelper';
+import * as ActionTypes from '../action-types';
+import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
 
 export const doFetchWorkflows = () => ({
   type: ActionTypes.FETCH_WORKFLOWS,

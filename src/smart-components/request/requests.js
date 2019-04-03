@@ -4,12 +4,12 @@ import propTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import { Toolbar } from '@patternfly/react-core';
 import { Section } from '@red-hat-insights/insights-frontend-components';
-import RequestList from './RequestList';
+import RequestList from './request-list';
 import RequestsFilterToolbar from '../../PresentationalComponents/Request/RequestsFilterToolbar';
-import { fetchRequests } from '../../redux/Actions/RequestActions';
+import { fetchRequests } from '../../redux/actions/request-actions';
 import AddRequest from './add-request-modal';
 import './request.scss';
-import { scrollToTop } from '../../Helpers/Shared/helpers';
+import { scrollToTop } from '../../helpers/shared/helpers';
 
 class Requests extends Component {
     state = {

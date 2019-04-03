@@ -5,8 +5,8 @@ import { notifications, notificationsMiddleware } from '@red-hat-insights/insigh
 
 import reduxLogger from 'redux-logger';
 import thunk from 'redux-thunk';
-import requestReducer, { requestInitialState } from '../redux/reducers/requestReducer';
-import workflowReducer, { workflowInitialState } from '../redux/reducers/workflowReducer';
+import requestReducer, { requestInitialState } from '../redux/reducers/request-reducer';
+import workflowReducer, { workflowInitialState } from '../redux/reducers/workflow-reducer';
 
 const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware(), notificationsMiddleware({
   errorTitleKey: [ 'message' ],

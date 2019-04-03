@@ -1,5 +1,5 @@
-import * as ActionTypes from '../ActionTypes';
-import * as RequestHelper from '../../Helpers/Request/RequestHelper';
+import * as ActionTypes from '../action-types';
+import * as RequestHelper from '../../helpers/request/request-helper';
 
 const doFetchRequests = () => ({
   type: ActionTypes.FETCH_REQUESTS,

@@ -1,7 +1,7 @@
 import {
   FETCH_WORKFLOW,
   FETCH_WORKFLOWS
-} from '../../redux/ActionTypes';
+} from '../../redux/action-types';
 
 // Initial State
 export const workflowInitialState = {

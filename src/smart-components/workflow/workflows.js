@@ -5,12 +5,12 @@ import { Route, Link } from 'react-router-dom';
 import { Toolbar, ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { Section } from '@red-hat-insights/insights-frontend-components';
 import WorkflowsFilterToolbar from '../../PresentationalComponents/Workflow/WorkflowsFilterToolbar';
-import { fetchWorkflows } from '../../redux/Actions/WorkflowActions';
+import { fetchWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
-import WorkflowList from './WorkflowList';
+import WorkflowList from './workflow-list';
 import './workflow.scss';
-import { scrollToTop } from '../../Helpers/Shared/helpers';
+import { scrollToTop } from '../../helpers/shared/helpers';
 
 class Workflows extends Component {
     state = {

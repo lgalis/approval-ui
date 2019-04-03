@@ -1,7 +1,7 @@
 import {
   FETCH_REQUEST,
   FETCH_REQUESTS
-} from '../../redux/ActionTypes';
+} from '../../redux/action-types';
 
 // Initial State
 export const requestInitialState = {

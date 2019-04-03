@@ -4,12 +4,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Routes } from './Routes';
 import './App.scss';
-import AppTabs from './SmartComponents/AppTabs/AppTabs';
+import AppTabs from './smart-components/app-tabs/app-tabs';
 import { Main, PageHeader } from '@red-hat-insights/insights-frontend-components';
 import { Title } from '@patternfly/react-core';
 import { NotificationsPortal } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import '@red-hat-insights/insights-frontend-components/components/Notifications.css';
-import { AppPlaceholder } from './PresentationalComponents/Shared/LoaderPlaceholders';
+import { AppPlaceholder } from './PresentationalComponents/shared/LoaderPlaceholders';
 
 class App extends Component {
   state = {

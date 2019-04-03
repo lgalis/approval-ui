@@ -7,9 +7,9 @@ import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 
 import FormRenderer from '../common/form-renderer';
-import { fetchWorkflows } from '../../redux/actions/approval-actions';
+import { fetchWorkflows } from '../../redux/actions/workflow-actions';
 import { createWorkflowSchema } from '../../forms/workflow-form.schema';
-import { addWorkflow, updateWorkflow } from '../../redux/Actions/WorkflowActions';
+import { addWorkflow, updateWorkflow } from '../../redux/actions/workflow-actions';
 
 const AddWorkflowModal = ({
   history: { goBack },

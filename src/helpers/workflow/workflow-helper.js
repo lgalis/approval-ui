@@ -1,5 +1,5 @@
 
-import { getWorkflowApi, getTemplateApi } from '../Shared/userLogin';
+import { getWorkflowApi, getTemplateApi } from '../shared/user-login';
 
 const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();

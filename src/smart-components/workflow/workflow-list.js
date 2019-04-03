@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { PageHeader, PageHeaderTitle } from '@red-hat-insights/insights-frontend-components';
 import { DataList } from '@patternfly/react-core';
-import Workflow from './Workflow';
+import Workflow from './workflow';
 
 class WorkflowList extends Component {
 
