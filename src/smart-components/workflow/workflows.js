@@ -4,7 +4,7 @@ import propTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
 import { Toolbar, ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { Section } from '@red-hat-insights/insights-frontend-components';
-import WorkflowsFilterToolbar from '../../presentational-components/Workflow/WorkflowsFilterToolbar';
+import WorkflowsFilterToolbar from '../../presentational-components/workflow/workflows-filter-toolbar';
 import { fetchWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';

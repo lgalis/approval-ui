@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FilterToolbarItem from '../shared/FilterToolbarItem';
+import FilterToolbarItem from '../shared/filter-toolbar-item';
 import '../shared/toolbarschema.scss';
 
 const WorkflowsFilterToolbar = ({ onFilterChange, filterValue, ...props }) => (

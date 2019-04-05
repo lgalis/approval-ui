@@ -27,9 +27,12 @@ const AddWorkflowModal = ({
     fetchRbacGroups();
   }, []);
 
-  const onSubmit = data => initialValues
-    ? updateWorkflow(data).then(goBack).then(() => fetchWorkflows())
-    : addWorkflow(data).then(goBack).then(() => fetchWorkflows());
+  const onSubmit = data => {
+    console.log('Data for submit workflow: ', data);
+    initialValues
+      ? updateWorkflow(data).then(goBack).then(() => fetchWorkflows())
+      : addWorkflow(data).then(goBack).then(() => fetchWorkflows());
+  };
 
   const onCancel = () => {
     addNotification({

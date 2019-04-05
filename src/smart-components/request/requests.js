@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import { Toolbar } from '@patternfly/react-core';
 import { Section } from '@red-hat-insights/insights-frontend-components';
 import RequestList from './request-list';
-import RequestsFilterToolbar from '../../presentational-components/Request/RequestsFilterToolbar';
+import RequestsFilterToolbar from '../../presentational-components/request/requests-filter-toolbar';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import AddRequest from './add-request-modal';
 import './request.scss';
