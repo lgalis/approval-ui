@@ -1,6 +1,7 @@
 
 import promiseMiddleware from 'redux-promise-middleware';
 import { ReducerRegistry, applyReducerHash } from '@red-hat-insights/insights-frontend-components';
+import rbacReducer, { rbacInitialState } from '../redux/reducers/rbac-reducer';
 import { notifications, notificationsMiddleware } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 
 import reduxLogger from 'redux-logger';
@@ -16,6 +17,7 @@ const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware(), notificat
 registry.register({
   requestReducer: applyReducerHash(requestReducer, requestInitialState),
   workflowReducer: applyReducerHash(workflowReducer, workflowInitialState),
+  rbacReducer: applyReducerHash(rbacReducer, rbacInitialState),
   notifications
 });
 

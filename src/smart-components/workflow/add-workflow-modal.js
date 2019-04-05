@@ -7,9 +7,9 @@ import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 
 import FormRenderer from '../common/form-renderer';
-import { fetchWorkflows } from '../../redux/actions/workflow-actions';
+import { fetchRbacGroups } from '../../redux/actions/rbac-actions';
 import { createWorkflowSchema } from '../../forms/workflow-form.schema';
-import { addWorkflow, updateWorkflow } from '../../redux/actions/workflow-actions';
+import { addWorkflow, updateWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
 
 const AddWorkflowModal = ({
   history: { goBack },
@@ -23,7 +23,9 @@ const AddWorkflowModal = ({
 }) => {
   useEffect(() => {
     fetchWorkflows();
+    fetchRbacGroups();
   }, []);
+
   const onSubmit = data => initialValues
     ? updateWorkflow(data).then(goBack).then(() => fetchWorkflows())
     : addWorkflow(data).then(goBack).then(() => fetchWorkflows());
@@ -63,9 +65,12 @@ AddWorkflowModal.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func.isRequired
   }).isRequired,
+  addWorkflow: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
   fetchWorkflows: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
+  updateWorkflow: PropTypes.func.isRequired,
+  fetchRbacGroups: PropTypes.func.isRequired,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
     label: PropTypes.string.isRequired

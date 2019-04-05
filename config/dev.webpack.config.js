@@ -8,6 +8,7 @@ const convert = require('koa-connect');
 
 webpackConfig.serve = {
   content: config.paths.public,
+  devtool: 'source-map',
   mode: 'development',
   port: 8002,
   // Setting inline and hot to false disables websockets

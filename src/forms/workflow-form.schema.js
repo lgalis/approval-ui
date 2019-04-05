@@ -2,12 +2,13 @@ import { componentTypes, validatorTypes } from '@data-driven-forms/react-form-re
 
 export const createWorkflowSchema = (newRecord, rbacGroups) => ({
   component: 'wizard',
-  name: 'workflow_wizzard',
+  name: 'workflow_wizard',
   assignFieldProvider: true,
   fields: [
     {
       title: 'Workflow information',
       name: 'wf_step_info',
+      component: componentTypes.SUB_FORM,
       stepKey: 1,
       nextStep: {
         when: 'wf_name'
@@ -35,6 +36,7 @@ export const createWorkflowSchema = (newRecord, rbacGroups) => ({
     },
     {
       title: 'Set approval stages',
+      component: componentTypes.SUB_FORM,
       name: 'step-2',
       stepKey: 2,
       nextStep: 'summary',
@@ -61,10 +63,11 @@ export const createWorkflowSchema = (newRecord, rbacGroups) => ({
     },
     {
       title: 'Please review the workflow details.',
+      component: componentTypes.SUB_FORM,
       fields: [
         {
           name: 'summary',
-          component: 'summary',
+          component: componentTypes.SUB_FORM,
           assignFieldProvider: true
         }
       ],

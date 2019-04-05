@@ -52,7 +52,7 @@ plugins.push(CleanWebpackPlugin);
  *
  * @type {var}
  */
-const LodashWebpackPlugin = new (require('lodash-webpack-plugin'))({ currying: true, flattening: true, placeholders: true });
+const LodashWebpackPlugin = new (require('lodash-webpack-plugin'))({ currying: true, flattening: true, placeholders: true, paths: true });
 plugins.push(LodashWebpackPlugin);
 
 /**
@@ -96,8 +96,8 @@ plugins.push(envPlugin);
  * This handles the path being either insights or insightsbeta in the esi:include.
  */
 const HtmlReplaceWebpackPlugin = new(require('html-replace-webpack-plugin'))([{
-  pattern: '@@env',
-  replacement: config.appDeployment
+    pattern: '@@env',
+    replacement: config.appDeploy
 }]);
 plugins.push(HtmlReplaceWebpackPlugin);
 

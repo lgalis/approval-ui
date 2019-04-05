@@ -27,4 +27,21 @@ global.apiClientMock = mock;
 /**
  * setup ENV vars
  */
-process.env.BASE_PATH = '/r/insights/platform';
+process.env.BASE_PATH = '/api';
+
+/**
+ * Setup JSDOM
+ */
+global.SVGPathElement = function () {};
+
+global.MutationObserver = class {
+  constructor(callback) {}
+  disconnect() {}
+  observe(element, initObject) {}
+};
+
+// prepare root element
+const root = document.createElement('div');
+root.id = 'root';
+document.body.appendChild(root);
+Element.prototype.scrollTo = () => {};

@@ -9,7 +9,7 @@ import { Main, PageHeader } from '@red-hat-insights/insights-frontend-components
 import { Title } from '@patternfly/react-core';
 import { NotificationsPortal } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import '@red-hat-insights/insights-frontend-components/components/Notifications.css';
-import { AppPlaceholder } from './PresentationalComponents/shared/LoaderPlaceholders';
+import { AppPlaceholder } from './presentational-components/shared/LoaderPlaceholders';
 
 class App extends Component {
   state = {

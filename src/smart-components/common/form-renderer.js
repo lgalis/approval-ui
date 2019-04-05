@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactFormRender, { componentTypes } from '@data-driven-forms/react-form-renderer';
 import { layoutMapper, formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
-import Pf4SelectWrapper from '../../PresentationalComponents/shared/pf4-select-wrapper';
+import Pf4SelectWrapper from '../../presentational-components/shared/pf4-select-wrapper';
 
 const buttonPositioning = {
   default: {},
