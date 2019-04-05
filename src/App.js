@@ -29,13 +29,6 @@ class App extends Component {
     }
   }
 
-  componentWillUnmount () {
-    if (this.state.chromeNavAvailable) {
-      this.appNav();
-      this.buildNav();
-    }
-  }
-
   render () {
     const { auth } = this.state;
     if (!auth) {
