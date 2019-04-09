@@ -5,7 +5,14 @@ import {
 
 // Initial State
 export const workflowInitialState = {
-  workflows: [],
+  workflows: {
+    data: [],
+    meta: {
+      count: 0,
+      limit: 10,
+      offset: 0
+    }
+  },
   workflow: {},
   filterValue: '',
   isLoading: false

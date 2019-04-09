@@ -19,16 +19,12 @@ import { AppPlaceholder } from './presentational-components/shared/loader-placeh
  *
  */
 const Requests = lazy(() => import('./smart-components/request/requests'));
-const Request = lazy(() => import('./smart-components/request/request'));
 const Workflows = lazy(() => import('./smart-components/workflow/workflows'));
-const Workflow = lazy(() => import('./smart-components/workflow/workflow'));
 
 const paths = {
   approval: '/',
   requests: '/requests',
-  request: '/request/:id',
-  workflows: '/workflows',
-  workflow: '/workflow/:id'
+  workflows: '/workflows'
 };
 
 const InsightsRoute = ({ rootClass, ...rest }) => {
@@ -57,9 +53,7 @@ export const Routes = props => {
     <Suspense fallback={ <AppPlaceholder /> }>
       <Switch>
         <InsightsRoute path={ paths.requests } component={ Requests } rootClass="requests"/>
-        <InsightsRoute path={ paths.request } component={ Request } rootClass="request"/>
         <InsightsRoute path={ paths.workflows } component={ Workflows } rootClass="workflows" />
-        <InsightsRoute path={ paths.workflow } component={ Workflow } rootClass="workflow" />
         { /* Finally, catch all unmatched routes */ }
         <Route render={ () => (some(paths, p => p === path) ? null : <Redirect to={ paths.workflows } />) } />
       </Switch>

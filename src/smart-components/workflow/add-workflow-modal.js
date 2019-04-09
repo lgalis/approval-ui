@@ -18,7 +18,6 @@ const AddWorkflowModal = ({
   fetchWorkflows,
   initialValues,
   updateWorkflow,
-  fetchRbacGroups,
   rbacGroups
 }) => {
   useEffect(() => {
@@ -99,8 +98,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchWorkflows,
-  fetchRbacGroups
+  fetchWorkflows
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddWorkflowModal));

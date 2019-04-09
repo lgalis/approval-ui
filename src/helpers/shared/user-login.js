@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../utilities/constants';
-import { AccessApi, PrincipalApi, GroupApi, ApiClient } from 'rbac_api_jsclient';
+import { GroupApi, PrincipalApi, AccessApi } from '@redhat-cloud-services/rbac-client';
 import { WorkflowApi, RequestApi, TemplateApi } from '@redhat-cloud-services/approval-client';
 
 const axiosInstance = axios.create();
@@ -14,12 +14,9 @@ const workflowApi = new WorkflowApi(undefined, APPROVAL_API_BASE, axiosInstance)
 const requestApi = new RequestApi(undefined, APPROVAL_API_BASE, axiosInstance);
 const templateApi = new TemplateApi(undefined, APPROVAL_API_BASE, axiosInstance);
 
-const defaultRbacClient = ApiClient.instance;
-defaultRbacClient.basePath = RBAC_API_BASE;
-
-const rbacAccessApi = new AccessApi();
-const rbacPrincipalApi = new PrincipalApi();
-const rbacGroupApi = new GroupApi();
+const rbacAccessApi = new AccessApi(undefined, RBAC_API_BASE, axiosInstance);
+const rbacPrincipalApi = new PrincipalApi(undefined, RBAC_API_BASE, axiosInstance);
+const rbacGroupApi = new GroupApi(undefined, RBAC_API_BASE, axiosInstance);
 
 export function getRequestApi() {
   return requestApi;
