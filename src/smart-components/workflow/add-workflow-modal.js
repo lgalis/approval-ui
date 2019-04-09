@@ -8,7 +8,6 @@ import { addNotification } from '@red-hat-insights/insights-frontend-components/
 import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
 
 import FormRenderer from '../common/form-renderer';
-import { fetchRbacGroups } from '../../redux/actions/rbac-actions';
 import { createWorkflowSchema } from '../../forms/workflow-form.schema';
 import { addWorkflow, updateWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
 
@@ -24,14 +23,16 @@ const AddWorkflowModal = ({
 }) => {
   useEffect(() => {
     fetchWorkflows();
-    fetchRbacGroups();
+    //fetchRbacGroups();
   }, []);
 
   const onSubmit = data => {
     console.log('Data for submit workflow: ', data);
+    const { name, description, ...wfGroups } = data;
+    const workflowData = { name, description, group_refs: Object.values(wfGroups) };
     initialValues
-      ? updateWorkflow(data).then(goBack).then(() => fetchWorkflows())
-      : addWorkflow(data).then(goBack).then(() => fetchWorkflows());
+      ? updateWorkflow(workflowData).then(goBack).then(() => fetchWorkflows())
+      : addWorkflow(workflowData).then(goBack).then(() => fetchWorkflows());
   };
 
   const onCancel = () => {
@@ -82,7 +83,6 @@ AddWorkflowModal.propTypes = {
   fetchWorkflows: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
   updateWorkflow: PropTypes.func.isRequired,
-  fetchRbacGroups: PropTypes.func.isRequired,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
     label: PropTypes.string.isRequired

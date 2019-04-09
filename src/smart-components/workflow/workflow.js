@@ -56,9 +56,16 @@ class Workflow extends Component {
     );
   };
 
-  fetchDetailsForWorkflow = (workflow) => {
-    return `Stages for ${workflow.name}`;
-  };
+  fetchDetailsForWorkflow = (workflow => {
+    const wfGroupNames = workflow.group_refs.map(groupId => fetchRbacGroup(groupId).name);
+    return (
+      <React.Fragment>
+        <TextContent component={ TextVariants.h6 }>
+          { wfGroupNames.join(',') }
+        </TextContent>
+      </React.Fragment>
+    );
+  });
 
   render() {
     let { item } = this.props;
@@ -105,9 +112,7 @@ class Workflow extends Component {
               <Title size="md">Stages</Title>
             </StackItem>
             <StackItem>
-              <TextContent component={ TextVariants.h6 }>
-                { this.fetchDetailsForWorkflow(item) }
-              </TextContent>
+              { this.fetchDetailsForWorkflow(item) }
             </StackItem>
           </Stack>
         </DataListContent>
@@ -119,6 +124,7 @@ class Workflow extends Component {
 Workflow.propTypes = {
   isLoading: propTypes.bool,
   item: propTypes.object,
+  rbacGroups: propTypes.array,
   isExpanded: propTypes.func.isRequired,
   toggleExpand: propTypes.func.isRequired,
   noItems: propTypes.string

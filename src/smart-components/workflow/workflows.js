@@ -11,6 +11,7 @@ import RemoveWorkflow from './remove-workflow-modal';
 import WorkflowList from './workflow-list';
 import './workflow.scss';
 import { scrollToTop } from '../../helpers/shared/helpers';
+import { fetchRbacGroups } from '../../redux/actions/rbac-actions';
 
 class Workflows extends Component {
     state = {
@@ -21,6 +22,7 @@ class Workflows extends Component {
 
     fetchData = () => {
       this.props.fetchWorkflows();
+      this.props.fetchRbacGroups();
     };
 
     componentDidMount() {
@@ -53,6 +55,7 @@ class Workflows extends Component {
     render() {
       let filteredItems = {
         items: this.props.workflows,
+        rbacGroups: this.props.rbacGroups,
         isLoading: this.props.isLoading && this.props.workflows.length === 0
       };
 
@@ -63,7 +66,7 @@ class Workflows extends Component {
           <Route exact path="/workflows/remove/:id" component={ RemoveWorkflow } />
           <Section type='content'>
             { this.renderToolbar() }
-            <WorkflowList { ...filteredItems } noItems={ 'No Workflows' }/>
+            <WorkflowList { ...filteredItems } noItems={ 'No Workflows' } />
           </Section>
         </Fragment>
       );
@@ -72,6 +75,7 @@ class Workflows extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    rbacGroups: state.rbacReducer.rbacGroups,
     workflows: state.workflowReducer.workflows,
     isLoading: state.workflowReducer.isLoading
   };
@@ -79,7 +83,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchWorkflows: apiProps => dispatch(fetchWorkflows(apiProps))
+    fetchWorkflows: apiProps => dispatch(fetchWorkflows(apiProps)),
+    fetchRbacGroups: apiProps => dispatch(fetchRbacGroups(apiProps))
   };
 };
 
