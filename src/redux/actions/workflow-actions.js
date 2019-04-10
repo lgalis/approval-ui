@@ -1,15 +1,15 @@
 import * as ActionTypes from '../action-types';
 import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
 
-export const doFetchWorkflows = () => ({
+export const doFetchWorkflows = (options = {}) => ({
   type: ActionTypes.FETCH_WORKFLOWS,
-  payload: WorkflowHelper.fetchWorkflows().then(({ data }) => [ ...data ])
+  payload: WorkflowHelper.fetchWorkflows(options)
 });
 
-export const fetchWorkflows = apiProps => (dispatch, getState) => {
+export const fetchWorkflows = (options) => (dispatch, getState) => {
   const { workflowReducer: { isLoading }} = getState();
   if (!isLoading) {
-    return dispatch(doFetchWorkflows(apiProps));
+    return dispatch(doFetchWorkflows(options));
   }
 };
 

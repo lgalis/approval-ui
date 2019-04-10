@@ -3,16 +3,8 @@ import { getWorkflowApi, getTemplateApi } from '../shared/user-login';
 const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
-export async function fetchWorkflows({ limit, offset }) {
-  let workflowData = workflowApi.listWorkflows(limit, offset);
-  let workflows = workflowData.data;
-  return Promise.all(workflows.map(async workflow => {
-    let workflowWithGroups = await workflowApi.fetchGroupsByWorkflowId(workflow.id);
-    return { ...workflow, groups: workflowWithGroups.groups };
-  })).then(data => ({
-    ...workflowData,
-    data
-  }));
+export async function fetchWorkflows({ limit = 10, offset = 0 }) {
+  return await workflowApi.listWorkflows(limit, offset);
 }
 
 export async function updateWorkflow(data) {

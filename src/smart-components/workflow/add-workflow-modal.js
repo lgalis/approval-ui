@@ -88,10 +88,10 @@ AddWorkflowModal.propTypes = {
   })).isRequired
 };
 
-const mapStateToProps = ({ rbacReducer: { rbacGroups }, workflowReducer: { workflows }}, { match: { params: { id }}}) => ({
+const mapStateToProps = ({ groupReducer: { groups }, workflowReducer: { workflows }}, { match: { params: { id }}}) => ({
   initialValues: id && workflows.find(item => item.id === id),
   workflowId: id,
-  rbacGroups
+  rbacGroups: groups
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
+import isEqual from 'lodash/isEqual';
 import debouncePromise from 'awesome-debounce-promise';
 import { Section } from '@red-hat-insights/insights-frontend-components';
 import { Toolbar, ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
@@ -21,7 +22,7 @@ const columns = [{
   cellFormatters: [ expandable ]
 },
 'Description',
-'Members'
+'Groups'
 ];
 
 class Workflows extends Component {
@@ -43,8 +44,10 @@ class Workflows extends Component {
     }
 
     componentDidUpdate(prevProps) {
-      if (this.props.workflows !== prevProps.workflows) {
+      console.log('Rows before: ', this.state.rows);
+      if (!isEqual(this.props.workflows, prevProps.workflows)) {
         this.setState({ rows: createInitialRows(this.props.workflows) });
+        console.log('Rows after: ', this.state.rows);
       }
     }
 
@@ -66,8 +69,8 @@ class Workflows extends Component {
       return request().then(() => this.setState({ rows: createInitialRows(this.props.workflows) }));
     }
 
-    setOpen = (data, uuid) => data.map(row => {
-      if (row.uuid === uuid) {
+    setOpen = (data, id) => data.map(row => {
+      if (row.id === id) {
         return {
           ...row,
           isOpen: !row.isOpen
@@ -77,8 +80,8 @@ class Workflows extends Component {
       return { ...row };
     });
 
-    setSelected = (data, uuid) => data.map(row => {
-      if (row.uuid === uuid) {
+    setSelected = (data, id) => data.map(row => {
+      if (row.id === id) {
         return {
           ...row,
           selected: !row.selected
@@ -90,11 +93,11 @@ class Workflows extends Component {
 
     onFilterChange = filterValue => this.setState({ filterValue })
 
-    onCollapse = (_event, _index, _isOpen, { uuid }) => this.setState(({ rows }) => ({ rows: this.setOpen(rows, uuid) }));
+    onCollapse = (_event, _index, _isOpen, { id }) => this.setState(({ rows }) => ({ rows: this.setOpen(rows, id) }));
 
-    selectRow = (_event, selected, index, { uuid } = {}) => index === -1
+    selectRow = (_event, selected, index, { id } = {}) => index === -1
       ? this.setState(({ rows }) => ({ rows: rows.map(row => ({ ...row, selected })) }))
-      : this.setState(({ rows }) => ({ rows: this.setSelected(rows, uuid) }));
+      : this.setState(({ rows }) => ({ rows: this.setSelected(rows, id) }));
 
     renderToolbar() {
       return (
@@ -137,7 +140,7 @@ class Workflows extends Component {
         {
           title: 'Edit',
           onClick: (event, rowId, workflow) =>
-            this.props.history.push(`/workflows/edit/${workflow.uuid}`)
+            this.props.history.push(`/workflows/edit/${workflow.id}`)
         },
         {
           title: 'Delete',
@@ -172,10 +175,10 @@ class Workflows extends Component {
     }
 }
 
-const mapStateToProps = ({ workflowReducer: { workflows, isLoading }, rbacReducer: { rbacGroups, filterValue }}) => ({
+const mapStateToProps = ({ workflowReducer: { workflows, isLoading }, groupReducer: { groups, filterValue }}) => ({
   workflows: workflows.data,
   pagination: workflows.meta,
-  rbacGroups,
+  rbacGroups: groups,
   isLoading,
   searchFilter: filterValue
 });

@@ -2,14 +2,14 @@ import React from 'react';
 
 import ExpandableContent from './expandable-content';
 
-export const createInitialRows = data => data.reduce((acc, { id, name, description, groups }, key) => ([
+export const createInitialRows = data => data.reduce((acc, { id, name, description, group_refs }, key) => ([
   ...acc, {
     id,
     isOpen: false,
-    cells: [ name, description, groups.length ]
+    cells: [ name, description, group_refs.length ]
   }, {
-    parent: key * 2,
-    cells: [{ title: <ExpandableContent description={ description } groups={ groups } /> }]
+    parent: 1 + (key * 2),
+    cells: [{ title: <ExpandableContent description={ description } groups={ group_refs } /> }]
   }
 ]), []);
 

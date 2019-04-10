@@ -4,7 +4,7 @@ import {
 } from '../../redux/action-types';
 
 // Initial State
-export const workflowInitialState = {
+export const workflowsInitialState = {
   workflows: {
     data: [],
     meta: {
