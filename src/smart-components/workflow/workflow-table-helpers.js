@@ -8,7 +8,7 @@ export const createInitialRows = data => data.reduce((acc, { id, name, descripti
     isOpen: false,
     cells: [ name, description, group_refs.length ]
   }, {
-    parent: 1 + (key * 2),
+    parent: key * 2,
     cells: [{ title: <ExpandableContent description={ description } groups={ group_refs } /> }]
   }
 ]), []);

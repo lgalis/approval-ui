@@ -12,7 +12,7 @@ import { fetchWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { scrollToTop, getCurrentPage, getNewPage } from '../../helpers/shared/helpers';
-import { fetchRbacGroups } from '../../redux/actions/rbac-actions';
+import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { createInitialRows } from './workflow-table-helpers';
 import WorkflowsFilterToolbar from '../../presentational-components/workflow/workflows-filter-toolbar';
 import './workflow.scss';

@@ -28,4 +28,3 @@ global.apiClientMock = mock;
  * setup ENV vars
  */
 process.env.BASE_PATH = '/api';
-

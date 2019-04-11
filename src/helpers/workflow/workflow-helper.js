@@ -7,6 +7,10 @@ export async function fetchWorkflows({ limit = 10, offset = 0 }) {
   return await workflowApi.listWorkflows(limit, offset);
 }
 
+export async function fetchWorkflow(id) {
+  return await workflowApi.showWorkflow(id);
+}
+
 export async function updateWorkflow(data) {
   await workflowApi.updateWorkflow(data.id, data);
 }

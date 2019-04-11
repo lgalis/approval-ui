@@ -96,8 +96,8 @@ plugins.push(envPlugin);
  * This handles the path being either insights or insightsbeta in the esi:include.
  */
 const HtmlReplaceWebpackPlugin = new(require('html-replace-webpack-plugin'))([{
-    pattern: '@@env',
-    replacement: config.appDeploy
+  pattern: '@@env',
+  replacement: config.appDeployment
 }]);
 plugins.push(HtmlReplaceWebpackPlugin);
 

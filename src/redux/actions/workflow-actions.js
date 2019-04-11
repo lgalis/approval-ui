@@ -13,6 +13,11 @@ export const fetchWorkflows = (options) => (dispatch, getState) => {
   }
 };
 
+export const fetchWorkflow = apiProps => ({
+  type: ActionTypes.FETCH_WORKFLOW,
+  payload: WorkflowHelper.fetchWorkflow(apiProps)
+});
+
 export const addWorkflow = (workflowData) => ({
   type: ActionTypes.ADD_WORKFLOW,
   payload: WorkflowHelper.addWorkflow(workflowData),

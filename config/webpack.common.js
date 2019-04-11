@@ -10,7 +10,7 @@ const entry = process.env.NODE_ENV === 'production' ?
   path.resolve(__dirname, '../src/entry-dev.js');
 const { insights } = require('../package.json');
 
-let appDeploy = 'apps';
+let appDeployment = 'apps';
 const gitBranch = process.env.TRAVIS_BRANCH || process.env.BRANCH || gitRevisionPlugin.branch();
 const betaBranch =
     gitBranch === 'master' ||
@@ -18,10 +18,10 @@ const betaBranch =
     gitBranch === 'qa-beta' ||
     gitBranch === 'prod-beta';
 if (process.env.NODE_ENV === 'production' && betaBranch) {
-  appDeploy = 'beta/apps';
+  appDeployment = 'beta/apps';
 }
 
-const publicPath = `/${appDeploy}/${insights.appname}/`;
+const publicPath = `/${appDeployment}/${insights.appname}/`;
 
 module.exports = {
   paths: {
@@ -34,5 +34,5 @@ module.exports = {
     static: path.resolve(__dirname, '../static'),
     publicPath
   },
-  appDeploy
+  appDeployment
 };
