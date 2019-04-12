@@ -10,6 +10,7 @@ import FormRenderer from '../common/form-renderer';
 import { createWorkflowSchema } from '../../forms/workflow-form.schema';
 import { addWorkflow, updateWorkflow, fetchWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
 import { fetchRbacGroup } from '../../redux/actions/group-actions';
+import SummaryContent from './summary_content';
 
 const AddWorkflowModal = ({
   history: { goBack },
@@ -55,11 +56,8 @@ const AddWorkflowModal = ({
   const setInitialGroups = (workflow) => {
     let idx = 0;
     let initialGroupList = workflow.group_refs.map((ref) => { const group = fetchRbacGroup(ref);
-      console.log('Group for ref: ', ref, group);
       return { [`Stage-${idx++}`]: group ? group.name : ref };});
-    console.log('Initial group list: ', initialGroupList);
     const flatList =  initialGroupList.reduce((acc, curr) => ({ ...acc, ...curr }), {});
-    console.log('Initial group list, flat: ', flatList);
     return flatList;
   };
 

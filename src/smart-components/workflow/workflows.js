@@ -34,8 +34,8 @@ class Workflows extends Component {
     };
 
     fetchData = () => {
-      this.props.fetchWorkflows().then(() => this.setState({ rows: createInitialRows(this.props.workflows) }));
       this.props.fetchRbacGroups();
+      this.props.fetchWorkflows().then(() => this.setState({ rows: createInitialRows(this.props.workflows) }));
     };
 
     componentDidMount() {
@@ -44,10 +44,8 @@ class Workflows extends Component {
     }
 
     componentDidUpdate(prevProps) {
-      console.log('Rows before: ', this.state.rows);
       if (!isEqual(this.props.workflows, prevProps.workflows)) {
         this.setState({ rows: createInitialRows(this.props.workflows) });
-        console.log('Rows after: ', this.state.rows);
       }
     }
 
