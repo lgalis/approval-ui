@@ -7,7 +7,6 @@ import FormRenderer from '../Common/FormRenderer';
 import { Modal, Grid, GridItem } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import { addWorkflow, fetchWorkflows, updateWorkflow } from '../../redux/Actions/WorkflowActions';
-import { pipe } from 'rxjs';
 
 const AddWorkflowModal = ({
   history: { goBack },
@@ -24,14 +23,14 @@ const AddWorkflowModal = ({
       : addWorkflow(request_data).then(() => fetchWorkflows()).then(goBack);
   };
 
-  const onCancel = () => pipe(
+  const onCancel = () => {
     addNotification({
       variant: 'warning',
       title: initialValues ? 'Editing workflow' : 'Creating workflow',
       description: initialValues ? 'Edit workflow was cancelled by the user.' : 'Creating workflow was cancelled by the user.'
-    }),
-    goBack()
-  );
+    });
+    goBack();
+  };
 
   let selectedRequests = [];
 
