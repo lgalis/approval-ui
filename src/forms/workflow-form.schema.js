@@ -57,7 +57,7 @@ export const createWorkflowSchema = (newRecord, rbacGroups) => ({
         assignFieldProvider: true
       }],
       stepKey: 'summary',
-      title: 'Please review the workflow details.',
+      title: '',
       name: 'summary'
     }]
   }]

@@ -1,39 +1,42 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Modal, Button, Title, Bullseye } from '@patternfly/react-core';
-import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { fetchWorkflows, removeWorkflow } from '../../redux/actions/workflow-actions';
+import { Modal, Button, Bullseye, Text, TextContent, TextVariants } from '@patternfly/react-core';
+import { fetchWorkflows, fetchWorkflow, removeWorkflow } from '../../redux/actions/workflow-actions';
 import './workflow.scss';
 
 const RemoveWorkflowModal = ({
   history: { goBack, push },
   removeWorkflow,
-  addNotification,
   fetchWorkflows,
+  fetchWorkflow,
   workflowId,
-  workflowName
+  workflow
 }) => {
+  useEffect(() => {
+    if (workflowId) {
+      fetchWorkflow(workflowId);
+    }
+  }, []);
+
+  if (!workflow) {
+    return null;
+  }
+
   const onSubmit = () => removeWorkflow(workflowId)
   .then(() => {
     fetchWorkflows();
     push('/workflows');
   });
 
-  const onCancel = () => {
-    addNotification({
-      variant: 'warning',
-      title: 'Removing workflow',
-      description: 'Removing workflow was cancelled by the user.'
-    });
-    goBack();
-  };
+  const onCancel = () => goBack();
 
   return (
     <Modal
       isOpen
+      isSmall
       title = { '' }
       onClose={ onCancel }
       actions={ [
@@ -46,11 +49,11 @@ const RemoveWorkflowModal = ({
       ] }
     >
       <Bullseye>
-        <div className="center_message">
-          <Title size={ 'xl' }>
-            Removing Workflow:  { workflowName }
-          </Title>
-        </div>
+        <TextContent>
+          <Text component={ TextVariants.h1 }>
+            Removing Workflow:  { workflow.name }
+          </Text>
+        </TextContent>
       </Bullseye>
     </Modal>
   );
@@ -62,25 +65,21 @@ RemoveWorkflowModal.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   removeWorkflow: PropTypes.func.isRequired,
-  addNotification: PropTypes.func.isRequired,
   fetchWorkflows: PropTypes.func.isRequired,
+  fetchWorkflow: PropTypes.func.isRequired,
   workflowId: PropTypes.string,
-  workflowName: PropTypes.string
+  workflow: PropTypes.object
 };
 
-const workflowDetailsFromState = (state, id) =>
-  state.workflowReducer.workflows.find(workflow => workflow.id  === id);
-
-const mapStateToProps = (state, { match: { params: { id }}}) => {
-  let workflow = workflowDetailsFromState(state, id);
-  return {
-    workflowId: workflow.id,
-    workflowName: workflow.name
-  };
-};
+const mapStateToProps = ({ workflowReducer: { selectedWorkflow, isLoading }},
+  { match: { params: { id }}}) => ({
+  workflowId: id,
+  workflow: selectedWorkflow,
+  isLoading
+});
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  addNotification,
+  fetchWorkflow,
   fetchWorkflows,
   removeWorkflow
 }, dispatch);

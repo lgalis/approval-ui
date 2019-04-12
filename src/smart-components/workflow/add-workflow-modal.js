@@ -48,11 +48,9 @@ const AddWorkflowModal = ({
     goBack();
   };
 
-  const Summary = () => <div>Custom summary component.</div>;
+  const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } />;
   const groupOptions = [ ...rbacGroups, { value: '', label: 'None' }];
 
-  return(
-      <Modal
   const setInitialGroups = (workflow) => {
     let idx = 0;
     let initialGroupList = workflow.group_refs.map((ref) => { const group = fetchRbacGroup(ref);
