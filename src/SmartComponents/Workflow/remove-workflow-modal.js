@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import { Modal, Button, Title, Bullseye } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import { fetchWorkflows, removeWorkflow } from '../../redux/Actions/WorkflowActions';
-import { pipe } from 'rxjs';
 import './workflow.scss';
 
 const RemoveWorkflowModal = ({
@@ -18,16 +17,19 @@ const RemoveWorkflowModal = ({
   workflowName
 }) => {
   const onSubmit = () => removeWorkflow(workflowId)
-  .then(() => pipe(fetchWorkflows(), push('/workflows')));
+  .then(() => {
+    fetchWorkflows();
+    push('/workflows');
+  });
 
-  const onCancel = () => pipe(
+  const onCancel = () => {
     addNotification({
       variant: 'warning',
       title: 'Removing workflow',
       description: 'Removing workflow was cancelled by the user.'
-    }),
-    goBack()
-  );
+    });
+    goBack();
+  };
 
   return (
     <Modal

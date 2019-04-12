@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import { Modal, Grid, GridItem, TextContent, Text, TextVariants } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import { fetchRequests } from '../../redux/Actions/RequestActions';
-import { pipe } from 'rxjs';
 
 const AddRequestModal = ({
   history: { goBack },
@@ -22,14 +21,14 @@ const AddRequestModal = ({
     updateRequest(data).then(() => fetchRequests()).then(goBack);
   };
 
-  const onCancel = () => pipe(
+  const onCancel = () => {
     addNotification({
       variant: 'warning',
       title: 'Editing request',
       description: 'Edit request was cancelled by the user.'
-    }),
-    goBack()
-  );
+    });
+    goBack();
+  };
 
   const onOptionSelect = () =>
   { };
