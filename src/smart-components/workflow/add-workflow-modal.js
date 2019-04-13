@@ -33,7 +33,7 @@ const AddWorkflowModal = ({
     const { name, description, ...wfGroups } = data;
     const workflowData = { name, description, group_refs: Object.values(wfGroups) };
     initialValues
-      ? updateWorkflow(workflowData).then(push('/workflosws')).then(() => fetchWorkflows())
+      ? updateWorkflow(workflowData).then(push('/workflows')).then(() => fetchWorkflows())
       : addWorkflow(workflowData).then(push('/workflows')).then(() => fetchWorkflows());
   };
 
