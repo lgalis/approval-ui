@@ -21,7 +21,7 @@ const SummaryContent = (values) => {
       </TextContent>
       <TextContent>
         <Text className="data-table-detail heading" component={ TextVariants.h5 }>Approval Stages</Text>
-        { Object.entries(stages).map(stage => (
+        { Object.entries(stages).map(stage => (stage[0].startsWith('stage') &&
           <Text key={ `${stage[0]}` }
             className="data-table-detail content"
             component={ TextVariants.p }>

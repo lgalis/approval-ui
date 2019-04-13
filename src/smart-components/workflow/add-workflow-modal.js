@@ -53,7 +53,7 @@ const AddWorkflowModal = ({
 
   const setInitialGroups = (workflow) => {
     let idx = 0;
-    let initialGroupList = workflow.group_refs.map((ref) => { const group = fetchRbacGroup(ref);
+    let initialGroupList = workflow.group_refs.map((ref) => { const group = fetchRbacGroup(ref).then( )
       return { [`Stage-${idx++}`]: group ? group.name : ref };});
     const flatList =  initialGroupList.reduce((acc, curr) => ({ ...acc, ...curr }), {});
     return flatList;
