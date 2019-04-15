@@ -1,5 +1,5 @@
-import { getWorkflowApi } from '../../../Helpers/Shared/userLogin';
-import { APPROVAL_API_BASE } from '../../../Utilities/Constants';
+import { getWorkflowApi } from '../../../helpers/shared/user-login';
+import { APPROVAL_API_BASE } from '../../../utilities/constants';
 
 describe('user login', () => {
   it('should set correct basePath for the workflow api instance', () => {

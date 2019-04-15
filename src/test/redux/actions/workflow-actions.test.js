@@ -3,14 +3,16 @@ import thunk from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware, ADD_NOTIFICATION } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import {
-  FETCH_WORKFLOWS
-} from '../../../redux/ActionTypes';
+  FETCH_WORKFLOWS,
+  FETCH_WORKFLOW
+} from '../../../redux/action-types';
 import {
-  fetchWorkflows
-} from '../../../redux/Actions/WorkflowActions';
+  fetchWorkflows,
+  fetchWorkflow
+} from '../../../redux/actions/workflow-actions';
 import {
   APPROVAL_API_BASE
-} from '../../../Utilities/Constants';
+} from '../../../utilities/constants';
 
 describe('Workflow actions', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
@@ -34,14 +36,14 @@ describe('Workflow actions', () => {
     const expectedActions = [{
       type: `${FETCH_WORKFLOWS}_PENDING`
     }, {
-      payload: [{
+      payload: { data: [{
         label: 'workflow',
         value: '11'
-      }],
+      }]},
       type: `${FETCH_WORKFLOWS}_FULFILLED`
     }];
 
-    apiClientMock.get(APPROVAL_API_BASE + '/workflows', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows?limit=10&offset=0', mockOnce({
       body: {
         data: [{
           label: 'workflow',
@@ -74,12 +76,45 @@ describe('Workflow actions', () => {
 
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + '/workflows', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows?limit=10&offset=0 ', mockOnce({
       status: 500
     }));
 
     return store.dispatch(fetchWorkflows())
     .catch(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  it('should dispatch correct actions after fetching one workflow', () => {
+    const store = mockStore({
+      workflowReducer: {
+        isLoading: false
+      }
+    });
+
+    const expectedActions = [{
+      type: `${FETCH_WORKFLOW}_PENDING`
+    }, {
+      payload: {
+        data: [{
+          id: '11',
+          name: 'workflow'
+        }]
+      },
+      type: `${FETCH_WORKFLOW}_FULFILLED`
+    }];
+
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows/11', mockOnce({
+      body: {
+        data: [{
+          id: '11',
+          name: 'workflow'
+        }]
+      }
+    }));
+
+    return store.dispatch(fetchWorkflow(11)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });

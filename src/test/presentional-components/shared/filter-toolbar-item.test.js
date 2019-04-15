@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import FilterToolbarItem from '../../../PresentationalComponents/Shared/FilterToolbarItem';
+import FilterToolbarItem from '../../../presentational-components/shared/filter-toolbar-item';
 
 describe('<FilterToolbarItem />', () => {
   let intialProps;

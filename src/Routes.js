@@ -2,7 +2,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { lazy, Suspense } from 'react';
 import some from 'lodash/some';
-import { AppPlaceholder } from './PresentationalComponents/Shared/LoaderPlaceholders';
+import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
 
 /**
  * Aysnc imports of components
@@ -18,17 +18,13 @@ import { AppPlaceholder } from './PresentationalComponents/Shared/LoaderPlacehol
  *         see the difference with DashboardMap and InventoryDeployments.
  *
  */
-const Requests = lazy(() => import('./SmartComponents/Request/Requests'));
-const Request = lazy(() => import('./SmartComponents/Request/Request'));
-const Workflows = lazy(() => import('./SmartComponents/Workflow/Workflows'));
-const Workflow = lazy(() => import('./SmartComponents/Workflow/Workflow'));
+const Requests = lazy(() => import('./smart-components/request/requests'));
+const Workflows = lazy(() => import('./smart-components/workflow/workflows'));
 
 const paths = {
   approval: '/',
   requests: '/requests',
-  request: '/request/:id',
-  workflows: '/workflows',
-  workflow: '/workflow/:id'
+  workflows: '/workflows'
 };
 
 const InsightsRoute = ({ rootClass, ...rest }) => {
@@ -57,9 +53,7 @@ export const Routes = props => {
     <Suspense fallback={ <AppPlaceholder /> }>
       <Switch>
         <InsightsRoute path={ paths.requests } component={ Requests } rootClass="requests"/>
-        <InsightsRoute path={ paths.request } component={ Request } rootClass="request"/>
         <InsightsRoute path={ paths.workflows } component={ Workflows } rootClass="workflows" />
-        <InsightsRoute path={ paths.workflow } component={ Workflow } rootClass="workflow" />
         { /* Finally, catch all unmatched routes */ }
         <Route render={ () => (some(paths, p => p === path) ? null : <Redirect to={ paths.workflows } />) } />
       </Switch>
