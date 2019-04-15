@@ -21,11 +21,11 @@ const SummaryContent = (values) => {
       </TextContent>
       <TextContent>
         <Text className="data-table-detail heading" component={ TextVariants.h5 }>Approval Stages</Text>
-        { Object.keys(stages).map(key => key.startWith('stage') &&
+        { Object.keys(stages).map(key => key.startsWith('stage') &&
             <Text key={ key }
               className="data-table-detail content"
               component={ TextVariants.p }>
-              { key } : { values.groupOptions.find(group => group.value === stages[key]) }
+              { `${key} : ${values.groupOptions.find(group => group.value === stages[key]).label}` }
             </Text>) }
       </TextContent>
     </Fragment>
