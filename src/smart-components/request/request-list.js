@@ -18,9 +18,7 @@ class RequestList extends Component {
     this.setState(() => ({ expanded: newExpanded }));
   };
 
-  isExpanded = key => {
-    return this.state.expanded.includes(key);
-  };
+  isExpanded = key => this.state.expanded.includes(key);
 
   render() {
     if (this.props.isLoading) {
@@ -33,16 +31,12 @@ class RequestList extends Component {
 
     return (
       <React.Fragment>
-        <div>
-          { this.props.isLoading && (<span color={ '#00b9e4' }> Loading...</span>) }
-        </div>
         { (this.props.items && this.props.items.length > 0) && (
-          <DataList aria-label="Expandable data list">
+          <DataList aria-label="Expandable data list" >
             { this.props.items.map((item) => {
               return (
                 <Request key= { item.id } item={ item } isExpanded={ this.isExpanded } toggleExpand={ this.toggleExpand }/>);
-            }
-            )
+            })
             }
           </DataList>)
         }
