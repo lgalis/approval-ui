@@ -1,9 +1,9 @@
-import workflowReducer from '../../../redux/reducers/workflowReducer';
+import workflowReducer from '../../../redux/reducers/workflow-reducer';
 import { callReducer } from '../redux-helpers';
 
 import {
   FETCH_WORKFLOWS
-} from '../../../redux/ActionTypes';
+} from '../../../redux/action-types';
 
 describe('Workflow reducer', () => {
   let initialState;

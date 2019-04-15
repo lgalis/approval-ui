@@ -13,6 +13,7 @@ node_modules
 dist
 
 #test coverage statistics
+cc-test-reporter
 coverage
 
 # deployment
