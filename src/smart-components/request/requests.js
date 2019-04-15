@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import { Toolbar } from '@patternfly/react-core';
 import { Section } from '@red-hat-insights/insights-frontend-components';
 import RequestList from './request-list';
-import RequestsFilterToolbar from '../../presentational-components/request/requests-filter-toolbar';
+import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import AddRequest from './add-request-modal';
 import './request.scss';
@@ -31,8 +31,8 @@ class Requests extends Component {
 
   renderToolbar() {
     return (
-      <Toolbar className="searchToolbar">
-        <RequestsFilterToolbar onFilterChange={ this.onFilterChange } filterValue={ this.state.filterValue } />
+      <Toolbar className="searchToolbar pf-u-box-shadow-md">
+        <FilterToolbar onFilterChange={ this.onFilterChange } searchValue={ this.state.filterValue } placeholder='Find a Request' />
       </Toolbar>
     );
   }
@@ -46,7 +46,7 @@ class Requests extends Component {
     return (
       <Fragment>
         <Route exact path="/requests/edit/:id" component={ AddRequest } />
-        <Section type='content'>
+        <Section style={ { padding: 32 } } type='content'>
           { this.renderToolbar() }
           <RequestList { ...filteredItems } noItems={ 'No Requests' } />
         </Section>
