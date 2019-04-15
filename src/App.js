@@ -33,7 +33,7 @@ class App extends Component {
       <React.Fragment>
         <NotificationsPortal />
         <PageHeader>
-          <Title size={ 'xl' }  style = { { margin: 12, padding: 12 } }>
+          <Title headingLevel='h1' size='2xl'>
             Approval
           </Title>
         </PageHeader>
