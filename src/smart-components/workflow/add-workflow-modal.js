@@ -12,7 +12,7 @@ import { addWorkflow, updateWorkflow, fetchWorkflow, fetchWorkflows } from '../.
 import SummaryContent from './summary_content';
 
 const AddWorkflowModal = ({
-  history: { goBack },
+  history: { push },
   addWorkflow,
   addNotification,
   fetchWorkflow,
@@ -27,15 +27,14 @@ const AddWorkflowModal = ({
     if (workflowId) {
       fetchWorkflow(workflowId).then(data => setInitialGroups(data));
     }
-  }, []);
+  }, [ workflowId ]);
 
   const onSubmit = data => {
-    console.log('Data for submit workflow: ', data);
     const { name, description, ...wfGroups } = data;
     const workflowData = { name, description, group_refs: Object.values(wfGroups) };
     initialValues
-      ? updateWorkflow(workflowData).then(goBack).then(() => fetchWorkflows())
-      : addWorkflow(workflowData).then(goBack).then(() => fetchWorkflows());
+      ? updateWorkflow(workflowData).then(push('/workflosws')).then(() => fetchWorkflows())
+      : addWorkflow(workflowData).then(push('/workflows')).then(() => fetchWorkflows());
   };
 
   const onCancel = () => {
@@ -44,16 +43,15 @@ const AddWorkflowModal = ({
       title: initialValues ? 'Editing workflow' : 'Creating workflow',
       description: initialValues ? 'Edit workflow was cancelled by the user.' : 'Creating workflow was cancelled by the user.'
     });
-    goBack();
+    push('/workflows');
   };
 
-  const groupOptions = [ ...rbacGroups, { value: '', label: 'None' }];
+  const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
   const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
 
   const setInitialGroups = (workflow) => {
-    const initialGroupList = workflow.value.group_names.map((group, idx) => { return { [`stage-${idx + 1}`]: group };});
-    const flatList =  initialGroupList.reduce((acc, curr) => ({ ...acc, ...curr }), {});
-    return flatList;
+    const initialGroupList = workflow.value.group_refs.map((group, idx) => { return { [`stage-${idx + 1}`]: group };});
+    return initialGroupList.reduce((acc, curr) => ({ ...acc, ...curr }), {});
   };
 
   return (

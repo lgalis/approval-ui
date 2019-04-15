@@ -4,7 +4,6 @@ export const createWorkflowSchema = (newRecord, rbacGroups) => ({
   fields: [{
     component: componentTypes.WIZARD,
     name: 'workflow_wizard',
-    assignFieldProvider: true,
     fields: [{
       title: 'Workflow information',
       name: 'wf_step_info',
@@ -53,11 +52,9 @@ export const createWorkflowSchema = (newRecord, rbacGroups) => ({
     }, {
       fields: [{
         name: 'summary',
-        component: 'summary',
-        assignFieldProvider: true
+        component: 'summary'
       }],
       stepKey: 'summary',
-      title: '',
       name: 'summary'
     }]
   }]

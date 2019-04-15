@@ -19,7 +19,7 @@ const RemoveWorkflowModal = ({
     if (workflowId) {
       fetchWorkflow(workflowId);
     }
-  }, []);
+  }, [ workflowId ]);
 
   if (!workflow) {
     return null;

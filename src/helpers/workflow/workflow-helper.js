@@ -31,7 +31,7 @@ export async function fetchWorkflow(id) {
 }
 
 export async function updateWorkflow(data) {
-  await workflowApi.updateWorkflow(data.id, data);
+  return await workflowApi.updateWorkflow(data.id, data);
 }
 
 export  function addWorkflow(workflow) {
@@ -47,6 +47,6 @@ export  function addWorkflow(workflow) {
 }
 
 export async function removeWorkflow(workflowId) {
-  await workflowApi.destroyWorkflow(workflowId);
+  return await workflowApi.destroyWorkflow(workflowId);
 }
 
