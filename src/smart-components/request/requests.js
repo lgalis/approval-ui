@@ -12,20 +12,20 @@ import './request.scss';
 import { scrollToTop } from '../../helpers/shared/helpers';
 
 class Requests extends Component {
-    state = {
-      filteredItems: [],
-      isOpen: false,
-      filterValue: ''
-    };
+  state = {
+    filteredItems: [],
+    isOpen: false,
+    filterValue: ''
+  };
 
-    fetchData = () => {
-      this.props.fetchRequests();
-    };
+  fetchData = () => {
+    this.props.fetchRequests();
+  };
 
-    componentDidMount() {
-      this.fetchData();
-      scrollToTop();
-    }
+  componentDidMount() {
+    this.fetchData();
+    scrollToTop();
+  }
 
   onFilterChange = filterValue => this.setState({ filterValue })
 
@@ -55,20 +55,16 @@ class Requests extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    requests: state.requestReducer.requests,
-    isLoading: state.requestReducer.isRequestDataLoading,
-    workflows: state.workflowReducer.workflows,
-    searchFilter: state.requestReducer.filterValue
-  };
-};
+const mapStateToProps = (state) => ({
+  requests: state.requestReducer.requests,
+  isLoading: state.requestReducer.isRequestDataLoading,
+  workflows: state.workflowReducer.workflows,
+  searchFilter: state.requestReducer.filterValue
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
+});
 
 Requests.propTypes = {
   filteredItems: propTypes.array,
