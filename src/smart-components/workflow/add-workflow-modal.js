@@ -9,7 +9,6 @@ import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
 import FormRenderer from '../common/form-renderer';
 import { createWorkflowSchema } from '../../forms/workflow-form.schema';
 import { addWorkflow, updateWorkflow, fetchWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
-import { fetchRbacGroup } from '../../redux/actions/group-actions';
 import SummaryContent from './summary_content';
 
 const AddWorkflowModal = ({
@@ -48,13 +47,11 @@ const AddWorkflowModal = ({
     goBack();
   };
 
-  const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } />;
   const groupOptions = [ ...rbacGroups, { value: '', label: 'None' }];
+  const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
 
   const setInitialGroups = (workflow) => {
-    let idx = 0;
-    let initialGroupList = workflow.group_refs.map((ref) => { const group = fetchRbacGroup(ref).then( )
-      return { [`Stage-${idx++}`]: group ? group.name : ref };});
+    const initialGroupList = workflow.value.group_names.map((group, idx) => { return { [`stage-${idx + 1}`]: group };});
     const flatList =  initialGroupList.reduce((acc, curr) => ({ ...acc, ...curr }), {});
     return flatList;
   };

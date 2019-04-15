@@ -9,3 +9,13 @@ export async function getRbacGroups() {
 export async function fetchGroup(id) {
   return await api.getGroup(id);
 }
+
+export async function fetchGroupNames(groupRefs) {
+  if (groupRefs) {
+    return Promise.all(groupRefs.map(async id => {
+      let group = await api.getGroup(id);
+      return group.name;
+    }));
+  }
+}
+

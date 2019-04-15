@@ -25,7 +25,7 @@ const SummaryContent = (values) => {
           <Text key={ `${stage[0]}` }
             className="data-table-detail content"
             component={ TextVariants.p }>
-            { `${stage[0]} : ${stage[1]}` }
+            { `${stage[0]}` } : { values.groupOptions.find(group => group.value === `${stage[1]}`).label }
           </Text>)) }
       </TextContent>
     </Fragment>
