@@ -1,7 +1,6 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { lazy, Suspense } from 'react';
-import some from 'lodash/some';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
 
 /**
@@ -47,20 +46,13 @@ InsightsRoute.propTypes = {
  *      path - https://prod.foo.redhat.com:1337/insights/advisor/rules
  *      component - component to be rendered when a route has been chosen.
  */
-export const Routes = props => {
-  const path = props.childProps.location.pathname;
-  return (
-    <Suspense fallback={ <AppPlaceholder /> }>
-      <Switch>
-        <InsightsRoute path={ paths.requests } component={ Requests } rootClass="requests"/>
-        <InsightsRoute path={ paths.workflows } component={ Workflows } rootClass="workflows" />
-        { /* Finally, catch all unmatched routes */ }
-        <Route render={ () => (some(paths, p => p === path) ? null : <Redirect to={ paths.workflows } />) } />
-      </Switch>
-    </Suspense>
-  );
-};
-
-Routes.propTypes = {
-  childProps: PropTypes.object
-};
+export const Routes = () => (
+  <Suspense fallback={ <AppPlaceholder /> }>
+    <Switch>
+      <InsightsRoute path={ paths.requests } component={ Requests } rootClass="requests"/>
+      <InsightsRoute path={ paths.workflows } component={ Workflows } rootClass="workflows" />
+      { /* Finally, catch all unmatched routes */ }
+      <Route render={ () => <Redirect to={ paths.workflows } /> } />
+    </Switch>
+  </Suspense>
+);
