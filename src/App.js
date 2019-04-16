@@ -32,15 +32,14 @@ class App extends Component {
     return (
       <React.Fragment>
         <NotificationsPortal />
-        <PageHeader>
-          <Title size={ 'xl' }  style = { { margin: 12, padding: 12 } }>
+        <PageHeader style={ { paddingBottom: 0 } }>
+          <Title headingLevel='h1' size='2xl'>
             Approval
           </Title>
+          <AppTabs />
         </PageHeader>
-        <Main style={ { backgroundColor: 'd3d3d3', margin: '0', padding: '0' } }>
-          <AppTabs>
-            <Routes childProps={ this.props } />
-          </AppTabs>
+        <Main>
+          <Routes />
         </Main>
       </React.Fragment>
     );

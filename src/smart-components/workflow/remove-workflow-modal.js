@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal, Button, Bullseye, Text, TextContent, TextVariants } from '@patternfly/react-core';
 import { fetchWorkflows, fetchWorkflow, removeWorkflow } from '../../redux/actions/workflow-actions';
-import './workflow.scss';
 
 const RemoveWorkflowModal = ({
   history: { goBack, push },

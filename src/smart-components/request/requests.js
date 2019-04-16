@@ -2,38 +2,45 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route } from 'react-router-dom';
-import { Toolbar } from '@patternfly/react-core';
-import { Section } from '@red-hat-insights/insights-frontend-components';
+import { Toolbar, ToolbarGroup, Level } from '@patternfly/react-core';
 import RequestList from './request-list';
-import RequestsFilterToolbar from '../../presentational-components/request/requests-filter-toolbar';
+import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import AddRequest from './add-request-modal';
-import './request.scss';
 import { scrollToTop } from '../../helpers/shared/helpers';
+import { TableToolbar } from '@red-hat-insights/insights-frontend-components/components/TableToolbar';
 
 class Requests extends Component {
-    state = {
-      filteredItems: [],
-      isOpen: false,
-      filterValue: ''
-    };
+  state = {
+    filteredItems: [],
+    isOpen: false,
+    filterValue: ''
+  };
 
-    fetchData = () => {
-      this.props.fetchRequests();
-    };
+  fetchData = () => {
+    this.props.fetchRequests();
+  };
 
-    componentDidMount() {
-      this.fetchData();
-      scrollToTop();
-    }
+  componentDidMount() {
+    this.fetchData();
+    scrollToTop();
+  }
 
   onFilterChange = filterValue => this.setState({ filterValue })
 
   renderToolbar() {
     return (
-      <Toolbar className="searchToolbar">
-        <RequestsFilterToolbar onFilterChange={ this.onFilterChange } filterValue={ this.state.filterValue } />
-      </Toolbar>
+      <TableToolbar>
+        <Level style={ { flex: 1 } }>
+          <Toolbar>
+            <ToolbarGroup>
+              <Toolbar>
+                <FilterToolbar onFilterChange={ this.onFilterChange } searchValue={ this.state.filterValue } placeholder='Find a Request' />
+              </Toolbar>
+            </ToolbarGroup>
+          </Toolbar>
+        </Level>
+      </TableToolbar>
     );
   }
 
@@ -46,29 +53,23 @@ class Requests extends Component {
     return (
       <Fragment>
         <Route exact path="/requests/edit/:id" component={ AddRequest } />
-        <Section type='content'>
-          { this.renderToolbar() }
-          <RequestList { ...filteredItems } noItems={ 'No Requests' } />
-        </Section>
+        { this.renderToolbar() }
+        <RequestList { ...filteredItems } noItems={ 'No Requests' } />
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    requests: state.requestReducer.requests,
-    isLoading: state.requestReducer.isRequestDataLoading,
-    workflows: state.workflowReducer.workflows,
-    searchFilter: state.requestReducer.filterValue
-  };
-};
+const mapStateToProps = (state) => ({
+  requests: state.requestReducer.requests,
+  isLoading: state.requestReducer.isRequestDataLoading,
+  workflows: state.workflowReducer.workflows,
+  searchFilter: state.requestReducer.filterValue
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
+});
 
 Requests.propTypes = {
   filteredItems: propTypes.array,
