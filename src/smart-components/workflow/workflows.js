@@ -142,6 +142,7 @@ class Workflows extends Component {
         },
         {
           title: 'Delete',
+          style: { color: 'var(--pf-global--danger-color--100)'	},
           onClick: (event, rowId, workflow) =>
             this.props.history.push(`/workflows/remove/${workflow.id}`)
         }
