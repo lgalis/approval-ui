@@ -39,7 +39,7 @@ class App extends Component {
           <AppTabs />
         </PageHeader>
         <Main>
-          <Routes childProps={ this.props } />
+          <Routes />
         </Main>
       </React.Fragment>
     );
