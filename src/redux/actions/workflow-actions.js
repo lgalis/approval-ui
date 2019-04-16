@@ -1,17 +1,10 @@
 import * as ActionTypes from '../action-types';
 import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
 
-export const doFetchWorkflows = (options = {}) => ({
+export const fetchWorkflows = (options = {}) => ({
   type: ActionTypes.FETCH_WORKFLOWS,
   payload: WorkflowHelper.fetchWorkflowsWithGroups(options)
 });
-
-export const fetchWorkflows = (options) => (dispatch, getState) => {
-  const { workflowReducer: { isLoading }} = getState();
-  if (!isLoading) {
-    return dispatch(doFetchWorkflows(options));
-  }
-};
 
 export const fetchWorkflow = apiProps => ({
   type: ActionTypes.FETCH_WORKFLOW,
