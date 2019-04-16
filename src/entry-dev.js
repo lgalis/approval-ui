@@ -10,7 +10,7 @@ pathName.shift();
 
 let release = '/';
 if (pathName[0] === 'beta') {
-  release = `/${pathName.shift()}`;
+  release = `/${pathName.shift()}/`;
 }
 
 ReactDOM.render(
