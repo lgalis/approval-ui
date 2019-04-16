@@ -1,25 +1,18 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from '@patternfly/react-core';
 
-import './apptabs.scss';
-
 const tabItems = [{ eventKey: 0, title: 'Requests', name: '/requests' }, { eventKey: 1, title: 'Workflows', name: '/workflows' }];
 
-const AppTabs = ({ children, history: { push }, location: { pathname }}) => {
+const AppTabs = ({ history: { push }, location: { pathname }}) => {
   const activeTab = tabItems.find(({ name }) => pathname.includes(name));
   const handleTabClick = (_event, tabIndex) => push(tabItems[tabIndex].name);
 
   return (
-    <Fragment>
-      <div className="ins-tabs">
-        <Tabs activeKey={ activeTab ? activeTab.eventKey : 0 } onSelect={ handleTabClick }>
-          { tabItems.map((item) => <Tab title={ item.title } key={ item.eventKey } eventKey={ item.eventKey } name={ item.name }/>) }
-        </Tabs>
-      </div>
-      { children }
-    </Fragment>
+    <Tabs className="pf-u-mt-md" activeKey={ activeTab ? activeTab.eventKey : 0 } onSelect={ handleTabClick }>
+      { tabItems.map((item) => <Tab title={ item.title } key={ item.eventKey } eventKey={ item.eventKey } name={ item.name }/>) }
+    </Tabs>
   );
 };
 
