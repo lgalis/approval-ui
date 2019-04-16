@@ -21,7 +21,7 @@ class RequestList extends Component {
   isExpanded = key => this.state.expanded.includes(key);
 
   render() {
-    if (this.props.isLoading) {
+    if (this.props.isLoading || this.props.items.length === 0) {
       return (
         <PageHeader>
           <PageHeaderTitle title={ this.props.noItems }/>
