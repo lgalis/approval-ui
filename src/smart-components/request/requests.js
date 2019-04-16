@@ -2,14 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route } from 'react-router-dom';
-import { Toolbar } from '@patternfly/react-core';
-import { Section } from '@red-hat-insights/insights-frontend-components';
+import { Toolbar, ToolbarGroup, Level } from '@patternfly/react-core';
 import RequestList from './request-list';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import AddRequest from './add-request-modal';
-import './request.scss';
 import { scrollToTop } from '../../helpers/shared/helpers';
+import { TableToolbar } from '@red-hat-insights/insights-frontend-components/components/TableToolbar';
 
 class Requests extends Component {
   state = {
@@ -31,9 +30,17 @@ class Requests extends Component {
 
   renderToolbar() {
     return (
-      <Toolbar className="searchToolbar pf-u-box-shadow-md">
-        <FilterToolbar onFilterChange={ this.onFilterChange } searchValue={ this.state.filterValue } placeholder='Find a Request' />
-      </Toolbar>
+      <TableToolbar>
+        <Level style={ { flex: 1 } }>
+          <Toolbar>
+            <ToolbarGroup>
+              <Toolbar>
+                <FilterToolbar onFilterChange={ this.onFilterChange } searchValue={ this.state.filterValue } placeholder='Find a Request' />
+              </Toolbar>
+            </ToolbarGroup>
+          </Toolbar>
+        </Level>
+      </TableToolbar>
     );
   }
 
@@ -46,10 +53,8 @@ class Requests extends Component {
     return (
       <Fragment>
         <Route exact path="/requests/edit/:id" component={ AddRequest } />
-        <Section style={ { padding: 32 } } type='content'>
-          { this.renderToolbar() }
-          <RequestList { ...filteredItems } noItems={ 'No Requests' } />
-        </Section>
+        { this.renderToolbar() }
+        <RequestList { ...filteredItems } noItems={ 'No Requests' } />
       </Fragment>
     );
   }
