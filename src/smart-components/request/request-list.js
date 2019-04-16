@@ -32,7 +32,7 @@ class RequestList extends Component {
     return (
       <React.Fragment>
         { (this.props.items && this.props.items.length > 0) && (
-          <DataList aria-label="Expandable data list" >
+          <DataList aria-label="Expandable data list">
             { this.props.items.map((item) => {
               return (
                 <Request key= { item.id } item={ item } isExpanded={ this.isExpanded } toggleExpand={ this.toggleExpand }/>);
