@@ -7,6 +7,7 @@ export const createInitialRows = data =>
     ...acc, {
       id,
       isOpen: false,
+      selected: false,
       cells: [ name, description, group_names.length ]
     }, {
       parent: key * 2,
