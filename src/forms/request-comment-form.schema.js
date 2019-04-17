@@ -1,16 +1,16 @@
 import { componentTypes, validatorTypes } from '@data-driven-forms/react-form-renderer';
 
-const schemaFields = (commentName, validation) =>({
+const schemaFields = (isDeny) =>({
   component: componentTypes.TEXTAREA_FIELD,
   name: 'name',
   type: 'text',
-  isRequired: validation,
-  label: commentName
+  isRequired: isDeny,
+  label: isDeny ? 'Reason' : 'Comment'
 });
 
-export const createRequestCommentSchema = (commentName, validation = false) => {
-  let schema = schemaFields(commentName, validation);
-  if (validation) {
+export const createRequestCommentSchema = (isDeny = false) => {
+  let schema = schemaFields(isDeny);
+  if (isDeny) {
     schema.validate = [{
       type: validatorTypes.REQUIRED
     }];

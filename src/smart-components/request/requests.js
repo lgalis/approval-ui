@@ -8,9 +8,7 @@ import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfl
 import { Table, TableHeader, TableBody, expandable } from '@patternfly/react-table';
 import { Pagination } from '@red-hat-insights/insights-frontend-components/components/Pagination';
 import { fetchRequests } from '../../redux/actions/request-actions';
-import AddComment from './add_comment-modal';
-import ApproveRequest from './approve-request-modal';
-import DenyRequest from './deny-request-modal';
+import ActionModal from './action-modal';
 import { scrollToTop, getCurrentPage, getNewPage } from '../../helpers/shared/helpers';
 import { createInitialRows } from './request-table-helpers';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
@@ -137,8 +135,8 @@ class Requests extends Component {
       return [
         {
           title: 'Comment',
-          onClick: (event, rowId, request) =>
-            this.props.history.push(`/requests/add_comment/${request.id}`)
+          onClick: () =>
+            this.props.history.push(`/requests/add_comment/${requestData.id}`)
         }
       ];
     };
@@ -146,9 +144,9 @@ class Requests extends Component {
     render() {
       return (
         <Fragment>
-          <Route exact path="/requests/add_comment/:id" component={ AddComment } />
-          <Route exact path="/requests/approve/:id" component={ ApproveRequest } />
-          <Route exact path="/requests/deny/:id" component={ DenyRequest } />
+          <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props } actionType={ 'Add Comment' } /> }/>
+          <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' } /> } />
+          <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' } /> } />
           { this.renderToolbar() }
           <Table
             aria-label="Approval Requests table"

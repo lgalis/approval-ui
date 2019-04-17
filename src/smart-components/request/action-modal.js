@@ -9,22 +9,25 @@ import { addNotification } from '@red-hat-insights/insights-frontend-components/
 import { fetchRequests } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 
-const AddCommentModal = ({
+const ActionModal = ({
   history: { push },
+  actionType,
   addNotification,
   fetchRequests,
   requestId
 }) => {
   const onSubmit = () => {
     // TODO - add api call for add comment
+    // different action depending on the path
     fetchRequests().then(push('/requests'));
   };
 
   const onCancel = () => {
+    const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
     addNotification({
       variant: 'warning',
-      title: 'Add comment',
-      description: 'Add comment was cancelled by the user.'
+      title: actionName,
+      description: `${actionName} was cancelled by the user.`
     });
     push('/requests');
   };
@@ -32,12 +35,12 @@ const AddCommentModal = ({
   return (
     <Modal
       isLarge
-      title={ `Request #${requestId}` }
+      title={ actionType === 'Add Comment' ? `Request #${requestId}` : `${actionType} Request #${requestId}` }
       isOpen
       onClose={ onCancel }
     >
       <FormRenderer
-        schema={ createRequestCommentSchema('Comment') }
+        schema={ createRequestCommentSchema (actionType === 'Deny') }
         schemaType="default"
         onSubmit={ onSubmit }
         onCancel={ onCancel }
@@ -47,14 +50,17 @@ const AddCommentModal = ({
   );
 };
 
-AddCommentModal.propTypes = {
+ActionModal.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
   addNotification: PropTypes.func.isRequired,
   fetchRequests: PropTypes.func.isRequired,
-  requests: PropTypes.array,
-  requestId: PropTypes.string
+  requests: PropTypes.object,
+  requestId: PropTypes.string,
+  actionType: PropTypes.string,
+  match: PropTypes.object,
+  location: PropTypes.object
 };
 
 const mapStateToProps = (state, { match: { params: { id }}}) => {
@@ -69,4 +75,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchRequests
 }, dispatch);
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddCommentModal));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActionModal));
