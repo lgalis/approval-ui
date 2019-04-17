@@ -6,7 +6,7 @@ import {
 // Initial State
 export const requestsInitialState = {
   requests: [],
-  request: {},
+  selectedRequest: {},
   filterValue: '',
   isRequestDataLoading: false
 };
