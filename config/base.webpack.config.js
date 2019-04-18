@@ -7,6 +7,7 @@ const webpackConfig = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   devtool: false,
   optimization: {
+    usedExports: true,
     minimize: process.env.NODE_ENV === 'production',
     splitChunks: {
       cacheGroups: {
