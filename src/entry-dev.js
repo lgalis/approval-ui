@@ -15,7 +15,7 @@ if (pathName[0] === 'beta') {
 
 ReactDOM.render(
   <Provider store={ store }>
-    <Router basename={ `${release}${pathName[0]}/${pathName[1]}` }>
+    <Router basename={ `${release}${pathName[0]}/${pathName[1]}/${pathName[2]}` }>
       <App />
     </Router>
   </Provider>,
