@@ -117,5 +117,8 @@
   },
   "insights": {
     "appname": "approval"
-  }
+  },
+  "sideEffects": [
+    "*.scss"
+  ]
 }
