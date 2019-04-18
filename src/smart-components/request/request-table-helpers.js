@@ -8,6 +8,7 @@ export const createInitialRows = data =>
     ...acc, {
       id,
       isOpen: false,
+      selected: false,
       cells: [ id, requester, timeAgo(created_at), timeAgo(updated_at), state, decision ]
     }, {
       parent: key * 2,
