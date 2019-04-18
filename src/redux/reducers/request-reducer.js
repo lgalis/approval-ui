@@ -4,7 +4,7 @@ import {
 } from '../../redux/action-types';
 
 // Initial State
-export const requestInitialState = {
+export const requestsInitialState = {
   requests: [],
   request: {},
   filterValue: '',

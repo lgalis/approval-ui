@@ -1,70 +1,65 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route } from 'react-router-dom';
-import { Toolbar, ToolbarGroup, Level } from '@patternfly/react-core';
-import RequestList from './request-list';
-import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
+import { expandable } from '@patternfly/react-table';
 import { fetchRequests } from '../../redux/actions/request-actions';
-import AddRequest from './add-request-modal';
-import { scrollToTop } from '../../helpers/shared/helpers';
-import { TableToolbar } from '@red-hat-insights/insights-frontend-components/components/TableToolbar';
+import ActionModal from './action-modal';
+import { createInitialRows } from './request-table-helpers';
+import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 
-class Requests extends Component {
-  state = {
-    filteredItems: [],
-    isOpen: false,
-    filterValue: ''
+const columns = [{
+  title: 'RequestId',
+  cellFormatters: [ expandable ]
+},
+'Requester',
+'Opened',
+'Updated',
+'Stage Status',
+'Decision'
+];
+
+const Requests = ({ fetchRequests, requests, pagination, history }) => {
+  const fetchData = (setRows) => {
+    fetchRequests().then(({ value: { data }}) => setRows(createInitialRows(data)));
   };
 
-  fetchData = () => {
-    this.props.fetchRequests();
-  };
+  const routes = () => <Fragment>
+    <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props } actionType={ 'Add Comment' } /> }/>
+    <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' } /> } />
+    <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' } /> } />
+  </Fragment>;
 
-  componentDidMount() {
-    this.fetchData();
-    scrollToTop();
-  }
+  const actionResolver = (requestData, { rowIndex }) => rowIndex === 1 ? null :
+    [
+      {
+        title: 'Comment',
+        onClick: () =>
+          history.push(`/requests/add_comment/${requestData.id}`)
+      }
+    ];
 
-  onFilterChange = filterValue => this.setState({ filterValue })
+  return (
+    <TableToolbarView
+      data={ requests }
+      createInitialRows={ createInitialRows }
+      columns={ columns }
+      fetchData={ fetchData }
+      request={ fetchRequests }
+      routes={ routes }
+      actionResolver={ actionResolver }
+      titlePlural="Requests"
+      titleSingular="Request"
+      pagination={ pagination }
+    />
+  );
+};
 
-  renderToolbar() {
-    return (
-      <TableToolbar>
-        <Level style={ { flex: 1 } }>
-          <Toolbar>
-            <ToolbarGroup>
-              <Toolbar>
-                <FilterToolbar onFilterChange={ this.onFilterChange } searchValue={ this.state.filterValue } placeholder='Find a Request' />
-              </Toolbar>
-            </ToolbarGroup>
-          </Toolbar>
-        </Level>
-      </TableToolbar>
-    );
-  }
-
-  render() {
-    let filteredItems = {
-      items: this.props.requests,
-      isLoading: this.props.isLoading && this.props.requests.length === 0
-    };
-
-    return (
-      <Fragment>
-        <Route exact path="/requests/edit/:id" component={ AddRequest } />
-        { this.renderToolbar() }
-        <RequestList { ...filteredItems } noItems={ 'No Requests' } />
-      </Fragment>
-    );
-  }
-}
-
-const mapStateToProps = (state) => ({
-  requests: state.requestReducer.requests,
-  isLoading: state.requestReducer.isRequestDataLoading,
-  workflows: state.workflowReducer.workflows,
-  searchFilter: state.requestReducer.filterValue
+const mapStateToProps = ({ requestReducer: { requests, isLoading, filterValue }}) => ({
+  requests: requests.data,
+  pagination: requests.meta,
+  isLoading,
+  searchFilter: filterValue
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -72,15 +67,26 @@ const mapDispatchToProps = dispatch => ({
 });
 
 Requests.propTypes = {
+  history: propTypes.shape({
+    goBack: propTypes.func.isRequired,
+    push: propTypes.func.isRequired
+  }).isRequired,
   filteredItems: propTypes.array,
   requests: propTypes.array,
+  platforms: propTypes.array,
   isLoading: propTypes.bool,
   searchFilter: propTypes.string,
-  fetchRequests: propTypes.func.isRequired
+  fetchRequests: propTypes.func.isRequired,
+  pagination: propTypes.shape({
+    limit: propTypes.number.isRequired,
+    offset: propTypes.number.isRequired,
+    count: propTypes.number.isRequired
+  })
 };
 
 Requests.defaultProps = {
-  requests: []
+  requests: [],
+  pagination: {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Requests);
