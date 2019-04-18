@@ -5,7 +5,7 @@ import { notifications, notificationsMiddleware } from '@red-hat-insights/insigh
 
 import reduxLogger from 'redux-logger';
 import thunk from 'redux-thunk';
-import requestReducer, { requestInitialState } from '../redux/reducers/request-reducer';
+import requestReducer, { requestsInitialState } from '../redux/reducers/request-reducer';
 import workflowReducer, { workflowsInitialState } from '../redux/reducers/workflow-reducer';
 import groupReducer, { groupsInitialState } from '../redux/reducers/group-reducer';
 
@@ -15,7 +15,7 @@ const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware(), notificat
 }), reduxLogger ]);
 
 registry.register({
-  requestReducer: applyReducerHash(requestReducer, requestInitialState),
+  requestReducer: applyReducerHash(requestReducer, requestsInitialState),
   workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState),
   groupReducer: applyReducerHash(groupReducer, groupsInitialState),
   notifications

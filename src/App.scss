@@ -17,3 +17,9 @@
     margin-top: 0 !important
   }
 }
+
+.destructive-color {
+  &:not(:disabled) {
+    color: #FF0000 !important;
+  }
+}
