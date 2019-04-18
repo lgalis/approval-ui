@@ -1,17 +1,12 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route } from 'react-router-dom';
-import debouncePromise from 'awesome-debounce-promise';
-import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
-import { Table, TableHeader, TableBody, expandable } from '@patternfly/react-table';
-import { Pagination } from '@red-hat-insights/insights-frontend-components/components/Pagination';
+import { expandable } from '@patternfly/react-table';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
-import { scrollToTop, getCurrentPage, getNewPage } from '../../helpers/shared/helpers';
 import { createInitialRows } from './request-table-helpers';
-import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
-import { TableToolbar } from '@red-hat-insights/insights-frontend-components/components/TableToolbar';
+import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 
 const columns = [{
   title: 'RequestId',
@@ -25,80 +20,15 @@ const columns = [{
 ];
 
 const Requests = ({ fetchRequests, requests, pagination, history }) => {
-  const [ filterValue, setFilterValue ] = useState([]);
-  const [ rows, setRows ] = useState([]);
-
-  const fetchData = () => {
+  const fetchData = (setRows) => {
     fetchRequests().then(({ value: { data }}) => setRows(createInitialRows(data)));
   };
 
-  useEffect(() => {
-    fetchData();
-    scrollToTop();
-  }, []);
-
-  const handleOnPerPageSelect = limit => fetchRequests({
-    offset: pagination.offset,
-    limit
-  }).then(() => setRows(createInitialRows(requests)));
-
-  const handleSetPage = (number, debounce) => {
-    const options = {
-      offset: getNewPage(number, pagination.limit),
-      limit: pagination.limit
-    };
-    const request = () => fetchRequests(options);
-    return debounce ? debouncePromise(request, 250)() : request().then(({ value: { data }}) => setRows(createInitialRows(data)));
-  };
-
-  const setOpen = (data, id) => data.map(row => row.id === id ?
-    {
-      ...row,
-      isOpen: !row.isOpen
-    } : {
-      ...row
-    });
-
-  const setSelected = (data, id) => data.map(row => row.id === id ?
-    {
-      ...row,
-      selected: !row.selected
-    } : {
-      ...row
-    });
-
-  const onCollapse = (_event, _index, _isOpen, { id }) => setRows((rows) => setOpen(rows, id));
-
-  const selectRow = (_event, selected, index, { id } = {}) => index === -1
-    ? setRows(rows.map(row => ({ ...row, selected })))
-    : setRows((rows) => setSelected(rows, id));
-
-  const renderToolbar = () => <TableToolbar>
-    <Level style={ { flex: 1 } }>
-      <LevelItem>
-        <Toolbar>
-          <FilterToolbar onFilterChange={ value => setFilterValue(value) } searchValue={ filterValue } placeholder='Find a Request' />
-        </Toolbar>
-      </LevelItem>
-
-      <LevelItem>
-        <Toolbar>
-          <ToolbarGroup>
-            <ToolbarItem>
-              <Pagination
-                itemsPerPage={ pagination.limit || 50 }
-                numberOfItems={ pagination.count || 50 }
-                onPerPageSelect={ handleOnPerPageSelect }
-                page={ getCurrentPage(pagination.limit, pagination.offset) }
-                onSetPage={ handleSetPage }
-                direction="down"
-              />
-            </ToolbarItem>
-          </ToolbarGroup>
-        </Toolbar>
-      </LevelItem>
-    </Level>
-  </TableToolbar>;
+  const routes = () => <Fragment>
+    <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props } actionType={ 'Add Comment' } /> }/>
+    <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' } /> } />
+    <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' } /> } />
+  </Fragment>;
 
   const actionResolver = (requestData, { rowIndex }) => rowIndex === 1 ? null :
     [
@@ -110,23 +40,18 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
     ];
 
   return (
-    <Fragment>
-      <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props } actionType={ 'Add Comment' } /> }/>
-      <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' } /> } />
-      <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' } /> } />
-      { renderToolbar() }
-      <Table
-        aria-label="Approval Requests table"
-        onCollapse={ onCollapse }
-        rows={ rows }
-        cells={ columns }
-        onSelect={ selectRow }
-        actionResolver={ actionResolver }
-      >
-        <TableHeader />
-        <TableBody />
-      </Table>
-    </Fragment>
+    <TableToolbarView
+      data={ requests }
+      createInitialRows={ createInitialRows }
+      columns={ columns }
+      fetchData={ fetchData }
+      request={ fetchRequests }
+      routes={ routes }
+      actionResolver={ actionResolver }
+      titlePlural="Requests"
+      titleSingular="Request"
+      pagination={ pagination }
+    />
   );
 };
 
