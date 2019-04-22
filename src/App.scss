@@ -18,6 +18,11 @@
   }
 }
 
+.detail-pane {
+  background-color: white;
+  minHeight: 100%;
+  padding: 24px;
+}
 .destructive-color {
   &:not(:disabled) {
     color: #FF0000 !important;

@@ -8,7 +8,7 @@ export const fetchRequests = (options = {}) => ({
 
 export const fetchRequest = apiProps => ({
   type: ActionTypes.FETCH_REQUEST,
-  payload: RequestHelper.fetchRequestWithStages(apiProps)
+  payload: RequestHelper.fetchRequestWithStagesAndActions(apiProps)
 });
 
 export const fetchStagesForRequest = apiProps => ({

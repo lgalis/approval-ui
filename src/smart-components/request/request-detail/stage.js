@@ -5,18 +5,20 @@ import { Link } from 'react-router-dom';
 import {
   Stack,
   StackItem,
+  Button,
   DataListItem,
   DataListCell,
-  DataListCheck,
   DataListToggle,
   DataListContent,
   DropdownItem,
   Dropdown,
   DropdownPosition,
   KebabToggle,
-  Title,
   TextVariants,
-  TextContent } from '@patternfly/react-core';
+  TextContent,
+  Level,
+  LevelItem
+} from '@patternfly/react-core';
 
 class Stage extends Component {
   state = {
@@ -42,7 +44,7 @@ class Stage extends Component {
         isOpen = { this.state.isKebabOpen }
         dropdownItems={ [
           <DropdownItem aria-label="Edit Stage" key="edit-stage">
-            <Link to={ `/stages/comment/${stage.id}` }>
+            <Link to={ `/requests/comment/${stage.requestId}` }>
                   Comment
             </Link>
           </DropdownItem>
@@ -70,24 +72,34 @@ class Stage extends Component {
           aria-labelledby={ `stage-${item.id} stage-${item.id}` }
           aria-label="Toggle details for"
         />
-        <DataListCheck aria-labelledby={ `check-stage-${item.id}` } name={ `check-stage-${item.id}` }/>
         <DataListCell>
-          <StackItem>
-            <span id={ item.id }>{ `${item.name}` } </span>
-          </StackItem>
-          <StackItem>
-            <span id={ item.description }>{ `${item.description}` } </span>
-          </StackItem>
+          <span id={ item.id }>{ `${item.name}` } </span>
         </DataListCell>
         <DataListCell>
-          { this.fetchStageDetails(item) }
+          <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
+        </DataListCell>
+        <DataListCell>
+          <Level>
+            <LevelItem>
+              <Link to={ `/requests/detail/${item.request_id}/approve` }>
+                <Button variant="link" aria-label="Approve Request">
+                  Approve
+                </Button>
+              </Link>
+              <Link to={ `/requests/detail/${item.request_id}/deny` }>
+                <Button variant="link" className="destructive-color" aria-label="Deny Request">
+                  Deny
+                </Button>
+              </Link>
+            </LevelItem>
+          </Level>
+        </DataListCell>
+        <DataListCell>
+          <span> </span>
         </DataListCell>
         <DataListContent aria-label="Stage Content Details"
           isHidden={ !this.props.isExpanded(`stage-${item.id}`) }>
           <Stack gutter="md">
-            <StackItem>
-              <Title size="md">Details</Title>
-            </StackItem>
             <StackItem>
               <TextContent component={ TextVariants.h6 }>
                 { this.fetchStageDetails(item) }

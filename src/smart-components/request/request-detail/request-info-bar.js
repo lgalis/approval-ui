@@ -5,15 +5,20 @@ import { Text, TextContent, TextVariants } from '@patternfly/react-core';
 const RequestInfoBar = ({ request }) => {
   return (
     <TextContent>
-      <Text component={ TextVariants.h6 }>Product: <br/>{ request.content ? request.content.product : 'Unknown' }</Text>
-      <Text component={ TextVariants.h6 }>
+      <Text component={ TextVariants.small }>Product: <br/></Text>
+      <Text>{ request.content ? request.content.product : 'Unknown' }</Text>
+      <Text component={ TextVariants.small }>
           Portfolio:
         <br/>
+      </Text>
+      <Text>
         { request.content ? request.content.portfolio : '' }
       </Text>
-      <Text component={ TextVariants.h6 }>Platform: <br/>{ request.content ? request.content.platform : '' }</Text>
-      <Text component={ TextVariants.h6 }>Project: <br/>{ request.content ? request.content.project : '' }</Text>
-      <Text component={ TextVariants.h6 }>Order Parameters: </Text>
+      <Text component={ TextVariants.small }>Platform: <br/></Text>
+      <Text>{ request.content ? request.content.platform : '' }</Text>
+      <Text component={ TextVariants.small }>Project: <br/></Text>
+      <Text>{ request.content ? request.content.project : '' }</Text>
+      <Text component={ TextVariants.small }>Order Parameters: </Text>
       <Text component={ TextVariants.h6 }>Requester: <br/>{ request.requester }
       </Text>
       <Text component={ TextVariants.h6 }>Project: <br/> </Text>

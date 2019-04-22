@@ -38,11 +38,11 @@ class StageList extends Component {
         </div>
         { (this.props.items && this.props.items.length > 0) && (
           <DataList aria-label="Expandable data list">
-            { this.props.items.map((item) => {
+            { this.props.items.map((item, idx) => {
               return (
-                <Stage key= { item.id } item={ item } isExpanded={ this.isExpanded } toggleExpand={ this.toggleExpand }/>);
-            }
-            )
+                <Stage key= { item.id } item={ item } isActive= { idx + 1 === item.active_stage }
+                  isExpanded={ this.isExpanded } toggleExpand={ this.toggleExpand }/>);
+            })
             }
           </DataList>)
         }

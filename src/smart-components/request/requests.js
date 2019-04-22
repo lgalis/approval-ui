@@ -59,7 +59,7 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
     <Section>
       <Switch>
         <Route path={ '/requests/detail/:id' } render={ props => <RequestDetail { ...props }/> } />
-        <Route exact path={ '/requests' } render={ () => renderRequestsList() } />
+        <Route path={ '/requests' } render={ () => renderRequestsList() } />
       </Switch>
     </Section>
   );
