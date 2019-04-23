@@ -43,9 +43,11 @@ class Stage extends Component {
         toggle={ <KebabToggle onToggle={ this.onKebabToggle }/> }
         isOpen = { this.state.isKebabOpen }
         dropdownItems={ [
-          <DropdownItem aria-label="Edit Stage" key="edit-stage">
-            <Link to={ `/requests/comment/${stage.requestId}` }>
-                  Comment
+          <DropdownItem aria-label="Add Comment" key={ `add_comment_${stage.id}` }>
+            <Link to={ `/requests/detail/${stage.request_id}/add_comment` }>
+              <Button variant="link" aria-label="Add Comment for Request">
+                Add Comment
+              </Button>
             </Link>
           </DropdownItem>
         ] }
@@ -73,7 +75,7 @@ class Stage extends Component {
           aria-label="Toggle details for"
         />
         <DataListCell>
-          <span id={ item.id }>{ `${item.name}` } </span>
+          <span id={ item.id }>{ `${this.props.idx + 1}. ${item.name}` } </span>
         </DataListCell>
         <DataListCell>
           <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
@@ -94,8 +96,12 @@ class Stage extends Component {
             </LevelItem>
           </Level>
         </DataListCell>
-        <DataListCell>
-          <span> </span>
+        <DataListCell
+          class="pf-c-data-list__action"
+          aria-labelledby={ `request-${item.id} check-workflow-action${item.id}` }
+          id={ `workflow-${item.id}` }
+          aria-label="Actions">
+          { this.buildStageActionKebab(item) }
         </DataListCell>
         <DataListContent aria-label="Stage Content Details"
           isHidden={ !this.props.isExpanded(`stage-${item.id}`) }>
@@ -115,6 +121,7 @@ class Stage extends Component {
 Stage.propTypes = {
   isLoading: PropTypes.bool,
   item: PropTypes.object,
+  idx: PropTypes.string,
   isExpanded: PropTypes.func.isRequired,
   toggleExpand: PropTypes.func.isRequired,
   noItems: PropTypes.string

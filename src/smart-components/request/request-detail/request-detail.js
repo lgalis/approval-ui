@@ -31,7 +31,7 @@ const RequestDetail = ({
   if (isLoading || Object.keys(selectedRequest).length === 0) {
     return (
       <Section style={ { backgroundColor: 'white', minHeight: '100%' } }>
-        <div>Test</div>
+        <div>Loading...</div>
       </Section>
     );
   }
