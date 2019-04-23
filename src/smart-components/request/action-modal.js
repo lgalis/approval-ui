@@ -14,12 +14,13 @@ const ActionModal = ({
   actionType,
   addNotification,
   fetchRequests,
+  closeUrl,
   requestId
 }) => {
   const onSubmit = () => {
     // TODO - add api call for add comment
     // different action depending on the path
-    fetchRequests().then(push('/requests'));
+    fetchRequests().then(push(closeUrl));
   };
 
   const onCancel = () => {
@@ -29,7 +30,7 @@ const ActionModal = ({
       title: actionName,
       description: `${actionName} was cancelled by the user.`
     });
-    push('/requests');
+    push(closeUrl);
   };
 
   return (
@@ -50,6 +51,10 @@ const ActionModal = ({
   );
 };
 
+ActionModal.defaultProps = {
+  closeUrl: '/requests'
+};
+
 ActionModal.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
@@ -59,6 +64,7 @@ ActionModal.propTypes = {
   requests: PropTypes.object,
   requestId: PropTypes.string,
   actionType: PropTypes.string,
+  closeUrl: PropTypes.string,
   match: PropTypes.object,
   location: PropTypes.object
 };

@@ -34,6 +34,22 @@ CardLoader.defaultProps = {
   items: 1
 };
 
+export const RequestLoader = () => (
+  <ContentLoader
+    height={ 800 }
+    width={ 600 }
+    speed={ 2 }
+    primaryColor="#ffffff"
+    secondaryColor="#ecebeb"
+  >
+    <rect x="290" y="225" rx="0" ry="0" width="0" height="0" />
+    <rect x="168" y="187" rx="0" ry="0" width="0" height="0" />
+    <rect x="368" y="280" rx="0" ry="0" width="0" height="0" />
+    <rect x="28" y="19" rx="0" ry="0" width="518" height="413" />
+    <rect x="392" y="380" rx="0" ry="0" width="1" height="60" />
+  </ContentLoader>
+);
+
 export const AppPlaceholder = props => (
   <div>
     <ContentLoader

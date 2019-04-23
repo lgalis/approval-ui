@@ -1,7 +1,7 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { lazy, Suspense } from 'react';
-import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
+import { RequestLoader } from './presentational-components/shared/loader-placeholders';
 
 /**
  * Aysnc imports of components
@@ -47,7 +47,7 @@ InsightsRoute.propTypes = {
  *      component - component to be rendered when a route has been chosen.
  */
 export const Routes = () => (
-  <Suspense fallback={ <AppPlaceholder /> }>
+  <Suspense fallback={ <RequestLoader /> }>
     <Switch>
       <InsightsRoute path={ paths.requests } component={ Requests } rootClass="requests"/>
       <InsightsRoute path={ paths.workflows } component={ Workflows } rootClass="workflows" />
