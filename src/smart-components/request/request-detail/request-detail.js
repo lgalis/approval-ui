@@ -9,13 +9,11 @@ import '../../../App.scss';
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
 import RequestStageTranscript from './request-stage-transcript';
-//import TopToolbar from '../../../presentational-components/shared/top-toolbar';
 import { fetchRequest } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 
 const RequestDetail = ({
   match: { url },
-  //history: { push },
   isLoading,
   fetchRequest,
   requestId,
@@ -35,7 +33,6 @@ const RequestDetail = ({
     );
   }
   else {
-    console.log('Not loading, request: ', selectedRequest);
     return (
       <Fragment>
         <Route exact path="/requests/detail/:id/add_comment" render={ props =>
