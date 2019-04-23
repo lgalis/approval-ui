@@ -6,7 +6,7 @@ import StageList from './stage-list';
 const RequestStageTranscript = ({ request }) => {
   console.log('Stages:', request ? request.stages : []);
   return (<Fragment>
-    <Title size="lg" > Stage(s) transcript </Title>
+    <Title size="sm" style={ { paddingLeft: '5%' } }> Stage(s) transcript </Title>
     <StageList items={ request ? request.stages : [] } noItems={ 'No Stages' } />
   </Fragment>);
 };

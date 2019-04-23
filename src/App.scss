@@ -21,8 +21,11 @@
 .detail-pane {
   background-color: white;
   minHeight: 100%;
-  padding: 24px;
+  padding: 20px;
+  overflow: ellipsis;
+  word-wrap: break-word
 }
+
 .destructive-color {
   &:not(:disabled) {
     color: #FF0000 !important;

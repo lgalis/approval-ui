@@ -44,10 +44,8 @@ class Stage extends Component {
         isOpen = { this.state.isKebabOpen }
         dropdownItems={ [
           <DropdownItem aria-label="Add Comment" key={ `add_comment_${stage.id}` }>
-            <Link to={ `/requests/detail/${stage.request_id}/add_comment` }>
-              <Button variant="link" aria-label="Add Comment for Request">
-                Add Comment
-              </Button>
+            <Link to={ `/requests/detail/${stage.request_id}/add_comment` } className="pf-c-dropdown__menu-item">
+              Comment
             </Link>
           </DropdownItem>
         ] }

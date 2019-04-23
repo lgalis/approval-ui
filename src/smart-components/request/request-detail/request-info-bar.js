@@ -8,7 +8,7 @@ const RequestInfoBar = ({ request }) => {
       <Text component={ TextVariants.small }>Product: <br/></Text>
       <Text>{ request.content ? request.content.product : 'Unknown' }</Text>
       <Text component={ TextVariants.small }>
-          Portfolio:
+              Portfolio:
         <br/>
       </Text>
       <Text>
@@ -24,9 +24,9 @@ const RequestInfoBar = ({ request }) => {
       <Text component={ TextVariants.h6 }>Project: <br/> </Text>
       { request.content.params && Object.keys(request.content.params).map(param => {
         return ((request.content.params[param] && request.content.params[param] !== '********') &&
-              <Text key={ param } component={ TextVariants.small }>
-                { `${param}: ${request.content.params[param]}` }
-              </Text>);
+                  <Text key={ param } component={ TextVariants.small }>
+                    { `${param}: ${request.content.params[param]}` }
+                  </Text>);
       })
       }
     </TextContent>

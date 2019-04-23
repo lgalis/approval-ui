@@ -6,13 +6,12 @@ import { withRouter, Route } from 'react-router-dom';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { Section } from '@red-hat-insights/insights-frontend-components';
 import '../../../App.scss';
-
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
 import RequestStageTranscript from './request-stage-transcript';
 //import TopToolbar from '../../../presentational-components/shared/top-toolbar';
 import { fetchRequest } from '../../../redux/actions/request-actions';
-//import { ProductLoaderPlaceholder } from '../../../presentational-components/shared/loader-placeholders';
+import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 
 const RequestDetail = ({
   match: { url },
@@ -31,7 +30,7 @@ const RequestDetail = ({
   if (isLoading || Object.keys(selectedRequest).length === 0) {
     return (
       <Section style={ { backgroundColor: 'white', minHeight: '100%' } }>
-        <div>Loading...</div>
+        <RequestLoader />
       </Section>
     );
   }
