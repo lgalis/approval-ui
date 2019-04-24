@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { expandable } from '@patternfly/react-table';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import { createInitialRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
+import { Section } from '@red-hat-insights/insights-frontend-components';
+import RequestDetail from './request-detail/request-detail';
 
 const columns = [{
   title: 'RequestId',
@@ -39,7 +41,7 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
       }
     ];
 
-  return (
+  const renderRequestsList = () =>
     <TableToolbarView
       data={ requests }
       createInitialRows={ createInitialRows }
@@ -51,20 +53,17 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
       titlePlural="Requests"
       titleSingular="Request"
       pagination={ pagination }
-    />
+    />;
+
+  return (
+    <Section>
+      <Switch>
+        <Route path={ '/requests/detail/:id' } render={ props => <RequestDetail { ...props }/> } />
+        <Route path={ '/requests' } render={ () => renderRequestsList() } />
+      </Switch>
+    </Section>
   );
 };
-
-const mapStateToProps = ({ requestReducer: { requests, isLoading, filterValue }}) => ({
-  requests: requests.data,
-  pagination: requests.meta,
-  isLoading,
-  searchFilter: filterValue
-});
-
-const mapDispatchToProps = dispatch => ({
-  fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
-});
 
 Requests.propTypes = {
   history: propTypes.shape({
@@ -88,5 +87,16 @@ Requests.defaultProps = {
   requests: [],
   pagination: {}
 };
+
+const mapStateToProps = ({ requestReducer: { requests, isRequestDataLoading, filterValue }}) => ({
+  requests: requests.data,
+  pagination: requests.meta,
+  isLoading: isRequestDataLoading,
+  searchFilter: filterValue
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Requests);

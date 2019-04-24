@@ -12,7 +12,15 @@ export async function fetchWorkflowsWithGroups({ limit = 10, offset = 0 }) {
   let wfData = await workflowApi.listWorkflows(limit, offset);
   let workflows = wfData.data;
   return Promise.all(workflows.map(async wf => {
-    let wfWithGroups = await fetchGroupNames(wf.group_refs);
+    let wfWithGroups = wf.group_refs;
+    try {
+      wfWithGroups = await fetchGroupNames(wf.group_refs);
+    }
+    catch (error) {
+      if (!(error.response && error.response.status === 404)) {
+        throw error;
+      }
+    }
     return { ...wf, group_names: wfWithGroups };
   })).then(data => ({
     ...wfData,
@@ -22,8 +30,17 @@ export async function fetchWorkflowsWithGroups({ limit = 10, offset = 0 }) {
 
 export async function fetchWorkflowWithGroups(id) {
   let wfData = await workflowApi.showWorkflow(id);
-  let wfGroups = await fetchGroupNames(wfData.group_refs);
-  return { ...wfData, group_names: wfGroups };
+  let wfWithGroups = wfData.group_refs;
+  try {
+    wfWithGroups = await fetchGroupNames(wfData.group_refs);
+  }
+  catch (error) {
+    if (!(error.response && error.response.status === 404)) {
+      throw error;
+    }
+  }
+
+  return { ...wfData, group_names: wfWithGroups };
 }
 
 export async function fetchWorkflow(id) {
