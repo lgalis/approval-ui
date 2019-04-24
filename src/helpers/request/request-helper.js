@@ -39,3 +39,7 @@ export async function fetchStagesWithActions(requestId) {
     data
   }));
 }
+
+export async function createStageAction (stageId, actionIn) {
+  return await actionApi.createAction(stageId, actionIn);
+};
