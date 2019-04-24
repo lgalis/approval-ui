@@ -12,12 +12,6 @@ export async function fetchRequest(id) {
   return await requestApi.showRequest(id);
 }
 
-export async function fetchRequestWithStages(id) {
-  let requestData = await requestApi.showRequest(id);
-  let requestStages = await stageApi.listStagesByRequest(id);
-  return { ...requestData, stages: requestStages.data };
-}
-
 export async function fetchRequestWithStagesAndActions(id) {
   let requestData = await requestApi.showRequest(id);
   let requestStages = await fetchStagesWithActions(id);

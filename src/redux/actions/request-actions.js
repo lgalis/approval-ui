@@ -16,11 +16,6 @@ export const fetchStagesForRequest = apiProps => ({
   payload: RequestHelper.fetchStagesForRequest(apiProps)
 });
 
-export const fetchRequestWithStages = apiProps => ({
-  type: ActionTypes.FETCH_REQUEST_WITH_STAGES,
-  payload: RequestHelper.fetchRequestWithStages(apiProps)
-});
-
 export const createStageAction = (actionName, stageId, actionIn) => ({
   type: ActionTypes.CREATE_STAGE_ACTION,
   payload: RequestHelper.createStageAction(stageId, actionIn),

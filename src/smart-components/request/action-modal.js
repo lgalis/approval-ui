@@ -5,15 +5,15 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
+import { isEmpty } from 'lodash';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { fetchRequest, createStageAction, fetchRequests } from '../../redux/actions/request-actions';
+import { fetchRequest, createStageAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 
 const ActionModal = ({
   history: { push },
   actionType,
   addNotification,
-  fetchRequests,
   fetchRequest,
   createStageAction,
   selectedRequest,
@@ -21,17 +21,19 @@ const ActionModal = ({
   requestId
 }) => {
   useEffect(() => {
-    if (requestId) {
+    if (isEmpty(selectedRequest)) {
       fetchRequest(requestId);
     }
-  }, [ requestId ]);
+  }, []);
 
   const onSubmit = async (data) => {
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
     const activeStage =  selectedRequest.stages[selectedRequest.active_stage - 1];
     const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
     if (activeStage) {
-      createStageAction(activeStage.id, { actionName, operation: operationType[actionType], processed_by: 'User', ...data }).then(fetchRequests()).then(push(closeUrl));
+      createStageAction(actionName, activeStage.id,
+        { operation: operationType[actionType], processed_by: 'User', ...data }).
+      then(push(closeUrl));
     }
   };
 
@@ -73,9 +75,7 @@ ActionModal.propTypes = {
   }).isRequired,
   addNotification: PropTypes.func.isRequired,
   fetchRequest: PropTypes.func.isRequired,
-  fetchRequests: PropTypes.func.isRequired,
   createStageAction: PropTypes.func.isRequired,
-  requests: PropTypes.object,
   selectedRequest: PropTypes.object,
   requestId: PropTypes.string,
   actionType: PropTypes.string,
@@ -94,7 +94,6 @@ const mapStateToProps = (state, { match: { params: { id }}}) => {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
-  fetchRequests,
   createStageAction,
   fetchRequest
 }, dispatch);

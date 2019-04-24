@@ -33,7 +33,6 @@ const RequestDetail = ({
     );
   }
   else {
-    console.log('Not loading, request: ', selectedRequest);
     return (
       <Fragment>
         <Route exact path="/requests/detail/:id/add_comment" render={ props =>

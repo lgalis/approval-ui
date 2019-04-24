@@ -9,6 +9,7 @@ import { createInitialRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import { Section } from '@red-hat-insights/insights-frontend-components';
 import RequestDetail from './request-detail/request-detail';
+import { isRequestStateActive } from '../../helpers/shared/helpers';
 
 const columns = [{
   title: 'RequestId',
@@ -32,14 +33,19 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
     <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' } /> } />
   </Fragment>;
 
-  const actionResolver = (requestData, { rowIndex }) => rowIndex === 1 ? null :
-    [
-      {
-        title: 'Comment',
-        onClick: () =>
-          history.push(`/requests/add_comment/${requestData.id}`)
-      }
-    ];
+  const actionResolver = (requestData, { rowIndex }) => {
+    return (rowIndex === 1 || areActionsDisabled(requestData) ? null :
+      [
+        {
+          title: 'Comment',
+          onClick: () =>
+            history.push(`/requests/add_comment/${requestData.id}`)
+        }
+      ]);
+
+  };
+
+  const areActionsDisabled = (requestData) => { return !isRequestStateActive(requestData.state);};
 
   const renderRequestsList = () =>
     <TableToolbarView
@@ -50,6 +56,7 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
       request={ fetchRequests }
       routes={ routes }
       actionResolver={ actionResolver }
+      areActionsDisabled={ areActionsDisabled }
       titlePlural="Requests"
       titleSingular="Request"
       pagination={ pagination }

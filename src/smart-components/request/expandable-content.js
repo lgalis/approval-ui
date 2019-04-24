@@ -2,9 +2,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button } from '@patternfly/react-core';
+import { isRequestStateActive } from '../../helpers/shared/helpers';
 
-const ExpandableContent = ({ id, content }) => {
-  console.log('ExpandableContent content: ', content);
+const ExpandableContent = ({ id, content, state }) => {
+  const requestActive = isRequestStateActive(state);
   return (
     <Fragment>
       <Level>
@@ -15,19 +16,19 @@ const ExpandableContent = ({ id, content }) => {
               component={ TextVariants.h5 }>{ content ? content.product : 'Unknown' }</Text>
           </TextContent>
         </LevelItem>
-        <LevelItem>
+        { requestActive && <LevelItem>
           <Link to={ `/requests/approve/${id}` }>
-            <Button variant="link" aria-label="Approve Request">
-                Approve
+            <Button variant="link" aria-label="Approve Request" isDisabled={ !requestActive }>
+              Approve
             </Button>
           </Link>
           <Link to={ `/requests/deny/${id}` }>
             <Button variant="link" className="destructive-color" aria-label="Deny Request">
-                Deny
+              Deny
             </Button>
           </Link>
         </LevelItem>
-      </Level>
+        }</Level>
       <Level>
         <LevelItem>
           <TextContent>
@@ -54,7 +55,9 @@ const ExpandableContent = ({ id, content }) => {
 
 ExpandableContent.propTypes = {
   id: PropTypes.string,
-  content: PropTypes.object
+  content: PropTypes.obuidt,
+  uname: PropTypes.string,
+  state: PropTypes.string
 };
 export default ExpandableContent;
 
