@@ -5,24 +5,24 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
-import { isEmpty } from 'lodash';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { fetchRequest, createStageAction } from '../../redux/actions/request-actions';
+import { createStageAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 
 const ActionModal = ({
   history: { push },
   actionType,
   addNotification,
-  fetchRequest,
   createStageAction,
   selectedRequest,
   closeUrl,
+  preMethod,
+  postMethod,
   requestId
 }) => {
   useEffect(() => {
-    if (isEmpty(selectedRequest)) {
-      fetchRequest(requestId);
+    if (preMethod) {
+      preMethod(requestId);
     }
   }, []);
 
@@ -33,7 +33,7 @@ const ActionModal = ({
     if (activeStage) {
       createStageAction(actionName, activeStage.id,
         { operation: operationType[actionType], processed_by: 'User', ...data }).
-      then(push(closeUrl));
+      then(postMethod ? postMethod().then(push(closeUrl)) : push(closeUrl));
     }
   };
 
@@ -74,7 +74,8 @@ ActionModal.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   addNotification: PropTypes.func.isRequired,
-  fetchRequest: PropTypes.func.isRequired,
+  preMethod: PropTypes.func,
+  postMethod: PropTypes.func,
   createStageAction: PropTypes.func.isRequired,
   selectedRequest: PropTypes.object,
   requestId: PropTypes.string,
@@ -94,8 +95,7 @@ const mapStateToProps = (state, { match: { params: { id }}}) => {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
-  createStageAction,
-  fetchRequest
+  createStageAction
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActionModal));

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { isRequestStateActive } from '../../../helpers/shared/helpers';
 
 import {
   Stack,
@@ -60,7 +61,7 @@ class Stage extends Component {
 
   render() {
     let { item } = this.props;
-
+    const requestActive = isRequestStateActive(item.state);
     return (
       <DataListItem key={ `stage-${item.id}` }
         aria-labelledby={ `check-stage-${item.id}` }
@@ -78,29 +79,31 @@ class Stage extends Component {
         <DataListCell>
           <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
         </DataListCell>
-        <DataListCell>
+        { requestActive && <DataListCell>
           <Level>
             <LevelItem>
               <Link to={ `/requests/detail/${item.request_id}/approve` }>
                 <Button variant="link" aria-label="Approve Request">
-                  Approve
+                    Approve
                 </Button>
               </Link>
               <Link to={ `/requests/detail/${item.request_id}/deny` }>
                 <Button variant="link" className="destructive-color" aria-label="Deny Request">
-                  Deny
+                    Deny
                 </Button>
               </Link>
             </LevelItem>
           </Level>
-        </DataListCell>
-        <DataListCell
-          class="pf-c-data-list__action"
-          aria-labelledby={ `request-${item.id} check-workflow-action${item.id}` }
-          id={ `workflow-${item.id}` }
-          aria-label="Actions">
-          { this.buildStageActionKebab(item) }
-        </DataListCell>
+        </DataListCell> }
+        { requestActive &&
+          <DataListCell
+            class="pf-c-data-list__action"
+            aria-labelledby={ `request-${item.id} check-workflow-action${item.id}` }
+            id={ `workflow-${item.id}` }
+            aria-label="Actions">
+            { this.buildStageActionKebab(item) }
+          </DataListCell>
+        }
         <DataListContent aria-label="Stage Content Details"
           isHidden={ !this.props.isExpanded(`stage-${item.id}`) }>
           <Stack gutter="md">

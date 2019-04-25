@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { expandable } from '@patternfly/react-table';
-import { fetchRequests } from '../../redux/actions/request-actions';
+import { fetchRequests, fetchRequest } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import { createInitialRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
@@ -28,9 +28,16 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
   };
 
   const routes = () => <Fragment>
-    <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props } actionType={ 'Add Comment' } /> }/>
-    <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' } /> } />
-    <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' } /> } />
+    <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
+      actionType={ 'Add Comment' }
+      preMethod = { fetchRequest }
+      postMethod={ fetchRequests } /> }/>
+    <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' }
+      preMethod = { fetchRequest }
+      postMethod={ fetchRequests }/> } />
+    <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' }
+      preMethod = { fetchRequest }
+      postMethod={ fetchRequests }/> } />
   </Fragment>;
 
   const actionResolver = (requestData, { rowIndex }) => {
