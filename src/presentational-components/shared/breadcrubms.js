@@ -6,7 +6,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 
 const patternsReducers = {
-  requests: 'requestReducer.selectedRequest.id'
+  requests: 'requestReducer.selectedRequest.name'
 };
 
 const fragmentMapper = {
@@ -79,7 +79,7 @@ const ApprovalBreadcrumbs = ({ match: { url }, reducers }) => {
   ));
   return (
     <Breadcrumb style={ { minHeight: 18 } }>
-      { items.length > 1 && items }
+      { items }
     </Breadcrumb>
   );
 };

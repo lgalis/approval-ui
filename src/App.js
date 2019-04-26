@@ -9,7 +9,9 @@ import { Main, PageHeader } from '@red-hat-insights/insights-frontend-components
 import { NotificationsPortal } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import '@red-hat-insights/insights-frontend-components/components/Notifications.css';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
-import TopToolbar from './presentational-components/shared/top-toolbar';
+import TopToolbar, { TopToolbarTitle } from './presentational-components/shared/top-toolbar';
+
+'./presentational-components/shared/top-toolbar';
 import { Title } from '@patternfly/react-core';
 
 class App extends Component {
@@ -35,9 +37,8 @@ class App extends Component {
         <NotificationsPortal />
         <PageHeader style={ { paddingBottom: 0 } }>
           <TopToolbar>
-            <Title size= "md">
-              Approval
-            </Title>
+            <TopToolbarTitle title = { 'Approval' }>
+            </TopToolbarTitle>
             <AppTabs />
           </TopToolbar>
         </PageHeader>
