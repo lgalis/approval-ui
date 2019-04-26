@@ -15,9 +15,10 @@ const operationIcon = { memo: <CommentIcon/>, approve: <CheckIcon/>,
   deny: <OutlinedTimesCircleIcon/>, notify: <EnvelopeIcon/>, skip: <AngleDoubleRightIcon/> };
 
 export const ActionTrasncript = actionList => {
+  console.log('Action List: ', actionList);
   return (
     <Stack>
-      { Object.values(actionList)[0].map(actionItem =>
+      { actionList.actionList.map(actionItem =>
         <div key={ `${actionItem.id}-action` }>
           <TextContent><Text style={ { marginBottom: 0 } } className="data-table-detail content" component={ TextVariants.small }>
             { `${timeAgo(actionItem.created_at)}` }
