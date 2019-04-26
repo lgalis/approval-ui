@@ -6,10 +6,11 @@ import { Routes } from './Routes';
 import './App.scss';
 import AppTabs from './smart-components/app-tabs/app-tabs';
 import { Main, PageHeader } from '@red-hat-insights/insights-frontend-components';
-import { Title } from '@patternfly/react-core';
 import { NotificationsPortal } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import '@red-hat-insights/insights-frontend-components/components/Notifications.css';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
+import TopToolbar from './presentational-components/shared/top-toolbar';
+import { Title } from '@patternfly/react-core';
 
 class App extends Component {
   state = {
@@ -33,10 +34,12 @@ class App extends Component {
       <React.Fragment>
         <NotificationsPortal />
         <PageHeader style={ { paddingBottom: 0 } }>
-          <Title headingLevel='h1' size='2xl'>
-            Approval
-          </Title>
-          <AppTabs />
+          <TopToolbar>
+            <Title size= "md">
+              Approval
+            </Title>
+            <AppTabs />
+          </TopToolbar>
         </PageHeader>
         <Main>
           <Routes />
