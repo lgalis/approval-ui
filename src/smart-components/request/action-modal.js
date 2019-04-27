@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FormRenderer from '../common/form-renderer';
 import { withRouter } from 'react-router-dom';
@@ -6,21 +6,35 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { fetchRequests } from '../../redux/actions/request-actions';
+import { createStageAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 
 const ActionModal = ({
   history: { push },
   actionType,
   addNotification,
-  fetchRequests,
+  createStageAction,
+  selectedRequest,
   closeUrl,
+  preMethod,
+  postMethod,
   requestId
 }) => {
-  const onSubmit = () => {
-    // TODO - add api call for add comment
-    // different action depending on the path
-    fetchRequests().then(push(closeUrl));
+  useEffect(() => {
+    if (preMethod) {
+      preMethod(requestId);
+    }
+  }, []);
+
+  const onSubmit = async (data) => {
+    const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
+    const activeStage =  selectedRequest.stages[selectedRequest.active_stage - 1];
+    const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
+    if (activeStage) {
+      createStageAction(actionName, activeStage.id,
+        { operation: operationType[actionType], processed_by: 'User', ...data }).
+      then(postMethod ? postMethod().then(push(closeUrl)) : push(closeUrl));
+    }
   };
 
   const onCancel = () => {
@@ -60,8 +74,10 @@ ActionModal.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   addNotification: PropTypes.func.isRequired,
-  fetchRequests: PropTypes.func.isRequired,
-  requests: PropTypes.object,
+  preMethod: PropTypes.func,
+  postMethod: PropTypes.func,
+  createStageAction: PropTypes.func.isRequired,
+  selectedRequest: PropTypes.object,
   requestId: PropTypes.string,
   actionType: PropTypes.string,
   closeUrl: PropTypes.string,
@@ -72,13 +88,14 @@ ActionModal.propTypes = {
 const mapStateToProps = (state, { match: { params: { id }}}) => {
   return {
     requests: state.requestReducer.requests,
+    selectedRequest: state.requestReducer.selectedRequest,
     requestId: id
   };
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
-  fetchRequests
+  createStageAction
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActionModal));

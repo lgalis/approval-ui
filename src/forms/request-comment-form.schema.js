@@ -2,7 +2,7 @@ import { componentTypes, validatorTypes } from '@data-driven-forms/react-form-re
 
 const schemaFields = (isDeny) =>({
   component: componentTypes.TEXTAREA_FIELD,
-  name: 'name',
+  name: 'comments',
   type: 'text',
   isRequired: isDeny,
   label: isDeny ? 'Reason' : 'Comment'

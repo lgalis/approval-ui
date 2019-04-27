@@ -6,16 +6,17 @@ import ExpandableContent from './expandable-content';
 import { timeAgo }  from '../../helpers/shared/helpers';
 
 export const createInitialRows = data =>
-  data.reduce((acc, { id, requester, created_at, updated_at, state, decision, content }, key) => ([
+  data.reduce((acc, { id, requester, created_at, updated_at, active_stage, total_stages, state, decision, content }, key) => ([
     ...acc, {
       id,
       isOpen: false,
+      state,
       cells: [ <Fragment key={ id }><Link to={ `/requests/detail/${id}` }>
-        <Button variant="link" > { id } </Button></Link></Fragment>, requester,
-      timeAgo(created_at), timeAgo(updated_at), state, decision ]
+        <Button variant="link"> { id } </Button></Link></Fragment>, requester,
+      timeAgo(created_at), timeAgo(updated_at), `${active_stage} of ${total_stages}`, decision ]
     }, {
       parent: key * 2,
-      cells: [{ title: <ExpandableContent id={ id } content={ content } /> }]
+      cells: [{ title: <ExpandableContent id={ id } content={ content } state={ state } active_stage={ active_stage }/> }]
     }
   ]), []);
 
