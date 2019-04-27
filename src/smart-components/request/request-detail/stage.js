@@ -84,12 +84,12 @@ class Stage extends Component {
             <LevelItem>
               <Link to={ `/requests/detail/${item.request_id}/approve` }>
                 <Button variant="link" aria-label="Approve Request">
-                    Approve
+                  Approve
                 </Button>
               </Link>
               <Link to={ `/requests/detail/${item.request_id}/deny` }>
                 <Button variant="link" className="destructive-color" aria-label="Deny Request">
-                    Deny
+                  Deny
                 </Button>
               </Link>
             </LevelItem>

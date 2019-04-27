@@ -40,6 +40,8 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
       postMethod={ fetchRequests }/> } />
   </Fragment>;
 
+  const areActionsDisabled = (requestData) => { return !isRequestStateActive(requestData.state);};
+
   const actionResolver = (requestData, { rowIndex }) => {
     return (rowIndex === 1 || areActionsDisabled(requestData) ? null :
       [
@@ -49,10 +51,7 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
             history.push(`/requests/add_comment/${requestData.id}`)
         }
       ]);
-
   };
-
-  const areActionsDisabled = (requestData) => { return !isRequestStateActive(requestData.state);};
 
   const renderRequestsList = () =>
     <TableToolbarView
