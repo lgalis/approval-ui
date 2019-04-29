@@ -10,6 +10,10 @@ import RemoveWorkflow from './remove-workflow-modal';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { createInitialRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
+import TopToolbar, { TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
+import { PageHeader } from '@red-hat-insights/insights-frontend-components';
+import AppTabs from '../../smart-components/app-tabs/app-tabs';
+import { Section } from '@red-hat-insights/insights-frontend-components';
 
 const columns = [{
   title: 'Name',
@@ -54,26 +58,37 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
           variant="primary"
           aria-label="Create Workflow"
         >
-Create Workflow
+          Create Workflow
         </Button>
       </Link>
     </ToolbarItem>
   </ToolbarGroup>;
 
   return (
-    <TableToolbarView
-      data={ workflows }
-      createInitialRows={ createInitialRows }
-      columns={ columns }
-      fetchData={ fetchData }
-      request={ fetchWorkflows }
-      routes={ routes }
-      actionResolver={ actionResolver }
-      titlePlural="Workflows"
-      titleSingular="Workflow"
-      pagination={ pagination }
-      toolbarButtons={ toolbarButtons }
-    />
+    <Fragment>
+      <PageHeader style={ { paddingBottom: 0 } }>
+        <TopToolbar>
+          <TopToolbarTitle title = { 'Approval' }>
+          </TopToolbarTitle>
+        </TopToolbar>
+        <AppTabs />
+      </PageHeader>
+      <Section style={ { marginTop: 20, minHeight: '100%' } } >
+        <TableToolbarView
+          data={ workflows }
+          createInitialRows={ createInitialRows }
+          columns={ columns }
+          fetchData={ fetchData }
+          request={ fetchWorkflows }
+          routes={ routes }
+          actionResolver={ actionResolver }
+          titlePlural="Workflows"
+          titleSingular="Workflow"
+          pagination={ pagination }
+          toolbarButtons={ toolbarButtons }
+        />
+      </Section>
+    </Fragment>
   );
 };
 

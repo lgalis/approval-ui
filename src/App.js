@@ -4,15 +4,10 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Routes } from './Routes';
 import './App.scss';
-import AppTabs from './smart-components/app-tabs/app-tabs';
-import { Main, PageHeader } from '@red-hat-insights/insights-frontend-components';
+import { Main } from '@red-hat-insights/insights-frontend-components';
 import { NotificationsPortal } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import '@red-hat-insights/insights-frontend-components/components/Notifications.css';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
-import TopToolbar, { TopToolbarTitle } from './presentational-components/shared/top-toolbar';
-
-'./presentational-components/shared/top-toolbar';
-import { Title } from '@patternfly/react-core';
 
 class App extends Component {
   state = {
@@ -35,13 +30,6 @@ class App extends Component {
     return (
       <React.Fragment>
         <NotificationsPortal />
-        <PageHeader style={ { paddingBottom: 0 } }>
-          <TopToolbar>
-            <TopToolbarTitle title = { 'Approval' }>
-            </TopToolbarTitle>
-            <AppTabs />
-          </TopToolbar>
-        </PageHeader>
         <Main>
           <Routes />
         </Main>
