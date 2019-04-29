@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { isRequestStateActive } from '../../../helpers/shared/helpers';
+import { ActionTrasncript } from './action';
 
 import {
   Stack,
@@ -56,7 +57,7 @@ class Stage extends Component {
   };
 
   fetchStageDetails = (stage) => {
-    return `Details for ${stage.name}`;
+    return <ActionTrasncript actionList={ stage.stageActions.data }/>;
   };
 
   render() {
