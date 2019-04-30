@@ -94,6 +94,7 @@ export const TableToolbarView = ({
         cells={ columns }
         onSelect={ selectRow }
         actionResolver={ actionResolver }
+        className="table-fix"
       >
         <TableHeader />
         <TableBody />

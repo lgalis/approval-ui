@@ -31,3 +31,9 @@
     color: #FF0000 !important;
   }
 }
+
+.table-fix {
+  .pf-c-table__toggle {
+    padding-top: 0;
+  }
+}
