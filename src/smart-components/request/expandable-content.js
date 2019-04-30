@@ -17,13 +17,13 @@ const ExpandableContent = ({ id, content, state }) => {
           </TextContent>
         </LevelItem>
         { requestActive && <LevelItem>
-          <Link to={ `/requests/approve/${id}` }>
-            <Button variant="link" aria-label="Approve Request" isDisabled={ !requestActive }>
+          <Link to={ `/requests/approve/${id}` }  className="pf-u-mr-md">
+            <Button variant="primary" aria-label="Approve Request" isDisabled={ !requestActive }>
               Approve
             </Button>
           </Link>
           <Link to={ `/requests/deny/${id}` }>
-            <Button variant="link" className="destructive-color" aria-label="Deny Request">
+            <Button variant="danger" aria-label="Deny Request">
               Deny
             </Button>
           </Link>

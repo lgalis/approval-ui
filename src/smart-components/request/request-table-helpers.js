@@ -16,6 +16,7 @@ export const createInitialRows = data =>
       timeAgo(created_at), timeAgo(updated_at), `${active_stage} of ${total_stages}`, decision ]
     }, {
       parent: key * 2,
+      fullWidth: true,
       cells: [{ title: <ExpandableContent id={ id } content={ content } state={ state } active_stage={ active_stage }/> }]
     }
   ]), []);
