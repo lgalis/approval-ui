@@ -31,7 +31,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
     <Route exact path="/workflows/remove/:id" component={ RemoveWorkflow } />
   </Fragment>;
 
-  const actionResolver = (workflowData, { rowIndex }) => rowIndex === 1 ?
+  const actionResolver = (workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
     null
     : [
       {
