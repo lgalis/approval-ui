@@ -1,13 +1,16 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Text, TextContent, TextVariants  } from '@patternfly/react-core';
+import { Level, LevelItem, Text, TextContent, TextVariants  } from '@patternfly/react-core';
 import { ToolbarTitlePlaceholder } from './loader-placeholders';
 import ApprovalBreadcrumbs from './breadcrubms';
 
 import './top-toolbar.scss';
-const TopToolbar = ({ breadcrumbs = [], children }) => (
-  <div>
-    <ApprovalBreadcrumbs { ...breadcrumbs }/>
+
+const TopToolbar = ({ children,  breadcrumbs, paddingBottom }) => (
+  <div className={ `pf-u-pt-xl pf-u-pr-xl pf-u-pl-xl ${paddingBottom ? 'pf-u-pb-xl' : ''} top-toolbar` }>
+    <Level className="pf-u-mb-md">
+      <ApprovalBreadcrumbs { ...breadcrumbs } />
+    </Level>
     { children }
   </div>
 );
@@ -17,23 +20,26 @@ TopToolbar.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
-  showTabs: PropTypes.boolean,
   breadcrumbs: PropTypes.array,
   paddingBottom: PropTypes.bool
 };
 
 TopToolbar.defaultProps = {
-  paddingBottom: true
+  paddingBottom: false
 };
 
 export default TopToolbar;
 
 export const TopToolbarTitle = ({ title, children }) => (
   <Fragment>
-    <TextContent className="top-toolbar-title">
-      { <Text component={ TextVariants.h2 }>{ title || <ToolbarTitlePlaceholder /> }</Text> }
-    </TextContent>
-    { children }
+    <Level className="pf-u-mb-xl">
+      <LevelItem>
+        <TextContent className="top-toolbar-title">
+          { <Text component={ TextVariants.h2 }>{ title || <ToolbarTitlePlaceholder /> }</Text> }
+        </TextContent>
+      </LevelItem>
+      { children }
+    </Level>
   </Fragment>
 );
 
@@ -44,4 +50,3 @@ TopToolbarTitle.propTypes = {
     PropTypes.arrayOf(PropTypes.node)
   ])
 };
-

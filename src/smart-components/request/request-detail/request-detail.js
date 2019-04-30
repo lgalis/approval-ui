@@ -12,7 +12,6 @@ import RequestStageTranscript from './request-stage-transcript';
 import { fetchRequest } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import TopToolbar, { TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
-import { PageHeader } from '@red-hat-insights/insights-frontend-components';
 
 const RequestDetail = ({
   match: { url },
@@ -48,13 +47,11 @@ const RequestDetail = ({
           <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ url }/> } />
         <Route exact path="/requests/detail/:id/deny" render={ props =>
           <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } /> } />
-        <PageHeader style={ { paddingBottom: 0 } }>
-          <TopToolbar breadcrumbs={ breadcrumbsList() }>
-            <TopToolbarTitle title = { selectedRequest.name }>
-            </TopToolbarTitle>
-          </TopToolbar>
-        </PageHeader>
-        <Section style={ { minHeight: '100%' } }>
+        <TopToolbar breadcrumbs={ breadcrumbsList() } paddingBottom={ true }>
+          <TopToolbarTitle title = { `Request ${selectedRequest.id}` }>
+          </TopToolbarTitle>
+        </TopToolbar>
+        <Section className="data-table-pane">
           <Grid gutter="md">
             <GridItem md={ 2 } className="detail-pane">
               <RequestInfoBar request={ selectedRequest }/>

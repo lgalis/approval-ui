@@ -9,6 +9,16 @@
   }
 }
 
+.data-table-pane {
+  padding-left:32px;
+  padding-right: 32px;
+  padding-top: 16px;
+}
+
+.detail-title {
+  margin-bottom: 16px;
+}
+
 .data-table-detail {
   &.heading {
     margin: 0 !important

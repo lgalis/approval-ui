@@ -30,7 +30,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <NotificationsPortal />
-        <Main>
+        <Main style={ { marginLeft: 0, padding: 0 } }>
           <Routes />
         </Main>
       </React.Fragment>

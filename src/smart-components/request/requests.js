@@ -7,12 +7,8 @@ import { fetchRequests, fetchRequest } from '../../redux/actions/request-actions
 import ActionModal from './action-modal';
 import { createInitialRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
-import { Section } from '@red-hat-insights/insights-frontend-components';
 import RequestDetail from './request-detail/request-detail';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
-import TopToolbar, { TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
-import { PageHeader } from '@red-hat-insights/insights-frontend-components';
-import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 const columns = [{
   title: 'RequestId',
@@ -58,28 +54,19 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
 
   const renderRequestsList = () =>
     <Fragment>
-      <PageHeader style={ { paddingBottom: 0, marginBottom: 0 } }>
-        <TopToolbar>
-          <TopToolbarTitle title = { 'Approval' }>
-          </TopToolbarTitle>
-        </TopToolbar>
-        <AppTabs />
-      </PageHeader>
-      <Section style={ { marginTop: 20, minHeight: '100%' } } >
-        <TableToolbarView
-          data={ requests }
-          createInitialRows={ createInitialRows }
-          columns={ columns }
-          fetchData={ fetchData }
-          request={ fetchRequests }
-          routes={ routes }
-          actionResolver={ actionResolver }
-          areActionsDisabled={ areActionsDisabled }
-          titlePlural="Requests"
-          titleSingular="Request"
-          pagination={ pagination }
-        />
-      </Section>
+      <TableToolbarView
+        data={ requests }
+        createInitialRows={ createInitialRows }
+        columns={ columns }
+        fetchData={ fetchData }
+        request={ fetchRequests }
+        routes={ routes }
+        actionResolver={ actionResolver }
+        areActionsDisabled={ areActionsDisabled }
+        titlePlural="Requests"
+        titleSingular="Request"
+        pagination={ pagination }
+      />
     </Fragment>;
 
   return (
