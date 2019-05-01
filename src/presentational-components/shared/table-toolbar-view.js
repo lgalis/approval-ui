@@ -6,7 +6,10 @@ import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { Pagination } from '@red-hat-insights/insights-frontend-components/components/Pagination';
 import { scrollToTop, getCurrentPage, getNewPage } from '../../helpers/shared/helpers';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
+import { Section } from '@red-hat-insights/insights-frontend-components';
 import { TableToolbar } from '@red-hat-insights/insights-frontend-components/components/TableToolbar';
+import TopToolbar, { TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
+import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 export const TableToolbarView = ({
   request, createInitialRows, columns, toolbarButtons, fetchData, data, actionResolver, routes, titlePlural, titleSingular, pagination
@@ -85,20 +88,26 @@ export const TableToolbarView = ({
 
   return (
     <Fragment>
-      { routes() }
-      { renderToolbar() }
-      <Table
-        aria-label={ `Approval ${titlePlural} table` }
-        onCollapse={ onCollapse }
-        rows={ rows }
-        cells={ columns }
-        onSelect={ selectRow }
-        actionResolver={ actionResolver }
-        className="table-fix"
-      >
-        <TableHeader />
-        <TableBody />
-      </Table>
+      <TopToolbar>
+        <TopToolbarTitle title="Approval" />
+        <AppTabs/>
+      </TopToolbar>
+      <Section className="data-table-pane" >
+        { routes() }
+        { renderToolbar() }
+        <Table
+          aria-label={ `Approval ${titlePlural} table` }
+          onCollapse={ onCollapse }
+          rows={ rows }
+          cells={ columns }
+          onSelect={ selectRow }
+          actionResolver={ actionResolver }
+          className="table-fix"
+        >
+          <TableHeader />
+          <TableBody />
+        </Table>
+      </Section>
     </Fragment>
   );
 };
