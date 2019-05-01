@@ -54,26 +54,28 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
           variant="primary"
           aria-label="Create Workflow"
         >
-Create Workflow
+          Create Workflow
         </Button>
       </Link>
     </ToolbarItem>
   </ToolbarGroup>;
 
   return (
-    <TableToolbarView
-      data={ workflows }
-      createInitialRows={ createInitialRows }
-      columns={ columns }
-      fetchData={ fetchData }
-      request={ fetchWorkflows }
-      routes={ routes }
-      actionResolver={ actionResolver }
-      titlePlural="Workflows"
-      titleSingular="Workflow"
-      pagination={ pagination }
-      toolbarButtons={ toolbarButtons }
-    />
+    <Fragment>
+      <TableToolbarView
+        data={ workflows }
+        createInitialRows={ createInitialRows }
+        columns={ columns }
+        fetchData={ fetchData }
+        request={ fetchWorkflows }
+        routes={ routes }
+        actionResolver={ actionResolver }
+        titlePlural="Workflows"
+        titleSingular="Workflow"
+        pagination={ pagination }
+        toolbarButtons={ toolbarButtons }
+      />
+    </Fragment>
   );
 };
 

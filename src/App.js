@@ -4,9 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Routes } from './Routes';
 import './App.scss';
-import AppTabs from './smart-components/app-tabs/app-tabs';
-import { Main, PageHeader } from '@red-hat-insights/insights-frontend-components';
-import { Title } from '@patternfly/react-core';
+import { Main } from '@red-hat-insights/insights-frontend-components';
 import { NotificationsPortal } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import '@red-hat-insights/insights-frontend-components/components/Notifications.css';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
@@ -32,13 +30,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <NotificationsPortal />
-        <PageHeader style={ { paddingBottom: 0 } }>
-          <Title headingLevel='h1' size='2xl'>
-            Approval
-          </Title>
-          <AppTabs />
-        </PageHeader>
-        <Main>
+        <Main style={ { marginLeft: 0, padding: 0 } }>
           <Routes />
         </Main>
       </React.Fragment>

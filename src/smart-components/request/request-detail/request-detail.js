@@ -11,6 +11,7 @@ import RequestInfoBar from './request-info-bar';
 import RequestStageTranscript from './request-stage-transcript';
 import { fetchRequest } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
+import TopToolbar, { TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
 
 const RequestDetail = ({
   match: { url },
@@ -24,6 +25,11 @@ const RequestDetail = ({
       fetchRequest(requestId);
     }
   }, [ requestId ]);
+
+  const breadcrumbsList = () => [
+    { title: 'Request Queue', to: '/requests' },
+    { title: requestId, isActive: true }
+  ];
 
   if (isLoading || Object.keys(selectedRequest).length === 0) {
     return (
@@ -41,7 +47,11 @@ const RequestDetail = ({
           <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ url }/> } />
         <Route exact path="/requests/detail/:id/deny" render={ props =>
           <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } /> } />
-        <Section style={ { minHeight: '100%' } }>
+        <TopToolbar breadcrumbs={ breadcrumbsList() } paddingBottom={ true }>
+          <TopToolbarTitle title = { `Request ${selectedRequest.id}` }>
+          </TopToolbarTitle>
+        </TopToolbar>
+        <Section className="data-table-pane">
           <Grid gutter="md">
             <GridItem md={ 2 } className="detail-pane">
               <RequestInfoBar request={ selectedRequest }/>

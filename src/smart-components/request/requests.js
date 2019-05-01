@@ -7,7 +7,6 @@ import { fetchRequests, fetchRequest } from '../../redux/actions/request-actions
 import ActionModal from './action-modal';
 import { createInitialRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
-import { Section } from '@red-hat-insights/insights-frontend-components';
 import RequestDetail from './request-detail/request-detail';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 
@@ -54,27 +53,27 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
   };
 
   const renderRequestsList = () =>
-    <TableToolbarView
-      data={ requests }
-      createInitialRows={ createInitialRows }
-      columns={ columns }
-      fetchData={ fetchData }
-      request={ fetchRequests }
-      routes={ routes }
-      actionResolver={ actionResolver }
-      areActionsDisabled={ areActionsDisabled }
-      titlePlural="Requests"
-      titleSingular="Request"
-      pagination={ pagination }
-    />;
+    <Fragment>
+      <TableToolbarView
+        data={ requests }
+        createInitialRows={ createInitialRows }
+        columns={ columns }
+        fetchData={ fetchData }
+        request={ fetchRequests }
+        routes={ routes }
+        actionResolver={ actionResolver }
+        areActionsDisabled={ areActionsDisabled }
+        titlePlural="Requests"
+        titleSingular="Request"
+        pagination={ pagination }
+      />
+    </Fragment>;
 
   return (
-    <Section>
-      <Switch>
-        <Route path={ '/requests/detail/:id' } render={ props => <RequestDetail { ...props }/> } />
-        <Route path={ '/requests' } render={ () => renderRequestsList() } />
-      </Switch>
-    </Section>
+    <Switch>
+      <Route path={ '/requests/detail/:id' } render={ props => <RequestDetail { ...props }/> } />
+      <Route path={ '/requests' } render={ () => renderRequestsList() } />
+    </Switch>
   );
 };
 
