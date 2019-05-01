@@ -85,33 +85,35 @@ class Stage extends Component {
               <DataListCell key={ `${item.id}-state` }>
                 <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
               </DataListCell>,
-              requestActive && <DataListCell>
+              <DataListCell key={ `${item.id}-action` }>
                 <Level>
                   <LevelItem>
-                    <Link to={ `/requests/detail/${item.request_id}/approve` }>
-                      <Button variant="link" aria-label="Approve Request">
-                    Approve
-                      </Button>
-                    </Link>
-                    <Link to={ `/requests/detail/${item.request_id}/deny` }>
-                      <Button variant="link" className="destructive-color" aria-label="Deny Request">
-                    Deny
-                      </Button>
-                    </Link>
+                    { requestActive &&
+                    <div>
+                      <Link to={ `/requests/detail/${item.request_id}/approve` }>
+                        <Button variant="link" aria-label="Approve Request">
+                          Approve
+                        </Button>
+                      </Link>
+                      <Link to={ `/requests/detail/${item.request_id}/deny` }>
+                        <Button variant="link" className="destructive-color" aria-label="Deny Request">
+                          Deny
+                        </Button>
+                      </Link>
+                    </div> }
                   </LevelItem>
                 </Level>
               </DataListCell>,
-              requestActive &&
-            <DataListCell
-              class="pf-c-data-list__action"
-              aria-labelledby={ `request-${item.id} check-workflow-action${item.id}` }
-              id={ `workflow-${item.id}` }
-              aria-label="Actions">
-              { this.buildStageActionKebab(item) }
-            </DataListCell>
+              <DataListCell
+                key={ `request-${item.id}` }
+                className="pf-c-data-list__action"
+                aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
+                id={ `workflow-${item.id}` }
+                aria-label="Actions">
+                { requestActive && this.buildStageActionKebab(item) }
+              </DataListCell>
             ] }/>
         </DataListItemRow>
-
         <DataListContent aria-label="Stage Content Details"
           isHidden={ !this.props.isExpanded(`stage-${item.id}`) }>
           <Stack gutter="md">
