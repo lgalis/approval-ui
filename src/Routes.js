@@ -52,7 +52,7 @@ export const Routes = () => (
       <InsightsRoute path={ paths.requests } component={ Requests } rootClass="requests"/>
       <InsightsRoute path={ paths.workflows } component={ Workflows } rootClass="workflows" />
       { /* Finally, catch all unmatched routes */ }
-      <Route render={ () => <Redirect to={ paths.workflows } /> } />
+      <Route render={ () => <Redirect to={ paths.requests } /> } />
     </Switch>
   </Suspense>
 );
