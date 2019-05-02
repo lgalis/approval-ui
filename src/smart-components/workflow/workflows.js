@@ -64,6 +64,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
     <Fragment>
       <TableToolbarView
         data={ workflows }
+        isSelectable={ true }
         createInitialRows={ createInitialRows }
         columns={ columns }
         fetchData={ fetchData }

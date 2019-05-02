@@ -23,7 +23,7 @@ const RequestInfoBar = ({ request }) => {
       </Text>
       <Text component={ TextVariants.h6 }>Project: <br/> </Text>
       { request.content.params && Object.keys(request.content.params).map(param => {
-        return ((request.content.params[param] && request.content.params[param] !== '********') &&
+        return ((request.content.params[param]) &&
                   <Text key={ param } component={ TextVariants.small }>
                     { `${param}: ${request.content.params[param]}` }
                   </Text>);
