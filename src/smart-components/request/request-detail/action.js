@@ -15,7 +15,6 @@ const operationIcon = { memo: <CommentIcon/>, approve: <CheckIcon/>,
   deny: <OutlinedTimesCircleIcon/>, notify: <EnvelopeIcon/>, skip: <AngleDoubleRightIcon/> };
 
 export const ActionTrasncript = actionList => {
-  console.log('Action List: ', actionList);
   return (
     <Stack>
       { actionList.actionList.map(actionItem =>

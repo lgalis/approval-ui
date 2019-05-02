@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { expandable } from '@patternfly/react-table';
-import { fetchRequests, fetchRequest } from '../../redux/actions/request-actions';
+import { fetchRequests } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import { createInitialRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
@@ -32,10 +32,10 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
       fetchData = { true }
       postMethod={ fetchRequests } /> }/>
     <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' }
-      preMethod = { fetchRequest }
+      fetchData = { true }
       postMethod={ fetchRequests }/> } />
     <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' }
-      preMethod = { fetchRequest }
+      fetchData = { true }
       postMethod={ fetchRequests }/> } />
   </Fragment>;
 
