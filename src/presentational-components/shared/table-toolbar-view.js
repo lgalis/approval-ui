@@ -12,7 +12,7 @@ import TopToolbar, { TopToolbarTitle } from '../../presentational-components/sha
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 export const TableToolbarView = ({
-  request, createInitialRows, columns, toolbarButtons, fetchData, data, actionResolver, routes, titlePlural, titleSingular, pagination
+  request, isSelectable, createInitialRows, columns, toolbarButtons, fetchData, data, actionResolver, routes, titlePlural, titleSingular, pagination
 }) => {
   const [ filterValue, setFilterValue ] = useState('');
   const [ rows, setRows ] = useState([]);
@@ -100,7 +100,7 @@ export const TableToolbarView = ({
           onCollapse={ onCollapse }
           rows={ rows }
           cells={ columns }
-          onSelect={ selectRow }
+          onSelect={ isSelectable && selectRow }
           actionResolver={ actionResolver }
           className="table-fix"
         >
@@ -113,6 +113,7 @@ export const TableToolbarView = ({
 };
 
 TableToolbarView.propTypes = {
+  isSelectable: propTypes.bool,
   createInitialRows: propTypes.func.isRequired,
   request: propTypes.func.isRequired,
   columns: propTypes.array.isRequired,
@@ -134,5 +135,6 @@ TableToolbarView.defaultProps = {
   requests: [],
   pagination: '',
   toolbarButtons: () => null,
+  isSelectable: null,
   routes: () => null
 };
