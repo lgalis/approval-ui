@@ -9,8 +9,10 @@ import {
   StackItem,
   Button,
   DataListItem,
+  DataListItemRow,
   DataListCell,
   DataListToggle,
+  DataListItemCells,
   DataListContent,
   DropdownItem,
   Dropdown,
@@ -67,44 +69,51 @@ class Stage extends Component {
       <DataListItem key={ `stage-${item.id}` }
         aria-labelledby={ `check-stage-${item.id}` }
         isExpanded={ this.props.isExpanded(`stage-${item.id}`) }>
-        <DataListToggle
-          onClick={ () => this.props.toggleExpand(`stage-${item.id}`) }
-          isExpanded={ this.props.isExpanded(`stage-${item.id}`) }
-          id={ `stage-${item.id}` }
-          aria-labelledby={ `stage-${item.id} stage-${item.id}` }
-          aria-label="Toggle details for"
-        />
-        <DataListCell>
-          <span id={ item.id }>{ `${this.props.idx + 1}. ${item.name}` } </span>
-        </DataListCell>
-        <DataListCell>
-          <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
-        </DataListCell>
-        { requestActive && <DataListCell>
-          <Level>
-            <LevelItem>
-              <Link to={ `/requests/detail/${item.request_id}/approve` }>
-                <Button variant="link" aria-label="Approve Request">
-                  Approve
-                </Button>
-              </Link>
-              <Link to={ `/requests/detail/${item.request_id}/deny` }>
-                <Button variant="link" className="destructive-color" aria-label="Deny Request">
-                  Deny
-                </Button>
-              </Link>
-            </LevelItem>
-          </Level>
-        </DataListCell> }
-        { requestActive &&
-          <DataListCell
-            class="pf-c-data-list__action"
-            aria-labelledby={ `request-${item.id} check-workflow-action${item.id}` }
-            id={ `workflow-${item.id}` }
-            aria-label="Actions">
-            { this.buildStageActionKebab(item) }
-          </DataListCell>
-        }
+        <DataListItemRow>
+          <DataListToggle
+            onClick={ () => this.props.toggleExpand(`stage-${item.id}`) }
+            isExpanded={ this.props.isExpanded(`stage-${item.id}`) }
+            id={ `stage-${item.id}` }
+            aria-labelledby={ `stage-${item.id} stage-${item.id}` }
+            aria-label="Toggle details for"
+          />
+          <DataListItemCells
+            dataListCells={ [
+              <DataListCell key ={ item.id }>
+                <span id={ item.id }>{ `${this.props.idx + 1}. ${item.name}` } </span>
+              </DataListCell>,
+              <DataListCell key={ `${item.id}-state` }>
+                <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
+              </DataListCell>,
+              <DataListCell key={ `${item.id}-action` }>
+                <Level>
+                  <LevelItem>
+                    { requestActive &&
+                    <div>
+                      <Link to={ `/requests/detail/${item.request_id}/approve` }>
+                        <Button variant="link" aria-label="Approve Request">
+                          Approve
+                        </Button>
+                      </Link>
+                      <Link to={ `/requests/detail/${item.request_id}/deny` }>
+                        <Button variant="link" className="destructive-color" aria-label="Deny Request">
+                          Deny
+                        </Button>
+                      </Link>
+                    </div> }
+                  </LevelItem>
+                </Level>
+              </DataListCell>,
+              <DataListCell
+                key={ `request-${item.id}` }
+                className="pf-c-data-list__action"
+                aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
+                id={ `workflow-${item.id}` }
+                aria-label="Actions">
+                { requestActive && this.buildStageActionKebab(item) }
+              </DataListCell>
+            ] }/>
+        </DataListItemRow>
         <DataListContent aria-label="Stage Content Details"
           isHidden={ !this.props.isExpanded(`stage-${item.id}`) }>
           <Stack gutter="md">
@@ -115,6 +124,7 @@ class Stage extends Component {
             </StackItem>
           </Stack>
         </DataListContent>
+
       </DataListItem>
     );
   };
