@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import FormRenderer from '../common/form-renderer';
 import { withRouter } from 'react-router-dom';
@@ -6,24 +6,26 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import { createStageAction } from '../../redux/actions/request-actions';
+import { createStageAction, fetchRequest } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 
 const ActionModal = ({
   history: { push },
+  match: { params: { id }},
   actionType,
   addNotification,
   createStageAction,
-  selectedRequest,
   closeUrl,
-  preMethod,
-  postMethod,
-  requestId
+  postMethod
 }) => {
+  const [ selectedRequest, setSelectedRequest ] = useState({});
+
+  const fetchData = (setRequestData) => {
+    fetchRequest(id).payload.then((data) => setRequestData(data));
+  };
+
   useEffect(() => {
-    if (preMethod) {
-      preMethod(requestId);
-    }
+    fetchData(setSelectedRequest);
   }, []);
 
   const onSubmit = async (data) => {
@@ -50,7 +52,7 @@ const ActionModal = ({
   return (
     <Modal
       isLarge
-      title={ actionType === 'Add Comment' ? `Request #${requestId}` : `${actionType} Request #${requestId}` }
+      title={ actionType === 'Add Comment' ? `Request #${id}` : `${actionType} Request #${id}` }
       isOpen
       onClose={ onCancel }
     >
@@ -66,7 +68,8 @@ const ActionModal = ({
 };
 
 ActionModal.defaultProps = {
-  closeUrl: '/requests'
+  closeUrl: '/requests',
+  fetchData: true
 };
 
 ActionModal.propTypes = {
@@ -74,27 +77,25 @@ ActionModal.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   addNotification: PropTypes.func.isRequired,
-  preMethod: PropTypes.func,
-  postMethod: PropTypes.func,
+  fetchData: PropTypes.bool,
   createStageAction: PropTypes.func.isRequired,
+  fetchRequest: PropTypes.func,
+  postMethod: PropTypes.func,
   selectedRequest: PropTypes.object,
-  requestId: PropTypes.string,
+  id: PropTypes.string,
   actionType: PropTypes.string,
   closeUrl: PropTypes.string,
   match: PropTypes.object,
   location: PropTypes.object
 };
 
-const mapStateToProps = (state, { match: { params: { id }}}) => {
-  return {
-    requests: state.requestReducer.requests,
-    selectedRequest: state.requestReducer.selectedRequest,
-    requestId: id
-  };
-};
+const mapStateToProps = ({ requestReducer: { isRequestDataLoading }}) => ({
+  isLoading: isRequestDataLoading
+});
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
+  fetchRequest,
   createStageAction
 }, dispatch);
 
