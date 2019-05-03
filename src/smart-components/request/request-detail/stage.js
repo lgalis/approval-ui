@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { isRequestStateActive } from '../../../helpers/shared/helpers';
-import { ActionTrasncript } from './action';
+import { ActionTrasncript } from './action-transcript';
 
 import {
   Stack,
@@ -64,7 +64,7 @@ class Stage extends Component {
 
   render() {
     let { item } = this.props;
-    const requestStageActive = isRequestStateActive(item.state);
+    const requestActive = isRequestStateActive(item.state);
     return (
       <DataListItem key={ `stage-${item.id}` }
         aria-labelledby={ `check-stage-${item.id}` }
@@ -88,7 +88,7 @@ class Stage extends Component {
               <DataListCell key={ `${item.id}-action` }>
                 <Level>
                   <LevelItem>
-                    { requestActive && item.active_stage === this.props.idx + 1
+                    { (requestActive && this.props.isActive) &&
                     <div>
                       <Link to={ `/requests/detail/${item.request_id}/approve` }>
                         <Button variant="link" aria-label="Approve Request">
@@ -110,7 +110,7 @@ class Stage extends Component {
                 aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
                 id={ `workflow-${item.id}` }
                 aria-label="Actions">
-                { requestActive && this.buildStageActionKebab(item) }
+                { requestActive && this.props.isActive  && this.buildStageActionKebab(item) }
               </DataListCell>
             ] }/>
         </DataListItemRow>
@@ -132,8 +132,9 @@ class Stage extends Component {
 
 Stage.propTypes = {
   isLoading: PropTypes.bool,
+  isActive: PropTypes.bool,
   item: PropTypes.object,
-  idx: PropTypes.string,
+  idx: PropTypes.number,
   isExpanded: PropTypes.func.isRequired,
   toggleExpand: PropTypes.func.isRequired,
   noItems: PropTypes.string
