@@ -29,13 +29,10 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
       actionType={ 'Add Comment' }
-      fetchData = { true }
       postMethod={ fetchRequests } /> }/>
     <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' }
-      fetchData = { true }
       postMethod={ fetchRequests }/> } />
     <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' }
-      fetchData = { true }
       postMethod={ fetchRequests }/> } />
   </Fragment>;
 
