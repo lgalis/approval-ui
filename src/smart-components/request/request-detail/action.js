@@ -6,12 +6,12 @@ import {
   Text,
   TextVariants
 } from '@patternfly/react-core';
-import { CheckIcon, CommentIcon, EnvelopeIcon, OutlinedTimesCircleIcon, AngleDoubleRightIcon } from '@patternfly/react-icons';
+import { CheckCircleIcon, CommentIcon, EnvelopeIcon, OutlinedTimesCircleIcon, AngleDoubleRightIcon } from '@patternfly/react-icons';
 
 const operationDisplayName = { memo: 'Comment from', approve: 'Approved By',
   deny: 'Denied by', notify: 'Notified By', skip: 'Skipped by' };
 
-const operationIcon = { memo: <CommentIcon/>, approve: <CheckIcon/>,
+const operationIcon = { memo: <CommentIcon/>, approve: <CheckCircleIcon fill="#32CD32"/>,
   deny: <OutlinedTimesCircleIcon/>, notify: <EnvelopeIcon/>, skip: <AngleDoubleRightIcon/> };
 
 export const ActionTrasncript = actionList => {

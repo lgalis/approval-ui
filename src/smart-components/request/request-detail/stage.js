@@ -64,7 +64,7 @@ class Stage extends Component {
 
   render() {
     let { item } = this.props;
-    const requestActive = isRequestStateActive(item.state);
+    const requestStageActive = isRequestStateActive(item.state);
     return (
       <DataListItem key={ `stage-${item.id}` }
         aria-labelledby={ `check-stage-${item.id}` }
@@ -88,7 +88,7 @@ class Stage extends Component {
               <DataListCell key={ `${item.id}-action` }>
                 <Level>
                   <LevelItem>
-                    { requestActive &&
+                    { requestActive && item.active_stage === this.props.idx + 1
                     <div>
                       <Link to={ `/requests/detail/${item.request_id}/approve` }>
                         <Button variant="link" aria-label="Approve Request">
