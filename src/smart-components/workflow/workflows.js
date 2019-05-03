@@ -26,9 +26,11 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
   };
 
   const routes = () => <Fragment>
-    <Route exact path="/workflows/add-workflow" component={ AddWorkflow } />
-    <Route exact path="/workflows/edit/:id" component={ AddWorkflow } />
-    <Route exact path="/workflows/remove/:id" component={ RemoveWorkflow } />
+    <Route exact path="/workflows/add-workflow" render={ props => <AddWorkflow { ...props }
+      postMethod={ fetchWorkflows } /> }/>
+    <Route exact path="/workflows/edit/:id" render={ props => <AddWorkflow { ...props }
+      postMethod={ fetchWorkflows } /> }/>
+    <Route exact path="/workflows/remove/:id" render={ props => <RemoveWorkflow { ...props } /> }/>
   </Fragment>;
 
   const actionResolver = (workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
