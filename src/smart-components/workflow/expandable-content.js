@@ -13,7 +13,7 @@ const ExpandableContent = ({ description, groupRefs, groupNames }) => (
       <Text
         className="data-table-detail content"
         component={ TextVariants.h5 }>
-        { groupRefs.reduce((acc, curr, idx) => acc.concat(groupNames[idx] || curr), '') }
+        { groupRefs.reduce((acc, curr, idx) => acc.concat(`${(idx > 0) ? ',' : ''} ${groupNames[idx] || curr}`), '') }
       </Text>
     </TextContent>
   </Fragment>
