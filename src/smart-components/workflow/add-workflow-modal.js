@@ -33,7 +33,16 @@ const AddWorkflowModal = ({
     fetchWorkflow(id).then((data) => {
       let values = data.value;
       data.value.group_refs.forEach((group, idx) => {
-        values[`stage-${idx + 1}`] = group;
+        if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
+          values[`stage-${idx + 1}`] = group;
+        }
+        else {
+          addNotification({
+            variant: 'warning',
+            title: 'Editing workflow',
+            description: `Stage-${idx + 1} group with id: ${group} no longer accessible`
+          });
+        }
       });
       setInitialValues(values);
     });
