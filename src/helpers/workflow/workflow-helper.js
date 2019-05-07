@@ -12,7 +12,7 @@ export async function fetchWorkflowsWithGroups({ limit = 10, offset = 0 }) {
   let wfData = await workflowApi.listWorkflows(limit, offset);
   let workflows = wfData.data;
   return Promise.all(workflows.map(async wf => {
-    let wfWithGroups = wf.group_refs;
+    let wfWithGroups = [];
     try {
       wfWithGroups = await fetchGroupNames(wf.group_refs);
     }
@@ -30,7 +30,7 @@ export async function fetchWorkflowsWithGroups({ limit = 10, offset = 0 }) {
 
 export async function fetchWorkflowWithGroups(id) {
   let wfData = await workflowApi.showWorkflow(id);
-  let wfWithGroups = wfData.group_refs;
+  let wfWithGroups = [];
   try {
     wfWithGroups = await fetchGroupNames(wfData.group_refs);
   }
