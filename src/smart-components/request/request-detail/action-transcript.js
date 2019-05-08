@@ -14,7 +14,7 @@ const operationDisplayName = { memo: 'Comment from', approve: 'Approved By',
 const operationIcon = { memo: <CommentIcon/>, approve: <CheckCircleIcon fill="#32CD32"/>,
   deny: <OutlinedTimesCircleIcon/>, notify: <EnvelopeIcon/>, skip: <AngleDoubleRightIcon/> };
 
-export const ActionTrasncript = actionList => {
+export const ActionTranscript = actionList => {
   return (
     <Stack>
       { actionList.actionList.map(actionItem =>
