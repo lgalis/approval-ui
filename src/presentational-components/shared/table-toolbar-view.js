@@ -10,12 +10,14 @@ import { Section } from '@red-hat-insights/insights-frontend-components';
 import { TableToolbar } from '@red-hat-insights/insights-frontend-components/components/TableToolbar';
 import TopToolbar, { TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
+import { DataListLoader } from './loader-placeholders';
 
 export const TableToolbarView = ({
   request, isSelectable, createInitialRows, columns, toolbarButtons, fetchData, data, actionResolver, routes, titlePlural, titleSingular, pagination
 }) => {
   const [ filterValue, setFilterValue ] = useState('');
   const [ rows, setRows ] = useState([]);
+  const [ isLoading ] = useState(false);
 
   useEffect(() => {
     fetchData(setRows);
@@ -86,6 +88,10 @@ export const TableToolbarView = ({
     </Level>
   </TableToolbar>;
 
+  if (isLoading) {
+    return <DataListLoader/>;
+  }
+
   return (
     <Fragment>
       <TopToolbar>
@@ -114,6 +120,7 @@ export const TableToolbarView = ({
 
 TableToolbarView.propTypes = {
   isSelectable: propTypes.bool,
+  isDataLoading: propTypes.func.isRequired,
   createInitialRows: propTypes.func.isRequired,
   request: propTypes.func.isRequired,
   columns: propTypes.array.isRequired,
