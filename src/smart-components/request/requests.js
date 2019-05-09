@@ -21,7 +21,7 @@ const columns = [{
 'Decision'
 ];
 
-const Requests = ({ fetchRequests, requests, pagination, history, isLoading }) => {
+const Requests = ({ fetchRequests, requests, pagination, history }) => {
   const fetchData = (setRows) => {
     fetchRequests().then(({ value: { data }}) => setRows(createInitialRows(data)));
   };
@@ -49,15 +49,10 @@ const Requests = ({ fetchRequests, requests, pagination, history, isLoading }) =
       ]);
   };
 
-  const isDataLoading = () => {
-    return isLoading;
-  };
-
   const renderRequestsList = () =>
     <Fragment>
       <TableToolbarView
         data={ requests }
-        isDataLoading={ isDataLoading }
         createInitialRows={ createInitialRows }
         columns={ columns }
         fetchData={ fetchData }

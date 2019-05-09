@@ -11,27 +11,31 @@ import {
 } from '@patternfly/react-core';
 import { Section } from '@red-hat-insights/insights-frontend-components';
 import ContentLoader from 'react-content-loader';
-import TopToolbar from './top-toolbar';
 
 export const RequestInfoBarLoader = () => (
   <ContentLoader
-    height={ 800 }
+    height={ 500 }
     width={ 200 }
     speed={ 2 }
-    primaryColor="#ffffff"
+    primaryColor="#f3f3f3"
     secondaryColor="#ecebeb"
   >
-    <rect x="290" y="225" rx="0" ry="0" width="0" height="0" />
-    <rect x="168" y="187" rx="0" ry="0" width="0" height="0" />
-    <rect x="368" y="280" rx="0" ry="0" width="0" height="0" />
-    <rect x="28" y="19" rx="0" ry="0" width="518" height="413" />
-    <rect x="392" y="380" rx="0" ry="0" width="1" height="60" />
+    <rect x="10" y="15" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="65" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="115" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="165" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="215" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="265" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="315" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="365" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="415" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="465" rx="0" ry="0" width="174" height="26" />
+    <rect x="10" y="515" rx="0" ry="0" width="174" height="26" />
   </ContentLoader>
 );
 
 export const RequestLoader = ({ items, ...props }) => (
   <Fragment>
-    <TopToolbar />
     <Section className="data-table-pane">
       <Grid gutter="md">
         <GridItem md={ 2 } className="detail-pane">
@@ -91,7 +95,6 @@ export const AppPlaceholder = props => (
 
 export const DataListLoader = ({ items, ...props }) => (
   <Fragment>
-    <TopToolbar />
     <DataList aria-label="datalist-placeholder" style={ { margin: 32 } }>
       { [ ...Array(items) ].map((_item, index) => (
         <DataListItem key={ index } aria-label="datalist-item-placeholder">
