@@ -3,6 +3,7 @@ import propTypes from 'prop-types';
 import { PageHeader, PageHeaderTitle } from '@red-hat-insights/insights-frontend-components';
 import { DataList } from '@patternfly/react-core';
 import Stage from './stage';
+import { DataListLoader } from '../../../presentational-components/shared/loader-placeholders';
 
 class StageList extends Component {
 
@@ -34,13 +35,13 @@ class StageList extends Component {
     return (
       <React.Fragment>
         <div>
-          { this.props.isLoading && (<span color={ '#00b9e4' }> Loading...</span>) }
+          { this.props.isLoading && <DataListLoader/> }
         </div>
         { (this.props.items && this.props.items.length > 0) && (
           <DataList aria-label="Expandable data list">
             { this.props.items.map((item, idx) => {
               return (
-                <Stage key= { item.id } item={ item } idx = { idx } isActive= { idx + 1 === item.active_stage }
+                <Stage key= { item.id } item={ item } idx = { idx } isActive= { idx + 1 === this.props.active_stage }
                   isExpanded={ this.isExpanded } toggleExpand={ this.toggleExpand }/>);
             })
             }
@@ -54,7 +55,8 @@ class StageList extends Component {
 StageList.propTypes = {
   isLoading: propTypes.bool,
   items: propTypes.array,
-  noItems: propTypes.string
+  noItems: propTypes.string,
+  active_stage: propTypes.number
 };
 
 export default StageList;

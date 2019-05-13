@@ -31,39 +31,49 @@ const RequestDetail = ({
     { title: requestId, isActive: true }
   ];
 
-  if (isLoading || Object.keys(selectedRequest).length === 0) {
-    return (
-      <Section style={ { backgroundColor: 'white', minHeight: '100%' } }>
-        <RequestLoader />
-      </Section>
-    );
-  }
-  else {
-    return (
-      <Fragment>
-        <Route exact path="/requests/detail/:id/add_comment" render={ props =>
-          <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ url }/> }/>
-        <Route exact path="/requests/detail/:id/approve" render={ props =>
-          <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ url }/> } />
-        <Route exact path="/requests/detail/:id/deny" render={ props =>
-          <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } /> } />
-        <TopToolbar breadcrumbs={ breadcrumbsList() } paddingBottom={ true }>
-          <TopToolbarTitle title = { `Request ${selectedRequest.id}` }>
-          </TopToolbarTitle>
-        </TopToolbar>
-        <Section className="data-table-pane">
-          <Grid gutter="md">
-            <GridItem md={ 2 } className="detail-pane">
-              <RequestInfoBar request={ selectedRequest }/>
-            </GridItem>
-            <GridItem md={ 10 } className = "detail-pane">
-              <RequestStageTranscript request={ selectedRequest } url={ url }/>
-            </GridItem>
-          </Grid>
+  const renderToolbar = () => (<TopToolbar breadcrumbs={ breadcrumbsList() } paddingBottom={ true }>
+    <TopToolbarTitle title = { `Request ${requestId}` }>
+    </TopToolbarTitle>
+  </TopToolbar>);
+
+  const renderRequestDetails = () => {
+    if (isLoading || Object.keys(selectedRequest).length === 0) {
+      return (
+        <Section style={ { backgroundColor: 'white', minHeight: '100%' } }>
+          <RequestLoader />
         </Section>
-      </Fragment>
-    );
-  }
+      );
+    }
+    else {
+      return (
+        <Fragment>
+          <GridItem md={ 2 } className="detail-pane">
+            <RequestInfoBar request={ selectedRequest }/>
+          </GridItem>
+          <GridItem md={ 10 } className = "detail-pane">
+            <RequestStageTranscript request={ selectedRequest } url={ url }/>
+          </GridItem>
+        </Fragment>
+      );
+    }
+  };
+
+  return (
+    <Fragment>
+      <Route exact path="/requests/detail/:id/add_comment" render={ props =>
+        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ url }/> }/>
+      <Route exact path="/requests/detail/:id/approve" render={ props =>
+        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ url }/> } />
+      <Route exact path="/requests/detail/:id/deny" render={ props =>
+        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } /> } />
+      { renderToolbar() }
+      <Section className="data-table-pane">
+        <Grid gutter="md">
+          { renderRequestDetails() }
+        </Grid>
+      </Section>
+    </Fragment>
+  );
 };
 
 RequestDetail.propTypes = {
@@ -77,6 +87,7 @@ RequestDetail.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   isLoading: PropTypes.bool,
+  requestId: PropTypes.string,
   fetchRequest: PropTypes.func.isRequired
 };
 

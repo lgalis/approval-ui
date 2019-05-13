@@ -6,15 +6,20 @@ import {
   Text,
   TextVariants
 } from '@patternfly/react-core';
-import { CheckIcon, CommentIcon, EnvelopeIcon, OutlinedTimesCircleIcon, AngleDoubleRightIcon } from '@patternfly/react-icons';
+import { CheckCircleIcon, CommentIcon, EnvelopeIcon, OutlinedTimesCircleIcon, AngleDoubleRightIcon } from '@patternfly/react-icons';
 
 const operationDisplayName = { memo: 'Comment from', approve: 'Approved By',
   deny: 'Denied by', notify: 'Notified By', skip: 'Skipped by' };
 
-const operationIcon = { memo: <CommentIcon/>, approve: <CheckIcon/>,
-  deny: <OutlinedTimesCircleIcon/>, notify: <EnvelopeIcon/>, skip: <AngleDoubleRightIcon/> };
+const operationIcon = {
+  memo: <CommentIcon/>,
+  approve: <CheckCircleIcon style={ { color: 'var(--pf-global--success-color--100)' } }/>,
+  deny: <OutlinedTimesCircleIcon style={ { color: 'var(--pf-global--danger-color--100)' }	}/>,
+  notify: <EnvelopeIcon/>,
+  skip: <AngleDoubleRightIcon/>
+};
 
-export const ActionTrasncript = actionList => {
+export const ActionTranscript = actionList => {
   return (
     <Stack>
       { actionList.actionList.map(actionItem =>

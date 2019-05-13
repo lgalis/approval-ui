@@ -17,7 +17,7 @@ export const createInitialRows = data =>
     }, {
       parent: key * 2,
       fullWidth: true,
-      cells: [{ title: <ExpandableContent id={ id } content={ content } state={ state } active_stage={ active_stage }/> }]
+      cells: [{ title: <ExpandableContent id={ id } content={ content } state={ state }/> }]
     }
   ]), []);
 
