@@ -60,6 +60,16 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         </Button>
       </Link>
     </ToolbarItem>
+    <ToolbarItem>
+      <Link to="/workflows/remove-workflow">
+        <Button
+            variant="primary"
+            aria-label="Create Workflow"
+        >
+          Delete
+        </Button>
+      </Link>
+    </ToolbarItem>
   </ToolbarGroup>;
 
   return (
