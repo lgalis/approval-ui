@@ -49,6 +49,11 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       }
     ];
 
+  const workflowsSelected = () => {
+    console.log('DEBUG - workflows: ', workflows);
+    return workflows.some(item => item.selected === true);
+  };
+
   const toolbarButtons = () => <ToolbarGroup>
     <ToolbarItem>
       <Link to="/workflows/add-workflow">
@@ -63,8 +68,10 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
     <ToolbarItem>
       <Link to="/workflows/remove-workflow">
         <Button
-            variant="primary"
-            aria-label="Create Workflow"
+          variant="link"
+          isDisabled = { !workflowsSelected() }
+          style={ { color: 'var(--pf-global--danger-color--100)'	} }
+          aria-label="Delete Workflow"
         >
           Delete
         </Button>

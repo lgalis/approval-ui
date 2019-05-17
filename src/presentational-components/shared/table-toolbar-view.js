@@ -46,13 +46,17 @@ export const TableToolbarView = ({
       ...row
     });
 
-  const setSelected = (data, id) => data.map(row => row.id === id ?
-    {
-      ...row,
-      selected: !row.selected
-    } : {
-      ...row
-    });
+  const setSelected = (data, id) => {
+    const newData = data.map(row => row.id === id ?
+      {
+        ...row,
+        selected: !row.selected
+      } : {
+        ...row
+      });
+    console.log('DEBUg - setSelected', newData)
+    return newData;
+  };
 
   const onCollapse = (_event, _index, _isOpen, { id }) => setRows((rows) => setOpen(rows, id));
 
