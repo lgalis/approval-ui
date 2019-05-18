@@ -19,7 +19,7 @@ const columns = [{
 'Groups'
 ];
 
-const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history }) => {
+const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history, selectedWorkflows = []}) => {
   const fetchData = (setRows) => {
     fetchRbacGroups();
     fetchWorkflows().then(({ value: { data }}) => setRows(createInitialRows(data)));
@@ -49,9 +49,14 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       }
     ];
 
-  const workflowsSelected = () => {
-    console.log('DEBUG - workflows: ', workflows);
-    return workflows.some(item => item.selected === true);
+  const setSelectedWorkflows = (checkedWorkflows) => {
+    selectedWorkflows = checkedWorkflows;
+    console.log('DEBUG - selectedWorkflows: ', selectedWorkflows);
+  };
+
+  const anyWorkflowsSelected = () => {
+    console.log('anyWorkflowSelected: ', selectedWorkflows.length > 0);
+    return selectedWorkflows.length > 0;
   };
 
   const toolbarButtons = () => <ToolbarGroup>
@@ -69,7 +74,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       <Link to="/workflows/remove-workflow">
         <Button
           variant="link"
-          isDisabled = { !workflowsSelected() }
+          isDisabled = { !anyWorkflowsSelected() }
           style={ { color: 'var(--pf-global--danger-color--100)'	} }
           aria-label="Delete Workflow"
         >
@@ -93,6 +98,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         titlePlural="Workflows"
         titleSingular="Workflow"
         pagination={ pagination }
+        setCheckedItems={ setSelectedWorkflows }
         toolbarButtons={ toolbarButtons }
       />
     </Fragment>
@@ -126,6 +132,7 @@ Workflows.propTypes = {
   searchFilter: propTypes.string,
   fetchWorkflows: propTypes.func.isRequired,
   fetchRbacGroups: propTypes.func.isRequired,
+  selectedWorkflows: propTypes.array,
   pagination: propTypes.shape({
     limit: propTypes.number.isRequired,
     offset: propTypes.number.isRequired,

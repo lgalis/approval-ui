@@ -13,8 +13,19 @@ import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { DataListLoader } from './loader-placeholders';
 
 export const TableToolbarView = ({
-  request, isSelectable, createInitialRows, columns, toolbarButtons, fetchData, data, actionResolver, routes, titlePlural, titleSingular, pagination
-}) => {
+  request,
+  isSelectable,
+  createInitialRows,
+  columns,
+  toolbarButtons,
+  fetchData,
+  data,
+  actionResolver,
+  routes,
+  titlePlural,
+  titleSingular,
+  pagination,
+  setCheckedItems }) => {
   const [ filterValue, setFilterValue ] = useState('');
   const [ rows, setRows ] = useState([]);
   const [ isLoading ] = useState(false);
@@ -54,7 +65,11 @@ export const TableToolbarView = ({
       } : {
         ...row
       });
-    console.log('DEBUg - setSelected', newData)
+    console.log('DEBUg - setSelected', newData);
+
+    let checkedItems = newData.filter(item => (item.id && item.selected));
+    console.log('setSelected - Debug, checkedItems:', checkedItems);
+    setCheckedItems(checkedItems);
     return newData;
   };
 
@@ -139,7 +154,8 @@ TableToolbarView.propTypes = {
   titlePlural: propTypes.string,
   titleSingular: propTypes.string,
   routes: propTypes.func,
-  actionResolver: propTypes.func
+  actionResolver: propTypes.func,
+  setCheckedItems: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
