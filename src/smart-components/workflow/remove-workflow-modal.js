@@ -1,30 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal, Button, Bullseye, Text, TextContent, TextVariants } from '@patternfly/react-core';
-import { fetchWorkflows, fetchWorkflow, removeWorkflow } from '../../redux/actions/workflow-actions';
+import { fetchWorkflows, removeWorkflows } from '../../redux/actions/workflow-actions';
 
 const RemoveWorkflowModal = ({
   history: { goBack, push },
-  removeWorkflow,
-  fetchWorkflows,
-  fetchWorkflow,
-  workflowId,
-  workflow
+  location: { state: { checkedWorkflows }},
+  removeWorkflows,
+  fetchWorkflows
 }) => {
-  useEffect(() => {
-    if (workflowId) {
-      fetchWorkflow(workflowId);
-    }
-  }, [ workflowId ]);
-
-  if (!workflow) {
+  if (!checkedWorkflows || checkedWorkflows.length === 0) {
     return null;
   }
 
-  const onSubmit = () => removeWorkflow(workflowId)
+  const onSubmit = () => removeWorkflows(checkedWorkflows)
   .then(() => {
     fetchWorkflows();
     push('/workflows');
@@ -50,7 +42,7 @@ const RemoveWorkflowModal = ({
       <Bullseye>
         <TextContent>
           <Text component={ TextVariants.h1 }>
-            Removing Workflow:  { workflow.name }
+            { `Removing ${checkedWorkflows.length} Workflows` }
           </Text>
         </TextContent>
       </Bullseye>
@@ -63,24 +55,17 @@ RemoveWorkflowModal.propTypes = {
     goBack: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired
   }).isRequired,
-  removeWorkflow: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    state: PropTypes.func.isRequired
+  }).isRequired,
+  removeWorkflows: PropTypes.func.isRequired,
   fetchWorkflows: PropTypes.func.isRequired,
-  fetchWorkflow: PropTypes.func.isRequired,
-  workflowId: PropTypes.string,
-  workflow: PropTypes.object
+  checkedWorkflows: PropTypes.array
 };
 
-const mapStateToProps = ({ workflowReducer: { selectedWorkflow, isLoading }},
-  { match: { params: { id }}}) => ({
-  workflowId: id,
-  workflow: selectedWorkflow,
-  isLoading
-});
-
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  fetchWorkflow,
   fetchWorkflows,
-  removeWorkflow
+  removeWorkflows
 }, dispatch);
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RemoveWorkflowModal));
+export default withRouter(connect(null, mapDispatchToProps)(RemoveWorkflowModal));

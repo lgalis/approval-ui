@@ -30,7 +30,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       postMethod={ fetchWorkflows } /> }/>
     <Route exact path="/workflows/edit/:id" render={ props => <AddWorkflow { ...props }
       postMethod={ fetchWorkflows } /> }/>
-    <Route exact path="/workflows/remove/:id" render={ props => <RemoveWorkflow { ...props } /> }/>
+    <Route exact path="/workflows/remove-workflow" render={ props => <RemoveWorkflow { ...props } /> }/>
   </Fragment>;
 
   const actionResolver = (workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
@@ -50,7 +50,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
     ];
 
   const setSelectedWorkflows = (checkedWorkflows) => {
-    selectedWorkflows = checkedWorkflows;
+    selectedWorkflows = checkedWorkflows.map(wf => wf.id);
     console.log('DEBUG - selectedWorkflows: ', selectedWorkflows);
   };
 
@@ -71,11 +71,12 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       </Link>
     </ToolbarItem>
     <ToolbarItem>
-      <Link to="/workflows/remove-workflow">
+      <Link to={ { pathname: '/workflows/remove-workflow', state: { checkedWorkflows: selectedWorkflows }} }
+        isDisabled={ !anyWorkflowsSelected() }>
         <Button
           variant="link"
-          isDisabled = { !anyWorkflowsSelected() }
-          style={ { color: 'var(--pf-global--danger-color--100)'	} }
+          isDisabled={ !anyWorkflowsSelected() }
+          style={ { color: anyWorkflowsSelected() ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
           aria-label="Delete Workflow"
         >
           Delete
