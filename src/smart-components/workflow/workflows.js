@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
@@ -19,7 +19,9 @@ const columns = [{
 'Groups'
 ];
 
-const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history, selectedWorkflows = []}) => {
+const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history }) => {
+  const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
+
   const fetchData = (setRows) => {
     fetchRbacGroups();
     fetchWorkflows().then(({ value: { data }}) => setRows(createInitialRows(data)));
@@ -45,12 +47,14 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         title: 'Delete',
         style: { color: 'var(--pf-global--danger-color--100)'	},
         onClick: (event, rowId, workflow) =>
-          history.push(`/workflows/remove/${workflow.id}`)
+          history.push({ pathname: '/workflows/remove-workflow',
+            state: { checkedWorkflows: [ workflow.id ]}
+          })
       }
     ];
 
-  const setSelectedWorkflows = (checkedWorkflows) => {
-    selectedWorkflows = checkedWorkflows.map(wf => wf.id);
+  const setCheckedWorkflows = (checkedWorkflows) => {
+    setSelectedWorkflows (checkedWorkflows.map(wf => wf.id));
     console.log('DEBUG - selectedWorkflows: ', selectedWorkflows);
   };
 
@@ -99,7 +103,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         titlePlural="Workflows"
         titleSingular="Workflow"
         pagination={ pagination }
-        setCheckedItems={ setSelectedWorkflows }
+        setCheckedItems={ setCheckedWorkflows }
         toolbarButtons={ toolbarButtons }
       />
     </Fragment>
