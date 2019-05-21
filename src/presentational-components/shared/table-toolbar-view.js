@@ -35,6 +35,10 @@ export const TableToolbarView = ({
     scrollToTop();
   }, []);
 
+  useEffect(() => {
+    setRows(createInitialRows(data));
+  }, [ data ]);
+
   const handleOnPerPageSelect = limit => request({
     offset: pagination.offset,
     limit
