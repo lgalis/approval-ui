@@ -8,6 +8,7 @@ import { Main } from '@red-hat-insights/insights-frontend-components';
 import { NotificationsPortal } from '@red-hat-insights/insights-frontend-components/components/Notifications';
 import '@red-hat-insights/insights-frontend-components/components/Notifications.css';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
+import { IntlProvider } from 'react-intl';
 
 class App extends Component {
   state = {
@@ -28,12 +29,14 @@ class App extends Component {
     }
 
     return (
-      <React.Fragment>
-        <NotificationsPortal />
-        <Main style={ { marginLeft: 0, padding: 0 } }>
-          <Routes />
-        </Main>
-      </React.Fragment>
+      <IntlProvider locale="en">
+        <React.Fragment>
+          <NotificationsPortal />
+          <Main style={ { marginLeft: 0, padding: 0 } }>
+            <Routes />
+          </Main>
+        </React.Fragment>
+      </IntlProvider>
     );
   }
 }
