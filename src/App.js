@@ -4,11 +4,13 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Routes } from './Routes';
 import './App.scss';
-import { Main } from '@red-hat-insights/insights-frontend-components';
-import { NotificationsPortal } from '@red-hat-insights/insights-frontend-components/components/Notifications';
-import '@red-hat-insights/insights-frontend-components/components/Notifications.css';
+import { Main } from '@redhat-cloud-services/frontend-components';
+import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications/';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
 import { IntlProvider } from 'react-intl';
+
+import '@redhat-cloud-services/frontend-components-notifications/index.css';
+import './App.scss';
 
 class App extends Component {
   state = {

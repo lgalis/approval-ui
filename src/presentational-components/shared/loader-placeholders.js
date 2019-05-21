@@ -9,7 +9,7 @@ import {
   Grid,
   GridItem
 } from '@patternfly/react-core';
-import { Section } from '@red-hat-insights/insights-frontend-components';
+import { Section } from '@redhat-cloud-services/frontend-components';
 import ContentLoader from 'react-content-loader';
 
 export const RequestInfoBarLoader = () => (

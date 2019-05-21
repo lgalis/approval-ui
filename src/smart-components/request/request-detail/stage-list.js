@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { PageHeader, PageHeaderTitle } from '@red-hat-insights/insights-frontend-components';
+import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components';
 import { DataList } from '@patternfly/react-core';
 import Stage from './stage';
 import { DataListLoader } from '../../../presentational-components/shared/loader-placeholders';
