@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter, Route } from 'react-router-dom';
 import { Grid, GridItem } from '@patternfly/react-core';
-import { Section } from '@red-hat-insights/insights-frontend-components';
+import { Section } from '@redhat-cloud-services/frontend-components';
 import '../../../App.scss';
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
