@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
-import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { createStageAction, fetchRequest } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 

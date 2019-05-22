@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '@patternfly/react-core';
-import { addNotification } from '@red-hat-insights/insights-frontend-components/components/Notifications';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
 import FormRenderer from '../common/form-renderer';
 import { createWorkflowSchema } from '../../forms/workflow-form.schema';
