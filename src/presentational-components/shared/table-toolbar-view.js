@@ -69,10 +69,8 @@ export const TableToolbarView = ({
       } : {
         ...row
       });
-    console.log('DEBUg - setSelected', newData);
 
     let checkedItems = newData.filter(item => (item.id && item.selected));
-    console.log('setSelected - Debug, checkedItems:', checkedItems);
     setCheckedItems(checkedItems);
     return newData;
   };

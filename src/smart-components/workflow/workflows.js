@@ -32,7 +32,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       postMethod={ fetchWorkflows } /> }/>
     <Route exact path="/workflows/edit/:id" render={ props => <AddWorkflow { ...props }
       postMethod={ fetchWorkflows } /> }/>
-    <Route exact path="/workflows/remove-workflow" render={ props => <RemoveWorkflow { ...props } /> }/>
+    <Route exact path="/workflows/remove-workflow" render={ props => <RemoveWorkflow { ...props } setSelectedWorkflows={ setSelectedWorkflows } /> }/>
   </Fragment>;
 
   const actionResolver = (workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
@@ -53,15 +53,10 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       }
     ];
 
-  const setCheckedWorkflows = (checkedWorkflows) => {
+  const setCheckedWorkflows = (checkedWorkflows) =>
     setSelectedWorkflows (checkedWorkflows.map(wf => wf.id));
-    console.log('DEBUG - selectedWorkflows: ', selectedWorkflows);
-  };
 
-  const anyWorkflowsSelected = () => {
-    console.log('anyWorkflowSelected: ', selectedWorkflows.length > 0);
-    return selectedWorkflows.length > 0;
-  };
+  const anyWorkflowsSelected = () => selectedWorkflows.length > 0;
 
   const toolbarButtons = () => <ToolbarGroup>
     <ToolbarItem>
