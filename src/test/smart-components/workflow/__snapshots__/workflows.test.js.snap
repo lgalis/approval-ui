@@ -2,11 +2,17 @@
 
 exports[`<Workflows /> should render correctly 1`] = `
 <Workflows
+  fetchRbacGroups={[Function]}
   fetchWorkflows={[Function]}
   isLoading={false}
-  pagination={Object {}}
-  requests={Array []}
-  searchFilter=""
+  pagination={
+    Object {
+      "count": 0,
+      "limit": 10,
+      "offset": 0,
+    }
+  }
+  rbacGroups={Array []}
   store={
     Object {
       "clearActions": [Function],
@@ -38,16 +44,23 @@ exports[`<Workflows /> should render correctly 1`] = `
       "unsubscribe": [Function],
     }
   }
+  workflows={Array []}
 />
 `;
 
 exports[`<Workflows /> should render correctly in loading state 1`] = `
 <Workflows
+  fetchRbacGroups={[Function]}
   fetchWorkflows={[Function]}
   isLoading={false}
-  pagination={Object {}}
-  workflows={Array []}
-  searchFilter=""
+  pagination={
+    Object {
+      "count": 0,
+      "limit": 10,
+      "offset": 0,
+    }
+  }
+  rbacGroups={Array []}
   store={
     Object {
       "clearActions": [Function],
@@ -79,5 +92,6 @@ exports[`<Workflows /> should render correctly in loading state 1`] = `
       "unsubscribe": [Function],
     }
   }
+  workflows={Array []}
 />
 `;

@@ -7,7 +7,8 @@ import promiseMiddleware from 'redux-promise-middleware';
 
 import Workflows from '../../../smart-components/workflow/workflows';
 import { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
-import { notificationsMiddleware } from '@red-hat-insights/insights-frontend-components/components/Notifications';
+import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
+import { groupsInitialState } from '../../../redux/reducers/group-reducer';
 
 describe('<Workflows />', () => {
 
@@ -19,7 +20,7 @@ describe('<Workflows />', () => {
   beforeEach(() => {
     initialProps = {};
     mockStore = configureStore(middlewares);
-    initialState = { workflowReducer: { ...workflowsInitialState, isLoading: false }};
+    initialState = { workflowReducer: { ...workflowsInitialState, isLoading: false }, groupReducer: { ...groupsInitialState }};
   });
 
   afterEach(() => {
