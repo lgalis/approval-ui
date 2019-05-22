@@ -23,10 +23,6 @@ describe('<Workflows />', () => {
     initialState = { workflowReducer: { ...workflowsInitialState, isLoading: false }, groupReducer: { ...groupsInitialState }};
   });
 
-  afterEach(() => {
-    fetchMock.reset();
-  });
-
   it('should render correctly', () => {
     const store = mockStore(initialState);
     const wrapper = shallow(<Workflows store={ store } { ...initialProps } />);

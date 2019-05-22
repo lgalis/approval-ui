@@ -32,7 +32,13 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       postMethod={ fetchWorkflows } /> }/>
     <Route exact path="/workflows/edit/:id" render={ props => <AddWorkflow { ...props }
       postMethod={ fetchWorkflows } /> }/>
-    <Route exact path="/workflows/remove-workflow" render={ props => <RemoveWorkflow { ...props } setSelectedWorkflows={ setSelectedWorkflows } /> }/>
+    <Route exact path="/workflows/remove/:id"
+      render={ props => <RemoveWorkflow { ...props }
+        setSelectedWorkflows={ setSelectedWorkflows } /> }/>
+    <Route exact path="/workflows/remove"
+      render={ props => <RemoveWorkflow { ...props }
+        ids={ selectedWorkflows }
+        setSelectedWorkflows={ setSelectedWorkflows } /> }/>
   </Fragment>;
 
   const actionResolver = (workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
@@ -47,9 +53,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         title: 'Delete',
         style: { color: 'var(--pf-global--danger-color--100)'	},
         onClick: (event, rowId, workflow) =>
-          history.push({ pathname: '/workflows/remove-workflow',
-            state: { checkedWorkflows: [ workflow.id ]}
-          })
+          history.push(`/workflows/remove/${workflow.id}`)
       }
     ];
 
@@ -70,7 +74,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       </Link>
     </ToolbarItem>
     <ToolbarItem>
-      <Link to={ { pathname: '/workflows/remove-workflow', state: { checkedWorkflows: selectedWorkflows }} }
+      <Link to={ { pathname: '/workflows/remove' } }
         isDisabled={ !anyWorkflowsSelected() }>
         <Button
           variant="link"
