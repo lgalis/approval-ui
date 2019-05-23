@@ -29,26 +29,18 @@ export const createWorkflowSchema = (newRecord, rbacGroups) => ({
       title: 'Set Approval Stages',
       name: 'wf_step_stages',
       nextStep: 'summary',
+      component: componentTypes.FORM_GROUP,
       fields: [{
-        component: componentTypes.SELECT,
-        name: 'stage-1',
-        isRequired: false,
-        label: '1st Stage',
-        options: rbacGroups
-      },
-      {
-        component: componentTypes.SELECT,
-        name: 'stage-2',
-        label: '2nd Stage',
-        options: rbacGroups
-      },
-      {
-        component: componentTypes.SELECT,
-        name: 'stage-3',
-        label: '3rd Stage',
-        options: rbacGroups
-      }
-      ]
+        name: 'wfGroups',
+        component: componentTypes.FIELD_ARRAY,
+        fields: [{
+          component: componentTypes.SELECT,
+          name: 'stage',
+          isRequired: false,
+          label: '1st Stage',
+          options: rbacGroups
+        }]
+      }]
     }, {
       fields: [{
         name: 'summary',
