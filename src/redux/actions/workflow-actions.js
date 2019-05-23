@@ -62,3 +62,17 @@ export const removeWorkflow = (workflow) => ({
     }
   }
 });
+
+export const removeWorkflows = (workflows) => ({
+  type: ActionTypes.REMOVE_WORKFLOWS,
+  payload: WorkflowHelper.removeWorkflows(workflows),
+  meta: {
+    notifications: {
+      fulfilled: {
+        variant: 'success',
+        title: 'Success removing workflows',
+        description: 'The selected workflows were removed successfully.'
+      }
+    }
+  }
+});

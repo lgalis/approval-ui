@@ -13,8 +13,19 @@ import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { DataListLoader } from './loader-placeholders';
 
 export const TableToolbarView = ({
-  request, isSelectable, createInitialRows, columns, toolbarButtons, fetchData, data, actionResolver, routes, titlePlural, titleSingular, pagination
-}) => {
+  request,
+  isSelectable,
+  createInitialRows,
+  columns,
+  toolbarButtons,
+  fetchData,
+  data,
+  actionResolver,
+  routes,
+  titlePlural,
+  titleSingular,
+  pagination,
+  setCheckedItems }) => {
   const [ filterValue, setFilterValue ] = useState('');
   const [ rows, setRows ] = useState([]);
   const [ isLoading ] = useState(false);
@@ -23,6 +34,10 @@ export const TableToolbarView = ({
     fetchData(setRows);
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    setRows(createInitialRows(data));
+  }, [ data ]);
 
   const handleOnPerPageSelect = limit => request({
     offset: pagination.offset,
@@ -46,13 +61,19 @@ export const TableToolbarView = ({
       ...row
     });
 
-  const setSelected = (data, id) => data.map(row => row.id === id ?
-    {
-      ...row,
-      selected: !row.selected
-    } : {
-      ...row
-    });
+  const setSelected = (data, id) => {
+    const newData = data.map(row => row.id === id ?
+      {
+        ...row,
+        selected: !row.selected
+      } : {
+        ...row
+      });
+
+    let checkedItems = newData.filter(item => (item.id && item.selected));
+    setCheckedItems(checkedItems);
+    return newData;
+  };
 
   const onCollapse = (_event, _index, _isOpen, { id }) => setRows((rows) => setOpen(rows, id));
 
@@ -135,7 +156,8 @@ TableToolbarView.propTypes = {
   titlePlural: propTypes.string,
   titleSingular: propTypes.string,
   routes: propTypes.func,
-  actionResolver: propTypes.func
+  actionResolver: propTypes.func,
+  setCheckedItems: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
