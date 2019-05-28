@@ -50,8 +50,8 @@ const AddWorkflowModal = ({
 
   const onSubmit = data => {
     const { name, description, wfGroups } = data;
-    const workflowData = { name, description, group_refs: Object.values(wfGroups) };
-    console.log('Submit Add workflow data: ', data);
+    const workflowData = { name, description, group_refs: wfGroups.map(group => group.stage) };
+    console.log('DEBUG - Submit Add workflow data: ', workflowData);
     id ? updateWorkflow({ id, ...workflowData }).
     then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'))
       : addWorkflow(workflowData).
