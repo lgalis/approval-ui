@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
 
 const SummaryContent = (values) => {
-  const { name, description, ...stages } = values.values;
+  const { name, description, wfGroups } = values.values;
 
   return (
     <Fragment>
@@ -21,12 +21,12 @@ const SummaryContent = (values) => {
       </TextContent>
       <TextContent>
         <Text className="data-table-detail heading" component={ TextVariants.h5 }>Approval Stages</Text>
-        { Object.keys(stages).map(key => key.startsWith('stage') &&
-            <Text key={ key }
-              className="data-table-detail content"
-              component={ TextVariants.p }>
-              { `${key} : ${values.groupOptions.find(group => group.value === stages[key]).label}` }
-            </Text>) }
+        { wfGroups.map((stage, idx)  =>
+          <Text key={ stage.value }
+            className="data-table-detail content"
+            component={ TextVariants.p }>
+            { `Stage ${idx + 1} : ${values.groupOptions.find(group => group.value === wfGroups[idx].stage).label}` }
+          </Text>) }
       </TextContent>
     </Fragment>
   );

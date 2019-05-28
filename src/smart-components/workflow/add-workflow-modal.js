@@ -32,7 +32,7 @@ const AddWorkflowModal = ({
   const fetchData = (setInitialValues)=> {
     fetchWorkflow(id).then((data) => {
       let values = data.value;
-      data.value.wf_stage_array.forEach((group, idx) => {
+      data.value.group_refs.forEach((group, idx) => {
         if (rbacGroups.find(rbacGroup => rbacGroup.value === group.stage)) {
           values.stage = group;
         }
