@@ -37,7 +37,7 @@ export const createWorkflowSchema = (newRecord, rbacGroups) => ({
           component: componentTypes.SELECT,
           name: 'stage',
           isRequired: false,
-          label: '1st Stage',
+          label: 'Stage',
           options: rbacGroups
         }]
       }]

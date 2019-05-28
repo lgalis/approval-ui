@@ -32,9 +32,9 @@ const AddWorkflowModal = ({
   const fetchData = (setInitialValues)=> {
     fetchWorkflow(id).then((data) => {
       let values = data.value;
-      data.value.group_refs.forEach((group, idx) => {
-        if (rbacGroups.find(rbacGroup => rbacGroup.value === group.stage)) {
-          values.stage = group;
+      let groups = data.value.group_refs.map((group, idx) => {
+        if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
+          return { stage: group };
         }
         else {
           addNotification({
@@ -44,14 +44,13 @@ const AddWorkflowModal = ({
           });
         }
       });
-      setInitialValues(values);
+      setInitialValues({ ...values, wfGroups: groups });
     });
   };
 
   const onSubmit = data => {
     const { name, description, wfGroups } = data;
     const workflowData = { name, description, group_refs: wfGroups.map(group => group.stage) };
-    console.log('DEBUG - Submit Add workflow data: ', workflowData);
     id ? updateWorkflow({ id, ...workflowData }).
     then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'))
       : addWorkflow(workflowData).
