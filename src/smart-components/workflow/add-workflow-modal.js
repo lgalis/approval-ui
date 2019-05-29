@@ -21,7 +21,17 @@ const AddWorkflowModal = ({
   postMethod,
   rbacGroups
 }) => {
-  const [ initialValues, setInitialValues ] = useState([]);
+  const withMinGroups = (groups, min) => {
+    let paddNumber = min - groups.length;
+    if (paddNumber > 0) {
+      let paddArray = new Array(paddNumber).fill({ stage: undefined });
+      return groups.concat(paddArray);
+    }
+
+    return groups;
+  };
+
+  const [ initialValues, setInitialValues ] = useState({ wfGroups: withMinGroups([], 3) });
 
   useEffect(() => {
     if (id) {
@@ -44,7 +54,7 @@ const AddWorkflowModal = ({
           });
         }
       });
-      setInitialValues({ ...values, wfGroups: groups });
+      setInitialValues({ ...values, wfGroups: withMinGroups(groups, 3) });
     });
   };
 
@@ -97,8 +107,7 @@ const AddWorkflowModal = ({
 };
 
 AddWorkflowModal.defaultProps = {
-  rbacGroups: [],
-  initialValues: {}
+  rbacGroups: []
 };
 
 AddWorkflowModal.propTypes = {
