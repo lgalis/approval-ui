@@ -109,7 +109,7 @@ AddWorkflowModal.propTypes = {
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
   fetchWorkflow: PropTypes.func.isRequired,
-  postMethod: PropTypes.func.isRequired,
+  postMethod: PropTypes.func,
   initialValues: PropTypes.object,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,

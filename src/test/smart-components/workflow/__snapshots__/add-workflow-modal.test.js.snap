@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AddWorkflowModal /> should create edit variant of workflow modal 1`] = `
+<MemoryRouter
+  initialEntries={
+    Array [
+      "workflows/edit/undefined",
+    ]
+  }
+>
+  <withRouter(Connect(AddWorkflowModal)) />
+</MemoryRouter>
+`;
