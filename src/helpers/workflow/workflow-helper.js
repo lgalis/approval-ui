@@ -21,6 +21,7 @@ export async function fetchWorkflowsWithGroups({ limit = 10, offset = 0 }) {
         throw error;
       }
     }
+
     return { ...wf, group_names: wfWithGroups };
   })).then(data => ({
     ...wfData,
@@ -65,5 +66,9 @@ export  function addWorkflow(workflow) {
 
 export async function removeWorkflow(workflowId) {
   return await workflowApi.destroyWorkflow(workflowId);
+}
+
+export async function removeWorkflows(selectedWorkflows) {
+  return Promise.all(selectedWorkflows.map(async workflowId => await workflowApi.destroyWorkflow(workflowId)));
 }
 

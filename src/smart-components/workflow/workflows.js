@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
@@ -20,6 +20,8 @@ const columns = [{
 ];
 
 const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history }) => {
+  const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
+
   const fetchData = (setRows) => {
     fetchRbacGroups();
     fetchWorkflows().then(({ value: { data }}) => setRows(createInitialRows(data)));
@@ -30,7 +32,13 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       postMethod={ fetchWorkflows } /> }/>
     <Route exact path="/workflows/edit/:id" render={ props => <AddWorkflow { ...props }
       postMethod={ fetchWorkflows } /> }/>
-    <Route exact path="/workflows/remove/:id" render={ props => <RemoveWorkflow { ...props } /> }/>
+    <Route exact path="/workflows/remove/:id"
+      render={ props => <RemoveWorkflow { ...props }
+        setSelectedWorkflows={ setSelectedWorkflows } /> }/>
+    <Route exact path="/workflows/remove"
+      render={ props => <RemoveWorkflow { ...props }
+        ids={ selectedWorkflows }
+        setSelectedWorkflows={ setSelectedWorkflows } /> }/>
   </Fragment>;
 
   const actionResolver = (workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
@@ -49,6 +57,11 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       }
     ];
 
+  const setCheckedWorkflows = (checkedWorkflows) =>
+    setSelectedWorkflows (checkedWorkflows.map(wf => wf.id));
+
+  const anyWorkflowsSelected = () => selectedWorkflows.length > 0;
+
   const toolbarButtons = () => <ToolbarGroup>
     <ToolbarItem>
       <Link to="/workflows/add-workflow">
@@ -57,6 +70,19 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
           aria-label="Create Workflow"
         >
           Create Workflow
+        </Button>
+      </Link>
+    </ToolbarItem>
+    <ToolbarItem>
+      <Link to={ { pathname: '/workflows/remove' } }
+        isDisabled={ !anyWorkflowsSelected() }>
+        <Button
+          variant="link"
+          isDisabled={ !anyWorkflowsSelected() }
+          style={ { color: anyWorkflowsSelected() ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
+          aria-label="Delete Workflow"
+        >
+          Delete
         </Button>
       </Link>
     </ToolbarItem>
@@ -76,6 +102,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         titlePlural="Workflows"
         titleSingular="Workflow"
         pagination={ pagination }
+        setCheckedItems={ setCheckedWorkflows }
         toolbarButtons={ toolbarButtons }
       />
     </Fragment>
@@ -109,6 +136,7 @@ Workflows.propTypes = {
   searchFilter: propTypes.string,
   fetchWorkflows: propTypes.func.isRequired,
   fetchRbacGroups: propTypes.func.isRequired,
+  selectedWorkflows: propTypes.array,
   pagination: propTypes.shape({
     limit: propTypes.number.isRequired,
     offset: propTypes.number.isRequired,
