@@ -21,7 +21,7 @@ const ActionModal = ({
   const [ selectedRequest, setSelectedRequest ] = useState({});
 
   const fetchData = (setRequestData) => {
-    fetchRequest(id).payload.then((data) => setRequestData(data));
+    fetchRequest(id).payload.then((data) => setRequestData(data)).catch(() => setRequestData(undefined));
   };
 
   useEffect(() => {
