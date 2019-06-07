@@ -58,13 +58,12 @@ describe('<ActionModal />', () => {
     });
   });
 
-  it('should create edit variant of request modal', done => {
+  it('should create the AddComment variant of the action modal', done => {
     const store = mockStore(initialState);
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows`, mockOnce({
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests`, mockOnce({
       body: {
         data: [{
-          name: 'workflow',
           id: '123'
         }]
       }
@@ -74,50 +73,36 @@ describe('<ActionModal />', () => {
       fields: [{
         component: componentTypes.TEXT_FIELD,
         isRequired: true,
-        label: 'Request Name',
+        label: 'Comment',
         name: 'name',
         validate: [ expect.any(Function) ]
-      }, {
-        component: componentTypes.TEXTAREA,
-        label: 'Description',
-        name: 'description'
-      }, {
-        component: componentTypes.SELECT,
-        label: 'Approval workflow',
-        name: 'workflow_ref',
-        options: [
-          {
-            label: 'foo',
-            value: 'bar'
-          }
-        ]
       }]
     };
 
     const wrapper = mount(
       <ComponentWrapper store={ store } requestId="123">
-        <Route path="requests/:id?" render={ () => <ActionModal { ...initialProps } match={ { params: { id: '123' }} } /> }/>
+        <Route path="requests/add_comment/:id?" render={ () => <ActionModal { ...initialProps } match={ { params: { id: '123' }} } /> }/>
       </ComponentWrapper>
     );
 
     setImmediate(() => {
       const modal = wrapper.find(Modal);
       const form = wrapper.find(FormRenderer);
-      expect(modal.props().title).toEqual('Edit request');
+      expect(modal.props().title).toEqual('Add Comment');
       expect(form.props().schema).toEqual(expectedSchema);
       done();
     });
   });
 
-  it('should create edit variant of request modal and call updateRequest on submit', () => {
+  it('should create Add comment variant of the action modal and call updateRequest on submit', () => {
     const store = mockStore(initialState);
 
-    apiClientMock.patch(`${APPROVAL_API_BASE}/requests/123`, ((req, res) => {
-      expect(JSON.parse(req.body())).toEqual({ id: '123', name: 'Request', workflow_ref: null });
+    apiClientMock.patch(`${APPROVAL_API_BASE}/requests/add_comment/123`, ((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ id: '123', name: 'Request', comment: 'Test' });
       return res.body(200);
     }));
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows`, mockOnce({ body: {
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests`, mockOnce({ body: {
       data: [{
         label: 'foo',
         value: 'bar'
@@ -127,7 +112,7 @@ describe('<ActionModal />', () => {
     const wrapper = mount(
       <ComponentWrapper store={ store } requestId="123">
         <Route
-          path="requests/:id?"
+          path="requests/add_comment/:id?"
           render={ () => <ActionModal { ...initialProps } match={ { params: { id: '123' }} }/> }
         />
       </ComponentWrapper>
