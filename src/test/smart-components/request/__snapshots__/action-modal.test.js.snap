@@ -1,25 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ActionModal /> should create edit variant of request modal 1`] = `
-<MemoryRouter
-  initialEntries={
-    Array [
-      "requests/undefined",
-    ]
-  }
->
-  <withRouter(Connect(ActionModal)) />
-</MemoryRouter>
-`;
-
-exports[`<ActionModal /> should create the AddComment variant of the action modal 1`] = `
-<MemoryRouter
-  initialEntries={
-    Array [
-      "requests/undefined",
-    ]
-  }
->
-  <withRouter(Connect(ActionModal)) />
-</MemoryRouter>
+exports[`<ActionModal /> should render correctly 1`] = `
+<Route>
+  <Component />
+</Route>
 `;
