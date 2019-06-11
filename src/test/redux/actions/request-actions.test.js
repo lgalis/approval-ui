@@ -42,7 +42,6 @@ describe('Request actions', () => {
       }]},
       type: `${FETCH_REQUESTS}_FULFILLED`
     }];
-
     apiClientMock.get(APPROVAL_API_BASE + '/requests?limit=10&offset=0', mockOnce({
       body: {
         data: [{
