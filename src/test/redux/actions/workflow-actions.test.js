@@ -22,10 +22,6 @@ describe('Workflow actions', () => {
     mockStore = configureStore(middlewares);
   });
 
-  afterEach(() => {
-    fetchMock.reset();
-  });
-
   it('should dispatch correct actions after fetching workflows', () => {
     const store = mockStore({
       workflowReducer: {
@@ -76,7 +72,7 @@ describe('Workflow actions', () => {
 
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + '/workflows?limit=10&offset=0 ', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows?limit=10&offset=0', mockOnce({
       status: 500
     }));
 
