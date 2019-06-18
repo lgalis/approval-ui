@@ -18,7 +18,7 @@ registry.register({
   requestReducer: applyReducerHash(requestReducer, requestsInitialState),
   workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState),
   groupReducer: applyReducerHash(groupReducer, groupsInitialState),
-  notifications: applyReducerHash(notifications, [])
+  notifications
 });
 
 export default registry.getStore();
