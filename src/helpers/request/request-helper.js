@@ -4,8 +4,8 @@ const requestApi = getRequestApi();
 const stageApi = getStageApi();
 const actionApi = getActionApi();
 
-export function fetchRequests({ limit = 10, offset = 0 }) {
-  return requestApi.listRequests(undefined, undefined, undefined, limit, offset);
+export function fetchRequests({ limit, offset }) {
+  return requestApi.listRequests(undefined, limit, offset);
 }
 
 export async function fetchRequest(id) {
@@ -36,4 +36,6 @@ export async function fetchStagesWithActions(requestId) {
 
 export async function createStageAction (stageId, actionIn) {
   return await actionApi.createAction(stageId, actionIn);
-};
+}
+
+;

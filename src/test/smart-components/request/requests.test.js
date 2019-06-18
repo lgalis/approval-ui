@@ -22,10 +22,6 @@ describe('<Requests />', () => {
     initialState = { requestReducer: { ...requestsInitialState, isLoading: false }};
   });
 
-  afterEach(() => {
-    fetchMock.reset();
-  });
-
   it('should render correctly', () => {
     const store = mockStore(initialState);
     const wrapper = shallow(<Requests store={ store } { ...initialProps } />);
