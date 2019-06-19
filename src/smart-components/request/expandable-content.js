@@ -4,6 +4,14 @@ import { Link } from 'react-router-dom';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button } from '@patternfly/react-core';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 
+const expandedItem = (title, detail) => {
+  return (<TextContent>
+    <Text className="data-table-detail heading" component={ TextVariants.small }>{ title }</Text>
+    <Text className="data-table-detail content"
+      component={ TextVariants.h5 }>{ detail }</Text>
+  </TextContent>);
+};
+
 const ExpandableContent = ({ id, content, state, reason }) => {
   const requestActive = isRequestStateActive(state);
   return (
@@ -31,21 +39,9 @@ const ExpandableContent = ({ id, content, state, reason }) => {
         }</Level>
       <Level>
         <LevelItem>
-          <TextContent>
-            <Text className="data-table-detail heading" component={ TextVariants.small }>Portfolio</Text>
-            <Text className="data-table-detail content"
-              component={ TextVariants.h5 }>{ content ? content.portfolio : 'Unknown' }</Text>
-          </TextContent>
-          <TextContent>
-            <Text className="data-table-detail heading" component={ TextVariants.small }>Platform</Text>
-            <Text className="data-table-detail content"
-              component={ TextVariants.h5 }>{ content ? content.platform : 'Unknown' }</Text>
-          </TextContent>
-          <TextContent>
-            <Text className="data-table-detail heading" component={ TextVariants.small }>Reason</Text>
-            <Text className="data-table-detail content"
-              component={ TextVariants.h5 }>{ reason }</Text>
-          </TextContent>
+          { expandedItem('Portfolio', content ? content.portfolio : 'Unknown') }e
+          { expandedItem('Platform', content ? content.platform : 'Unknown') }
+          { expandedItem('Reason', reason) }
         </LevelItem>
 
       </Level>
