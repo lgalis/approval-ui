@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button } from '@patternfly/react-core';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 
-const ExpandableContent = ({ id, content, state, total_stages, decision, reason }) => {
+const ExpandableContent = ({ id, content, state, reason }) => {
   const requestActive = isRequestStateActive(state);
   return (
     <Fragment>
@@ -42,14 +42,9 @@ const ExpandableContent = ({ id, content, state, total_stages, decision, reason 
               component={ TextVariants.h5 }>{ content ? content.platform : 'Unknown' }</Text>
           </TextContent>
           <TextContent>
-            <Text className="data-table-detail heading" component={ TextVariants.small }>Total Stages:</Text>
-            <Text className="data-table-detail content"
-              component={ TextVariants.h5 }>{ total_stages }</Text>
-          </TextContent>
-          <TextContent>
             <Text className="data-table-detail heading" component={ TextVariants.small }>Reason</Text>
             <Text className="data-table-detail content"
-              component={ TextVariants.h5 }>{ `${decision}: ${reason}` }</Text>
+              component={ TextVariants.h5 }>{ reason }</Text>
           </TextContent>
         </LevelItem>
 
@@ -63,8 +58,6 @@ ExpandableContent.propTypes = {
   content: PropTypes.obuidt,
   uname: PropTypes.string,
   state: PropTypes.string,
-  total_stages: PropTypes.string,
-  decision: PropTypes.string,
   reason: PropTypes.string
 };
 export default ExpandableContent;

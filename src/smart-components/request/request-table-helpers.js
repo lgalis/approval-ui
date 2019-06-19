@@ -6,7 +6,16 @@ import ExpandableContent from './expandable-content';
 import { timeAgo }  from '../../helpers/shared/helpers';
 
 export const createInitialRows = data =>
-  data.reduce((acc, { id, requester, created_at, updated_at, active_stage, total_stages, state, decision, reason, content }, key) => ([
+  data.reduce((acc, { id,
+    requester,
+    created_at,
+    updated_at,
+    active_stage,
+    total_stages,
+    state,
+    decision,
+    reason,
+    content }, key) => ([
     ...acc, {
       id,
       isOpen: false,
@@ -20,8 +29,6 @@ export const createInitialRows = data =>
       cells: [{ title: <ExpandableContent id={ id }
         content={ content }
         state={ state }
-        total_stages={ total_stages }
-        decision={ decision }
         reason={ reason }/> }]
     }
   ]), []);
