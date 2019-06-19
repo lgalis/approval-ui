@@ -15,8 +15,7 @@ const columns = [{
   title: 'Name',
   cellFormatters: [ expandable ]
 },
-'Description',
-'Groups'
+'Description'
 ];
 
 const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history }) => {
@@ -67,9 +66,9 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       <Link to="/workflows/add-workflow">
         <Button
           variant="primary"
-          aria-label="Create Workflow"
+          aria-label="Create workflow"
         >
-          Create Workflow
+          Create workflow
         </Button>
       </Link>
     </ToolbarItem>
@@ -99,8 +98,8 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         request={ fetchWorkflows }
         routes={ routes }
         actionResolver={ actionResolver }
-        titlePlural="Workflows"
-        titleSingular="Workflow"
+        titlePlural="workflows"
+        titleSingular="workflow"
         pagination={ pagination }
         setCheckedItems={ setCheckedWorkflows }
         toolbarButtons={ toolbarButtons }

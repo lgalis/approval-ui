@@ -60,8 +60,8 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
         routes={ routes }
         actionResolver={ actionResolver }
         areActionsDisabled={ areActionsDisabled }
-        titlePlural="Requests"
-        titleSingular="Request"
+        titlePlural="requests"
+        titleSingular="request"
         pagination={ pagination }
       />
     </Fragment>;
