@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from '@patternfly/react-core';
 
-const tabItems = [{ eventKey: 0, title: 'Requests', name: '/requests' }, { eventKey: 1, title: 'Workflows', name: '/workflows' }];
+const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' }, { eventKey: 1, title: 'Workflows', name: '/workflows' }];
 
 const AppTabs = ({ history: { push }, location: { pathname }}) => {
   const activeTab = tabItems.find(({ name }) => pathname.includes(name));
