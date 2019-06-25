@@ -5,7 +5,8 @@ import { Route, Link } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows } from '../../redux/actions/workflow-actions';
-import AddWorkflow from './add-workflow-modal';
+import AddWorkflow from './add-stages/add_stages_wizard';
+import EditWorkflow from './edit-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { createInitialRows } from './workflow-table-helpers';
@@ -29,7 +30,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
   const routes = () => <Fragment>
     <Route exact path="/workflows/add-workflow" render={ props => <AddWorkflow { ...props }
       postMethod={ fetchWorkflows } /> }/>
-    <Route exact path="/workflows/edit/:id" render={ props => <AddWorkflow { ...props }
+    <Route exact path="/workflows/edit/:id" render={ props => <EditWorkflow { ...props }
       postMethod={ fetchWorkflows } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }

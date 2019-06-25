@@ -1,54 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { Modal } from '@patternfly/react-core';
+import { Wizard } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
-import FormRenderer from '../common/form-renderer';
-import { createWorkflowSchema } from '../../forms/workflow-form.schema';
-import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
+import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../../redux/actions/workflow-actions';
 import SummaryContent from './summary_content';
 
-const AddWorkflowModal = ({
+const AddWorkflow = ({
   history: { push },
   match: { params: { id }},
   addWorkflow,
   addNotification,
-  fetchWorkflow,
   updateWorkflow,
   postMethod,
   rbacGroups
 }) => {
-  const [ initialValues, setInitialValues ] = useState([]);
+  const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
+  const StageInformation = (data) => <StageInformation values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
+  const SetStages = (data) => <SetStages values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
+  const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
 
-  useEffect(() => {
-    if (id) {
-      fetchData(setInitialValues);
-    }
-  }, []);
+  const steps = [
+    { name: 'General Information', component: { StageInformation }},
+    { name: 'Set Stages', component: { SetStages }},
+    { name: 'Review', component: { Summary }, nextButtonText: 'Submit' }
+  ];
 
-  const fetchData = (setInitialValues)=> {
-    fetchWorkflow(id).then((data) => {
-      let values = data.value;
-      data.value.group_refs.forEach((group, idx) => {
-        if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
-          values[`stage-${idx + 1}`] = group;
-        }
-        else {
-          addNotification({
-            variant: 'warning',
-            title: 'Editing workflow',
-            description: `Stage-${idx + 1} group with id: ${group} no longer accessible`
-          });
-        }
-      });
-      setInitialValues(values);
-    });
-  };
-
-  const onSubmit = data => {
+  const onSave = data => {
     const { name, description, ...wfGroups } = data;
     const workflowData = { name, description, group_refs: Object.values(wfGroups) };
     id ? updateWorkflow({ id, ...workflowData }).
@@ -66,42 +46,23 @@ const AddWorkflowModal = ({
     postMethod ?  postMethod().then(push('/workflows')) : push('/workflows');
   };
 
-  const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
-  const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
-
   return (
-    <Modal
+    <Wizard
       title={ id ? 'Edit workflow' : 'Create workflow' }
       isOpen
       onClose={ onCancel }
-      isSmall
-    >
-      <div style={ { padding: 8 } }>
-        <FormRenderer
-          schema={ createWorkflowSchema(!id, groupOptions) }
-          schemaType="default"
-          onSubmit={ onSubmit }
-          onCancel={ onCancel }
-          initialValues={ { ...initialValues } }
-          formFieldsMapper={ {
-            ...formFieldsMapper,
-            summary: Summary
-          } }
-          formContainer="modal"
-          showFormControls={ false }
-          buttonsLabels={ { submitLabel: 'Confirm' } }
-        />
-      </div>
-    </Modal>
+      onSave={ onSave }
+      steps= { steps }
+    />
   );
 };
 
-AddWorkflowModal.defaultProps = {
+AddWorkflow.defaultProps = {
   rbacGroups: [],
   initialValues: {}
 };
 
-AddWorkflowModal.propTypes = {
+AddWorkflow.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func.isRequired
   }).isRequired,
@@ -132,4 +93,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchWorkflow
 }, dispatch);
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddWorkflowModal));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddWorkflow));
