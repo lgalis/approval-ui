@@ -1,42 +1,62 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
+import { Title } from '@patternfly/react-core';
+import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import { TextContent, Text, TextVariants } from '@patternfly/react-core';
 
-const SummaryContent = (values) => {
-  const { name, description, ...stages } = values.values;
+const SetStages = (onHandleChange, options) => {
+  const [ isExpanded, setExpanded ] = useState(false);
+  const [ selected, setSelected ] = useState(undefined);
+
+  const onToggle = (isExpanded) => {
+    setExpanded(isExpanded);
+  };
+
+  const clearSelection = () => {
+    setSelected(null);
+    setExpanded(false);
+  };
+
+  const onSelect = (event, selection, isPlaceholder) => {
+    if (isPlaceholder) {
+      clearSelection();
+    }
+    else {
+      setSelected(selection);
+      setExpanded(false);
+    }
+
+    onHandleChange(selected);
+    console.log('selected:', selection);
+  };
 
   return (
     <Fragment>
-      <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Please review the workflow
-          details</Text>
-      </TextContent>
-      <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Name</Text>
-        <Text className="data-table-detail content" component={ TextVariants.p }>{ name }</Text>
-      </TextContent>
-      <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Description</Text>
-        <Text className="data-table-detail content" component={ TextVariants.p }>{ description }</Text>
-      </TextContent>
-      <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Approval Stages</Text>
-        { Object.keys(stages).map(key => key.startsWith('stage') &&
-            <Text key={ key }
-              className="data-table-detail content"
-              component={ TextVariants.p }>
-              { `${key} : ${values.groupOptions.find(group => group.value === stages[key]).label}` }
-            </Text>) }
-      </TextContent>
+      <Title size="sm" style={ { paddingLeft: '32px' } }> Set stages </Title>
+      <Select
+        variant={ SelectVariant.single }
+        aria-label="Select stage"
+        onToggle={ onToggle }
+        onSelect={ onSelect }
+        selections={ selected }
+        isExpanded={ isExpanded }
+        ariaLabelledBy={ 'Stage' }
+      >
+        { options.map((option, index) => (
+          <SelectOption
+            isDisabled={ option.disabled }
+            key={ index }
+            value={ option.value }
+            isPlaceholder={ option.isPlaceholder }
+          />
+        )) }
+      </Select>
     </Fragment>
   );
 };
 
-SummaryContent.propTypes = {
+SetStages.propTypes = {
   name: PropTypes.string,
-  description: PropTypes.string,
-  groups: PropTypes.array
+  description: PropTypes.string
 };
 
-export default SummaryContent;
-
+export default SetStages;

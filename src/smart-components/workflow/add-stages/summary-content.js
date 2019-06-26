@@ -2,32 +2,32 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
 
-const SummaryContent = (values) => {
-  const { name, description, ...stages } = values.values;
+const SummaryContent = (values, groupOptions) => {
+  const { name, description, ...stages } =
+      values && values.values ? values.values : { name: '', description: '' };
 
   return (
     <Fragment>
       <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Please review the workflow
-          details</Text>
+        <Text className="data-table-detail heading" component={ TextVariants.h5 }>
+          Review and confirm your inputs. If there is anything incorrect, click Back and revise.</Text>
       </TextContent>
       <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Name</Text>
+        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Workflow name</Text>
         <Text className="data-table-detail content" component={ TextVariants.p }>{ name }</Text>
       </TextContent>
       <TextContent>
         <Text className="data-table-detail heading" component={ TextVariants.h5 }>Description</Text>
         <Text className="data-table-detail content" component={ TextVariants.p }>{ description }</Text>
       </TextContent>
-      <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Approval Stages</Text>
+      { stages && <TextContent>
         { Object.keys(stages).map(key => key.startsWith('stage') &&
             <Text key={ key }
               className="data-table-detail content"
               component={ TextVariants.p }>
-              { `${key} : ${values.groupOptions.find(group => group.value === stages[key]).label}` }
+              { `${key} : ${groupOptions.find(group => group.value === stages[key]).label}` }
             </Text>) }
-      </TextContent>
+      </TextContent> }
     </Fragment>
   );
 };

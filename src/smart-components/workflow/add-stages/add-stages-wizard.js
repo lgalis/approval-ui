@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -6,7 +6,9 @@ import { withRouter } from 'react-router-dom';
 import { Wizard } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../../redux/actions/workflow-actions';
-import SummaryContent from './summary_content';
+import SummaryContent from './summary-content';
+import StageInformation from './stage-information';
+import SetStages from './set-stages';
 
 const AddWorkflow = ({
   history: { push },
@@ -17,18 +19,22 @@ const AddWorkflow = ({
   postMethod,
   rbacGroups
 }) => {
+  const [ formData, setValues ] = useState({ name: '', description: '', stages: []});
+
+  const handleChange = event => {
+    setValues({ ...formData,  [event.target.name]: event.target.value });
+  };
+
   const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
-  const StageInformation = (data) => <StageInformation values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
-  const SetStages = (data) => <SetStages values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
-  const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
 
   const steps = [
-    { name: 'General Information', component: { StageInformation }},
-    { name: 'Set Stages', component: { SetStages }},
-    { name: 'Review', component: { Summary }, nextButtonText: 'Submit' }
+    { name: 'General Information', component: new StageInformation(handleChange) },
+    { name: 'Set Stages', component: new SetStages(handleChange, groupOptions) },
+    { name: 'Review', component: new SummaryContent(formData, groupOptions) }
   ];
 
   const onSave = data => {
+    console.log('DEBUG - onSave: ', data);
     const { name, description, ...wfGroups } = data;
     const workflowData = { name, description, group_refs: Object.values(wfGroups) };
     id ? updateWorkflow({ id, ...workflowData }).

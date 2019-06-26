@@ -9,7 +9,7 @@ import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
 import FormRenderer from '../common/form-renderer';
 import { createWorkflowSchema } from '../../forms/workflow-form.schema';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
-import SummaryContent from './add-stages/summary_content';
+import SummaryContent from './add-stages/summary-content';
 
 const EditWorkflowModal = ({
   history: { push },

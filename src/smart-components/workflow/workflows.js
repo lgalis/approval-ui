@@ -5,7 +5,7 @@ import { Route, Link } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows } from '../../redux/actions/workflow-actions';
-import AddWorkflow from './add-stages/add_stages_wizard';
+import AddWorkflow from './add-stages/add-stages-wizard';
 import EditWorkflow from './edit-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
