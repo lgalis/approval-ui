@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button } from '@patternfly/react-core';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 
-const expandedItem = (title, detail) => {
+const ExpandedItem = (title, detail) => {
   return (<TextContent>
     <Text className="data-table-detail heading" component={ TextVariants.small }>{ title }</Text>
     <Text className="data-table-detail content"
@@ -39,9 +39,9 @@ const ExpandableContent = ({ id, content, state, reason }) => {
         }</Level>
       <Level>
         <LevelItem>
-          { expandedItem('Portfolio', content ? content.portfolio : 'Unknown') }e
-          { expandedItem('Platform', content ? content.platform : 'Unknown') }
-          { expandedItem('Reason', reason) }
+          <ExpandedItem title="Portfolio" detail={ content ? content.portfolio : 'Unknown' }/>
+          <ExpandedItem title="Platform" detail={ content ? content.platform : 'Unknown' }/>
+          <ExpandedItem title="Reason" detail={ reason }/>
         </LevelItem>
 
       </Level>
@@ -51,7 +51,7 @@ const ExpandableContent = ({ id, content, state, reason }) => {
 
 ExpandableContent.propTypes = {
   id: PropTypes.string,
-  content: PropTypes.obuidt,
+  content: PropTypes.object,
   uname: PropTypes.string,
   state: PropTypes.string,
   reason: PropTypes.string
