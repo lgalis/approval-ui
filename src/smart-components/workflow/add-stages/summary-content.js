@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
 
-const SummaryContent = (values, groupOptions) => {
+const SummaryContent = (formData, groupOptions) => {
   const { name, description, ...stages } =
-      values && values.values ? values.values : { name: '', description: '' };
+      formData ? formData : { name: '', description: '' };
 
   return (
     <Fragment>

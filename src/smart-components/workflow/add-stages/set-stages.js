@@ -3,7 +3,7 @@ import { Title } from '@patternfly/react-core';
 import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 
-const SetStages = (onHandleChange, options) => {
+const SetStages = (formData, onHandleChange, options) => {
   const [ isExpanded, setExpanded ] = useState(false);
   const [ selected, setSelected ] = useState(undefined);
 

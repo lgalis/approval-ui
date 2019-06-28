@@ -25,7 +25,7 @@ const StageInformation = (formValue, onHandleChange) => {
             name="workflow-name"
             aria-describedby="workflow-name"
             value={ formValue.name }
-            onChange={ onHandleChange }
+            onChange={ (_, event) => onHandleChange({ name: event.currentTarget.value }) }
           />
         </FormGroup>
         <FormGroup label="Description" fieldId="workflow-description">
@@ -34,7 +34,7 @@ const StageInformation = (formValue, onHandleChange) => {
             id="workflow-description"
             name="workflow-description"
             value={ formValue.description }
-            onChange={ onHandleChange }
+            onChange={ (_, event) => onHandleChange({ description: event.currentTarget.value }) }
           />
         </FormGroup>
       </Form>

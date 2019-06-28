@@ -19,23 +19,23 @@ const AddWorkflow = ({
   postMethod,
   rbacGroups
 }) => {
-  const [ formData, setValues ] = useState({ name: '', description: '', stages: []});
+  const [ formData, setValues ] = useState({ values: { name: '', description: '', wfGroups: []}});
 
-  const handleChange = event => {
-    setValues({ ...formData,  [event.target.name]: event.target.value });
+  const handleChange = data => {
+    setValues({ ...formData,  ...data });
   };
 
   const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
 
   const steps = [
-    { name: 'General Information', component: new StageInformation(handleChange) },
-    { name: 'Set Stages', component: new SetStages(handleChange, groupOptions) },
-    { name: 'Review', component: new SummaryContent(formData, groupOptions) }
+    { name: 'General Information', component: new StageInformation(formData, handleChange) },
+    { name: 'Set Stages', component: new SetStages(formData, handleChange, groupOptions) },
+    { name: 'Review', component: new SummaryContent(formData, groupOptions), nextButtonText: 'Confirm' }
   ];
 
-  const onSave = data => {
-    console.log('DEBUG - onSave: ', data);
-    const { name, description, ...wfGroups } = data;
+  const onSave = () => {
+    console.log('DEBUG - onSave: ', formData);
+    const { name, description, ...wfGroups } = formData;
     const workflowData = { name, description, group_refs: Object.values(wfGroups) };
     id ? updateWorkflow({ id, ...workflowData }).
     then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'))
@@ -57,7 +57,7 @@ const AddWorkflow = ({
       title={ id ? 'Edit workflow' : 'Create workflow' }
       isOpen
       onClose={ onCancel }
-      onSave={ onSave }
+      onSave={ onSave  }
       steps= { steps }
     />
   );
