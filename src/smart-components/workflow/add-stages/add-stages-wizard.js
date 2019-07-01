@@ -30,7 +30,7 @@ const AddWorkflow = ({
   const steps = [
     { name: 'General Information', component: new StageInformation(formData, handleChange) },
     { name: 'Set Stages', component: new SetStages(formData, handleChange, groupOptions) },
-    { name: 'Review', component: new SummaryContent(formData, groupOptions), nextButtonText: 'Confirm' }
+    { name: 'Review', component: new SummaryContent({ values: formData }, groupOptions), nextButtonText: 'Confirm' }
   ];
 
   const onSave = () => {

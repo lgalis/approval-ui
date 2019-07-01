@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Title } from '@patternfly/react-core';
-import { Select, SelectOption, SelectVariant } from '@patternfly/react-core';
+import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 
 const SetStages = (formData, onHandleChange, options) => {
@@ -11,45 +11,33 @@ const SetStages = (formData, onHandleChange, options) => {
     setExpanded(isExpanded);
   };
 
-  const clearSelection = () => {
-    setSelected(null);
-    setExpanded(false);
-  };
-
-  const onSelect = (event, selection, isPlaceholder) => {
-    if (isPlaceholder) {
-      clearSelection();
-    }
-    else {
-      setSelected(selection);
-      setExpanded(false);
-    }
-
-    onHandleChange(selected);
-    console.log('selected:', selection);
+  const onChange = (value, event) => {
+    setSelected(value);
+    onHandleChange({ wfgroups: [ value ]});
+    console.log('selected:', value, event);
   };
 
   return (
     <Fragment>
       <Title size="sm" style={ { paddingLeft: '32px' } }> Set stages </Title>
-      <Select
-        variant={ SelectVariant.single }
+      <FormSelect
         aria-label="Select stage"
         onToggle={ onToggle }
-        onSelect={ onSelect }
-        selections={ selected }
+        onChange={ onChange }
+        value={ selected }
         isExpanded={ isExpanded }
         ariaLabelledBy={ 'Stage' }
       >
-        { options.map((option, index) => (
-          <SelectOption
+        { options.map((option) => (
+          <FormSelectOption
             isDisabled={ option.disabled }
-            key={ index }
+            key={ option.value || option.label }
+            label={ option.label.toString() }
             value={ option.value }
             isPlaceholder={ option.isPlaceholder }
           />
         )) }
-      </Select>
+      </FormSelect>
     </Fragment>
   );
 };

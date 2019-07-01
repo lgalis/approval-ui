@@ -4,7 +4,7 @@ import { TextContent, Text, TextVariants } from '@patternfly/react-core';
 
 const SummaryContent = (formData, groupOptions) => {
   const { name, description, ...stages } =
-      formData ? formData : { name: '', description: '' };
+      formData.values ? formData.values : { name: '', description: '' };
 
   return (
     <Fragment>
