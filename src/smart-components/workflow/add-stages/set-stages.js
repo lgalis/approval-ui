@@ -1,32 +1,35 @@
 import React, { Fragment, useState } from 'react';
-import { Title } from '@patternfly/react-core';
-import { FormSelect, FormSelectOption } from '@patternfly/react-core';
+import { Title, FormSelect, FormSelectOption, Button } from '@patternfly/react-core';
+import { PlusIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 
 const SetStages = (formData, onHandleChange, options) => {
   const [ isExpanded, setExpanded ] = useState(false);
-  const [ selected, setSelected ] = useState(undefined);
+  const [ stageValues, setStageValues ] = useState([]);
+  const [ stageIndex, setStageIndex ] = useState(1);
 
   const onToggle = (isExpanded) => {
     setExpanded(isExpanded);
   };
 
   const onChange = (value, event) => {
-    setSelected(value);
-    onHandleChange({ wfgroups: [ value ]});
-    console.log('selected:', value, event);
+    setStageValues(...stageValues, value);
+    onHandleChange({ [`stage-#{event.key}`]: value });
+
+    console.log('selected:', stageValues, value, event);
   };
 
-  return (
-    <Fragment>
-      <Title size="sm" style={ { paddingLeft: '32px' } }> Set stages </Title>
+  const createStageInput = (idx) => {
+    return (
       <FormSelect
-        aria-label="Select stage"
+        label={ `${idx + 1} Stage` }
+        aria-label= { `${idx + 1} Stage` }
         onToggle={ onToggle }
         onChange={ onChange }
-        value={ selected }
+        key = { `stage-${idx + 1}` }
+        value={ stageValues[idx] }
         isExpanded={ isExpanded }
-        ariaLabelledBy={ 'Stage' }
+        ariaLabelledBy={ `Stage-${idx}` }
       >
         { options.map((option) => (
           <FormSelectOption
@@ -37,7 +40,23 @@ const SetStages = (formData, onHandleChange, options) => {
             isPlaceholder={ option.isPlaceholder }
           />
         )) }
-      </FormSelect>
+      </FormSelect>);
+  };
+
+  const [ stageSchema, setStageSchema ] = useState([ (createStageInput(0)) ]);
+
+  const addStageSchema = () => {
+    setStageSchema([ ...stageSchema, createStageInput(stageIndex + 1) ]);
+    setStageIndex(stageIndex + 1);
+  };
+
+  return (
+    <Fragment>
+      <Title size="md"> Set stages </Title>
+      { stageSchema.map((stage, idx) => createStageInput(idx)) }
+      <Button variant="link" isInline onClick={ addStageSchema }>
+        <PlusIcon/> { 'Add a stage' }
+      </Button>
     </Fragment>
   );
 };

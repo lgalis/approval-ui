@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
 
-const SummaryContent = (formData, groupOptions) => {
+const SummaryContent = (formData) => {
   const { name, description, ...stages } =
       formData.values ? formData.values : { name: '', description: '' };
 
@@ -25,7 +25,7 @@ const SummaryContent = (formData, groupOptions) => {
             <Text key={ key }
               className="data-table-detail content"
               component={ TextVariants.p }>
-              { `${key} : ${groupOptions.find(group => group.value === stages[key]).label}` }
+              { `${key} : ${formData.groupOptions.find(group => group.value === stages[key]).label}` }
             </Text>) }
       </TextContent> }
     </Fragment>
