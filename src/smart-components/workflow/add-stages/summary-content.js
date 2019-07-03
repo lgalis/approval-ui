@@ -1,33 +1,60 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { TextContent, Text, TextVariants } from '@patternfly/react-core';
+import {
+  Stack,
+  StackItem,
+  Text,
+  TextContent,
+  TextVariants,
+  Title
+} from '@patternfly/react-core';
+
+import {  } from '@patternfly/react-core';
 
 const SummaryContent = (formData) => {
-  const { name, description, ...stages } =
-      formData.values ? formData.values : { name: '', description: '' };
+  const { name, description, stages } =
+      formData.values ? formData.values : { name: '', description: '', stages: []};
 
   return (
     <Fragment>
-      <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>
-          Review and confirm your inputs. If there is anything incorrect, click Back and revise.</Text>
-      </TextContent>
-      <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Workflow name</Text>
-        <Text className="data-table-detail content" component={ TextVariants.p }>{ name }</Text>
-      </TextContent>
-      <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.h5 }>Description</Text>
-        <Text className="data-table-detail content" component={ TextVariants.p }>{ description }</Text>
-      </TextContent>
-      { stages && <TextContent>
-        { Object.keys(stages).map(key => key.startsWith('stage') &&
-            <Text key={ key }
-              className="data-table-detail content"
-              component={ TextVariants.p }>
-              { `${key} : ${formData.groupOptions.find(group => group.value === stages[key]).label}` }
-            </Text>) }
-      </TextContent> }
+      <Stack gutter="md">
+        <StackItem>
+          <Title size="xl"> Review </Title>
+        </StackItem>
+        <StackItem>
+          <Stack gutter="sm">
+            <StackItem>
+              <TextContent>
+                <Text className="data-table-detail heading" component={ TextVariants.h5 }>
+                Review and confirm your inputs. If there is anything incorrect, click Back and revise.</Text>
+              </TextContent>
+            </StackItem>
+            <StackItem>
+              <TextContent>
+                <Text className="data-table-detail heading" component={ TextVariants.h5 }>Workflow name</Text>
+                <Text className="data-table-detail content" component={ TextVariants.p }>{ name }</Text>
+              </TextContent>
+            </StackItem>
+            <StackItem>
+              <TextContent>
+                <Text className="data-table-detail heading" component={ TextVariants.h5 }>Description</Text>
+                <Text className="data-table-detail content" component={ TextVariants.p }>{ description }</Text>
+              </TextContent>
+            </StackItem>
+            <StackItem>
+              <TextContent>
+                <Text className="data-table-detail heading" component={ TextVariants.h5 }>Approval Stages</Text>
+                { (stages !== undefined) && stages.map((stage, idx)  =>
+                  <Text key={ stage.value }
+                    className="data-table-detail content"
+                    component={ TextVariants.p }>
+                    { `Stage ${idx + 1} : ${formData.groupOptions.find(group => group.value === stages[idx].stage).label}` }
+                  </Text>) }
+              </TextContent>
+            </StackItem>
+          </Stack>
+        </StackItem>
+      </Stack>
     </Fragment>
   );
 };

@@ -12,7 +12,7 @@ const SetStages = (formData, onHandleChange, options) => {
     setExpanded(isExpanded);
   };
 
-  const onChange = (value, event) => {
+  const onChange = ( event, value) => {
     setStageValues(...stageValues, value);
     onHandleChange({ [`stage-#{event.key}`]: value });
 
@@ -25,8 +25,8 @@ const SetStages = (formData, onHandleChange, options) => {
         label={ `${idx + 1} Stage` }
         aria-label= { `${idx + 1} Stage` }
         onToggle={ onToggle }
-        onChange={ onChange }
         key = { `stage-${idx + 1}` }
+        onChange={ (e) => onChange(e, idx) }
         value={ stageValues[idx] }
         isExpanded={ isExpanded }
         ariaLabelledBy={ `Stage-${idx}` }
