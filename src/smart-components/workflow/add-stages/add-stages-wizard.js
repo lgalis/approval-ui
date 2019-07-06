@@ -35,7 +35,6 @@ const AddWorkflow = ({
   ];
 
   const onSave = () => {
-    console.log('DEBUG - onSave: ', formData);
     const { name, description, ...wfGroups } = formData;
     const workflowData = { name, description, group_refs: Object.values(wfGroups) };
     id ? updateWorkflow({ id, ...workflowData }).

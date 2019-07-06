@@ -50,7 +50,7 @@ const EditWorkflowModal = ({
 
   const onSubmit = data => {
     const { name, description, ...wfGroups } = data;
-    const workflowData = { name, description, group_refs: Object.values(wfGroups) };
+    const workflowData = { name, description, group_refs: wfGroups };
     id ? updateWorkflow({ id, ...workflowData }).
     then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'))
       : addWorkflow(workflowData).
