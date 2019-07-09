@@ -4,6 +4,7 @@ export const createWorkflowSchema = (newRecord, rbacGroups) => ({
   fields: [{
     component: componentTypes.WIZARD,
     name: 'workflow_wizard',
+    inModal: true,
     fields: [{
       title: 'Workflow information',
       name: 'wf_step_info',
