@@ -141,7 +141,6 @@ export const TableToolbarView = ({
 
 TableToolbarView.propTypes = {
   isSelectable: propTypes.bool,
-  isDataLoading: propTypes.func.isRequired,
   createInitialRows: propTypes.func.isRequired,
   request: propTypes.func.isRequired,
   columns: propTypes.array.isRequired,
