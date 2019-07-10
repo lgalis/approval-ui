@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button } from '@patternfly/react-core';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 
-const ExpandedItem = (title, detail) => {
+const ExpandedItem = (data) => {
   return (<TextContent>
-    <Text className="data-table-detail heading" component={ TextVariants.small }>{ title }</Text>
+    <Text className="data-table-detail heading" component={ TextVariants.small }>{ data ? data.title : '' }</Text>
     <Text className="data-table-detail content"
-      component={ TextVariants.h5 }>{ detail }</Text>
+      component={ TextVariants.h5 }>{ data ? data.detail : '' }</Text>
   </TextContent>);
 };
 
@@ -41,7 +41,7 @@ const ExpandableContent = ({ id, content, state, reason }) => {
         <LevelItem>
           <ExpandedItem title="Portfolio" detail={ content ? content.portfolio : 'Unknown' }/>
           <ExpandedItem title="Platform" detail={ content ? content.platform : 'Unknown' }/>
-          <ExpandedItem title="Reason" detail={ reason }/>
+          <ExpandedItem title="Reason" detail={ reason ? reason : '' }/>
         </LevelItem>
 
       </Level>
