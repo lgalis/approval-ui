@@ -119,7 +119,7 @@ export const TableToolbarView = ({
         <TopToolbarTitle title="Approval" />
         <AppTabs/>
       </TopToolbar>
-      <Section className="data-table-pane" >
+      <Section className="data-table-pane" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
         { routes() }
         { renderToolbar() }
         <Table
