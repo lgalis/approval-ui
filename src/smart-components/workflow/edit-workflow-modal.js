@@ -9,9 +9,9 @@ import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
 import FormRenderer from '../common/form-renderer';
 import { createWorkflowSchema } from '../../forms/workflow-form.schema';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
-import SummaryContent from './summary_content';
+import SummaryContent from './add-stages/summary-content';
 
-const AddWorkflowModal = ({
+const EditWorkflowModal = ({
   history: { push },
   match: { params: { id }},
   addWorkflow,
@@ -50,7 +50,7 @@ const AddWorkflowModal = ({
 
   const onSubmit = data => {
     const { name, description, ...wfGroups } = data;
-    const workflowData = { name, description, group_refs: Object.values(wfGroups) };
+    const workflowData = { name, description, group_refs: wfGroups };
     id ? updateWorkflow({ id, ...workflowData }).
     then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'))
       : addWorkflow(workflowData).
@@ -96,12 +96,12 @@ const AddWorkflowModal = ({
   );
 };
 
-AddWorkflowModal.defaultProps = {
+EditWorkflowModal.defaultProps = {
   rbacGroups: [],
   initialValues: {}
 };
 
-AddWorkflowModal.propTypes = {
+EditWorkflowModal.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func.isRequired
   }).isRequired,
@@ -132,4 +132,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchWorkflow
 }, dispatch);
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddWorkflowModal));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowModal));

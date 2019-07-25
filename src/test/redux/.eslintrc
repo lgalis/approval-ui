@@ -5,8 +5,7 @@
   },
   "globals": {
     "apiClientMock": true,
-    "mockOnce": true,
-    "fetchMock": true
+    "mockOnce": true
   },
   "rules": {
     "react/display-name": "off",

@@ -119,7 +119,7 @@ export const TableToolbarView = ({
         <TopToolbarTitle title="Approval" />
         <AppTabs/>
       </TopToolbar>
-      <Section className="data-table-pane" >
+      <Section className="data-table-pane" page-type={ titlePlural }>
         { routes() }
         { renderToolbar() }
         <Table
@@ -141,7 +141,6 @@ export const TableToolbarView = ({
 
 TableToolbarView.propTypes = {
   isSelectable: propTypes.bool,
-  isDataLoading: propTypes.func.isRequired,
   createInitialRows: propTypes.func.isRequired,
   request: propTypes.func.isRequired,
   columns: propTypes.array.isRequired,

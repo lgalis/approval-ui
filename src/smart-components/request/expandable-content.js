@@ -4,7 +4,15 @@ import { Link } from 'react-router-dom';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button } from '@patternfly/react-core';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 
-const ExpandableContent = ({ id, content, state }) => {
+const ExpandedItem = (data) => {
+  return (<TextContent>
+    <Text className="data-table-detail heading" component={ TextVariants.small }>{ data ? data.title : '' }</Text>
+    <Text className="data-table-detail content"
+      component={ TextVariants.h5 }>{ data ? data.detail : '' }</Text>
+  </TextContent>);
+};
+
+const ExpandableContent = ({ id, content, state, reason }) => {
   const requestActive = isRequestStateActive(state);
   return (
     <Fragment>
@@ -31,21 +39,9 @@ const ExpandableContent = ({ id, content, state }) => {
         }</Level>
       <Level>
         <LevelItem>
-          <TextContent>
-            <Text className="data-table-detail heading" component={ TextVariants.small }>Portfolio</Text>
-            <Text className="data-table-detail content"
-              component={ TextVariants.h5 }>{ content ? content.portfolio : 'Unknown' }</Text>
-          </TextContent>
-          <TextContent>
-            <Text className="data-table-detail heading" component={ TextVariants.small }>Platform</Text>
-            <Text className="data-table-detail content"
-              component={ TextVariants.h5 }>{ content ? content.platform : 'Unknown' }</Text>
-          </TextContent>
-          <TextContent>
-            <Text className="data-table-detail heading" component={ TextVariants.small }>Comments</Text>
-            <Text className="data-table-detail content"
-              component={ TextVariants.h5 }>{ content ? content.comments : 'Unknown' }</Text>
-          </TextContent>
+          <ExpandedItem title="Portfolio" detail={ content ? content.portfolio : 'Unknown' }/>
+          <ExpandedItem title="Platform" detail={ content ? content.platform : 'Unknown' }/>
+          <ExpandedItem title="Reason" detail={ reason ? reason : '' }/>
         </LevelItem>
 
       </Level>
@@ -55,9 +51,10 @@ const ExpandableContent = ({ id, content, state }) => {
 
 ExpandableContent.propTypes = {
   id: PropTypes.string,
-  content: PropTypes.obuidt,
+  content: PropTypes.object,
   uname: PropTypes.string,
-  state: PropTypes.string
+  state: PropTypes.string,
+  reason: PropTypes.string
 };
 export default ExpandableContent;
 

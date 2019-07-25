@@ -8,7 +8,7 @@ export const createInitialRows = data =>
       id,
       isOpen: false,
       selected: false,
-      cells: [ name, description, group_refs.length ]
+      cells: [ name, description ]
     }, {
       parent: key * 2,
       cells: [{ title: <ExpandableContent description={ description } groupRefs={ group_refs } groupNames={ group_names } /> }]

@@ -22,10 +22,6 @@ describe('Request actions', () => {
     mockStore = configureStore(middlewares);
   });
 
-  afterEach(() => {
-    fetchMock.reset();
-  });
-
   it('should dispatch correct actions after fetching requests', () => {
     const store = mockStore({
       requestReducer: {
@@ -42,7 +38,6 @@ describe('Request actions', () => {
       }]},
       type: `${FETCH_REQUESTS}_FULFILLED`
     }];
-
     apiClientMock.get(APPROVAL_API_BASE + '/requests?limit=10&offset=0', mockOnce({
       body: {
         data: [{
@@ -76,7 +71,7 @@ describe('Request actions', () => {
 
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests?limit=10&offset=0 ', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests', mockOnce({
       status: 500
     }));
 
