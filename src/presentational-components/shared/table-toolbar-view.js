@@ -25,8 +25,9 @@ export const TableToolbarView = ({
   titlePlural,
   titleSingular,
   pagination,
-  setCheckedItems }) => {
-  const [ filterValue, setFilterValue ] = useState('');
+  setCheckedItems,
+  filterValue,
+  setFilterValue }) => {
   const [ rows, setRows ] = useState([]);
   const [ isLoading ] = useState(false);
 
@@ -156,7 +157,9 @@ TableToolbarView.propTypes = {
   titleSingular: propTypes.string,
   routes: propTypes.func,
   actionResolver: propTypes.func,
-  setCheckedItems: propTypes.func
+  setCheckedItems: propTypes.func,
+  filterValue: propTypes.string,
+  setFilterValue: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
