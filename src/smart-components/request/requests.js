@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
@@ -23,8 +23,10 @@ const columns = [{
 
 const Requests = ({ fetchRequests, requests, pagination, history }) => {
   const fetchData = (setRows) => {
-    fetchRequests().then(({ value: { data }}) => setRows(createInitialRows(data)));
+    fetchRequests().then(({ value: { data }}) => setRows(createInitialRows(data, searchFilter)));
   };
+
+  const [ searchFilter, setSearchFilter ] = useState('');
 
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
@@ -63,6 +65,9 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
         titlePlural="requests"
         titleSingular="request"
         pagination={ pagination }
+        searchFilter={ searchFilter }
+        setSearchFilter = { setSearchFilter }
+
       />
     </Fragment>;
 
@@ -97,11 +102,10 @@ Requests.defaultProps = {
   pagination: {}
 };
 
-const mapStateToProps = ({ requestReducer: { requests, isRequestDataLoading, filterValue }}) => ({
+const mapStateToProps = ({ requestReducer: { requests, isRequestDataLoading }}) => ({
   requests: requests.data,
   pagination: requests.meta,
-  isLoading: isRequestDataLoading,
-  searchFilter: filterValue
+  isLoading: isRequestDataLoading
 });
 
 const mapDispatchToProps = dispatch => ({
