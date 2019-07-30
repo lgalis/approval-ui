@@ -21,10 +21,11 @@ const columns = [{
 
 const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history }) => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
+  const [ searchFilter, setSearchFilter ] = useState('');
 
   const fetchData = (setRows) => {
     fetchRbacGroups();
-    fetchWorkflows().then(({ value: { data }}) => setRows(createInitialRows(data)));
+    fetchWorkflows().then(({ value: { data }}) => setRows(createInitialRows(data, searchFilter)));
   };
 
   const routes = () => <Fragment>
@@ -104,17 +105,18 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         pagination={ pagination }
         setCheckedItems={ setCheckedWorkflows }
         toolbarButtons={ toolbarButtons }
+        searchFilter={ searchFilter }
+        setSearchFilter = { setSearchFilter }
       />
     </Fragment>
   );
 };
 
-const mapStateToProps = ({ workflowReducer: { workflows, isLoading }, groupReducer: { groups, filterValue }}) => ({
+const mapStateToProps = ({ workflowReducer: { workflows, isLoading }, groupReducer: { groups }) => ({
   workflows: workflows.data,
   pagination: workflows.meta,
   rbacGroups: groups,
-  isLoading,
-  searchFilter: filterValue
+  isLoading
 });
 
 const mapDispatchToProps = dispatch => {
