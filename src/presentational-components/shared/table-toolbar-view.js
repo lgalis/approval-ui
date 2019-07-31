@@ -38,12 +38,12 @@ export const TableToolbarView = ({
 
   useEffect(() => {
     setRows(createRows(data, filterValue));
-  }, [ data, filterValue, pagination ]);
+  }, [ data, filterValue, pagination.limit ]);
 
   const handleOnPerPageSelect = limit => request({
     offset: pagination.offset,
     limit
-  }).then(() => setRows(createRows(data, filterValue)));
+  }).then(({ value: { data }}) => setRows(createRows(data, filterValue)));
 
   const handleSetPage = (number, debounce) => {
     const options = {
