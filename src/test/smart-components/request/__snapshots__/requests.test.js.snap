@@ -6,7 +6,6 @@ exports[`<Requests /> should render correctly 1`] = `
   isLoading={false}
   pagination={Object {}}
   requests={Array []}
-  searchFilter=""
   store={
     Object {
       "clearActions": [Function],
@@ -47,7 +46,6 @@ exports[`<Requests /> should render correctly in loading state 1`] = `
   isLoading={false}
   pagination={Object {}}
   requests={Array []}
-  searchFilter=""
   store={
     Object {
       "clearActions": [Function],
