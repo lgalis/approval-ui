@@ -5,9 +5,9 @@ import { Button } from '@patternfly/react-core';
 import ExpandableContent from './expandable-content';
 import { timeAgo }  from '../../helpers/shared/helpers';
 
-export const createInitialRows = (data, searchFilter) =>
-  data.filter(item => { const filter = searchFilter ? item.name.include(searchFilter) : true;
-    return (item.name !== 'Always approve') && filter; }).reduce((acc, { id,
+export const createRows = (data, filterValue) =>
+  data.filter(item => { const filter = filterValue ? item.id.includes(filterValue) : true;
+    return filter; }).reduce((acc, { id,
     requester,
     created_at,
     updated_at,
