@@ -5,16 +5,14 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
 import FormRenderer from '../common/form-renderer';
-import { createWorkflowSchema } from '../../forms/workflow-form.schema';
+import { createEditWorkflowSchema } from '../../forms/edit-workflow-form.schema';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
-import SummaryContent from './add-stages/summary-content';
 
 const EditWorkflowModal = ({
   history: { push },
   match: { params: { id }},
-  addWorkflow,
+  editType,
   addNotification,
   fetchWorkflow,
   updateWorkflow,
@@ -32,18 +30,22 @@ const EditWorkflowModal = ({
   const fetchData = (setInitialValues)=> {
     fetchWorkflow(id).then((data) => {
       let values = data.value;
-      data.value.group_refs.forEach((group, idx) => {
-        if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
-          values[`stage-${idx + 1}`] = group;
-        }
-        else {
-          addNotification({
-            variant: 'warning',
-            title: 'Editing workflow',
-            description: `Stage-${idx + 1} group with id: ${group} no longer accessible`
-          });
-        }
-      });
+      if (editType === 'stages') {
+        data.value.group_refs.forEach((group, idx) => {
+          if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
+            values[`stage-${idx + 1}`] = group;
+          }
+          else {
+            addNotification({
+              variant: 'warning',
+              title: `Edit workflow's information`,
+              description: `Stage-${idx + 1} group with id: ${group} no longer accessible`
+            });
+          }
+        });
+      }
+
+      console.log('DEBUG - initial values: ', values);
       setInitialValues(values);
     });
   };
@@ -51,23 +53,20 @@ const EditWorkflowModal = ({
   const onSubmit = data => {
     const { name, description, ...wfGroups } = data;
     const workflowData = { name, description, group_refs: wfGroups };
-    id ? updateWorkflow({ id, ...workflowData }).
-    then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'))
-      : addWorkflow(workflowData).
-      then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
+    updateWorkflow({ id, ...workflowData }).then(postMethod ?
+      postMethod().then(push('/workflows')) : push('/workflows'));
   };
 
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: id ? 'Editing workflow' : 'Creating workflow',
-      description: id ? 'Edit workflow was cancelled by the user.' : 'Creating workflow was cancelled by the user.'
+      title: `Edit workflow's ${editType}`,
+      description: `Edit workflow's ${editType} was cancelled by the user.`
     });
-    postMethod ?  postMethod().then(push('/workflows')) : push('/workflows');
+    postMethod ? postMethod().then(push('/workflows')) : push('/workflows');
   };
 
   const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
-  const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
 
   return (
     <Modal
@@ -78,18 +77,13 @@ const EditWorkflowModal = ({
     >
       <div style={ { padding: 8 } }>
         <FormRenderer
-          schema={ createWorkflowSchema(!id, groupOptions) }
+          schema={ createEditWorkflowSchema(editType, initialValues.name, groupOptions) }
           schemaType="default"
           onSubmit={ onSubmit }
           onCancel={ onCancel }
           initialValues={ { ...initialValues } }
-          formFieldsMapper={ {
-            ...formFieldsMapper,
-            summary: Summary
-          } }
           formContainer="modal"
-          showFormControls={ false }
-          buttonsLabels={ { submitLabel: 'Confirm' } }
+          buttonsLabels={ { submitLabel: 'Save' } }
         />
       </div>
     </Modal>
@@ -113,6 +107,7 @@ EditWorkflowModal.propTypes = {
   initialValues: PropTypes.object,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,
+  editType: PropTypes.string,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
     label: PropTypes.string.isRequired
