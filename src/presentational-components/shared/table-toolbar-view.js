@@ -15,7 +15,7 @@ import { DataListLoader } from './loader-placeholders';
 export const TableToolbarView = ({
   request,
   isSelectable,
-  createInitialRows,
+  createRows,
   columns,
   toolbarButtons,
   fetchData,
@@ -25,24 +25,25 @@ export const TableToolbarView = ({
   titlePlural,
   titleSingular,
   pagination,
-  setCheckedItems }) => {
-  const [ filterValue, setFilterValue ] = useState('');
+  setCheckedItems,
+  filterValue,
+  setFilterValue }) => {
   const [ rows, setRows ] = useState([]);
   const [ isLoading ] = useState(false);
 
   useEffect(() => {
-    fetchData(setRows);
+    fetchData(setRows, filterValue);
     scrollToTop();
   }, []);
 
   useEffect(() => {
-    setRows(createInitialRows(data));
-  }, [ data ]);
+    setRows(createRows(data, filterValue));
+  }, [ data, filterValue, pagination.limit ]);
 
   const handleOnPerPageSelect = limit => request({
     offset: pagination.offset,
     limit
-  }).then(() => setRows(createInitialRows(data)));
+  }).then(({ value: { data }}) => setRows(createRows(data, filterValue)));
 
   const handleSetPage = (number, debounce) => {
     const options = {
@@ -50,7 +51,7 @@ export const TableToolbarView = ({
       limit: pagination.limit
     };
     const requestFunc = () => request(options);
-    return debounce ? debouncePromise(request, 250)() : requestFunc().then(({ value: { data }}) => setRows(createInitialRows(data)));
+    return debounce ? debouncePromise(request, 250)() : requestFunc().then(({ value: { data }}) => setRows(createRows(data, filterValue)));
   };
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
@@ -141,7 +142,7 @@ export const TableToolbarView = ({
 
 TableToolbarView.propTypes = {
   isSelectable: propTypes.bool,
-  createInitialRows: propTypes.func.isRequired,
+  createRows: propTypes.func.isRequired,
   request: propTypes.func.isRequired,
   columns: propTypes.array.isRequired,
   toolbarButtons: propTypes.func,
@@ -156,7 +157,9 @@ TableToolbarView.propTypes = {
   titleSingular: propTypes.string,
   routes: propTypes.func,
   actionResolver: propTypes.func,
-  setCheckedItems: propTypes.func
+  setCheckedItems: propTypes.func,
+  filterValue: propTypes.string,
+  setFilterValue: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
