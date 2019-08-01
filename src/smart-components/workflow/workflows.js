@@ -30,7 +30,9 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
   const routes = () => <Fragment>
     <Route exact path="/workflows/add-workflow" render={ props => <AddWorkflow { ...props }
       postMethod={ fetchWorkflows } /> }/>
-    <Route exact path="/workflows/edit/:id" render={ props => <EditWorkflow { ...props }
+    <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflow editType= 'info' { ...props }
+      postMethod={ fetchWorkflows } /> }/>
+    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflow editType= 'stages' { ...props }
       postMethod={ fetchWorkflows } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }
@@ -45,10 +47,16 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
     null
     : [
       {
-        title: 'Edit',
+        title: 'Edit info',
         onClick: (event, rowId, workflow) =>
-          history.push(`/workflows/edit/${workflow.id}`)
+          history.push(`/workflows/edit-info/${workflow.id}`)
       },
+      {
+        title: 'Edit stages',
+        onClick: (event, rowId, workflow) =>
+          history.push(`/workflows/edit-stages/${workflow.id}`)
+      },
+
       {
         title: 'Delete',
         style: { color: 'var(--pf-global--danger-color--100)'	},
