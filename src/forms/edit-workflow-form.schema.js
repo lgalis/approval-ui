@@ -44,12 +44,5 @@ export const createEditWorkflowSchema = (type, name, rbacGroups) => (
         options: rbacGroups
       }
       ]
-    }, {
-      fields: [{
-        name: 'summary',
-        component: 'summary'
-      }],
-      stepKey: 'summary',
-      name: 'summary'
     }]}
 );
