@@ -20,7 +20,7 @@ export const workflowsInitialState = {
 
 const setLoadingState = state => ({ ...state, isLoading: true });
 const setWorkflows = (state, { payload }) => ({ ...state, workflows: payload, isLoading: false });
-const selectWorkflow = (state, { payload }) => ({ ...state, selectedWorkflow: payload, isLoading: false });
+const selectWorkflow = (state, { payload }) => ({ ...state, workflow: payload, isLoading: false });
 
 export default {
   [`${FETCH_WORKFLOWS}_PENDING`]: setLoadingState,
