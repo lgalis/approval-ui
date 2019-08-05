@@ -9,9 +9,10 @@ import { Button,
   Title
 } from '@patternfly/react-core';
 
-const SetStages = (formData, onHandleChange, options) => {
+const SetStages = ({ formData, handleChange, options }) => {
+
   const [ isExpanded, setExpanded ] = useState(false);
-  const [ stageValues, setStageValues ] = useState([]);
+  const [ stageValues, setStageValues ] = useState(formData.wfGroups);
   const [ stageIndex, setStageIndex ] = useState(1);
 
   const onToggle = (isExpanded) => {
@@ -22,7 +23,7 @@ const SetStages = (formData, onHandleChange, options) => {
     let values = stageValues;
     values[index] = value;
     setStageValues(values);
-    onHandleChange({ wfGroups: values });
+    handleChange({ wfGroups: values });
   };
 
   const createStageInput = (idx) => {
@@ -81,7 +82,10 @@ const SetStages = (formData, onHandleChange, options) => {
 
 SetStages.propTypes = {
   name: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
+  formData: PropTypes.object,
+  options: PropTypes.array,
+  handleChange: PropTypes.func.required
 };
 
 export default SetStages;
