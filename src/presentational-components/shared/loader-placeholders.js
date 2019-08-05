@@ -7,7 +7,10 @@ import {
   DataListItemRow,
   DataListItemCells,
   Grid,
-  GridItem
+  GridItem,
+  Form,
+  FormGroup,
+  Title
 } from '@patternfly/react-core';
 import { Section } from '@redhat-cloud-services/frontend-components';
 import ContentLoader from 'react-content-loader';
@@ -128,3 +131,27 @@ DataListLoader.propTypes = {
 DataListLoader.defaultProps = {
   items: 5
 };
+
+const FormItemLoader = () => (
+  <ContentLoader
+    height={ 36 }
+    width={ 400 }
+    speed={ 2 }
+    primaryColor="#ffffff"
+    secondaryColor="#ecebeb"
+  >
+    <rect x="0" y="0" rx="0" ry="0" width="400" height="36" />
+  </ContentLoader>
+);
+
+export const WorkflowStageLoader = () => (
+  <Form>
+    <Title size="xl">Editing workflow stages</Title>
+    <FormGroup fieldId="3">
+      <FormItemLoader />
+    </FormGroup>
+    <FormGroup fieldId="4">
+      <FormItemLoader />
+    </FormGroup>
+  </Form>
+);
