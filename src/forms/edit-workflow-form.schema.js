@@ -21,28 +21,15 @@ export const createEditWorkflowSchema = (type, name, rbacGroups) => (
         label: 'Description'
       }]
     }]} : { fields: [{
-      component: componentTypes.SUB_FORM,
-      title: 'Set Approval Stages',
-      name: 'workflow_edit_stages',
+      name: 'wfGroups',
+      component: componentTypes.FIELD_ARRAY,
       fields: [{
         component: componentTypes.SELECT,
-        name: 'stage-1',
+        name: 'stage',
         isRequired: false,
-        label: '1st Stage',
+        label: 'Stage',
         options: rbacGroups
-      },
-      {
-        component: componentTypes.SELECT,
-        name: 'stage-2',
-        label: '2nd Stage',
-        options: rbacGroups
-      },
-      {
-        component: componentTypes.SELECT,
-        name: 'stage-3',
-        label: '3rd Stage',
-        options: rbacGroups
-      }
-      ]
-    }]}
+      }]}
+    ]
+    }
 );
