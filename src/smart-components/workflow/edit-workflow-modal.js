@@ -7,9 +7,9 @@ import { ActionGroup, Button, FormGroup, Modal, Title } from '@patternfly/react-
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
-import StageInformation from './add-stages/stage-information';
-import SetStages from './add-stages/set-stages';
 import { WorkflowStageLoader } from '../../presentational-components/shared/loader-placeholders';
+import SetStages from './add-stages/set-stages';
+import StageInformation from './add-stages/stage-information';
 
 const EditWorkflowModal = ({
   history: { push },
@@ -24,19 +24,16 @@ const EditWorkflowModal = ({
 }) => {
 
   const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
-  const [ formData, setValues ] = useState({ ...workflow, rbacGroups: groupOptions });
+  const [ formData, setValues ] = useState({});
   const [ isFetching, setFetching ] = useState(true);
 
-  useEffect(() => {
-    setFetching(true);
-    Promise.all([ fetchWorkflow(id), fetchRbacGroups() ])
-    .then(() => { console.log('DEBUG - setInitialValues - 1: ', workflow, rbacGroups); setFetching(false); })
-    .catch(() => setFetching(false));
-  }, []);
+  const handleChange = data => {
+    setValues({ ...formData, ...data });
+  };
 
-  const setInitialValues = () => {
+  const initialValues = () => {
     console.log('DEBUG - info initial values: ', workflow);
-    setValues(workflow);
+    let initialFormValues = { ...workflow };
 
     if (editType === 'stages') {
       let groups = workflow.group_refs.map((group, idx) => {
@@ -52,19 +49,23 @@ const EditWorkflowModal = ({
         }
       });
       console.log('DEBUG - stages initial values: ', groups);
-      setValues({ ...workflow, wfGroups: groups });
+      initialFormValues.wfGroups = groups;
     }
+
+    return initialFormValues;
   };
 
-  const handleChange = data => {
-    setValues({ ...formData, ...data });
-  };
+  useEffect(() => {
+    setFetching(true);
+    Promise.all([ fetchWorkflow(id), fetchRbacGroups() ])
+    .then(() => { setValues(initialValues()).then(setFetching(false)); })
+    .catch(() => setFetching(false));
+  }, []);
 
   const onSave = () => {
-    const { name, description, ...wfGroups } = formData;
-    const workflowData = { name, description, group_refs: Object.values(wfGroups) };
-    id ? updateWorkflow({ id, ...workflowData }).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'))
-      : addWorkflow(workflowData).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
+    const { name, description, wfGroups } = formData;
+    const workflowData = (editType === 'stages') ? { group_refs: wfGroups.slice() } : { name, description };
+    updateWorkflow({ id, ...workflowData }).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
   };
 
   const onCancel = () => {
@@ -90,9 +91,9 @@ const EditWorkflowModal = ({
                 No groups available.
           </Title>) }
         { !isFetching && rbacGroups.length > 0 && editType === 'stages' && (
-          <SetStages formData={ setInitialValues() } handleChange groupOptions />) }
+          <SetStages formData={ initialValues() } handleChange = { handleChange } options={ groupOptions } />) }
         { !isFetching && editType !== 'stages' && (
-          new StageInformation(formData, handleChange)) }
+          <StageInformation initialValues={ initialValues() } formData = { formData } handleChange = { handleChange } />) }
       </FormGroup>
       <ActionGroup>
         <Button aria-label={ 'Save' }
@@ -125,7 +126,7 @@ EditWorkflowModal.propTypes = {
   initialValues: PropTypes.object,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,
-  workflow: PropTypes.string,
+  workflow: PropTypes.object,
   editType: PropTypes.string,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,

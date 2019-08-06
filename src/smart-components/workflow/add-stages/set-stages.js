@@ -13,7 +13,7 @@ const SetStages = ({ formData, handleChange, options }) => {
 
   const [ isExpanded, setExpanded ] = useState(false);
   const [ stageValues, setStageValues ] = useState(formData.wfGroups);
-  const [ stageIndex, setStageIndex ] = useState(1);
+  const [ stageIndex, setStageIndex ] = useState(formData.wfGroups ? formData.wfGroups.length : 1);
 
   const onToggle = (isExpanded) => {
     setExpanded(isExpanded);
@@ -31,9 +31,9 @@ const SetStages = ({ formData, handleChange, options }) => {
       <StackItem>
         <FormSelect
           label={ `${idx + 1} Stage` }
-          aria-label= { `${idx + 1} Stage` }
+          aria-label={ `${idx + 1} Stage` }
           onToggle={ onToggle }
-          key = { `stage-${idx + 1}` }
+          key={ `stage-${idx + 1}` }
           onChange={ (e) => onStageChange(e, idx) }
           value={ stageValues[idx] }
           isExpanded={ isExpanded }
@@ -52,10 +52,8 @@ const SetStages = ({ formData, handleChange, options }) => {
       </StackItem>);
   };
 
-  const [ stageSchema, setStageSchema ] = useState([ (createStageInput(0)) ]);
-
-  const addStageSchema = () => {
-    setStageSchema([ ...stageSchema, createStageInput(stageIndex + 1) ]);
+  const addStage = () => {
+    setStageValues([ ...stageValues, undefined ]);
     setStageIndex(stageIndex + 1);
   };
 
@@ -67,9 +65,9 @@ const SetStages = ({ formData, handleChange, options }) => {
         </StackItem>
         <StackItem>
           <Stack gutter="sm">
-            { stageSchema.map((stage, idx) => createStageInput(idx)) }
+            { stageValues.map((stage, idx) => createStageInput(idx)) }
             <StackItem>
-              <Button variant="link" isInline onClick={ addStageSchema }>
+              <Button variant="link" isInline onClick={ addStage }>
                 <PlusIcon/> { 'Add a stage' }
               </Button>
             </StackItem>
