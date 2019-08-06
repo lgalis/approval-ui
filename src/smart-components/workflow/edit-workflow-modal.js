@@ -79,7 +79,7 @@ const EditWorkflowModal = ({
 
   return (
     <Modal
-      title={ editType === 'stages' ? 'Edit workflow  stages' : 'Edit workflow information' }
+      title={ editType === 'stages' ? `Edit workflow's stages` : `Edit workflow's information` }
       width={ '50%' }
       isOpen
       onClose={ onCancel }
@@ -91,7 +91,10 @@ const EditWorkflowModal = ({
                 No groups available.
           </Title>) }
         { !isFetching && rbacGroups.length > 0 && editType === 'stages' && (
-          <SetStages formData={ initialValues() } handleChange = { handleChange } options={ groupOptions } />) }
+          <SetStages formData={ initialValues() }
+            handleChange = { handleChange }
+            options={ groupOptions }
+            title={ `Add or remove ${workflow.name}'s stages` }/>) }
         { !isFetching && editType !== 'stages' && (
           <StageInformation initialValues={ initialValues() } formData = { formData } handleChange = { handleChange } />) }
       </FormGroup>
