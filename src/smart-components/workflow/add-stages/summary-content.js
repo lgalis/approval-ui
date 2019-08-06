@@ -11,8 +11,6 @@ import {
   Title
 } from '@patternfly/react-core';
 
-import {  } from '@patternfly/react-core';
-
 const SummaryContent = (formData) => {
   const { name, description, wfGroups } =
       formData.values ? formData.values : { name: '', description: '', wfGroups: []};
