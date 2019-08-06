@@ -11,6 +11,8 @@ import {
 } from '@patternfly/react-core';
 
 const StageInformation = ({ formData, handleChange }) => {
+  const { name, description } = formData;
+
   return (
     <Fragment>
       <Stack gutter="md">
@@ -30,7 +32,7 @@ const StageInformation = ({ formData, handleChange }) => {
                 id="workflow-name"
                 name="workflow-name"
                 aria-describedby="workflow-name"
-                value={ formData.name }
+                value={ name }
                 onChange={ (_, event) => handleChange({ name: event.currentTarget.value }) }
               />
             </FormGroup>
@@ -39,7 +41,7 @@ const StageInformation = ({ formData, handleChange }) => {
                 type="text"
                 id="workflow-description"
                 name="workflow-description"
-                value={ formData.description }
+                value={ description }
                 onChange={ (_, event) => handleChange({ description: event.currentTarget.value }) }
               />
             </FormGroup>
