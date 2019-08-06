@@ -9,7 +9,7 @@ import { Button,
   Title
 } from '@patternfly/react-core';
 
-const SetStages = ({ formData, handleChange, options }) => {
+const SetStages = ({ formData, handleChange, options, title }) => {
 
   const [ isExpanded, setExpanded ] = useState(false);
   const [ stageValues, setStageValues ] = useState(formData.wfGroups);
@@ -61,7 +61,7 @@ const SetStages = ({ formData, handleChange, options }) => {
     <Fragment>
       <Stack gutter="md">
         <StackItem>
-          <Title size="xl">Set stages</Title>
+          <Title size="md">{ title || 'Set stages' }</Title>
         </StackItem>
         <StackItem>
           <Stack gutter="sm">
@@ -81,6 +81,7 @@ const SetStages = ({ formData, handleChange, options }) => {
 SetStages.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string,
+  title: PropTypes.string,
   formData: PropTypes.object,
   options: PropTypes.array,
   handleChange: PropTypes.func.required
