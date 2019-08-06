@@ -9,7 +9,7 @@ import AddWorkflow from './add-stages/add-stages-wizard';
 import EditWorkflow from './edit-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
-import { createInitialRows } from './workflow-table-helpers';
+import { createRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 
 const columns = [{
@@ -21,10 +21,10 @@ const columns = [{
 
 const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history }) => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
-
-  const fetchData = (setRows) => {
+  const [ filterValue, setFilterValue ] = useState(undefined);
+  const fetchData = (setRows, filterValue) => {
     fetchRbacGroups();
-    fetchWorkflows().then(({ value: { data }}) => setRows(createInitialRows(data)));
+    fetchWorkflows().then(({ value: { data }}) => setRows(createRows(data, filterValue)));
   };
 
   const routes = () => <Fragment>
@@ -93,7 +93,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       <TableToolbarView
         data={ workflows }
         isSelectable={ true }
-        createInitialRows={ createInitialRows }
+        createRows={ createRows }
         columns={ columns }
         fetchData={ fetchData }
         request={ fetchWorkflows }
@@ -104,17 +104,18 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         pagination={ pagination }
         setCheckedItems={ setCheckedWorkflows }
         toolbarButtons={ toolbarButtons }
+        filterValue={ filterValue }
+        setFilterValue={ setFilterValue }
       />
     </Fragment>
   );
 };
 
-const mapStateToProps = ({ workflowReducer: { workflows, isLoading }, groupReducer: { groups, filterValue }}) => ({
+const mapStateToProps = ({ workflowReducer: { workflows, isLoading }, groupReducer: { groups }}) => ({
   workflows: workflows.data,
   pagination: workflows.meta,
   rbacGroups: groups,
-  isLoading,
-  searchFilter: filterValue
+  isLoading
 });
 
 const mapDispatchToProps = dispatch => {
@@ -129,11 +130,9 @@ Workflows.propTypes = {
     goBack: propTypes.func.isRequired,
     push: propTypes.func.isRequired
   }).isRequired,
-  filteredItems: propTypes.array,
   workflows: propTypes.array,
   platforms: propTypes.array,
   isLoading: propTypes.bool,
-  searchFilter: propTypes.string,
   fetchWorkflows: propTypes.func.isRequired,
   fetchRbacGroups: propTypes.func.isRequired,
   selectedWorkflows: propTypes.array,

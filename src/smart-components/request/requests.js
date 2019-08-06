@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { expandable } from '@patternfly/react-table';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
-import { createInitialRows } from './request-table-helpers';
+import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import RequestDetail from './request-detail/request-detail';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
@@ -22,8 +22,9 @@ const columns = [{
 ];
 
 const Requests = ({ fetchRequests, requests, pagination, history }) => {
+  const [ filterValue, setFilterValue ] = useState('');
   const fetchData = (setRows) => {
-    fetchRequests().then(({ value: { data }}) => setRows(createInitialRows(data)));
+    fetchRequests().then(({ value: { data }}) => setRows(createRows(data, filterValue)));
   };
 
   const routes = () => <Fragment>
@@ -53,7 +54,7 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
     <Fragment>
       <TableToolbarView
         data={ requests }
-        createInitialRows={ createInitialRows }
+        createRows={ createRows }
         columns={ columns }
         fetchData={ fetchData }
         request={ fetchRequests }
@@ -63,6 +64,8 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
         titlePlural="requests"
         titleSingular="request"
         pagination={ pagination }
+        filterValue={ filterValue }
+        setFilterValue={ setFilterValue }
       />
     </Fragment>;
 
@@ -83,7 +86,8 @@ Requests.propTypes = {
   requests: propTypes.array,
   platforms: propTypes.array,
   isLoading: propTypes.bool,
-  searchFilter: propTypes.string,
+  filterValue: propTypes.string,
+  setFilterValue: propTypes.func,
   fetchRequests: propTypes.func.isRequired,
   pagination: propTypes.shape({
     limit: propTypes.number.isRequired,
@@ -97,11 +101,10 @@ Requests.defaultProps = {
   pagination: {}
 };
 
-const mapStateToProps = ({ requestReducer: { requests, isRequestDataLoading, filterValue }}) => ({
+const mapStateToProps = ({ requestReducer: { requests, isRequestDataLoading }}) => ({
   requests: requests.data,
   pagination: requests.meta,
-  isLoading: isRequestDataLoading,
-  searchFilter: filterValue
+  isLoading: isRequestDataLoading
 });
 
 const mapDispatchToProps = dispatch => ({
