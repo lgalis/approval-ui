@@ -23,7 +23,7 @@
     "react-content-loader": "^3.4.2",
     "react-dom": "^16.8.6",
     "react-intl": "^2.9.0",
-    "react-redux": "^5.0.7",
+    "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "react-select": "^2.1.2",
     "redux": "^3.7.2",
