@@ -88,7 +88,7 @@ const EditWorkflowModal = ({
                 No groups available.
           </Title>) }
         { !isFetching && rbacGroups.length > 0 && editType === 'stages' && (
-          <SetStages formData={ initialValues() }
+          <SetStages formData={ formData }
             handleChange = { handleChange }
             options={ groupOptions }
             title={ `Add or remove ${formData.name}'s stages` }/>) }
@@ -121,9 +121,7 @@ EditWorkflowModal.propTypes = {
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
   fetchWorkflow: PropTypes.func.isRequired,
-  fetchRbacGroups: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,
   editType: PropTypes.string,
