@@ -77,7 +77,7 @@ const EditWorkflowModal = ({
   return (
     <Modal
       title={ editType === 'stages' ? `Edit workflow's stages` : `Edit workflow's information` }
-      width={ '50%' }
+      isSmall
       isOpen
       onClose={ onCancel }
       onSave={ onSave }>
@@ -93,7 +93,7 @@ const EditWorkflowModal = ({
             options={ groupOptions }
             title={ `Add or remove ${formData.name}'s stages` }/>) }
         { !isFetching && editType !== 'stages' && (
-          <StageInformation formData = { formData } handleChange = { handleChange } />) }
+          <StageInformation formData = { formData } handleChange = { handleChange } title = { `Make any changes to workflow ${formData.name}` }/>) }
       </FormGroup>
       <ActionGroup>
         <Button aria-label={ 'Save' }
