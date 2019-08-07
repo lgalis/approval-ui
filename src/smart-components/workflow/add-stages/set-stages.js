@@ -12,7 +12,7 @@ import { Button,
 const SetStages = ({ formData, handleChange, options, title }) => {
 
   const [ isExpanded, setExpanded ] = useState(false);
-  const [ stageValues, setStageValues ] = useState(formData.wfGroups);
+  const [ stageValues, setStageValues ] = useState(formData.wfGroups ? formData.wfGroups : []);
   const [ stageIndex, setStageIndex ] = useState(formData.wfGroups ? formData.wfGroups.length : 1);
 
   const onToggle = (isExpanded) => {
