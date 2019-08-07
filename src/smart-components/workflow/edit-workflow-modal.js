@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Title } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
-import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { WorkflowStageLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetStages from './add-stages/set-stages';
 import StageInformation from './add-stages/stage-information';
@@ -18,11 +17,9 @@ const EditWorkflowModal = ({
   addNotification,
   fetchWorkflow,
   updateWorkflow,
-  workflow,
-  rbacGroups,
   postMethod
 }) => {
-
+  const rbacGroups = useSelector(state => (state.groupReducer ? state.groupReducer.groups : {}));
   const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
   const [ formData, setValues ] = useState({});
   const [ isFetching, setFetching ] = useState(true);
@@ -31,12 +28,12 @@ const EditWorkflowModal = ({
     setValues({ ...formData, ...data });
   };
 
-  const initialValues = () => {
-    console.log('DEBUG - info initial values: ', workflow);
-    let initialFormValues = { ...workflow };
+  const initialValues = (wfData) => {
+    console.log('DEBUG - info initial values: ', wfData);
+    let initialFormValues = { ...wfData };
 
     if (editType === 'stages') {
-      let groups = workflow.group_refs.map((group, idx) => {
+      let groups = wfData.group_refs.map((group, idx) => {
         if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
           return group;
         }
@@ -57,8 +54,8 @@ const EditWorkflowModal = ({
 
   useEffect(() => {
     setFetching(true);
-    Promise.all([ fetchWorkflow(id), fetchRbacGroups() ])
-    .then(() => { setValues(initialValues()).then(setFetching(false)); })
+    fetchWorkflow(id)
+    .then((data) => { setValues(initialValues(data.value)).then(setFetching(false)); })
     .catch(() => setFetching(false));
   }, []);
 
@@ -94,9 +91,9 @@ const EditWorkflowModal = ({
           <SetStages formData={ initialValues() }
             handleChange = { handleChange }
             options={ groupOptions }
-            title={ `Add or remove ${workflow.name}'s stages` }/>) }
+            title={ `Add or remove ${formData.name}'s stages` }/>) }
         { !isFetching && editType !== 'stages' && (
-          <StageInformation initialValues={ initialValues() } formData = { formData } handleChange = { handleChange } />) }
+          <StageInformation formData = { formData } handleChange = { handleChange } />) }
       </FormGroup>
       <ActionGroup>
         <Button aria-label={ 'Save' }
@@ -129,7 +126,6 @@ EditWorkflowModal.propTypes = {
   initialValues: PropTypes.object,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,
-  workflow: PropTypes.object,
   editType: PropTypes.string,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
@@ -137,17 +133,11 @@ EditWorkflowModal.propTypes = {
   })).isRequired
 };
 
-const mapStateToProps = ({ workflowReducer: { workflow }, groupReducer: { groups }}) => ({
-  workflow,
-  rbacGroups: groups
-});
-
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchRbacGroups,
   fetchWorkflow
 }, dispatch);
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowModal));
+export default withRouter(connect(null, mapDispatchToProps)(EditWorkflowModal));
