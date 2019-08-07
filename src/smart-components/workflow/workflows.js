@@ -23,8 +23,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
   const [ filterValue, setFilterValue ] = useState(undefined);
   const fetchData = (setRows, filterValue) => {
-    fetchRbacGroups();
-    fetchWorkflows().then(({ value: { data }}) => setRows(createRows(data, filterValue)));
+    fetchRbacGroups().then(fetchWorkflows().then(({ value: { data }}) => setRows(createRows(data, filterValue))));
   };
 
   const routes = () => <Fragment>
