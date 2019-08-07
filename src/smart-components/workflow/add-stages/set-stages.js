@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from 'react';
-import { PlusIcon } from '@patternfly/react-icons';
+import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import { Button,
+  FormGroup,
   FormSelect,
   FormSelectOption,
   Stack,
@@ -29,26 +30,34 @@ const SetStages = ({ formData, handleChange, options, title }) => {
   const createStageInput = (idx) => {
     return (
       <StackItem>
-        <FormSelect
-          label={ `${idx + 1} Stage` }
-          aria-label={ `${idx + 1} Stage` }
-          onToggle={ onToggle }
-          key={ `stage-${idx + 1}` }
-          onChange={ (e) => onStageChange(e, idx) }
-          value={ stageValues[idx] }
-          isExpanded={ isExpanded }
-          ariaLabelledBy={ `Stage-${idx}` }
+        <FormGroup
+          label={ `Stage ${idx + 1}` }
+          fieldId={ `${idx + 1}_stage_label` }
         >
-          { options.map((option) => (
-            <FormSelectOption
-              isDisabled={ option.disabled }
-              key={ option.value || option.label }
-              label={ option.label.toString() }
-              value={ option.value }
-              isPlaceholder={ option.isPlaceholder }
-            />
-          )) }
-        </FormSelect>
+          <FormSelect
+            label={ `${idx + 1} Stage` }
+            aria-label={ `${idx + 1} Stage` }
+            onToggle={ onToggle }
+            key={ `stage-${idx + 1}` }
+            onChange={ (e) => onStageChange(e, idx) }
+            value={ stageValues[idx] }
+            isExpanded={ isExpanded }
+            ariaLabelledBy={ `Stage-${idx}` }
+          >
+            { options.map((option) => (
+              <FormSelectOption
+                isDisabled={ option.disabled }
+                key={ option.value || option.label }
+                label={ option.label.toString() }
+                value={ option.value }
+                isPlaceholder={ option.isPlaceholder }
+              />
+            )) }
+          </FormSelect>
+          <Button variant="link" isInline onClick={ addStage }>
+            <TrashIcon/> { 'Remove' }
+          </Button>
+        </FormGroup>
       </StackItem>);
   };
 
@@ -68,7 +77,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
             { stageValues.map((stage, idx) => createStageInput(idx)) }
             <StackItem>
               <Button variant="link" isInline onClick={ addStage }>
-                <PlusIcon/> { 'Add a stage' }
+                <PlusIcon/> { 'Add another stage' }
               </Button>
             </StackItem>
           </Stack>
