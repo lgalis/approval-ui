@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem, Title } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
+import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { WorkflowStageLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetStages from './add-stages/set-stages';
 import StageInformation from './add-stages/stage-information';
@@ -18,9 +19,11 @@ const EditWorkflowModal = ({
   addNotification,
   fetchWorkflow,
   updateWorkflow,
+  fetchRbacGroups,
+  rbacGroups,
   postMethod
 }) => {
-  const rbacGroups = useSelector(state => (state.groupReducer ? state.groupReducer.groups : {}));
+  //const rbacGroups = useSelector(state => (state.groupReducer ? state.groupReducer.groups : {}));
   const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
   const [ formData, setValues ] = useState({});
   const [ isFetching, setFetching ] = useState(true);
@@ -31,7 +34,7 @@ const EditWorkflowModal = ({
 
   const initialValues = (wfData) => {
     let initialFormValues = { ...wfData };
-
+    console.log('Debug: wfData, rbacGroups', wfData, rbacGroups);
     if (editType === 'stages') {
       let groups = wfData.group_refs.map((group, idx) => {
         if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
@@ -52,10 +55,16 @@ const EditWorkflowModal = ({
   };
 
   useEffect(() => {
-    setFetching(true);
-    fetchWorkflow(id)
-    .then((data) => { setValues(initialValues(data.value)).then(setFetching(false)); })
-    .catch(() => setFetching(false));
+    const fetchData = async () => {
+      setFetching(true);
+      const groups = await fetchRbacGroups();
+      rbacGroups = groups.value;
+      const result = await fetchWorkflow(id);
+      setValues(initialValues(result.value));
+      setFetching(false);
+    };
+
+    fetchData();
   }, []);
 
   const onSave = () => {
@@ -136,6 +145,7 @@ EditWorkflowModal.propTypes = {
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
   fetchWorkflow: PropTypes.func.isRequired,
+  fetchRbacGroups: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,
@@ -150,7 +160,13 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchWorkflow
+  fetchWorkflow,
+  fetchRbacGroups
 }, dispatch);
 
-export default withRouter(connect(null, mapDispatchToProps)(EditWorkflowModal));
+const mapStateToProps = ({ workflowReducer: { workflow }, groupReducer: { groups }}) => ({
+  workflow: workflow.data,
+  rbacGroups: groups
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowModal));
