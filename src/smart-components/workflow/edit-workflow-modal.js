@@ -9,6 +9,7 @@ import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/
 import { WorkflowStageLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetStages from './add-stages/set-stages';
 import StageInformation from './add-stages/stage-information';
+import '../../App.scss';
 
 const EditWorkflowModal = ({
   history: { push },
@@ -29,7 +30,6 @@ const EditWorkflowModal = ({
   };
 
   const initialValues = (wfData) => {
-    console.log('DEBUG - info initial values: ', wfData);
     let initialFormValues = { ...wfData };
 
     if (editType === 'stages') {
@@ -45,7 +45,6 @@ const EditWorkflowModal = ({
           });
         }
       });
-      console.log('DEBUG - stages initial values: ', groups);
       initialFormValues.wfGroups = groups;
     }
 
@@ -90,10 +89,12 @@ const EditWorkflowModal = ({
                     No groups available.
               </Title>) }
             { !isFetching && rbacGroups.length > 0 && editType === 'stages' && (
-              <SetStages formData={ formData }
-                handleChange = { handleChange }
-                options={ groupOptions }
-                title={ `Add or remove ${formData.name}'s stages` }/>) }
+              <StackItem className="stages-modal">
+                <SetStages className="stages-modal" formData={ formData }
+                  handleChange = { handleChange }
+                  options={ groupOptions }
+                  title={ `Add or remove ${formData.name}'s stages` }/>
+              </StackItem>) }
             { !isFetching && editType !== 'stages' && (
               <StageInformation formData = { formData }
                 handleChange = { handleChange }

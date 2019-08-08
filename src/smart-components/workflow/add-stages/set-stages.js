@@ -29,6 +29,19 @@ const SetStages = ({ formData, handleChange, options, title }) => {
     handleChange({ wfGroups: values });
   };
 
+  const addStage = () => {
+    setStageValues([ ...stageValues, undefined ]);
+    setStageIndex(stageIndex + 1);
+  };
+
+  const removeStage = (idx) => {
+    const i = parseInt(idx.target.id);
+    const values = [ ...stageValues.filter((_, j) => i !== j) ];
+    setStageValues(values);
+    setStageIndex(stageIndex - 1);
+    handleChange({ wfGroups: values });
+  };
+
   const createStageInput = (idx) => {
     return (
       <StackItem>
@@ -45,40 +58,28 @@ const SetStages = ({ formData, handleChange, options, title }) => {
                 key={ `stage-${idx + 1}` }
                 onChange={ (e) => onStageChange(e, idx) }
                 value={ stageValues[idx] }
-                isExpanded={ isExpanded }
-                ariaLabelledBy={ `Stage-${idx}` }
+                isexpanded={ isExpanded }
+                aria-labelledby={ `Stage-${idx}` }
               >
                 { options.map((option) => (
                   <FormSelectOption
-                    isDisabled={ option.disabled }
+                    isdisabled={ option.disabled }
                     key={ option.value || option.label }
                     label={ option.label.toString() }
                     value={ option.value }
-                    isPlaceholder={ option.isPlaceholder }
+                    isplaceholder={ option.isPlaceholder }
                   />
                 )) }
               </FormSelect>
             </GridItem>
             <GridItem span={ 1 }>
-              { idx > 0 && <Button variant="link" isInline onClick={ removeStage }>
+              { idx > 0 && <Button variant="link" isInline key={ idx } id={ idx } onClick={ removeStage }>
                 <TrashIcon/> { 'Remove' }
               </Button> }
             </GridItem>
           </Grid>
         </FormGroup>
       </StackItem>);
-  };
-
-  const addStage = () => {
-    setStageValues([ ...stageValues, undefined ]);
-    setStageIndex(stageIndex + 1);
-  };
-
-  const removeStage = (idx) => {
-    const i = idx.event.target;
-    setStageValues([ ...stageValues.filter((_, j) => i !== j) ]);
-    console.log('DEMO', stageValues);
-    setStageIndex(stageIndex - 1);
   };
 
   return (
