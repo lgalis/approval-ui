@@ -24,7 +24,6 @@ const EditWorkflowModal = ({
   postMethod
 }) => {
   //const rbacGroups = useSelector(state => (state.groupReducer ? state.groupReducer.groups : {}));
-  const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
   const [ formData, setValues ] = useState({});
   const [ isFetching, setFetching ] = useState(true);
 
@@ -34,7 +33,6 @@ const EditWorkflowModal = ({
 
   const initialValues = (wfData) => {
     let initialFormValues = { ...wfData };
-    console.log('Debug: wfData, rbacGroups', wfData, rbacGroups);
     if (editType === 'stages') {
       let groups = wfData.group_refs.map((group, idx) => {
         if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
@@ -101,7 +99,7 @@ const EditWorkflowModal = ({
               <StackItem className="stages-modal">
                 <SetStages className="stages-modal" formData={ formData }
                   handleChange = { handleChange }
-                  options={ groupOptions }
+                  options={ rbacGroups }
                   title={ `Add or remove ${formData.name}'s stages` }/>
               </StackItem>) }
             { !isFetching && editType !== 'stages' && (
