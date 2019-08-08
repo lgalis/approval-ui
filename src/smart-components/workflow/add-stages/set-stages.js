@@ -5,10 +5,10 @@ import { Button,
   FormGroup,
   FormSelect,
   FormSelectOption,
+  Grid,
+  GridItem,
   Stack,
   StackItem,
-  Split,
-  SplitItem,
   Title
 } from '@patternfly/react-core';
 
@@ -36,8 +36,8 @@ const SetStages = ({ formData, handleChange, options, title }) => {
           label={ `Stage ${idx + 1}` }
           fieldId={ `${idx + 1}_stage_label` }
         >
-          <Split gutter="md">
-            <SplitItem isFilled>
+          <Grid gutter="md">
+            <GridItem span={ 8 }>
               <FormSelect
                 label={ `${idx + 1} Stage` }
                 aria-label={ `${idx + 1} Stage` }
@@ -58,13 +58,13 @@ const SetStages = ({ formData, handleChange, options, title }) => {
                   />
                 )) }
               </FormSelect>
-            </SplitItem>
-            <SplitItem>
-              <Button variant="link" isInline onClick={ removeStage }>
+            </GridItem>
+            <GridItem span={ 1 }>
+              { idx > 0 && <Button variant="link" isInline onClick={ removeStage }>
                 <TrashIcon/> { 'Remove' }
-              </Button>
-            </SplitItem>
-          </Split>
+              </Button> }
+            </GridItem>
+          </Grid>
         </FormGroup>
       </StackItem>);
   };
@@ -75,7 +75,8 @@ const SetStages = ({ formData, handleChange, options, title }) => {
   };
 
   const removeStage = (idx) => {
-    setStageValues([ ...stageValues.filter((_, j) => idx !== j) ]);
+    const i = idx.event.target;
+    setStageValues([ ...stageValues.filter((_, j) => i !== j) ]);
     console.log('DEMO', stageValues);
     setStageIndex(stageIndex - 1);
   };
