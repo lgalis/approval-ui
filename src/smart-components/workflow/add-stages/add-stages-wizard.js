@@ -35,7 +35,6 @@ const AddWorkflow = ({
   const onSave = () => {
     const { name, description, wfGroups } = formData;
     const workflowData = { name, description, group_refs: wfGroups.slice() };
-    console.log('DEBUG - wfGroups, workflowData', wfGroups, workflowData);
     addWorkflow(workflowData).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
   };
 
