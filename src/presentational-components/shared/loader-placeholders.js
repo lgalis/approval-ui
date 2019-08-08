@@ -9,8 +9,7 @@ import {
   Grid,
   GridItem,
   Form,
-  FormGroup,
-  Title
+  FormGroup
 } from '@patternfly/react-core';
 import { Section } from '@redhat-cloud-services/frontend-components';
 import ContentLoader from 'react-content-loader';
@@ -146,11 +145,10 @@ const FormItemLoader = () => (
 
 export const WorkflowStageLoader = () => (
   <Form>
-    <Title size="xl">Editing workflow stages</Title>
-    <FormGroup fieldId="3">
+    <FormGroup fieldId="1">
       <FormItemLoader />
     </FormGroup>
-    <FormGroup fieldId="4">
+    <FormGroup fieldId="2">
       <FormItemLoader />
     </FormGroup>
   </Form>
