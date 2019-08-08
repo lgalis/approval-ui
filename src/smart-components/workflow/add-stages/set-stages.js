@@ -93,7 +93,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
             { stageValues.map((stage, idx) => createStageInput(idx)) }
             <StackItem style={ { borderTop: 10 } }>
               <Button variant="link" isInline onClick={ addStage }>
-                <PlusIcon/> { 'Add another stage' }
+                <PlusIcon/> { `Add ${ stageValues.length > 0 ? 'another' : 'a'} stage` }
               </Button>
             </StackItem>
           </Stack>
