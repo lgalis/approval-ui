@@ -77,7 +77,7 @@ const EditWorkflowModal = ({
   return (
     <Modal
       title={ editType === 'stages' ? `Edit workflow's stages` : `Edit workflow's information` }
-      isSmall
+      width={ '40%' }
       isOpen
       onClose={ onCancel }
       onSave={ onSave }>

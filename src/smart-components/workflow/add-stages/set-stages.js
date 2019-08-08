@@ -7,6 +7,8 @@ import { Button,
   FormSelectOption,
   Stack,
   StackItem,
+  Split,
+  SplitItem,
   Title
 } from '@patternfly/react-core';
 
@@ -34,29 +36,35 @@ const SetStages = ({ formData, handleChange, options, title }) => {
           label={ `Stage ${idx + 1}` }
           fieldId={ `${idx + 1}_stage_label` }
         >
-          <FormSelect
-            label={ `${idx + 1} Stage` }
-            aria-label={ `${idx + 1} Stage` }
-            onToggle={ onToggle }
-            key={ `stage-${idx + 1}` }
-            onChange={ (e) => onStageChange(e, idx) }
-            value={ stageValues[idx] }
-            isExpanded={ isExpanded }
-            ariaLabelledBy={ `Stage-${idx}` }
-          >
-            { options.map((option) => (
-              <FormSelectOption
-                isDisabled={ option.disabled }
-                key={ option.value || option.label }
-                label={ option.label.toString() }
-                value={ option.value }
-                isPlaceholder={ option.isPlaceholder }
-              />
-            )) }
-          </FormSelect>
-          <Button variant="link" isInline onClick={ addStage }>
-            <TrashIcon/> { 'Remove' }
-          </Button>
+          <Split gutter="md">
+            <SplitItem isFilled>
+              <FormSelect
+                label={ `${idx + 1} Stage` }
+                aria-label={ `${idx + 1} Stage` }
+                onToggle={ onToggle }
+                key={ `stage-${idx + 1}` }
+                onChange={ (e) => onStageChange(e, idx) }
+                value={ stageValues[idx] }
+                isExpanded={ isExpanded }
+                ariaLabelledBy={ `Stage-${idx}` }
+              >
+                { options.map((option) => (
+                  <FormSelectOption
+                    isDisabled={ option.disabled }
+                    key={ option.value || option.label }
+                    label={ option.label.toString() }
+                    value={ option.value }
+                    isPlaceholder={ option.isPlaceholder }
+                  />
+                )) }
+              </FormSelect>
+            </SplitItem>
+            <SplitItem>
+              <Button variant="link" isInline onClick={ removeStage }>
+                <TrashIcon/> { 'Remove' }
+              </Button>
+            </SplitItem>
+          </Split>
         </FormGroup>
       </StackItem>);
   };
@@ -64,6 +72,12 @@ const SetStages = ({ formData, handleChange, options, title }) => {
   const addStage = () => {
     setStageValues([ ...stageValues, undefined ]);
     setStageIndex(stageIndex + 1);
+  };
+
+  const removeStage = (idx) => {
+    setStageValues([ ...stageValues.filter((_, j) => idx !== j) ]);
+    console.log('DEMO', stageValues);
+    setStageIndex(stageIndex - 1);
   };
 
   return (
@@ -75,7 +89,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
         <StackItem>
           <Stack gutter="sm">
             { stageValues.map((stage, idx) => createStageInput(idx)) }
-            <StackItem>
+            <StackItem style={ { borderTop: 10 } }>
               <Button variant="link" isInline onClick={ addStage }>
                 <PlusIcon/> { 'Add another stage' }
               </Button>
