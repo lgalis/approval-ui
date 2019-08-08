@@ -23,13 +23,13 @@ const AddWorkflow = ({
     setValues({ ...formData,  ...data });
   };
 
-  const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
-
   const steps = [
-    { name: 'General Information', component: <StageInformation formData = { formData } handleChange={ handleChange } /> },
-    { name: 'Set Stages', component: <SetStages formData = { formData } handleChange={ handleChange } options={ groupOptions } /> },
-    { name: 'Review', component: new SummaryContent({ values: formData, groupOptions }),
-      nextButtonText: 'Confirm' }
+    { name: 'General Information', component: <StageInformation formData = { formData }
+      handleChange={ handleChange } /> },
+    { name: 'Set Stages', component: <SetStages formData = { formData }
+      handleChange={ handleChange } options={ rbacGroups } /> },
+    { name: 'Review', component: <SummaryContent formData = { formData }
+      options = { rbacGroups } />, nextButtonText: 'Confirm' }
   ];
 
   const onSave = () => {
