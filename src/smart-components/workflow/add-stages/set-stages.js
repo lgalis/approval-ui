@@ -72,7 +72,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
                 )) }
               </FormSelect>
             </GridItem>
-            <GridItem span={ 1 }>
+            <GridItem span={ 1 } style={ { display: 'flex' } }>
               { idx > 0 && <Button variant="link" isInline key={ idx } id={ idx } onClick={ removeStage }>
                 <TrashIcon/> { 'Remove' }
               </Button> }
