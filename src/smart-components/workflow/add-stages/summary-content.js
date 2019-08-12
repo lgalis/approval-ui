@@ -11,11 +11,8 @@ import {
   Title
 } from '@patternfly/react-core';
 
-import {  } from '@patternfly/react-core';
-
-const SummaryContent = (formData) => {
-  const { name, description, wfGroups } =
-      formData.values ? formData.values : { name: '', description: '', wfGroups: []};
+const SummaryContent = ({ formData, options }) => {
+  const { name, description, wfGroups } = formData ? formData : { name: '', description: '', wfGroups: []};
   return (
     <Fragment>
       <Stack gutter="md">
@@ -51,7 +48,7 @@ const SummaryContent = (formData) => {
                 <Text key={ stage.value }
                   className="data-table-detail content"
                   component={ TextVariants.p }>
-                  { `Stage ${idx + 1} : ${formData.groupOptions.find(group => group.value === wfGroups[idx]).label}` }
+                  { `Stage ${idx + 1} : ${options.find(group => group.value === wfGroups[idx]).label}` }
                 </Text>) }
             </StackItem>
           </Stack>
@@ -62,9 +59,8 @@ const SummaryContent = (formData) => {
 };
 
 SummaryContent.propTypes = {
-  name: PropTypes.string,
-  description: PropTypes.string,
-  groups: PropTypes.array
+  formData: PropTypes.object,
+  options: PropTypes.array
 };
 
 export default SummaryContent;

@@ -10,12 +10,14 @@ import {
   Title
 } from '@patternfly/react-core';
 
-const StageInformation = (formValue, onHandleChange) => {
+const StageInformation = ({ formData, handleChange, title = undefined }) => {
+  const { name, description } = formData;
+
   return (
     <Fragment>
       <Stack gutter="md">
         <StackItem>
-          <Title size="xl"> Enter your information </Title>
+          <Title size="md"> { title || 'Enter your information' } </Title>
         </StackItem>
         <StackItem>
           <Form>
@@ -30,8 +32,8 @@ const StageInformation = (formValue, onHandleChange) => {
                 id="workflow-name"
                 name="workflow-name"
                 aria-describedby="workflow-name"
-                value={ formValue.name }
-                onChange={ (_, event) => onHandleChange({ name: event.currentTarget.value }) }
+                value={ name }
+                onChange={ (_, event) => handleChange({ name: event.currentTarget.value }) }
               />
             </FormGroup>
             <FormGroup label="Description" fieldId="workflow-description">
@@ -39,8 +41,8 @@ const StageInformation = (formValue, onHandleChange) => {
                 type="text"
                 id="workflow-description"
                 name="workflow-description"
-                value={ formValue.description }
-                onChange={ (_, event) => onHandleChange({ description: event.currentTarget.value }) }
+                value={ description }
+                onChange={ (_, event) => handleChange({ description: event.currentTarget.value }) }
               />
             </FormGroup>
           </Form>
@@ -52,7 +54,10 @@ const StageInformation = (formValue, onHandleChange) => {
 
 StageInformation.propTypes = {
   name: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
+  title: PropTypes.string,
+  formData: PropTypes.object,
+  handleChange: PropTypes.func.required
 };
 
 export default StageInformation;
