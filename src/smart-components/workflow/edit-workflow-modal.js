@@ -3,102 +3,136 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { Modal } from '@patternfly/react-core';
+import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem, Title } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
-import FormRenderer from '../common/form-renderer';
-import { createWorkflowSchema } from '../../forms/workflow-form.schema';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
-import SummaryContent from './add-stages/summary-content';
+import { fetchRbacGroups } from '../../redux/actions/group-actions';
+import { WorkflowStageLoader } from '../../presentational-components/shared/loader-placeholders';
+import SetStages from './add-stages/set-stages';
+import StageInformation from './add-stages/stage-information';
+import '../../App.scss';
 
 const EditWorkflowModal = ({
   history: { push },
   match: { params: { id }},
-  addWorkflow,
+  editType,
   addNotification,
   fetchWorkflow,
   updateWorkflow,
-  postMethod,
-  rbacGroups
+  fetchRbacGroups,
+  rbacGroups,
+  postMethod
 }) => {
-  const [ initialValues, setInitialValues ] = useState([]);
+  //const rbacGroups = useSelector(state => (state.groupReducer ? state.groupReducer.groups : {}));
+  const [ formData, setValues ] = useState({});
+  const [ isFetching, setFetching ] = useState(true);
 
-  useEffect(() => {
-    if (id) {
-      fetchData(setInitialValues);
-    }
-  }, []);
+  const handleChange = data => {
+    setValues({ ...formData, ...data });
+  };
 
-  const fetchData = (setInitialValues)=> {
-    fetchWorkflow(id).then((data) => {
-      let values = data.value;
-      data.value.group_refs.forEach((group, idx) => {
+  const initialValues = (wfData) => {
+    let initialFormValues = { ...wfData };
+    if (editType === 'stages') {
+      let groups = wfData.group_refs.map((group, idx) => {
         if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
-          values[`stage-${idx + 1}`] = group;
+          return group;
         }
         else {
           addNotification({
             variant: 'warning',
-            title: 'Editing workflow',
-            description: `Stage-${idx + 1} group with id: ${group} no longer accessible`
+            title: `Edit workflow's information`,
+            description: `Stage ${idx + 1} group with id: ${group} no longer accessible`
           });
         }
       });
-      setInitialValues(values);
-    });
+      initialFormValues.wfGroups = groups;
+    }
+
+    return initialFormValues;
   };
 
-  const onSubmit = data => {
-    const { name, description, ...wfGroups } = data;
-    const workflowData = { name, description, group_refs: wfGroups };
-    id ? updateWorkflow({ id, ...workflowData }).
-    then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'))
-      : addWorkflow(workflowData).
-      then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
+  useEffect(() => {
+    const fetchData = async () => {
+      setFetching(true);
+      const groups = await fetchRbacGroups();
+      rbacGroups = groups.value;
+      const result = await fetchWorkflow(id);
+      setValues(initialValues(result.value));
+      setFetching(false);
+    };
+
+    fetchData();
+  }, []);
+
+  const onSave = () => {
+    const { name, description, wfGroups } = formData;
+    const workflowData = (editType === 'stages') ? { group_refs: wfGroups.slice() } : { name, description };
+    updateWorkflow({ id, ...workflowData }).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
   };
 
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: id ? 'Editing workflow' : 'Creating workflow',
-      description: id ? 'Edit workflow was cancelled by the user.' : 'Creating workflow was cancelled by the user.'
+      title: `Edit workflow's ${editType}`,
+      description: `Edit workflow's ${editType} was cancelled by the user.`
     });
-    postMethod ?  postMethod().then(push('/workflows')) : push('/workflows');
+    postMethod ? postMethod().then(push('/workflows')) : push('/workflows');
   };
-
-  const groupOptions = [ ...rbacGroups, { value: undefined, label: 'None' }];
-  const Summary = (data) => <SummaryContent values={ data.formOptions.getState().values } groupOptions={ groupOptions } />;
 
   return (
     <Modal
-      title={ id ? 'Edit workflow' : 'Create workflow' }
+      title={ editType === 'stages' ? `Edit workflow's stages` : `Edit workflow's information` }
+      width={ '40%' }
       isOpen
       onClose={ onCancel }
-      isSmall
-    >
-      <div style={ { padding: 8 } }>
-        <FormRenderer
-          schema={ createWorkflowSchema(!id, groupOptions) }
-          schemaType="default"
-          onSubmit={ onSubmit }
-          onCancel={ onCancel }
-          initialValues={ { ...initialValues } }
-          formFieldsMapper={ {
-            ...formFieldsMapper,
-            summary: Summary
-          } }
-          formContainer="modal"
-          showFormControls={ false }
-          buttonsLabels={ { submitLabel: 'Confirm' } }
-        />
-      </div>
+      onSave={ onSave }>
+      <Stack gutter="md">
+        <StackItem>
+          <FormGroup>
+            { isFetching && <WorkflowStageLoader/> }
+            { !isFetching && rbacGroups.length === 0 && (
+              <Title headingLevel="h2" size="1xl">
+                    No groups available.
+              </Title>) }
+            { !isFetching && rbacGroups.length > 0 && editType === 'stages' && (
+              <StackItem className="stages-modal">
+                <SetStages className="stages-modal" formData={ formData }
+                  handleChange = { handleChange }
+                  options={ rbacGroups }
+                  title={ `Add or remove ${formData.name}'s stages` }/>
+              </StackItem>) }
+            { !isFetching && editType !== 'stages' && (
+              <StageInformation formData = { formData }
+                handleChange = { handleChange }
+                title = { `Make any changes to workflow ${formData.name}` }/>) }
+          </FormGroup>
+        </StackItem>
+        <StackItem>
+          <ActionGroup>
+            <Split gutter="md">
+              <SplitItem>
+                <Button aria-label={ 'Save' }
+                  variant="primary"
+                  type="submit"
+                  onClick={ onSave }>Save</Button>
+              </SplitItem>
+              <SplitItem>
+                <Button  aria-label='Cancel'
+                  variant='secondary'
+                  type='button'
+                  onClick={ onCancel }>Cancel</Button>
+              </SplitItem>
+            </Split>
+          </ActionGroup>
+        </StackItem>
+      </Stack>
     </Modal>
   );
 };
 
 EditWorkflowModal.defaultProps = {
-  rbacGroups: [],
-  initialValues: {}
+  rbacGroups: []
 };
 
 EditWorkflowModal.propTypes = {
@@ -109,27 +143,28 @@ EditWorkflowModal.propTypes = {
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
   fetchWorkflow: PropTypes.func.isRequired,
+  fetchRbacGroups: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,
+  editType: PropTypes.string,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
     label: PropTypes.string.isRequired
   })).isRequired
 };
 
-const mapStateToProps = (state) => {
-  return {
-    rbacGroups: state.groupReducer.groups
-  };
-};
-
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchWorkflow
+  fetchWorkflow,
+  fetchRbacGroups
 }, dispatch);
+
+const mapStateToProps = ({ workflowReducer: { workflow }, groupReducer: { groups }}) => ({
+  workflow: workflow.data,
+  rbacGroups: groups
+});
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowModal));
