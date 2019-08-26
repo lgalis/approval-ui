@@ -43,3 +43,12 @@ const root = document.createElement('div');
 root.id = 'root';
 document.body.appendChild(root);
 Element.prototype.scrollTo = () => {};
+
+// mock insights instance
+global.insights = {
+  chrome: {
+    auth: {
+      getUser: () => new Promise(resolve => resolve(true))
+    }
+  }
+};
