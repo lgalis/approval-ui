@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
 
-const ExpandableContent = ({ description, groupRefs, groupNames }) => (
+const ExpandableContent = ({ description, group_refs, group_names }) => (
   <Fragment>
     <TextContent>
       <Text className="data-table-detail heading" component={ TextVariants.small }>Description</Text>
@@ -13,7 +13,7 @@ const ExpandableContent = ({ description, groupRefs, groupNames }) => (
       <Text
         className="data-table-detail content"
         component={ TextVariants.h5 }>
-        { groupRefs.reduce((acc, curr, idx) => acc.concat(`${(idx > 0) ? ',' : ''} ${groupNames[idx] || curr}`), '') }
+        { group_refs.reduce((acc, curr, idx) => acc.concat(`${(idx > 0) ? ',' : ''} ${group_names[idx] || curr}`), '') }
       </Text>
     </TextContent>
   </Fragment>
@@ -21,8 +21,8 @@ const ExpandableContent = ({ description, groupRefs, groupNames }) => (
 
 ExpandableContent.propTypes = {
   description: PropTypes.string,
-  groupRefs: PropTypes.array.required,
-  groupNames: PropTypes.array.required
+  group_refs: PropTypes.array.required,
+  group_names: PropTypes.array.required
 };
 
 export default ExpandableContent;

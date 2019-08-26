@@ -8,6 +8,11 @@ const axiosInstance = axios.create();
 
 const resolveInterceptor = response => response.data || response;
 
+// check identity before each request. If the token is expired it will log out user
+axiosInstance.interceptors.request.use(async config => {
+  await window.insights.chrome.auth.getUser();
+  return config;
+});
 axiosInstance.interceptors.response.use(resolveInterceptor);
 
 // Approval Apis
@@ -57,3 +62,6 @@ export function getRbacGroupApi() {
   return rbacGroupApi;
 }
 
+export function getAxiosInstance() {
+  return axiosInstance;
+}

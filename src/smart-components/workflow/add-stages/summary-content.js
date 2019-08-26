@@ -12,6 +12,7 @@ import {
 } from '@patternfly/react-core';
 
 const SummaryContent = ({ formData, options }) => {
+  console.log('Debug - formData, options: ', formData);
   const { name, description, wfGroups } = formData ? formData : { name: '', description: '', wfGroups: []};
   return (
     <Fragment>
@@ -48,7 +49,7 @@ const SummaryContent = ({ formData, options }) => {
                 <Text key={ stage.value }
                   className="data-table-detail content"
                   component={ TextVariants.p }>
-                  { `Stage ${idx + 1} : ${options.find(group => group.value === wfGroups[idx]).label}` }
+                  { `Stage ${idx + 1} : ${wfGroups[idx].label}` }
                 </Text>) }
             </StackItem>
           </Stack>
