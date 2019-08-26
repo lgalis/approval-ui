@@ -12,7 +12,7 @@ import { Button,
   Title
 } from '@patternfly/react-core';
 
-const SetStages = ({ formData, handleChange, title }) => {
+const SetStages = ({ formData, handleChange, options, title }) => {
 
   const [ isExpanded, setExpanded ] = useState(false);
   const [ stageValues, setStageValues ] = useState(formData.wfGroups ? formData.wfGroups : []);
@@ -60,6 +60,8 @@ const SetStages = ({ formData, handleChange, title }) => {
           <Grid gutter="md">
             <GridItem span={ 8 }>
               <AsyncSelect
+                cacheOptions
+                isClearable
                 label={ `${idx + 1} Stage` }
                 aria-label={ `${idx + 1} Stage` }
                 onToggle={ onToggle }
@@ -70,6 +72,7 @@ const SetStages = ({ formData, handleChange, title }) => {
                 isexpanded={ isExpanded }
                 aria-labelledby={ `Stage-${idx}` }
                 loadOptions={ loadGroupOptions }
+                defaultOptions={ options }
                 onInputChange={ (e) => onInputChange(e, idx) }
               />
             </GridItem>
@@ -110,7 +113,7 @@ SetStages.propTypes = {
   title: PropTypes.string,
   formData: PropTypes.object,
   options: PropTypes.array,
-  handleChange: PropTypes.func.required
+  handleChange: PropTypes.func
 };
 
 export default SetStages;

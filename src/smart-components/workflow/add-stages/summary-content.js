@@ -12,7 +12,6 @@ import {
 } from '@patternfly/react-core';
 
 const SummaryContent = ({ formData }) => {
-  console.log('Debug - formData, options: ', formData);
   const { name, description, wfGroups } = formData ? formData : { name: '', description: '', wfGroups: []};
   return (
     <Fragment>
