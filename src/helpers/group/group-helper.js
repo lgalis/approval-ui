@@ -20,7 +20,7 @@ export async function fetchGroupNames(groupRefs) {
   }
 }
 
-export const fetchFilterGroups = (filterValue = '') =>
+export const fetchFilterGroups = (filterValue) =>
   getAxiosInstance().get(`${RBAC_API_BASE}/groups/${filterValue.length > 0
     ? `?name=${filterValue}`
     : ''}`)
