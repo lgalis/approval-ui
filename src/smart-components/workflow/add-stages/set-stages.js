@@ -52,7 +52,7 @@ const SetStages = ({ formData, handleChange, title }) => {
 
   const createStageInput = (idx) => {
     return (
-      <StackItem key={`Stack_${idx + 1}`}>
+      <StackItem key={ `Stack_${idx + 1}` }>
         <FormGroup
           label={ `Stage ${idx + 1}` }
           fieldId={ `${idx + 1}_stage_label` }

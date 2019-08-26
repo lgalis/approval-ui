@@ -11,7 +11,7 @@ import {
   Title
 } from '@patternfly/react-core';
 
-const SummaryContent = ({ formData, options }) => {
+const SummaryContent = ({ formData }) => {
   console.log('Debug - formData, options: ', formData);
   const { name, description, wfGroups } = formData ? formData : { name: '', description: '', wfGroups: []};
   return (
@@ -60,8 +60,7 @@ const SummaryContent = ({ formData, options }) => {
 };
 
 SummaryContent.propTypes = {
-  formData: PropTypes.object,
-  options: PropTypes.array
+  formData: PropTypes.object
 };
 
 export default SummaryContent;
