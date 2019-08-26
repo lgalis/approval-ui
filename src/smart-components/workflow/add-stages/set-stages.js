@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
+import AsyncSelect from 'react-select/async';
+import { fetchFilterGroups } from '../../../helpers/group/group-helper';
 import { Button,
   FormGroup,
-  FormSelect,
-  FormSelectOption,
   Grid,
   GridItem,
   Stack,
@@ -12,11 +12,17 @@ import { Button,
   Title
 } from '@patternfly/react-core';
 
-const SetStages = ({ formData, handleChange, options, title }) => {
+const SetStages = ({ formData, handleChange, title }) => {
 
   const [ isExpanded, setExpanded ] = useState(false);
   const [ stageValues, setStageValues ] = useState(formData.wfGroups ? formData.wfGroups : []);
   const [ stageIndex, setStageIndex ] = useState(formData.wfGroups ? formData.wfGroups.length : 1);
+  const [ inputValue, setInputValue ] = useState([]);
+
+  const onInputChange = (newValue) => {
+    const value = newValue.replace(/\W/g, '');
+    setInputValue(value);
+  };
 
   const onToggle = (isExpanded) => {
     setExpanded(isExpanded);
@@ -42,35 +48,30 @@ const SetStages = ({ formData, handleChange, options, title }) => {
     handleChange({ wfGroups: values });
   };
 
+  const loadGroupOptions = (inputValue) => fetchFilterGroups(inputValue);
+
   const createStageInput = (idx) => {
     return (
-      <StackItem>
+      <StackItem key={`Stack_${idx + 1}`}>
         <FormGroup
           label={ `Stage ${idx + 1}` }
           fieldId={ `${idx + 1}_stage_label` }
         >
           <Grid gutter="md">
             <GridItem span={ 8 }>
-              <FormSelect
+              <AsyncSelect
                 label={ `${idx + 1} Stage` }
                 aria-label={ `${idx + 1} Stage` }
                 onToggle={ onToggle }
                 key={ `stage-${idx + 1}` }
                 onChange={ (e) => onStageChange(e, idx) }
                 value={ stageValues[idx] }
+                inpuValue={ inputValue }
                 isexpanded={ isExpanded }
                 aria-labelledby={ `Stage-${idx}` }
-              >
-                { options.map((option) => (
-                  <FormSelectOption
-                    isdisabled={ option.disabled }
-                    key={ option.value || option.label }
-                    label={ option.label.toString() }
-                    value={ option.value }
-                    isplaceholder={ option.isPlaceholder }
-                  />
-                )) }
-              </FormSelect>
+                loadOptions={ loadGroupOptions }
+                onInputChange={ (e) => onInputChange(e, idx) }
+              />
             </GridItem>
             <GridItem span={ 1 } style={ { display: 'flex' } }>
               { idx > 0 && <Button variant="link" isInline key={ idx } id={ idx } onClick={ removeStage }>
