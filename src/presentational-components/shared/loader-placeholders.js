@@ -44,7 +44,7 @@ export const RequestLoader = ({ items, ...props }) => (
           <RequestInfoBarLoader/>
         </GridItem>
         <GridItem md={ 10 } className = "detail-pane">
-          <DataList aria-labelledby="datalist-placeholder" style={ { margin: 32 } }>
+          <DataList aria-label="datalist-placeholder" style={ { margin: 32 } }>
             { [ ...Array(items) ].map((_item, index) => (
               <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
                 <DataListItemRow>
@@ -100,7 +100,7 @@ export const DataListLoader = ({ items, ...props }) => (
     <DataList aria-labelledby="datalist-placeholder" style={ { margin: 32 } }>
       { [ ...Array(items) ].map((_item, index) => (
         <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
-          <DataListItemRow aria-labelledby="datalist-item-placeholder-row">
+          <DataListItemRow aria-label="datalist-item-placeholder-row">
             <DataListItemCells dataListCells={ [
               <DataListCell key="1">
                 <ContentLoader
