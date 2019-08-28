@@ -17,7 +17,7 @@ export const createRows = (data, filterValue = undefined) =>
       cells: [ name, description ]
     }, {
       parent: key * 2,
-      cells: [{ title: <ExpandableContent description={ description } group_refs={ group_refs } group_names={ group_names } /> }]
+      cells: [{ title: <ExpandableContent description={ description } groupRefs={ group_refs } groupNames={ group_names } /> }]
     }
   ]), []);
 
