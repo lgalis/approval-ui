@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
+import asyncDebounce from '../../../utilities/async-debounce';
 import { fetchFilterGroups } from '../../../helpers/group/group-helper';
 import { Button,
   FormGroup,
@@ -71,7 +72,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
                 inpuValue={ inputValue }
                 isexpanded={ isExpanded }
                 aria-labelledby={ `Stage-${idx}` }
-                loadOptions={ loadGroupOptions }
+                loadOptions={ asyncDebounce(loadGroupOptions) }
                 defaultOptions={ options }
                 onInputChange={ (e) => onInputChange(e, idx) }
               />
