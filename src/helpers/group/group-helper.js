@@ -25,3 +25,9 @@ export const fetchFilterGroups = (filterValue) =>
     ? `?name=${filterValue}`
     : ''}`)
   .then(({ data }) => data.map(({ uuid, name }) => ({ label: name, value: uuid })));
+
+export async function fetchGroupOption(uuid) {
+  let option = await api.getGroup(uuid);
+  let group = await option;
+  return { label: group ? group.name : uuid, value: uuid };
+}
