@@ -67,7 +67,7 @@ const EditWorkflowModal = ({
 
   const onSave = () => {
     const { name, description, wfGroups } = formData;
-    const workflowData = (editType === 'stages') ? { group_refs: wfGroups.slice() } : { name, description };
+    const workflowData = (editType === 'stages') ? { group_refs: wfGroups.map(group => group.value)  } : { name, description };
     updateWorkflow({ id, ...workflowData }).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
   };
 
