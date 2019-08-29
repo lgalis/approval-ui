@@ -7,7 +7,7 @@ const createOptions = (options, inputValue, isRequired) => {
     return options;
   }
 
-  let selectOptions = [ ...options ];
+  const selectOptions = [ ...options ];
   return selectOptions.find(({ value }) => value === undefined)
     ? [ ...selectOptions ]
     : [{ label: isRequired ? 'Please choose' : 'None' }, ...selectOptions ];
