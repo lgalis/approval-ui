@@ -16,8 +16,8 @@ import { Button,
 const SetStages = ({ formData, handleChange, options, title }) => {
 
   const [ isExpanded, setExpanded ] = useState(false);
-  const [ stageValues, setStageValues ] = useState(formData.wfGroups ? formData.wfGroups : []);
-  const [ stageIndex, setStageIndex ] = useState(formData.wfGroups ? formData.wfGroups.length : 1);
+  const [ stageValues, setStageValues ] = useState(formData.wfStageOptions ? formData.wfStageOptions : []);
+  const [ stageIndex, setStageIndex ] = useState(formData.wfStageOptions ? formData.wfStageOptions.length : 1);
   const [ inputValue, setInputValue ] = useState([]);
 
   const onInputChange = (newValue) => {
@@ -71,7 +71,6 @@ const SetStages = ({ formData, handleChange, options, title }) => {
                 value={ stageValues[idx] }
                 inpuValue={ inputValue }
                 isexpanded={ isExpanded }
-                aria-labelledby={ `Stage-${idx}` }
                 loadOptions={ asyncDebounce(loadGroupOptions) }
                 defaultOptions={ options }
                 onInputChange={ (e) => onInputChange(e, idx) }
