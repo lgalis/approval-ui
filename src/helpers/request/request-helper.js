@@ -13,8 +13,8 @@ export async function fetchRequest(id) {
 }
 
 export async function fetchRequestWithStagesAndActions(id) {
-  let requestData = await requestApi.showRequest(id);
-  let requestStages = await fetchStagesWithActions(id);
+  const requestData = await requestApi.showRequest(id);
+  const requestStages = await fetchStagesWithActions(id);
   return { ...requestData, stages: requestStages.data };
 }
 
@@ -23,10 +23,10 @@ export async function fetchStagesForRequest(id) {
 }
 
 export async function fetchStagesWithActions(requestId) {
-  let requestStages = await stageApi.listStagesByRequest(requestId);
-  let stages = requestStages.data;
+  const requestStages = await stageApi.listStagesByRequest(requestId);
+  const stages = requestStages.data;
   return Promise.all(stages.map(async stage => {
-    let stageWithActions = await actionApi.listActionsByStage(stage.id);
+    const stageWithActions = await actionApi.listActionsByStage(stage.id);
     return { ...stage, stageActions: stageWithActions };
   })).then(data => ({
     ...requestStages,
