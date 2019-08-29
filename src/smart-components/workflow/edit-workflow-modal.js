@@ -31,14 +31,15 @@ const EditWorkflowModal = ({
   };
 
   const initialValues = (wfData) => {
-    let initialFormValues = { ...wfData };
+    const initialFormValues = { ...wfData };
     if (editType === 'stages') {
-      let stageOptions = wfData.group_refs.map((group, idx) => {
+      const stageOptions = wfData.group_refs.map((group, idx) => {
         return { label: (wfData.group_names[idx] ? wfData.group_names[idx] : group), value: group };
       });
       initialFormValues.wfGroups = wfData.group_refs;
       initialFormValues.wfStageOptions = stageOptions;
     }
+
     return initialFormValues;
   };
 

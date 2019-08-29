@@ -63,7 +63,7 @@ class Stage extends Component {
   };
 
   render() {
-    let { item } = this.props;
+    const { item } = this.props;
     const requestActive = isRequestStateActive(item.state);
     return (
       <DataListItem key={ `stage-${item.id}` }

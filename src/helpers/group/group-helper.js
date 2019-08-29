@@ -14,7 +14,7 @@ export async function fetchGroup(id) {
 export async function fetchGroupNames(groupRefs) {
   if (groupRefs) {
     return Promise.all(groupRefs.map(async id => {
-      let group = await api.getGroup(id);
+      const group = await api.getGroup(id);
       return group.name;
     }));
   }
@@ -27,7 +27,7 @@ export const fetchFilterGroups = (filterValue) =>
   .then(({ data }) => data.map(({ uuid, name }) => ({ label: name, value: uuid })));
 
 export async function fetchGroupOption(uuid) {
-  let option = await api.getGroup(uuid);
-  let group = await option;
+  const option = await api.getGroup(uuid);
+  const group = await option;
   return { label: group ? group.name : uuid, value: uuid };
 }

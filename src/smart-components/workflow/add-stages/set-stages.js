@@ -30,7 +30,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
   };
 
   const onStageChange = (value, index) => {
-    let values = stageValues;
+    const values = stageValues;
     values[index] = value;
     setStageValues(values);
     handleChange({ wfGroups: values });
