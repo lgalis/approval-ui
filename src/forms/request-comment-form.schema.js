@@ -9,7 +9,7 @@ const schemaFields = (isDeny) =>({
 });
 
 export const createRequestCommentSchema = (isDeny = false) => {
-  let schema = schemaFields(isDeny);
+  const schema = schemaFields(isDeny);
   if (isDeny) {
     schema.validate = [{
       type: validatorTypes.REQUIRED

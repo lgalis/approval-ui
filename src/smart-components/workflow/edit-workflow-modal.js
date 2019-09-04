@@ -23,7 +23,6 @@ const EditWorkflowModal = ({
   rbacGroups,
   postMethod
 }) => {
-  //const rbacGroups = useSelector(state => (state.groupReducer ? state.groupReducer.groups : {}));
   const [ formData, setValues ] = useState({});
   const [ isFetching, setFetching ] = useState(true);
 
@@ -32,21 +31,13 @@ const EditWorkflowModal = ({
   };
 
   const initialValues = (wfData) => {
-    let initialFormValues = { ...wfData };
+    const initialFormValues = { ...wfData };
     if (editType === 'stages') {
-      let groups = wfData.group_refs.map((group, idx) => {
-        if (rbacGroups.find(rbacGroup => rbacGroup.value === group)) {
-          return group;
-        }
-        else {
-          addNotification({
-            variant: 'warning',
-            title: `Edit workflow's information`,
-            description: `Stage ${idx + 1} group with id: ${group} no longer accessible`
-          });
-        }
+      const stageOptions = wfData.group_refs.map((group, idx) => {
+        return { label: (wfData.group_names[idx] ? wfData.group_names[idx] : group), value: group };
       });
-      initialFormValues.wfGroups = groups;
+      initialFormValues.wfGroups = wfData.group_refs;
+      initialFormValues.wfStageOptions = stageOptions;
     }
 
     return initialFormValues;
@@ -67,7 +58,7 @@ const EditWorkflowModal = ({
 
   const onSave = () => {
     const { name, description, wfGroups } = formData;
-    const workflowData = (editType === 'stages') ? { group_refs: wfGroups.slice() } : { name, description };
+    const workflowData = (editType === 'stages') ? { group_refs: wfGroups.map(group => group.value)  } : { name, description };
     updateWorkflow({ id, ...workflowData }).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
   };
 
