@@ -24,8 +24,7 @@ const AddWorkflow = ({
   };
 
   const steps = [
-    { name: 'General Information', component: <StageInformation formData = { formData }
-      handleChange={ handleChange } /> },
+    { name: 'General Information', component: <StageInformation formData = { formData } handleChange = { handleChange } /> },
     { name: 'Set Stages', component: <SetStages formData = { formData }
       handleChange={ handleChange } options={ rbacGroups } /> },
     { name: 'Review', component: <SummaryContent formData = { formData }
@@ -34,7 +33,8 @@ const AddWorkflow = ({
 
   const onSave = () => {
     const { name, description, wfGroups } = formData;
-    const workflowData = { name, description, group_refs: wfGroups.slice() };
+    const workflowData = { name, description, group_refs: wfGroups.map(group => group.value) };
+
     addWorkflow(workflowData).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
   };
 

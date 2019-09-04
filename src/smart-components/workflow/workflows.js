@@ -81,8 +81,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
       </Link>
     </ToolbarItem>
     <ToolbarItem>
-      <Link to={ { pathname: '/workflows/remove' } }
-        isDisabled={ !anyWorkflowsSelected() }>
+      <Link className= { anyWorkflowsSelected() ? '' : 'disabled-link' } to={ { pathname: '/workflows/remove' } }>
         <Button
           variant="link"
           isDisabled={ !anyWorkflowsSelected() }
