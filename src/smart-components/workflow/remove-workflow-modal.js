@@ -20,12 +20,9 @@ const RemoveWorkflowModal = ({
     return null;
   }
 
-  const onSubmit = () => workflowId ? removeWorkflow(workflowId) : removeWorkflows(ids)
-  .then(() => {
-    fetchWorkflows();
-    setSelectedWorkflows([]);
-    push('/workflows');
-  });
+  const onSubmit = () => { return ((workflowId ? removeWorkflow(workflowId) : removeWorkflows(ids))
+  .then(setSelectedWorkflows([])).then(fetchWorkflows()).then(push('/workflows')));
+  };
 
   const onCancel = () => goBack();
 
@@ -33,8 +30,10 @@ const RemoveWorkflowModal = ({
     <Modal
       isOpen
       isSmall
+      width={ '40%' }
       title = { '' }
       onClose={ onCancel }
+      onSave={ onSubmit }
       actions={ [
         <Button key="cancel" variant="secondary" type="button" onClick={ onCancel }>
           Cancel
