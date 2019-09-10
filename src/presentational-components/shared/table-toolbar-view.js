@@ -1,15 +1,14 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import debouncePromise from 'awesome-debounce-promise';
 import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
-import { Pagination } from '@redhat-cloud-services/frontend-components/components/Pagination';
+import { Pagination } from '@redhat-cloud-services/frontend-components';
 import { scrollToTop, getCurrentPage, getNewPage } from '../../helpers/shared/helpers';
+import { defaultSettings  } from '../../helpers/shared/pagination';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
 import { Section } from '@redhat-cloud-services/frontend-components';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/components/TableToolbar';
-import TopToolbar, { TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
-import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { DataListLoader } from './loader-placeholders';
 
 export const TableToolbarView = ({
@@ -32,13 +31,13 @@ export const TableToolbarView = ({
   const [ isLoading ] = useState(false);
 
   useEffect(() => {
-    fetchData(setRows, filterValue);
+    fetchData(setRows, filterValue, pagination);
     scrollToTop();
   }, []);
 
   useEffect(() => {
     setRows(createRows(data, filterValue));
-  }, [ data, filterValue, pagination.limit ]);
+  }, [ data, filterValue, pagination.limit, pagination.offset ]);
 
   const handleOnPerPageSelect = limit => request({
     offset: pagination.offset,
@@ -82,49 +81,44 @@ export const TableToolbarView = ({
     ? setRows(rows.map(row => ({ ...row, selected })))
     : setRows((rows) => setSelected(rows, id));
 
-  const renderToolbar = () => <TableToolbar>
-    <Level style={ { flex: 1 } }>
-      <LevelItem>
-        <Toolbar>
-          <FilterToolbar onFilterChange={ value => setFilterValue(value) } searchValue={ filterValue } placeholder={ `Find a ${titleSingular}` } />
-          { toolbarButtons() }
-        </Toolbar>
-      </LevelItem>
+  const renderToolbar = () => {
+    return (<TableToolbar>
+      <Level style={ { flex: 1 } }>
+        <LevelItem>
+          <Toolbar>
+            <FilterToolbar onFilterChange={ value => setFilterValue(value) } searchValue={ filterValue }
+              placeholder={ `Find a ${titleSingular}` }/>
+            { toolbarButtons() }
+          </Toolbar>
+        </LevelItem>
 
-      <LevelItem>
-        <Toolbar>
-          <ToolbarGroup>
-            <ToolbarItem>
-              <Pagination
-                itemsPerPage={ pagination.limit || 50 }
-                numberOfItems={ pagination.count || 50 }
-                onPerPageSelect={ handleOnPerPageSelect }
-                page={ getCurrentPage(pagination.limit, pagination.offset) }
-                onSetPage={ handleSetPage }
-                direction="down"
-              />
-            </ToolbarItem>
-          </ToolbarGroup>
-        </Toolbar>
-      </LevelItem>
-    </Level>
-  </TableToolbar>;
-
-  if (isLoading) {
-    return <DataListLoader/>;
-  }
+        <LevelItem>
+          <Toolbar>
+            <ToolbarGroup>
+              <ToolbarItem>
+                <Pagination
+                  itemsPerPage={ pagination.limit }
+                  numberOfItems={ pagination.count }
+                  onPerPageSelect={ handleOnPerPageSelect }
+                  page={ getCurrentPage(pagination.limit, pagination.offset) }
+                  onSetPage={ handleSetPage }
+                  direction="down"
+                />
+              </ToolbarItem>
+            </ToolbarGroup>
+          </Toolbar>
+        </LevelItem>
+      </Level>
+    </TableToolbar>);
+  };
 
   return (
-    <Fragment>
-      <TopToolbar>
-        <TopToolbarTitle title="Approval" />
-        <AppTabs/>
-      </TopToolbar>
-      <Section className="data-table-pane" page-type={ titlePlural }>
+    isLoading ? <DataListLoader/> :
+      <Section className="data-table-pane" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
         { routes() }
         { renderToolbar() }
         <Table
-          aria-label={ `Approval ${titlePlural} table` }
+          aria-label={ `${titlePlural} table` }
           onCollapse={ onCollapse }
           rows={ rows }
           cells={ columns }
@@ -136,7 +130,6 @@ export const TableToolbarView = ({
           <TableBody />
         </Table>
       </Section>
-    </Fragment>
   );
 };
 
@@ -149,9 +142,9 @@ TableToolbarView.propTypes = {
   fetchData: propTypes.func.isRequired,
   data: propTypes.array,
   pagination: propTypes.shape({
-    limit: propTypes.number.isRequired,
-    offset: propTypes.number.isRequired,
-    count: propTypes.number.isRequired
+    limit: propTypes.number,
+    offset: propTypes.number,
+    count: propTypes.number
   }),
   titlePlural: propTypes.string,
   titleSingular: propTypes.string,
@@ -164,7 +157,7 @@ TableToolbarView.propTypes = {
 
 TableToolbarView.defaultProps = {
   requests: [],
-  pagination: '',
+  pagination: defaultSettings,
   toolbarButtons: () => null,
   isSelectable: null,
   routes: () => null

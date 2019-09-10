@@ -96,6 +96,10 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
 
   return (
     <Fragment>
+      <TopToolbar>
+        <TopToolbarTitle title="User access management" />
+        <AppTabs/>
+      </TopToolbar>
       <TableToolbarView
         data={ workflows }
         isSelectable={ true }
