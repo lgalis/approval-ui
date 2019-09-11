@@ -23,7 +23,7 @@ const columns = [{
 'Decision'
 ];
 
-const Requests = ({ fetchRequests, pagination, history }) => {
+const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
   const [ filterValue, setFilterValue ] = useState('');
   const [ requests, setRequests ] = useState([]);
 
@@ -76,6 +76,7 @@ const Requests = ({ fetchRequests, pagination, history }) => {
         pagination={ pagination }
         filterValue={ filterValue }
         setFilterValue={ setFilterValue }
+        isLoading={ isLoading }
       />
     </Fragment>;
 
@@ -108,6 +109,7 @@ Requests.propTypes = {
 
 Requests.defaultProps = {
   requests: [],
+  isLoading: false,
   pagination: {}
 };
 

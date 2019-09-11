@@ -26,9 +26,9 @@ export const TableToolbarView = ({
   pagination,
   setCheckedItems,
   filterValue,
+  isLoading,
   setFilterValue }) => {
   const [ rows, setRows ] = useState([]);
-  const [ isLoading ] = useState(false);
 
   useEffect(() => {
     fetchData(setRows, filterValue, pagination);
@@ -152,11 +152,13 @@ TableToolbarView.propTypes = {
   actionResolver: propTypes.func,
   setCheckedItems: propTypes.func,
   filterValue: propTypes.string,
-  setFilterValue: propTypes.func
+  setFilterValue: propTypes.func,
+  isLoading: propTypes.bool
 };
 
 TableToolbarView.defaultProps = {
   requests: [],
+  isLoading: false,
   pagination: defaultSettings,
   toolbarButtons: () => null,
   isSelectable: null,

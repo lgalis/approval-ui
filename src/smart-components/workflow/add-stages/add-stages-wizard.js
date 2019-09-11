@@ -43,7 +43,7 @@ const AddWorkflow = ({
       title: 'Creating workflow',
       description: 'Creating workflow was cancelled by the user.'
     });
-    postMethod ?  postMethod().then(push('/workflows')) : push('/workflows');
+    push('/workflows');
   };
 
   return (

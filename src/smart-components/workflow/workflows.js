@@ -21,7 +21,7 @@ const columns = [{
 'Description'
 ];
 
-const Workflows = ({ fetchRbacGroups, fetchWorkflows, pagination, history }) => {
+const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, history }) => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
   const [ filterValue, setFilterValue ] = useState(undefined);
   const [ workflows, setWorkflows ] = useState([]);
@@ -129,6 +129,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, pagination, history }) => 
         toolbarButtons={ toolbarButtons }
         filterValue={ filterValue }
         setFilterValue={ setFilterValue }
+        isLoading={ isLoading }
       />
     </Fragment>
   );
@@ -168,6 +169,7 @@ Workflows.propTypes = {
 
 Workflows.defaultProps = {
   workflows: [],
+  isLoading: false,
   pagination: {}
 };
 
