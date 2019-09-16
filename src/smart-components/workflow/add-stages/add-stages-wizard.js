@@ -34,8 +34,7 @@ const AddWorkflow = ({
   const onSave = () => {
     const { name, description, wfGroups } = formData;
     const workflowData = { name, description, group_refs: wfGroups.map(group => group.value) };
-
-    addWorkflow(workflowData).then(postMethod ? postMethod().then(push('/workflows')) : push('/workflows'));
+    return addWorkflow(workflowData).then(() => postMethod()).then(() => (push('/workflows')));
   };
 
   const onCancel = () => {
@@ -44,7 +43,7 @@ const AddWorkflow = ({
       title: 'Creating workflow',
       description: 'Creating workflow was cancelled by the user.'
     });
-    postMethod ?  postMethod().then(push('/workflows')) : push('/workflows');
+    push('/workflows');
   };
 
   return (
