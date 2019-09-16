@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { Modal, Button, Bullseye, Text, TextContent, TextVariants } from '@patternfly/react-core';
-import { fetchWorkflows, removeWorkflow, removeWorkflows } from '../../redux/actions/workflow-actions';
+import { removeWorkflow, removeWorkflows } from '../../redux/actions/workflow-actions';
 
 const RemoveWorkflowModal = ({
   history: { goBack, push },
@@ -13,7 +13,7 @@ const RemoveWorkflowModal = ({
   ids,
   removeWorkflow,
   removeWorkflows,
-  fetchWorkflows,
+  fetchData,
   setSelectedWorkflows
 }) => {
   if (!workflowId && (!ids || ids.length === 0)) {
@@ -21,7 +21,7 @@ const RemoveWorkflowModal = ({
   }
 
   const onSubmit = () => { return ((workflowId ? removeWorkflow(workflowId) : removeWorkflows(ids))
-  .then(setSelectedWorkflows([])).then(fetchWorkflows()).then(push('/workflows')));
+  .then(setSelectedWorkflows([])).then(fetchData()).then(push('/workflows')));
   };
 
   const onCancel = () => goBack();
@@ -71,14 +71,13 @@ RemoveWorkflowModal.propTypes = {
   match: PropTypes.object,
   removeWorkflows: PropTypes.func.isRequired,
   removeWorkflow: PropTypes.func.isRequired,
-  fetchWorkflows: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired,
   setSelectedWorkflows: PropTypes.func.isRequired,
   workflowId: PropTypes.string,
   ids: PropTypes.array
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  fetchWorkflows,
   removeWorkflow,
   removeWorkflows
 }, dispatch);

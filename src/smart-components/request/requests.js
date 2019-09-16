@@ -9,6 +9,8 @@ import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import RequestDetail from './request-detail/request-detail';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
+import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
+import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 const columns = [{
   title: 'RequestId',
@@ -21,11 +23,15 @@ const columns = [{
 'Decision'
 ];
 
-const Requests = ({ fetchRequests, requests, pagination, history }) => {
+const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
   const [ filterValue, setFilterValue ] = useState('');
-  const fetchData = (setRows) => {
-    fetchRequests().then(({ value: { data }}) => setRows(createRows(data, filterValue)));
+  const [ requests, setRequests ] = useState([]);
+
+  const fetchData = () => {
+    fetchRequests().then(({ value: { data }}) => setRequests(data));
   };
+
+  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' }, { eventKey: 1, title: 'Workflows', name: '/workflows' }];
 
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
@@ -52,6 +58,10 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
 
   const renderRequestsList = () =>
     <Fragment>
+      <TopToolbar>
+        <TopToolbarTitle title="Approval" />
+        <AppTabs tabItems={ tabItems }/>
+      </TopToolbar>
       <TableToolbarView
         data={ requests }
         createRows={ createRows }
@@ -66,6 +76,7 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
         pagination={ pagination }
         filterValue={ filterValue }
         setFilterValue={ setFilterValue }
+        isLoading={ isLoading }
       />
     </Fragment>;
 
@@ -98,6 +109,7 @@ Requests.propTypes = {
 
 Requests.defaultProps = {
   requests: [],
+  isLoading: false,
   pagination: {}
 };
 
