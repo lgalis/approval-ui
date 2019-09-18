@@ -92,7 +92,7 @@ Requests.propTypes = {
   history: propTypes.shape({
     goBack: propTypes.func.isRequired,
     push: propTypes.func.isRequired
-  }).isRequired,
+  }),
   filteredItems: propTypes.array,
   requests: propTypes.array,
   platforms: propTypes.array,
@@ -101,9 +101,9 @@ Requests.propTypes = {
   setFilterValue: propTypes.func,
   fetchRequests: propTypes.func.isRequired,
   pagination: propTypes.shape({
-    limit: propTypes.number.isRequired,
-    offset: propTypes.number.isRequired,
-    count: propTypes.number.isRequired
+    limit: propTypes.number,
+    offset: propTypes.number,
+    count: propTypes.number
   })
 };
 

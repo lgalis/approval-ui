@@ -17,6 +17,7 @@ const EditWorkflowInfoModal = ({
   fetchWorkflow,
   updateWorkflow,
   postMethod,
+  workflow,
   isFetching
 }) => {
   const [ formData, setValues ] = useState({});
@@ -26,7 +27,7 @@ const EditWorkflowInfoModal = ({
   };
 
   useEffect(() => {
-    fetchWorkflow(id).then((data) => setValues({ ...formData, ...data.value }));
+    fetchWorkflow(id).then((data) => { setValues({ ...formData, ...data.value });});
   }, []);
 
   const onSave = () => {
@@ -46,7 +47,7 @@ const EditWorkflowInfoModal = ({
 
   return (
     <Modal
-      title={ `Edit workflow's stages` }
+      title={ `Edit workflow's information` }
       width={ '40%' }
       isOpen
       onClose={ onCancel }
@@ -58,7 +59,7 @@ const EditWorkflowInfoModal = ({
             { !isFetching && (
               <StageInformation formData = { formData }
                 handleChange = { handleChange }
-                title = { `Make any changes to workflow ${formData.name}` }/>) }
+                title = { `Make any changes to workflow ${workflow.name}` }/>) }
           </FormGroup>
         </StackItem>
         <StackItem>
@@ -97,6 +98,7 @@ EditWorkflowInfoModal.propTypes = {
   fetchWorkflow: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
+  workflow: PropTypes.object,
   id: PropTypes.string,
   editType: PropTypes.string,
   isFetching: PropTypes.bool
@@ -110,7 +112,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 }, dispatch);
 
 const mapStateToProps = ({ workflowReducer: { workflow, isRecordLoading }}) => ({
-  workflow: workflow.data,
+  workflow,
   isFetching: isRecordLoading
 });
 

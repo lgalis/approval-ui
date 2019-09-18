@@ -78,7 +78,7 @@ const RequestDetail = ({
 
 RequestDetail.propTypes = {
   match: PropTypes.shape({
-    path: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired
   }).isRequired,
   selectedRequest: PropTypes.shape({
     id: PropTypes.string
