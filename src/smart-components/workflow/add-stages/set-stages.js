@@ -90,7 +90,6 @@ const SetStages = ({ formData, handleChange, options, title }) => {
       </StackItem>);
   };
 
-  console.log('Debug - setStages - stageIndex, stageValues, formData', stageIndex, stageValues, formData);
   return (
     <Fragment>
       <Stack gutter="md">

@@ -20,20 +20,18 @@ const EditWorkflowInfoModal = ({
   workflow,
   isFetching
 }) => {
-  const [ formData, setValues ] = useState({});
+  const [ formData, setFormData ] = useState({});
 
-  const handleChange = data => {
-    setValues({ ...formData, ...data });
-  };
+  const handleChange = data => setFormData({ ...formData, ...data });
 
   useEffect(() => {
-    fetchWorkflow(id).then((data) => { setValues({ ...formData, ...data.value });});
+    fetchWorkflow(id).then((data) => { setFormData({ ...formData, ...data.value });});
   }, []);
 
   const onSave = () => {
     const { name, description } = formData;
-    const workflowData = { name, description };
-    updateWorkflow({ id, ...workflowData }).then(postMethod()).then(push('/workflows'));
+    const workflowData = { id, name, description };
+    updateWorkflow(workflowData).then(postMethod()).then(push('/workflows'));
   };
 
   const onCancel = () => {
