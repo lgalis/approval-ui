@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
@@ -14,16 +14,20 @@ import { Button,
 } from '@patternfly/react-core';
 
 const SetStages = ({ formData, handleChange, options, title }) => {
-
   const [ isExpanded, setExpanded ] = useState(false);
-  const [ stageValues, setStageValues ] = useState(formData.wfStageOptions ? formData.wfStageOptions : []);
-  const [ stageIndex, setStageIndex ] = useState(formData.wfStageOptions ? formData.wfStageOptions.length : 1);
+  const [ stageValues, setStageValues ] = useState([]);
+  const [ stageIndex, setStageIndex ] = useState(1);
   const [ inputValue, setInputValue ] = useState([]);
 
   const onInputChange = (newValue) => {
     const value = newValue.replace(/\W/g, '');
     setInputValue(value);
   };
+
+  useEffect(() => {
+    setStageValues(formData.wfGroups ? formData.wfGroups : []);
+    setStageIndex(formData.wfGroups ? formData.wfGroups.length : 1);
+  }, [ formData.wfGroups ]);
 
   const onToggle = (isExpanded) => {
     setExpanded(isExpanded);

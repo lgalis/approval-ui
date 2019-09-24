@@ -64,7 +64,7 @@ AddWorkflow.defaultProps = {
 
 AddWorkflow.propTypes = {
   history: PropTypes.shape({
-    goBack: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired
   }).isRequired,
   addWorkflow: PropTypes.func.isRequired,
   match: PropTypes.object,

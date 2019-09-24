@@ -15,16 +15,18 @@ export const workflowsInitialState = {
   },
   workflow: {},
   filterValue: '',
-  isLoading: false
+  isLoading: false,
+  isRecordLoading: false
 };
 
 const setLoadingState = state => ({ ...state, isLoading: true });
+const setRecordLoadingState = state => ({ ...state, isRecordLoading: true });
 const setWorkflows = (state, { payload }) => ({ ...state, workflows: payload, isLoading: false });
-const selectWorkflow = (state, { payload }) => ({ ...state, workflow: payload, isLoading: false });
+const selectWorkflow = (state, { payload }) => ({ ...state, workflow: payload, isRecordLoading: false });
 
 export default {
   [`${FETCH_WORKFLOWS}_PENDING`]: setLoadingState,
   [`${FETCH_WORKFLOWS}_FULFILLED`]: setWorkflows,
-  [`${FETCH_WORKFLOW}_PENDING`]: setLoadingState,
+  [`${FETCH_WORKFLOW}_PENDING`]: setRecordLoadingState,
   [`${FETCH_WORKFLOW}_FULFILLED`]: selectWorkflow
 };

@@ -11,7 +11,7 @@ import RequestInfoBar from './request-info-bar';
 import RequestStageTranscript from './request-stage-transcript';
 import { fetchRequest } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
-import TopToolbar, { TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
+import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
 
 const RequestDetail = ({
   match: { url },
@@ -78,7 +78,7 @@ const RequestDetail = ({
 
 RequestDetail.propTypes = {
   match: PropTypes.shape({
-    path: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired
   }).isRequired,
   selectedRequest: PropTypes.shape({
     id: PropTypes.string
