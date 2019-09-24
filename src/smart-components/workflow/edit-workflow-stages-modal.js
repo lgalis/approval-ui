@@ -85,6 +85,7 @@ const EditWorkflowStagesModal = ({
                 <Button aria-label={ 'Save' }
                   variant="primary"
                   type="submit"
+                  isDisabled={ isFetching }
                   onClick={ onSave }>Save</Button>
               </SplitItem>
               <SplitItem>
