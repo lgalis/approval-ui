@@ -38,7 +38,7 @@ export const RequestInfoBarLoader = () => (
 
 export const RequestLoader = ({ items, ...props }) => (
   <Fragment>
-    <Section className="data-table-pane">
+    <Section type={"content"}>
       <Grid gutter="md">
         <GridItem md={ 2 } className="detail-pane">
           <RequestInfoBarLoader/>
@@ -97,7 +97,7 @@ export const AppPlaceholder = props => (
 
 export const DataListLoader = ({ items, ...props }) => (
   <Fragment>
-    <DataList aria-labelledby="datalist-placeholder" style={ { margin: 32 } }>
+    <DataList aria-labelledby="datalist-placeholder">
       { [ ...Array(items) ].map((_item, index) => (
         <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
           <DataListItemRow aria-label="datalist-item-placeholder-row">
