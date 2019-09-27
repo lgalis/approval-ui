@@ -67,7 +67,7 @@ const RequestDetail = ({
       <Route exact path="/requests/detail/:id/deny" render={ props =>
         <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } /> } />
       { renderToolbar() }
-      <Section className="data-table-pane">
+      <Section type="content">
         <Grid gutter="md">
           { renderRequestDetails() }
         </Grid>
