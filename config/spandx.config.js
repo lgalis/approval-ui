@@ -2,7 +2,7 @@
 
 module.exports = {
   routes: {
-    '/hybrid/catalog/approval': { host: `http://localhost:8002` },
-    '/apps/approval': { host: `http://localhost:8002` }
+    '/beta/hybrid/catalog/approval': { host: `http://localhost:8002` },
+    '/beta/apps/approval': { host: `http://localhost:8002` }
   }
 };
