@@ -6,7 +6,8 @@ import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-stages/add-stages-wizard';
-import EditWorkflow from './edit-workflow-modal';
+import EditWorkflowInfo from './edit-workflow-info-modal';
+import EditWorkflowStages from './edit-workflow-stages-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { createRows } from './workflow-table-helpers';
@@ -21,7 +22,7 @@ const columns = [{
 'Description'
 ];
 
-const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, history }) => {
+const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, history, rbacGroups }) => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
   const [ filterValue, setFilterValue ] = useState(undefined);
   const [ workflows, setWorkflows ] = useState([]);
@@ -40,9 +41,9 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
   const routes = () => <Fragment>
     <Route exact path="/workflows/add-workflow" render={ props => <AddWorkflow { ...props }
       postMethod={ fetchData } /> }/>
-    <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflow editType= 'info' { ...props }
+    <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType= 'info' { ...props }
       postMethod={ fetchData } /> }/>
-    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflow editType= 'stages' { ...props }
+    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType= 'stages' rbacGroups={ rbacGroups }{ ...props }
       postMethod={ fetchData } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }
@@ -161,6 +162,7 @@ Workflows.propTypes = {
   fetchWorkflows: propTypes.func.isRequired,
   fetchRbacGroups: propTypes.func.isRequired,
   selectedWorkflows: propTypes.array,
+  rbacGroups: propTypes.array,
   pagination: propTypes.shape({
     limit: propTypes.number.isRequired,
     offset: propTypes.number.isRequired,
@@ -170,6 +172,7 @@ Workflows.propTypes = {
 
 Workflows.defaultProps = {
   workflows: [],
+  rbacGroups: {},
   isLoading: false,
   pagination: {}
 };

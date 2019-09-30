@@ -114,7 +114,7 @@ export const TableToolbarView = ({
 
   return (
     isLoading ? <DataListLoader/> :
-      <Section className="data-table-pane" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
+      <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
         { routes() }
         { renderToolbar() }
         <Table
