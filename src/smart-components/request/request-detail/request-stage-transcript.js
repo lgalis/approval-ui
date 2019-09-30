@@ -10,7 +10,9 @@ const RequestStageTranscript = ({ request }) => (<Fragment>
 
 RequestStageTranscript.propTypes = {
   request: PropTypes.shape({
-    content: PropTypes.object
+    content: PropTypes.object,
+    stages: PropTypes.array,
+    active_stage: PropTypes.string
   }).isRequired
 };
 

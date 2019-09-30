@@ -10,6 +10,7 @@ import { TableToolbarView } from '../../presentational-components/shared/table-t
 import RequestDetail from './request-detail/request-detail';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
+import { Stack, StackItem } from '@patternfly/react-core';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 const columns = [{
@@ -57,28 +58,32 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
   };
 
   const renderRequestsList = () =>
-    <Fragment>
-      <TopToolbar>
-        <TopToolbarTitle title="Approval" />
-        <AppTabs tabItems={ tabItems }/>
-      </TopToolbar>
-      <TableToolbarView
-        data={ requests }
-        createRows={ createRows }
-        columns={ columns }
-        fetchData={ fetchData }
-        request={ fetchRequests }
-        routes={ routes }
-        actionResolver={ actionResolver }
-        areActionsDisabled={ areActionsDisabled }
-        titlePlural="requests"
-        titleSingular="request"
-        pagination={ pagination }
-        filterValue={ filterValue }
-        setFilterValue={ setFilterValue }
-        isLoading={ isLoading }
-      />
-    </Fragment>;
+    <Stack>
+      <StackItem>
+        <TopToolbar>
+          <TopToolbarTitle title="Approval" />
+          <AppTabs tabItems={ tabItems }/>
+        </TopToolbar>
+      </StackItem>
+      <StackItem>
+        <TableToolbarView
+          data={ requests }
+          createRows={ createRows }
+          columns={ columns }
+          fetchData={ fetchData }
+          request={ fetchRequests }
+          routes={ routes }
+          actionResolver={ actionResolver }
+          areActionsDisabled={ areActionsDisabled }
+          titlePlural="requests"
+          titleSingular="request"
+          pagination={ pagination }
+          filterValue={ filterValue }
+          setFilterValue={ setFilterValue }
+          isLoading={ isLoading }
+        />
+      </StackItem>
+    </Stack>;
 
   return (
     <Switch>
@@ -92,7 +97,7 @@ Requests.propTypes = {
   history: propTypes.shape({
     goBack: propTypes.func.isRequired,
     push: propTypes.func.isRequired
-  }).isRequired,
+  }),
   filteredItems: propTypes.array,
   requests: propTypes.array,
   platforms: propTypes.array,
@@ -101,9 +106,9 @@ Requests.propTypes = {
   setFilterValue: propTypes.func,
   fetchRequests: propTypes.func.isRequired,
   pagination: propTypes.shape({
-    limit: propTypes.number.isRequired,
-    offset: propTypes.number.isRequired,
-    count: propTypes.number.isRequired
+    limit: propTypes.number,
+    offset: propTypes.number,
+    count: propTypes.number
   })
 };
 
