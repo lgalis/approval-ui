@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
@@ -6,11 +6,14 @@ import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-stages/add-stages-wizard';
-import EditWorkflow from './edit-workflow-modal';
+import EditWorkflowInfo from './edit-workflow-info-modal';
+import EditWorkflowStages from './edit-workflow-stages-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { createRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
+import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
+import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 const columns = [{
   title: 'Name',
@@ -19,26 +22,37 @@ const columns = [{
 'Description'
 ];
 
-const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, history }) => {
+const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, history, rbacGroups }) => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
   const [ filterValue, setFilterValue ] = useState(undefined);
-  const fetchData = (setRows, filterValue) => {
-    fetchRbacGroups().then(fetchWorkflows().then(({ value: { data }}) => setRows(createRows(data, filterValue))));
+  const [ workflows, setWorkflows ] = useState([]);
+
+  useEffect(() => {
+    fetchRbacGroups();
+  }, []);
+
+  const fetchData = () => {
+    fetchWorkflows().then(({ value: { data }}) => setWorkflows(data));
   };
+
+  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
+    { eventKey: 1, title: 'Workflows', name: '/workflows' }];
 
   const routes = () => <Fragment>
     <Route exact path="/workflows/add-workflow" render={ props => <AddWorkflow { ...props }
-      postMethod={ fetchWorkflows } /> }/>
-    <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflow editType= 'info' { ...props }
-      postMethod={ fetchWorkflows } /> }/>
-    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflow editType= 'stages' { ...props }
-      postMethod={ fetchWorkflows } /> }/>
+      postMethod={ fetchData } /> }/>
+    <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType= 'info' { ...props }
+      postMethod={ fetchData } /> }/>
+    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType= 'stages' rbacGroups={ rbacGroups }{ ...props }
+      postMethod={ fetchData } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }
+        fetchData={ fetchData }
         setSelectedWorkflows={ setSelectedWorkflows } /> }/>
     <Route exact path="/workflows/remove"
       render={ props => <RemoveWorkflow { ...props }
         ids={ selectedWorkflows }
+        fetchData={ fetchData }
         setSelectedWorkflows={ setSelectedWorkflows } /> }/>
   </Fragment>;
 
@@ -96,6 +110,10 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
 
   return (
     <Fragment>
+      <TopToolbar>
+        <TopToolbarTitle title="Approval" />
+        <AppTabs tabItems={ tabItems }/>
+      </TopToolbar>
       <TableToolbarView
         data={ workflows }
         isSelectable={ true }
@@ -112,6 +130,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, workflows, pagination, his
         toolbarButtons={ toolbarButtons }
         filterValue={ filterValue }
         setFilterValue={ setFilterValue }
+        isLoading={ isLoading }
       />
     </Fragment>
   );
@@ -142,6 +161,7 @@ Workflows.propTypes = {
   fetchWorkflows: propTypes.func.isRequired,
   fetchRbacGroups: propTypes.func.isRequired,
   selectedWorkflows: propTypes.array,
+  rbacGroups: propTypes.array,
   pagination: propTypes.shape({
     limit: propTypes.number.isRequired,
     offset: propTypes.number.isRequired,
@@ -151,6 +171,8 @@ Workflows.propTypes = {
 
 Workflows.defaultProps = {
   workflows: [],
+  rbacGroups: {},
+  isLoading: false,
   pagination: {}
 };
 

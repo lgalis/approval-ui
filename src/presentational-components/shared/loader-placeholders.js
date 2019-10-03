@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   DataList,
@@ -37,39 +37,37 @@ export const RequestInfoBarLoader = () => (
 );
 
 export const RequestLoader = ({ items, ...props }) => (
-  <Fragment>
-    <Section className="data-table-pane">
-      <Grid gutter="md">
-        <GridItem md={ 2 } className="detail-pane">
-          <RequestInfoBarLoader/>
-        </GridItem>
-        <GridItem md={ 10 } className = "detail-pane">
-          <DataList aria-label="datalist-placeholder" style={ { margin: 32 } }>
-            { [ ...Array(items) ].map((_item, index) => (
-              <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
-                <DataListItemRow>
-                  <DataListItemCells dataListCells={ [
-                    <DataListCell key="1">
-                      <ContentLoader
-                        height={ 12 }
-                        width={ 300 }
-                        speed={ 2 }
-                        primaryColor="#FFFFFF"
-                        secondaryColor="#ecebeb"
-                        { ...props }>
-                        <rect x="0" y="0" rx="0" ry="0" width="300" height="12" />
-                      </ContentLoader>
-                    </DataListCell>
-                  ] }
-                  />
-                </DataListItemRow>
-              </DataListItem>
-            )) }
-          </DataList>
-        </GridItem>
-      </Grid>
-    </Section>
-  </Fragment>
+  <Section type="content">
+    <Grid gutter="md">
+      <GridItem md={ 2 } className="detail-pane">
+        <RequestInfoBarLoader/>
+      </GridItem>
+      <GridItem md={ 10 } className = "detail-pane">
+        <DataList aria-label="datalist-placeholder" style={ { margin: 32 } }>
+          { [ ...Array(items) ].map((_item, index) => (
+            <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
+              <DataListItemRow>
+                <DataListItemCells dataListCells={ [
+                  <DataListCell key="1">
+                    <ContentLoader
+                      height={ 12 }
+                      width={ 300 }
+                      speed={ 2 }
+                      primaryColor="#FFFFFF"
+                      secondaryColor="#ecebeb"
+                      { ...props }>
+                      <rect x="0" y="0" rx="0" ry="0" width="300" height="12" />
+                    </ContentLoader>
+                  </DataListCell>
+                ] }
+                />
+              </DataListItemRow>
+            </DataListItem>
+          )) }
+        </DataList>
+      </GridItem>
+    </Grid>
+  </Section>
 );
 
 RequestLoader.propTypes = {
@@ -96,8 +94,8 @@ export const AppPlaceholder = props => (
 );
 
 export const DataListLoader = ({ items, ...props }) => (
-  <Fragment>
-    <DataList aria-labelledby="datalist-placeholder" style={ { margin: 32 } }>
+  <Section type="content">
+    <DataList aria-labelledby="datalist-placeholder">
       { [ ...Array(items) ].map((_item, index) => (
         <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
           <DataListItemRow aria-label="datalist-item-placeholder-row">
@@ -120,7 +118,7 @@ export const DataListLoader = ({ items, ...props }) => (
         </DataListItem>
       )) }
     </DataList>
-  </Fragment>
+  </Section>
 );
 
 DataListLoader.propTypes = {
@@ -153,3 +151,17 @@ export const WorkflowStageLoader = () => (
     </FormGroup>
   </Form>
 );
+
+export const ToolbarTitlePlaceholder = props => (
+  <ContentLoader
+    height={ 21 }
+    width={ 200 }
+    speed={ 2 }
+    primaryColor="#f3f3f3"
+    secondaryColor="#ecebeb"
+    { ...props }
+  >
+    <rect x="0" y="0" rx="0" ry="0" width="200" height="21" />
+  </ContentLoader>
+);
+

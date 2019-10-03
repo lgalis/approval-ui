@@ -6,11 +6,12 @@ import ApprovalBreadcrumbs from './breadcrubms';
 
 import './top-toolbar.scss';
 
-const TopToolbar = ({ children,  breadcrumbs, paddingBottom }) => (
-  <div className={ `pf-u-pt-xl pf-u-pr-xl pf-u-pl-xl ${paddingBottom ? 'pf-u-pb-xl' : ''} top-toolbar` }>
-    <Level className="pf-u-mb-md">
+export const TopToolbar = ({ children,  breadcrumbs, paddingBottom }) => (
+  <div className={ `pf-u-pt-xl pf-u-pr-xl pf-u-pl-lg ${paddingBottom ? 'pf-u-pb-sm' : ''} top-toolbar` }>
+    { breadcrumbs && (<Level className="pf-u-mb-md">
       <ApprovalBreadcrumbs { ...breadcrumbs } />
-    </Level>
+    </Level>)
+    }
     { children }
   </div>
 );
@@ -28,15 +29,17 @@ TopToolbar.defaultProps = {
   paddingBottom: false
 };
 
-export default TopToolbar;
-
-export const TopToolbarTitle = ({ title, children }) => (
+export const TopToolbarTitle = ({ title, description, children }) => (
   <Fragment>
-    <Level className="pf-u-mb-xl">
+    <Level>
       <LevelItem>
-        <TextContent className="top-toolbar-title">
-          { <Text component={ TextVariants.h2 }>{ title || <ToolbarTitlePlaceholder /> }</Text> }
+        <TextContent className="pf-u-mb-sm">
+          { <Text component={ TextVariants.h1 }>{ title || <ToolbarTitlePlaceholder /> }</Text> }
         </TextContent>
+        { description &&
+              <TextContent className="pf-u-pt-sm pf-u-mb-md">
+                <Text component={ TextVariants.p }>{ description }</Text>
+              </TextContent> }
       </LevelItem>
       { children }
     </Level>
@@ -44,7 +47,8 @@ export const TopToolbarTitle = ({ title, children }) => (
 );
 
 TopToolbarTitle.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  description: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node)

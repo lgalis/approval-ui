@@ -9,6 +9,9 @@ import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import RequestDetail from './request-detail/request-detail';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
+import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
+import { Stack, StackItem } from '@patternfly/react-core';
+import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 const columns = [{
   title: 'RequestId',
@@ -21,11 +24,15 @@ const columns = [{
 'Decision'
 ];
 
-const Requests = ({ fetchRequests, requests, pagination, history }) => {
+const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
   const [ filterValue, setFilterValue ] = useState('');
-  const fetchData = (setRows) => {
-    fetchRequests().then(({ value: { data }}) => setRows(createRows(data, filterValue)));
+  const [ requests, setRequests ] = useState([]);
+
+  const fetchData = () => {
+    fetchRequests().then(({ value: { data }}) => setRequests(data));
   };
+
+  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' }, { eventKey: 1, title: 'Workflows', name: '/workflows' }];
 
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
@@ -51,23 +58,32 @@ const Requests = ({ fetchRequests, requests, pagination, history }) => {
   };
 
   const renderRequestsList = () =>
-    <Fragment>
-      <TableToolbarView
-        data={ requests }
-        createRows={ createRows }
-        columns={ columns }
-        fetchData={ fetchData }
-        request={ fetchRequests }
-        routes={ routes }
-        actionResolver={ actionResolver }
-        areActionsDisabled={ areActionsDisabled }
-        titlePlural="requests"
-        titleSingular="request"
-        pagination={ pagination }
-        filterValue={ filterValue }
-        setFilterValue={ setFilterValue }
-      />
-    </Fragment>;
+    <Stack>
+      <StackItem>
+        <TopToolbar>
+          <TopToolbarTitle title="Approval" />
+          <AppTabs tabItems={ tabItems }/>
+        </TopToolbar>
+      </StackItem>
+      <StackItem>
+        <TableToolbarView
+          data={ requests }
+          createRows={ createRows }
+          columns={ columns }
+          fetchData={ fetchData }
+          request={ fetchRequests }
+          routes={ routes }
+          actionResolver={ actionResolver }
+          areActionsDisabled={ areActionsDisabled }
+          titlePlural="requests"
+          titleSingular="request"
+          pagination={ pagination }
+          filterValue={ filterValue }
+          setFilterValue={ setFilterValue }
+          isLoading={ isLoading }
+        />
+      </StackItem>
+    </Stack>;
 
   return (
     <Switch>
@@ -81,7 +97,7 @@ Requests.propTypes = {
   history: propTypes.shape({
     goBack: propTypes.func.isRequired,
     push: propTypes.func.isRequired
-  }).isRequired,
+  }),
   filteredItems: propTypes.array,
   requests: propTypes.array,
   platforms: propTypes.array,
@@ -90,14 +106,15 @@ Requests.propTypes = {
   setFilterValue: propTypes.func,
   fetchRequests: propTypes.func.isRequired,
   pagination: propTypes.shape({
-    limit: propTypes.number.isRequired,
-    offset: propTypes.number.isRequired,
-    count: propTypes.number.isRequired
+    limit: propTypes.number,
+    offset: propTypes.number,
+    count: propTypes.number
   })
 };
 
 Requests.defaultProps = {
   requests: [],
+  isLoading: false,
   pagination: {}
 };
 

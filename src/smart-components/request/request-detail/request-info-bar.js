@@ -35,7 +35,8 @@ const RequestInfoBar = ({ request }) => {
 
 RequestInfoBar.propTypes = {
   request: PropTypes.shape({
-    content: PropTypes.object
+    content: PropTypes.object,
+    requester: PropTypes.string
   }).isRequired
 };
 export default RequestInfoBar;
