@@ -20,12 +20,16 @@ const ActionModal = ({
 }) => {
   const [ selectedRequest, setSelectedRequest ] = useState({});
 
-  const fetchData = (setRequestData) => {
-    fetchRequest(id).payload.then((data) => setRequestData(data));
+  const setRequestData = (requestData) => {
+    setSelectedRequest(requestData);
+  };
+
+  const fetchData = () => {
+    fetchRequest(id).payload.then((data) => setRequestData(data)).catch(() => setRequestData(undefined));
   };
 
   useEffect(() => {
-    fetchData(setSelectedRequest);
+    fetchData();
   }, []);
 
   const onSubmit = async (data) => {
@@ -33,9 +37,19 @@ const ActionModal = ({
     const activeStage =  selectedRequest.stages[selectedRequest.active_stage - 1];
     const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
     if (activeStage) {
-      createStageAction(actionName, activeStage.id,
-        { operation: operationType[actionType], processed_by: 'User', ...data }).
-      then(postMethod ? postMethod().then(push(closeUrl)) : push(closeUrl));
+      return postMethod ? createStageAction(actionName, activeStage.id,
+        { operation: operationType[actionType], processed_by: 'User', ...data }).then(() => postMethod()).then(() => push(closeUrl)) :
+        createStageAction(actionName, activeStage.id,
+          { operation: operationType[actionType], processed_by: 'User', ...data }).then(() => push(closeUrl));
+    }
+    else {
+      const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
+      addNotification({
+        variant: 'warning',
+        title: actionName,
+        description: `${actionName} - no active stage.`
+      });
+      push(closeUrl);
     }
   };
 
@@ -68,8 +82,7 @@ const ActionModal = ({
 };
 
 ActionModal.defaultProps = {
-  closeUrl: '/requests',
-  fetchData: true
+  closeUrl: '/requests'
 };
 
 ActionModal.propTypes = {
@@ -77,7 +90,6 @@ ActionModal.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   addNotification: PropTypes.func.isRequired,
-  fetchData: PropTypes.bool,
   createStageAction: PropTypes.func.isRequired,
   fetchRequest: PropTypes.func,
   postMethod: PropTypes.func,

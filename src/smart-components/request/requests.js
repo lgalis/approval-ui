@@ -37,11 +37,11 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
       actionType={ 'Add Comment' }
-      postMethod={ fetchRequests } /> }/>
+      postMethod={ fetchData } /> }/>
     <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' }
-      postMethod={ fetchRequests }/> } />
+      postMethod={ fetchData }/> } />
     <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' }
-      postMethod={ fetchRequests }/> } />
+      postMethod={ fetchData }/> } />
   </Fragment>;
 
   const areActionsDisabled = (requestData) => { return !isRequestStateActive(requestData.state);};
