@@ -9,7 +9,7 @@ import {
 import { CheckCircleIcon, CommentIcon, EnvelopeIcon, OutlinedTimesCircleIcon, AngleDoubleRightIcon } from '@patternfly/react-icons';
 
 const operationDisplayName = { memo: 'Comment from', approve: 'Approved By',
-  deny: 'Denied by', notify: 'Notified By', skip: 'Skipped by' };
+  deny: 'Denied by', notify: 'Notified By', skip: 'Skipped by', cancel: 'Canceled by' };
 
 const operationIcon = {
   memo: <CommentIcon/>,
@@ -20,6 +20,7 @@ const operationIcon = {
 };
 
 export const ActionTranscript = actionList => {
+  console.log('DEBUG - action list', actionList);
   return (
     <Stack>
       { actionList.actionList.map(actionItem =>
