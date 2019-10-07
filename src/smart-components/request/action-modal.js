@@ -38,9 +38,9 @@ const ActionModal = ({
     const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
     if (activeStage) {
       return postMethod ? createStageAction(actionName, activeStage.id,
-        { operation: operationType[actionType], processed_by: 'User', ...data }).then(() => postMethod()).then(() => push(closeUrl)) :
+        { operation: operationType[actionType], ...data }).then(() => postMethod()).then(() => push(closeUrl)) :
         createStageAction(actionName, activeStage.id,
-          { operation: operationType[actionType], processed_by: 'User', ...data }).then(() => push(closeUrl));
+          { operation: operationType[actionType], ...data }).then(() => push(closeUrl));
     }
     else {
       const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
