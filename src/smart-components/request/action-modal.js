@@ -47,6 +47,7 @@ const ActionModal = ({
       addNotification({
         variant: 'warning',
         title: actionName,
+        dismissable: true,
         description: `${actionName} - no active stage.`
       });
       push(closeUrl);
@@ -58,6 +59,7 @@ const ActionModal = ({
     addNotification({
       variant: 'warning',
       title: actionName,
+      dismissable: true,
       description: `${actionName} was cancelled by the user.`
     });
     push(closeUrl);

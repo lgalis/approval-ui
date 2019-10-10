@@ -49,6 +49,7 @@ const EditWorkflowStagesModal = ({
     addNotification({
       variant: 'warning',
       title: `Edit workflow's stages`,
+      dismissable: true,
       description: `Edit workflow's stages was cancelled by the user.`
     });
     push('/workflows');

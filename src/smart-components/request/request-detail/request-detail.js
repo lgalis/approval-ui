@@ -17,7 +17,8 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 const RequestDetail = ({
   match: { params: { id }, url },
   isLoading,
-  fetchRequest
+  fetchRequest,
+  addNotification
 }) => {
   const [ selectedRequest, setSelectedRequest ] = useState({});
 
@@ -26,6 +27,7 @@ const RequestDetail = ({
       addNotification({
         variant: 'warning',
         title: `Request ${id}`,
+        dismissable: true,
         description: `Request ${id} not found`
       });});
   };
@@ -93,7 +95,8 @@ RequestDetail.propTypes = {
   }).isRequired,
   isLoading: PropTypes.bool,
   id: PropTypes.string,
-  fetchRequest: PropTypes.func.isRequired
+  fetchRequest: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -103,7 +106,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  fetchRequest
+  fetchRequest,
+  addNotification
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RequestDetail));
