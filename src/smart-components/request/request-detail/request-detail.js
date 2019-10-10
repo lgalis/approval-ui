@@ -12,6 +12,7 @@ import RequestStageTranscript from './request-stage-transcript';
 import { fetchRequest } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
 const RequestDetail = ({
   match: { params: { id }, url },
@@ -21,7 +22,12 @@ const RequestDetail = ({
   const [ selectedRequest, setSelectedRequest ] = useState({});
 
   const fetchData = () => {
-    fetchRequest(id).then((data) => setSelectedRequest(data.value)).catch(() => setSelectedRequest(undefined));
+    fetchRequest(id).then((data) => setSelectedRequest(data.value)).catch(() => { setSelectedRequest(undefined);
+      addNotification({
+        variant: 'warning',
+        title: `Request ${id}`,
+        description: `Request ${id} not found`
+      });});
   };
 
   useEffect(() => {
