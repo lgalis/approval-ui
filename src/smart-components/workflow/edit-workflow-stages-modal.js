@@ -42,7 +42,7 @@ const EditWorkflowStagesModal = ({
   const onSave = () => {
     const { wfGroups } = formData;
     const workflowData = { group_refs: wfGroups.map(group => group.value)  };
-    updateWorkflow({ id, ...workflowData }).then(postMethod()).then(push('/workflows'));
+    updateWorkflow({ id, ...workflowData }).then(() => postMethod()).then(()=>push('/workflows'));
   };
 
   const onCancel = () => {
@@ -136,8 +136,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchRbacGroups
 }, dispatch);
 
-const mapStateToProps = ({ workflowReducer: { workflow, isRecordLoading }}) => ({
-  workflow: workflow.data,
+const mapStateToProps = ({ workflowReducer: { isRecordLoading }}) => ({
   isFetching: isRecordLoading
 });
 
