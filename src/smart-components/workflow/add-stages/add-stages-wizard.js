@@ -41,6 +41,7 @@ const AddWorkflow = ({
     addNotification({
       variant: 'warning',
       title: 'Creating workflow',
+      dismissable: true,
       description: 'Creating workflow was cancelled by the user.'
     });
     push('/workflows');

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -12,32 +12,42 @@ import RequestStageTranscript from './request-stage-transcript';
 import { fetchRequest } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
 const RequestDetail = ({
-  match: { url },
+  match: { params: { id }, url },
   isLoading,
   fetchRequest,
-  requestId,
-  selectedRequest
+  addNotification
 }) => {
+  const [ selectedRequest, setSelectedRequest ] = useState({});
+
+  const fetchData = () => {
+    fetchRequest(id).then((data) => setSelectedRequest(data.value)).catch(() => { setSelectedRequest(undefined);
+      addNotification({
+        variant: 'warning',
+        title: `Request ${id}`,
+        dismissable: true,
+        description: `Request ${id} not found`
+      });});
+  };
+
   useEffect(() => {
-    if (requestId) {
-      fetchRequest(requestId);
-    }
-  }, [ requestId ]);
+    fetchData();
+  }, []);
 
   const breadcrumbsList = () => [
     { title: 'Request Queue', to: '/requests' },
-    { title: requestId, isActive: true }
+    { title: id, isActive: true }
   ];
 
   const renderToolbar = () => (<TopToolbar breadcrumbs={ breadcrumbsList() } paddingBottom={ true }>
-    <TopToolbarTitle title = { `Request ${requestId}` }>
+    <TopToolbarTitle title = { `Request ${id}` }>
     </TopToolbarTitle>
   </TopToolbar>);
 
   const renderRequestDetails = () => {
-    if (isLoading || Object.keys(selectedRequest).length === 0) {
+    if (isLoading || !selectedRequest || Object.keys(selectedRequest).length === 0) {
       return (
         <Section style={ { backgroundColor: 'white', minHeight: '100%' } }>
           <RequestLoader />
@@ -61,11 +71,11 @@ const RequestDetail = ({
   return (
     <Fragment>
       <Route exact path="/requests/detail/:id/add_comment" render={ props =>
-        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ url }/> }/>
+        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ url } postMethod={ fetchData }/> }/>
       <Route exact path="/requests/detail/:id/approve" render={ props =>
-        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ url }/> } />
+        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ url } postMethod={ fetchData } /> } />
       <Route exact path="/requests/detail/:id/deny" render={ props =>
-        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } /> } />
+        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } postMethod={ fetchData }/> } />
       { renderToolbar() }
       <Section type="content">
         <Grid gutter="md">
@@ -80,27 +90,24 @@ RequestDetail.propTypes = {
   match: PropTypes.shape({
     url: PropTypes.string.isRequired
   }).isRequired,
-  selectedRequest: PropTypes.shape({
-    id: PropTypes.string
-  }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
   isLoading: PropTypes.bool,
-  requestId: PropTypes.string,
-  fetchRequest: PropTypes.func.isRequired
+  id: PropTypes.string,
+  fetchRequest: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, { match: { params: { id }}}) => {
+const mapStateToProps = (state) => {
   return {
-    selectedRequest: state.requestReducer.selectedRequest,
-    isLoading: state.requestReducer.isRequestDataLoading,
-    requestId: id
+    isLoading: state.requestReducer.isRequestDataLoading
   };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  fetchRequest
+  fetchRequest,
+  addNotification
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RequestDetail));
