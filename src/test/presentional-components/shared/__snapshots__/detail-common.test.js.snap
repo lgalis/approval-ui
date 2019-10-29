@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ItemDetails /> should render correctly 1`] = `
+<ItemDetails
+  bar="Bar prop"
+  baz="Should not be rendered"
+  foo="Foo prop"
+  toDisplay={
+    Array [
+      "foo",
+      "bar",
+    ]
+  }
+>
+  <div>
+    <PropLine
+      key="prop-foo"
+      value="Foo prop"
+    >
+      <div
+        className="card_element"
+      >
+        Foo prop
+      </div>
+    </PropLine>
+    <PropLine
+      key="prop-bar"
+      value="Bar prop"
+    >
+      <div
+        className="card_element"
+      >
+        Bar prop
+      </div>
+    </PropLine>
+  </div>
+</ItemDetails>
+`;
