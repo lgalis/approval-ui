@@ -4,9 +4,11 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-services/frontend-components-notifications';
 import {
   FETCH_REQUESTS,
-  FETCH_REQUEST
+  FETCH_REQUEST,
+  CREATE_STAGE_ACTION
 } from '../../../redux/action-types';
 import {
+  createStageAction,
   fetchRequests,
   fetchRequest
 } from '../../../redux/actions/request-actions';
@@ -138,6 +140,71 @@ describe('Request actions', () => {
 
     return store.dispatch(fetchRequest(11)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  it('createStageAction should create correct actions on success ', (done) => {
+    expect.assertions(2);
+    const store = mockStore({});
+
+    apiClientMock.post(`${APPROVAL_API_BASE}/stages/123/actions`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual('actionIn');
+      return res.status(200).body({ foo: 'bar' });
+    }));
+
+    const expectedActions = [{
+      type: `${CREATE_STAGE_ACTION}_PENDING`,
+      meta: expect.any(Object)
+    }, {
+      type: ADD_NOTIFICATION,
+      payload: {
+        description: 'The actionName was successful.',
+        dismissDelay: 5000,
+        dismissable: true,
+        title: 'Success',
+        variant: 'success'
+      }
+    }, {
+      type: `${CREATE_STAGE_ACTION}_FULFILLED`,
+      meta: expect.any(Object),
+      payload: { foo: 'bar' }
+    }];
+
+    store.dispatch(createStageAction('actionName', '123', 'actionIn')).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+      done();
+    });
+  });
+
+  it('createStageAction should create correct actions when failed ', (done) => {
+    expect.assertions(2);
+    const store = mockStore({});
+
+    apiClientMock.post(`${APPROVAL_API_BASE}/stages/123/actions`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual('actionIn');
+      return res.status(500);
+    }));
+
+    const expectedActions = [{
+      type: `${CREATE_STAGE_ACTION}_PENDING`,
+      meta: expect.any(Object)
+    }, {
+      type: ADD_NOTIFICATION,
+      payload: {
+        description: 'The actionName action failed.',
+        dismissDelay: 5000,
+        dismissable: true,
+        title: 'actionName error',
+        variant: 'danger'
+
+      }
+    }, expect.objectContaining({
+      type: `${CREATE_STAGE_ACTION}_REJECTED`
+    }) ];
+
+    store.dispatch(createStageAction('actionName', '123', 'actionIn')).catch(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+      done();
     });
   });
 });
