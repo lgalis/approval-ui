@@ -1,7 +1,8 @@
-import workflowReducer from '../../../redux/reducers/workflow-reducer';
+import workflowReducer, { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
 import { callReducer } from '../redux-helpers';
 
 import {
+  FETCH_WORKFLOW,
   FETCH_WORKFLOWS
 } from '../../../redux/action-types';
 
@@ -22,6 +23,16 @@ describe('Workflow reducer', () => {
     const payload = { data: 'Foo' };
     const expectedState = { isLoading: false, workflows: payload };
     expect(reducer(initialState, { type: `${FETCH_WORKFLOWS}_FULFILLED`, payload })).toEqual(expectedState);
+  });
+
+  it('should set record loading state', () => {
+    const expectedState = { ... workflowsInitialState, isRecordLoading: true };
+    expect(reducer({ ...workflowsInitialState }, { type: `${FETCH_WORKFLOW}_PENDING` })).toEqual(expectedState);
+  });
+
+  it('should select workflow and set record loading state to true', () => {
+    const expectedState = { ... workflowsInitialState, isRecordLoading: false, workflow: 'my workflow' };
+    expect(reducer({ ...workflowsInitialState }, { type: `${FETCH_WORKFLOW}_FULFILLED`, payload: 'my workflow' })).toEqual(expectedState);
   });
 
 });
