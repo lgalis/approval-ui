@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SetStages /> should render correctly 1`] = `
+<SetStages
+  formData={
+    Object {
+      "wfGroups": Array [],
+    }
+  }
+  handleChange={[MockFunction]}
+  options={Array []}
+  title="Set stages test"
+>
+  <Stack
+    gutter="md"
+  >
+    <div
+      className="pf-l-stack pf-m-gutter"
+    >
+      <StackItem>
+        <div
+          className="pf-l-stack__item"
+        >
+          <Title
+            size="md"
+          >
+            <h1
+              className="pf-c-title pf-m-md"
+            >
+              Set stages test
+            </h1>
+          </Title>
+        </div>
+      </StackItem>
+      <StackItem>
+        <div
+          className="pf-l-stack__item"
+        >
+          <Stack
+            gutter="sm"
+          >
+            <div
+              className="pf-l-stack pf-m-gutter"
+            >
+              <StackItem
+                style={
+                  Object {
+                    "borderTop": 10,
+                  }
+                }
+              >
+                <div
+                  className="pf-l-stack__item"
+                  style={
+                    Object {
+                      "borderTop": 10,
+                    }
+                  }
+                >
+                  <Component
+                    isInline={true}
+                    onClick={[Function]}
+                    variant="link"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": Array [
+                            <PlusIcon
+                              color="currentColor"
+                              noVerticalAlign={false}
+                              size="sm"
+                              title={null}
+                            />,
+                            " ",
+                            "Add a stage",
+                          ],
+                          "isInline": true,
+                          "onClick": [Function],
+                          "variant": "link",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        isInline={true}
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="link"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-link pf-m-inline"
+                          disabled={false}
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          <PlusIcon
+                            color="currentColor"
+                            noVerticalAlign={false}
+                            size="sm"
+                            title={null}
+                          >
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              fill="currentColor"
+                              height="1em"
+                              role="img"
+                              style={
+                                Object {
+                                  "verticalAlign": "-0.125em",
+                                }
+                              }
+                              viewBox="0 0 448 512"
+                              width="1em"
+                            >
+                              <path
+                                d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                                transform=""
+                              />
+                            </svg>
+                          </PlusIcon>
+                           
+                          Add a stage
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                </div>
+              </StackItem>
+            </div>
+          </Stack>
+        </div>
+      </StackItem>
+    </div>
+  </Stack>
+</SetStages>
+`;
