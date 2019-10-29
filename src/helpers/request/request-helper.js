@@ -18,10 +18,6 @@ export async function fetchRequestWithStagesAndActions(id) {
   return { ...requestData, stages: requestStages.data };
 }
 
-export async function fetchStagesForRequest(id) {
-  return await stageApi.listStagesByRequest(id);
-}
-
 export async function fetchStagesWithActions(requestId) {
   const requestStages = await stageApi.listStagesByRequest(requestId);
   const stages = requestStages.data;
@@ -37,5 +33,3 @@ export async function fetchStagesWithActions(requestId) {
 export async function createStageAction (stageId, actionIn) {
   return await actionApi.createAction(stageId, actionIn);
 }
-
-;

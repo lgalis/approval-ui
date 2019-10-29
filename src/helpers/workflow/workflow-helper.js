@@ -48,8 +48,8 @@ export async function fetchWorkflow(id) {
   return await workflowApi.showWorkflow(id);
 }
 
-export async function updateWorkflow(data) {
-  return await workflowApi.updateWorkflow(data.id, data);
+export function updateWorkflow(data) {
+  return workflowApi.updateWorkflow(data.id, data);
 }
 
 export  function addWorkflow(workflow) {

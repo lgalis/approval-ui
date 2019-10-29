@@ -1,7 +1,8 @@
-import requestReducer from '../../../redux/reducers/request-reducer';
+import requestReducer, { requestsInitialState } from '../../../redux/reducers/request-reducer';
 import { callReducer } from '../redux-helpers';
 
 import {
+  FETCH_REQUEST,
   FETCH_REQUESTS
 } from '../../../redux/action-types';
 
@@ -24,4 +25,17 @@ describe('Request reducer', () => {
     expect(reducer(initialState, { type: `${FETCH_REQUESTS}_FULFILLED`, payload })).toEqual(expectedState);
   });
 
+  it('should set single request and set loading state to false', () => {
+    const expectedState = {
+      ...requestsInitialState,
+      isRequestDataLoading: false,
+      selectedRequest: 'single request'
+    };
+    expect(reducer(
+      { ...requestsInitialState, isRequestDataLoading: true },
+      { type: `${FETCH_REQUEST}_FULFILLED`, payload: 'single request' },
+    ))
+    .toEqual(expectedState);
+
+  });
 });

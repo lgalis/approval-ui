@@ -31,7 +31,7 @@ const EditWorkflowInfoModal = ({
   const onSave = () => {
     const { name, description } = formData;
     const workflowData = { id, name, description };
-    updateWorkflow(workflowData).then(postMethod()).then(push('/workflows'));
+    updateWorkflow(workflowData).then(() => postMethod()).then(() => push('/workflows'));
   };
 
   const onCancel = () => {
