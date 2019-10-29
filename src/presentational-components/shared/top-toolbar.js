@@ -9,7 +9,7 @@ import './top-toolbar.scss';
 export const TopToolbar = ({ children,  breadcrumbs, paddingBottom }) => (
   <div className={ `pf-u-pt-xl pf-u-pr-xl pf-u-pl-lg ${paddingBottom ? 'pf-u-pb-sm' : ''} top-toolbar` }>
     { breadcrumbs && (<Level className="pf-u-mb-md">
-      <ApprovalBreadcrumbs { ...breadcrumbs } />
+      <ApprovalBreadcrumbs breadcrumbs={ breadcrumbs } />
     </Level>)
     }
     { children }

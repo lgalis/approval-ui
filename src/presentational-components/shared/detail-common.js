@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// This whole thing is a bit strange
-const PropLine = ({ value }) => <div className = "card_element">{ value }</div>;
+const PropLine = ({ value }) => <div className="card_element">{ value }</div>;
 
 PropLine.propTypes = {
   value: PropTypes.oneOfType([
@@ -15,7 +14,7 @@ PropLine.propTypes = {
   ]).isRequired
 };
 
-const ItemDetails = ({ toDisplay = [], ...item }) => (
+const ItemDetails = ({ toDisplay, ...item }) => (
   <div>
     { toDisplay.map(prop => <PropLine key={ `prop-${prop}` } value={ item[prop] } />) }
   </div>

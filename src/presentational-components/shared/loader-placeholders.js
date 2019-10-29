@@ -95,7 +95,7 @@ export const AppPlaceholder = props => (
 
 export const DataListLoader = ({ items, ...props }) => (
   <Section type="content">
-    <DataList aria-labelledby="datalist-placeholder">
+    <DataList aria-label="data-list-loader" aria-labelledby="datalist-placeholder">
       { [ ...Array(items) ].map((_item, index) => (
         <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
           <DataListItemRow aria-label="datalist-item-placeholder-row">
