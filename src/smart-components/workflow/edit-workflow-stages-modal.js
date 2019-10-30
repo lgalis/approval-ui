@@ -60,11 +60,10 @@ const EditWorkflowStagesModal = ({
       title={ `Edit workflow's stages` }
       width={ '40%' }
       isOpen
-      onClose={ onCancel }
-      onSave={ onSave }>
+      onClose={ onCancel }>
       <Stack gutter="md">
         <StackItem>
-          <FormGroup>
+          <FormGroup fieldId="workflow-stages-formgroup">
             { isFetching && <WorkflowStageLoader/> }
             { !isFetching && rbacGroups.length === 0 && (
               <Title headingLevel="h2" size="1xl">
