@@ -55,40 +55,39 @@ const SetStages = ({ formData, handleChange, options, title }) => {
 
   const loadGroupOptions = (inputValue) => fetchFilterGroups(inputValue);
 
-  const createStageInput = (idx) => {
-    return (
-      <StackItem key={ `Stack_${idx + 1}` }>
-        <FormGroup
-          label={ `Stage ${idx + 1}` }
-          fieldId={ `${idx + 1}_stage_label` }
-        >
-          <Grid gutter="md">
-            <GridItem span={ 8 }>
-              <AsyncSelect
-                cacheOptions
-                isClearable
-                label={ `${idx + 1} Stage` }
-                aria-label={ `${idx + 1} Stage` }
-                onToggle={ onToggle }
-                key={ `stage-${idx + 1}` }
-                onChange={ (e) => onStageChange(e, idx) }
-                value={ stageValues[idx] }
-                inpuValue={ inputValue }
-                isexpanded={ isExpanded }
-                loadOptions={ asyncDebounce(loadGroupOptions) }
-                defaultOptions={ options }
-                onInputChange={ (e) => onInputChange(e, idx) }
-              />
-            </GridItem>
-            <GridItem span={ 1 } style={ { display: 'flex' } }>
-              { idx > 0 && <Button variant="link" isInline key={ idx } id={ idx } onClick={ removeStage }>
-                <TrashIcon/> { 'Remove' }
-              </Button> }
-            </GridItem>
-          </Grid>
-        </FormGroup>
-      </StackItem>);
-  };
+  const createStageInput = (idx) => (
+    <StackItem key={ `Stack_${idx + 1}` }>
+      <FormGroup
+        label={ `Stage ${idx + 1}` }
+        fieldId={ `${idx + 1}_stage_label` }
+      >
+        <Grid gutter="md">
+          <GridItem span={ 8 }>
+            <AsyncSelect
+              cacheOptions
+              isClearable
+              label={ `${idx + 1} Stage` }
+              aria-label={ `${idx + 1} Stage` }
+              onToggle={ onToggle }
+              key={ `stage-${idx + 1}` }
+              onChange={ (e) => onStageChange(e, idx) }
+              value={ stageValues[idx] }
+              inpuValue={ inputValue }
+              isexpanded={ isExpanded }
+              loadOptions={ asyncDebounce(loadGroupOptions) }
+              defaultOptions={ options }
+              onInputChange={ (e) => onInputChange(e, idx) }
+            />
+          </GridItem>
+          <GridItem span={ 1 } style={ { display: 'flex' } }>
+            { idx > 0 && <Button variant="link" isInline key={ idx } id={ idx } onClick={ removeStage }>
+              <TrashIcon/> { 'Remove' }
+            </Button> }
+          </GridItem>
+        </Grid>
+      </FormGroup>
+    </StackItem>
+  );
 
   return (
     <Fragment>
@@ -98,7 +97,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
         </StackItem>
         <StackItem>
           <Stack gutter="sm">
-            { stageValues.map((stage, idx) => createStageInput(idx)) }
+            { stageValues.map((_stage, idx) => createStageInput(idx)) }
             <StackItem style={ { borderTop: 10 } }>
               <Button variant="link" isInline onClick={ addStage }>
                 <PlusIcon/> { `Add ${ stageValues.length > 0 ? 'another' : 'a'} stage` }
