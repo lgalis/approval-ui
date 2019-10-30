@@ -5,7 +5,7 @@ import toJson from 'enzyme-to-json';
 import SetStages from '../../../../smart-components/workflow/add-stages/set-stages';
 import { TrashIcon } from '@patternfly/react-icons';
 import AsyncSelect from 'react-select/async';
-import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../../utilities/constants';
+import { RBAC_API_BASE } from '../../../../utilities/constants';
 
 describe('<SetStages />', () => {
   let initialProps;

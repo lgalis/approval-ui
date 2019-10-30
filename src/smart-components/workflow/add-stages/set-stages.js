@@ -99,7 +99,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
           <Stack gutter="sm">
             { stageValues.map((_stage, idx) => createStageInput(idx)) }
             <StackItem style={ { borderTop: 10 } }>
-              <Button variant="link" isInline onClick={ addStage }>
+              <Button id="add-workflow-stage" variant="link" isInline onClick={ addStage }>
                 <PlusIcon/> { `Add ${ stageValues.length > 0 ? 'another' : 'a'} stage` }
               </Button>
             </StackItem>
