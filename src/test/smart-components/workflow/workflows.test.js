@@ -18,7 +18,12 @@ describe('<Workflows />', () => {
   let initialState;
 
   beforeEach(() => {
-    initialProps = {};
+    initialProps = {
+      history: {
+        goBack: jest.fn(),
+        push: jest.fn()
+      }
+    };
     mockStore = configureStore(middlewares);
     initialState = { workflowReducer: { ...workflowsInitialState, isLoading: false }, groupReducer: { ...groupsInitialState }};
   });
