@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
@@ -61,19 +61,19 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
     : [
       {
         title: 'Edit info',
-        onClick: (event, rowId, workflow) =>
+        onClick: (_event, _rowId, workflow) =>
           history.push(`/workflows/edit-info/${workflow.id}`)
       },
       {
         title: 'Edit stages',
-        onClick: (event, rowId, workflow) =>
+        onClick: (_event, _rowId, workflow) =>
           history.push(`/workflows/edit-stages/${workflow.id}`)
       },
 
       {
         title: 'Delete',
         style: { color: 'var(--pf-global--danger-color--100)'	},
-        onClick: (event, rowId, workflow) =>
+        onClick: (_event, _rowId, workflow) =>
           history.push(`/workflows/remove/${workflow.id}`)
       }
     ];
@@ -85,7 +85,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
 
   const toolbarButtons = () => <ToolbarGroup>
     <ToolbarItem>
-      <Link to="/workflows/add-workflow">
+      <Link id="add-workflow-link" to="/workflows/add-workflow">
         <Button
           variant="primary"
           aria-label="Create workflow"
@@ -95,7 +95,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
       </Link>
     </ToolbarItem>
     <ToolbarItem>
-      <Link className= { anyWorkflowsSelected() ? '' : 'disabled-link' } to={ { pathname: '/workflows/remove' } }>
+      <Link id="remove-multiple-workflows" className= { anyWorkflowsSelected() ? '' : 'disabled-link' } to={ { pathname: '/workflows/remove' } }>
         <Button
           variant="link"
           isDisabled={ !anyWorkflowsSelected() }
@@ -151,21 +151,21 @@ const mapDispatchToProps = dispatch => {
 };
 
 Workflows.propTypes = {
-  history: propTypes.shape({
-    goBack: propTypes.func.isRequired,
-    push: propTypes.func.isRequired
+  history: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired
   }).isRequired,
-  workflows: propTypes.array,
-  platforms: propTypes.array,
-  isLoading: propTypes.bool,
-  fetchWorkflows: propTypes.func.isRequired,
-  fetchRbacGroups: propTypes.func.isRequired,
-  selectedWorkflows: propTypes.array,
-  rbacGroups: propTypes.array,
-  pagination: propTypes.shape({
-    limit: propTypes.number.isRequired,
-    offset: propTypes.number.isRequired,
-    count: propTypes.number.isRequired
+  workflows: PropTypes.array,
+  platforms: PropTypes.array,
+  isLoading: PropTypes.bool,
+  fetchWorkflows: PropTypes.func.isRequired,
+  fetchRbacGroups: PropTypes.func.isRequired,
+  selectedWorkflows: PropTypes.array,
+  rbacGroups: PropTypes.array,
+  pagination: PropTypes.shape({
+    limit: PropTypes.number.isRequired,
+    offset: PropTypes.number.isRequired,
+    count: PropTypes.number.isRequired
   })
 };
 
