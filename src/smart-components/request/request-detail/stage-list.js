@@ -6,18 +6,16 @@ import Stage from './stage';
 import { DataListLoader } from '../../../presentational-components/shared/loader-placeholders';
 
 class StageList extends Component {
-
-  state= {
+  state = {
     expanded: []
   };
 
-  toggleExpand = id => {
-    const expanded = this.state.expanded;
+  toggleExpand = id => this.setState(({ expanded }) => {
     const index = expanded.indexOf(id);
     const newExpanded =
-        index >= 0 ? [ ...expanded.slice(0, index), ...expanded.slice(index + 1, expanded.length) ] : [ ...expanded, id ];
-    this.setState(() => ({ expanded: newExpanded }));
-  };
+      index >= 0 ? [ ...expanded.slice(0, index), ...expanded.slice(index + 1, expanded.length) ] : [ ...expanded, id ];
+    return ({ expanded: newExpanded });
+  });
 
   isExpanded = key => {
     return this.state.expanded.includes(key);
@@ -36,14 +34,17 @@ class StageList extends Component {
             </Fragment>
           ) }
         </div>
-        { (this.props.items && this.props.items.length > 0) && (
+        { this.props.items.length > 0 && (
           <DataList aria-label="Expandable data list">
-            { this.props.items.map((item, idx) => {
-              return (
-                <Stage key={ item.id } item={ item } idx={ idx } isActive={ idx + 1 === this.props.active_stage }
-                  isExpanded={ this.isExpanded } toggleExpand={ this.toggleExpand }/>);
-            })
-            }
+            { this.props.items.map((item, idx) => (
+              <Stage
+                key={ item.id }
+                item={ item }
+                idx={ idx }
+                isActive={ idx + 1 === this.props.active_stage }
+                isExpanded={ this.isExpanded(`stage-${item.id}`) }
+                toggleExpand={ this.toggleExpand }
+              />)) }
           </DataList>)
         }
       </Fragment>

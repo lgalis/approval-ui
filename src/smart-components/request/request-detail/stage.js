@@ -67,16 +67,16 @@ class Stage extends Component {
   };
 
   render() {
-    const { item } = this.props;
+    const { item, isExpanded } = this.props;
     const requestActive = isRequestStateActive(item.state);
     return (
       <DataListItem key={ `stage-${item.id}` }
         aria-labelledby={ `check-stage-${item.id}` }
-        isExpanded={ this.props.isExpanded(`stage-${item.id}`) }>
+        isExpanded={ isExpanded }>
         <DataListItemRow>
           <DataListToggle
             onClick={ () => this.props.toggleExpand(`stage-${item.id}`) }
-            isExpanded={ this.props.isExpanded(`stage-${item.id}`) }
+            isExpanded={ isExpanded }
             id={ `stage-${item.id}` }
             aria-labelledby={ `stage-${item.id} stage-${item.id}` }
             aria-label="Toggle details for"
@@ -119,7 +119,7 @@ class Stage extends Component {
             ] }/>
         </DataListItemRow>
         <DataListContent aria-label="Stage Content Details"
-          isHidden={ !this.props.isExpanded(`stage-${item.id}`) }>
+          isHidden={ !isExpanded }>
           <Stack gutter="md">
             <StackItem>
               <TextContent component={ TextVariants.h6 }>

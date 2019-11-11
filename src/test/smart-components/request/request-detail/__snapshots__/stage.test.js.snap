@@ -2,35 +2,7 @@
 
 exports[`<Stage /> should render correctly 1`] = `
 <Stage
-  isExpanded={
-    [MockFunction] {
-      "calls": Array [
-        Array [
-          "stage-item-id",
-        ],
-        Array [
-          "stage-item-id",
-        ],
-        Array [
-          "stage-item-id",
-        ],
-      ],
-      "results": Array [
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-      ],
-    }
-  }
+  isExpanded={false}
   item={
     Object {
       "id": "item-id",
@@ -45,6 +17,7 @@ exports[`<Stage /> should render correctly 1`] = `
 >
   <DataListItem
     aria-labelledby="check-stage-item-id"
+    isExpanded={false}
     key="stage-item-id"
   >
     <li
@@ -62,6 +35,7 @@ exports[`<Stage /> should render correctly 1`] = `
             aria-label="Toggle details for"
             aria-labelledby="stage-item-id stage-item-id"
             id="stage-item-id"
+            isExpanded={false}
             key=".0"
             onClick={[Function]}
             rowid="check-stage-item-id"

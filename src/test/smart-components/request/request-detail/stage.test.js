@@ -14,7 +14,7 @@ describe('<Stage />', () => {
   let initialProps;
   beforeEach(() => {
     initialProps = {
-      isExpanded: jest.fn(),
+      isExpanded: false,
       toggleExpand: jest.fn(),
       item: {
         id: 'item-id',
