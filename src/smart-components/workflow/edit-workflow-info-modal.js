@@ -55,9 +55,9 @@ const EditWorkflowInfoModal = ({
           <FormGroup fieldId="edito-workflow-info-modal-info">
             { isFetching && <WorkflowStageLoader/> }
             { !isFetching && (
-              <StageInformation formData = { formData }
-                handleChange = { handleChange }
-                title = { `Make any changes to workflow ${workflow.name}` }/>) }
+              <StageInformation formData={ formData }
+                handleChange={ handleChange }
+                title={ `Make any changes to workflow ${workflow.name}` }/>) }
           </FormGroup>
         </StackItem>
         <StackItem>

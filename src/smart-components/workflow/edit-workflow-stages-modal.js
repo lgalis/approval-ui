@@ -72,7 +72,7 @@ const EditWorkflowStagesModal = ({
             { !isFetching && rbacGroups.length > 0 && (
               <StackItem className="stages-modal">
                 <SetStages className="stages-modal" formData={ formData }
-                  handleChange = { handleChange }
+                  handleChange={ handleChange }
                   options={ rbacGroups }
                   title={ `Add or remove ${formData.name}'s stages` }/>
               </StackItem>) }

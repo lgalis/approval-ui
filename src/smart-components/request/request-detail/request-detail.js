@@ -42,7 +42,7 @@ const RequestDetail = ({
   ];
 
   const renderToolbar = () => (<TopToolbar breadcrumbs={ breadcrumbsList() } paddingBottom={ true }>
-    <TopToolbarTitle title = { `Request ${id}` }>
+    <TopToolbarTitle title={ `Request ${id}` }>
     </TopToolbarTitle>
   </TopToolbar>);
 
@@ -60,7 +60,7 @@ const RequestDetail = ({
           <GridItem md={ 2 } className="detail-pane">
             <RequestInfoBar request={ selectedRequest }/>
           </GridItem>
-          <GridItem md={ 10 } className = "detail-pane">
+          <GridItem md={ 10 } className="detail-pane">
             <RequestStageTranscript request={ selectedRequest } url={ url }/>
           </GridItem>
         </Fragment>

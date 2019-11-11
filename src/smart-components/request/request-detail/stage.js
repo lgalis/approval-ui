@@ -45,7 +45,7 @@ class Stage extends Component {
         position={ DropdownPosition.right }
         onSelect={ this.onKebabSelect }
         toggle={ <KebabToggle id={ `stage-request-dropdown-${stage.request_id}` } onToggle={ this.onKebabToggle }/> }
-        isOpen = { this.state.isKebabOpen }
+        isOpen={ this.state.isKebabOpen }
         dropdownItems={ [
           <DropdownItem aria-label="Add Comment" key={ `add_comment_${stage.id}` }>
             <Link
@@ -83,7 +83,7 @@ class Stage extends Component {
           />
           <DataListItemCells
             dataListCells={ [
-              <DataListCell key ={ item.id }>
+              <DataListCell key={ item.id }>
                 <span id={ item.id }>{ `${this.props.idx + 1}. ${item.name}` } </span>
               </DataListCell>,
               <DataListCell key={ `${item.id}-state` }>

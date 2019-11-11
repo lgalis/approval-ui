@@ -31,7 +31,7 @@ const RemoveWorkflowModal = ({
       isOpen
       isSmall
       width={ '40%' }
-      title = { '' }
+      title={ '' }
       onClose={ onCancel }
       actions={ [
         <Button id="cancel-remove-workflow" key="cancel" variant="secondary" type="button" onClick={ onCancel }>

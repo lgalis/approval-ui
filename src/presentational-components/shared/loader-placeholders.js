@@ -42,7 +42,7 @@ export const RequestLoader = ({ items, ...props }) => (
       <GridItem md={ 2 } className="detail-pane">
         <RequestInfoBarLoader/>
       </GridItem>
-      <GridItem md={ 10 } className = "detail-pane">
+      <GridItem md={ 10 } className="detail-pane">
         <DataList aria-label="datalist-placeholder" style={ { margin: 32 } }>
           { [ ...Array(items) ].map((_item, index) => (
             <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
