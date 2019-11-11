@@ -44,11 +44,15 @@ class Stage extends Component {
       <Dropdown
         position={ DropdownPosition.right }
         onSelect={ this.onKebabSelect }
-        toggle={ <KebabToggle onToggle={ this.onKebabToggle }/> }
+        toggle={ <KebabToggle id={ `stage-request-dropdown-${stage.request_id}` } onToggle={ this.onKebabToggle }/> }
         isOpen = { this.state.isKebabOpen }
         dropdownItems={ [
           <DropdownItem aria-label="Add Comment" key={ `add_comment_${stage.id}` }>
-            <Link to={ `/requests/detail/${stage.request_id}/add_comment` } className="pf-c-dropdown__menu-item">
+            <Link
+              id={ `stage-${stage.request_id}-request-comment` }
+              to={ `/requests/detail/${stage.request_id}/add_comment` }
+              className="pf-c-dropdown__menu-item"
+            >
               Comment
             </Link>
           </DropdownItem>
@@ -90,12 +94,12 @@ class Stage extends Component {
                   <LevelItem>
                     { (requestActive && this.props.isActive) &&
                     <div>
-                      <Link to={ `/requests/detail/${item.request_id}/approve` }>
+                      <Link id={ `approve-${item.request_id}` } to={ `/requests/detail/${item.request_id}/approve` }>
                         <Button variant="link" aria-label="Approve Request">
                           Approve
                         </Button>
                       </Link>
-                      <Link to={ `/requests/detail/${item.request_id}/deny` }>
+                      <Link id={ `deny-${item.request_id}` } to={ `/requests/detail/${item.request_id}/deny` }>
                         <Button variant="link" className="destructive-color" aria-label="Deny Request">
                           Deny
                         </Button>
@@ -133,7 +137,13 @@ class Stage extends Component {
 Stage.propTypes = {
   isLoading: PropTypes.bool,
   isActive: PropTypes.bool,
-  item: PropTypes.object,
+  item: PropTypes.shape({
+    state: PropTypes.string,
+    request_id: PropTypes.string,
+    stageActions: PropTypes.shape({
+      data: PropTypes.array
+    })
+  }).isRequired,
   idx: PropTypes.number,
   isExpanded: PropTypes.func.isRequired,
   toggleExpand: PropTypes.func.isRequired,
