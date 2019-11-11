@@ -12,39 +12,21 @@ import RequestStageTranscript from './request-stage-transcript';
 import { fetchRequest } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
 const RequestDetail = ({
   match: { params: { id }, url },
   isLoading,
-  fetchRequest,
-  addNotification
+  fetchRequest
 }) => {
   const [ selectedRequest, setSelectedRequest ] = useState({});
 
   const fetchData = () => {
-    fetchRequest(id).then((data) => setSelectedRequest(data.value)).catch(() => { setSelectedRequest(undefined);
-      addNotification({
-        variant: 'warning',
-        title: `Request ${id}`,
-        dismissable: true,
-        description: `Request ${id} not found`
-      });});
+    fetchRequest(id).then((data) => setSelectedRequest(data.value));
   };
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  const breadcrumbsList = () => [
-    { title: 'Request Queue', to: '/requests' },
-    { title: id, isActive: true }
-  ];
-
-  const renderToolbar = () => (<TopToolbar breadcrumbs={ breadcrumbsList() } paddingBottom={ true }>
-    <TopToolbarTitle title={ `Request ${id}` }>
-    </TopToolbarTitle>
-  </TopToolbar>);
 
   const renderRequestDetails = () => {
     if (isLoading || !selectedRequest || Object.keys(selectedRequest).length === 0) {
@@ -76,7 +58,12 @@ const RequestDetail = ({
         <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ url } postMethod={ fetchData } /> } />
       <Route exact path="/requests/detail/:id/deny" render={ props =>
         <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } postMethod={ fetchData }/> } />
-      { renderToolbar() }
+      <TopToolbar
+        breadcrumbs={ [{ title: 'Request Queue', to: '/requests', id: 'requests' }] }
+        paddingBottom={ true }
+      >
+        <TopToolbarTitle title={ `Request ${id}` } />
+      </TopToolbar>
       <Section type="content">
         <Grid gutter="md">
           { renderRequestDetails() }
@@ -95,8 +82,7 @@ RequestDetail.propTypes = {
   }).isRequired,
   isLoading: PropTypes.bool,
   id: PropTypes.string,
-  fetchRequest: PropTypes.func.isRequired,
-  addNotification: PropTypes.func.isRequired
+  fetchRequest: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -106,8 +92,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  fetchRequest,
-  addNotification
+  fetchRequest
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RequestDetail));
