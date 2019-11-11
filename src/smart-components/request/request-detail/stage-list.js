@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import propTypes from 'prop-types';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components';
 import { DataList } from '@patternfly/react-core';
@@ -24,18 +24,17 @@ class StageList extends Component {
   };
 
   render() {
-    if (this.props.isLoading) {
-      return (
-        <PageHeader>
-          <PageHeaderTitle title={ this.props.noItems }/>
-        </PageHeader>
-      );
-    }
-
     return (
-      <React.Fragment>
+      <Fragment>
         <div>
-          { this.props.isLoading && <DataListLoader/> }
+          { this.props.isLoading && (
+            <Fragment>
+              <PageHeader>
+                <PageHeaderTitle title={ this.props.noItems }/>
+              </PageHeader>
+              <DataListLoader/>
+            </Fragment>
+          ) }
         </div>
         { (this.props.items && this.props.items.length > 0) && (
           <DataList aria-label="Expandable data list">
@@ -47,7 +46,7 @@ class StageList extends Component {
             }
           </DataList>)
         }
-      </React.Fragment>
+      </Fragment>
     );
   };
 }
@@ -57,6 +56,10 @@ StageList.propTypes = {
   items: propTypes.array,
   noItems: propTypes.string,
   active_stage: propTypes.number
+};
+
+StageList.defaultProps = {
+  items: []
 };
 
 export default StageList;
