@@ -1,0 +1,301 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Stage /> should render correctly 1`] = `
+<Stage
+  isExpanded={false}
+  item={
+    Object {
+      "id": "item-id",
+      "request_id": "request-id",
+      "stageActions": Object {
+        "data": Array [],
+      },
+      "state": "no-state",
+    }
+  }
+  toggleExpand={[MockFunction]}
+>
+  <DataListItem
+    aria-labelledby="check-stage-item-id"
+    isExpanded={false}
+    key="stage-item-id"
+  >
+    <li
+      aria-labelledby="check-stage-item-id"
+      className="pf-c-data-list__item"
+    >
+      <DataListItemRow
+        key=".0"
+        rowid="check-stage-item-id"
+      >
+        <div
+          className="pf-c-data-list__item-row"
+        >
+          <DataListToggle
+            aria-label="Toggle details for"
+            aria-labelledby="stage-item-id stage-item-id"
+            id="stage-item-id"
+            isExpanded={false}
+            key=".0"
+            onClick={[Function]}
+            rowid="check-stage-item-id"
+          >
+            <div
+              className="pf-c-data-list__item-control"
+              onClick={[Function]}
+            >
+              <div
+                className="pf-c-data-list__toggle"
+              >
+                <Component
+                  aria-controls={false}
+                  aria-expanded={false}
+                  aria-label="Toggle details for"
+                  aria-labelledby={null}
+                  id="stage-item-id"
+                  variant="plain"
+                >
+                  <ComponentWithOuia
+                    component={[Function]}
+                    componentProps={
+                      Object {
+                        "aria-controls": false,
+                        "aria-expanded": false,
+                        "aria-label": "Toggle details for",
+                        "aria-labelledby": null,
+                        "children": <AngleRightIcon
+                          color="currentColor"
+                          noVerticalAlign={false}
+                          size="sm"
+                          title={null}
+                        />,
+                        "id": "stage-item-id",
+                        "variant": "plain",
+                      }
+                    }
+                    consumerContext={null}
+                  >
+                    <Button
+                      aria-controls={false}
+                      aria-expanded={false}
+                      aria-label="Toggle details for"
+                      aria-labelledby={null}
+                      id="stage-item-id"
+                      ouiaContext={
+                        Object {
+                          "isOuia": false,
+                          "ouiaId": null,
+                        }
+                      }
+                      variant="plain"
+                    >
+                      <button
+                        aria-controls={false}
+                        aria-disabled={null}
+                        aria-expanded={false}
+                        aria-label="Toggle details for"
+                        aria-labelledby={null}
+                        className="pf-c-button pf-m-plain"
+                        disabled={false}
+                        id="stage-item-id"
+                        tabIndex={null}
+                        type="button"
+                      >
+                        <AngleRightIcon
+                          color="currentColor"
+                          noVerticalAlign={false}
+                          size="sm"
+                          title={null}
+                        >
+                          <svg
+                            aria-hidden={true}
+                            aria-labelledby={null}
+                            fill="currentColor"
+                            height="1em"
+                            role="img"
+                            style={
+                              Object {
+                                "verticalAlign": "-0.125em",
+                              }
+                            }
+                            viewBox="0 0 256 512"
+                            width="1em"
+                          >
+                            <path
+                              d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                              transform=""
+                            />
+                          </svg>
+                        </AngleRightIcon>
+                      </button>
+                    </Button>
+                  </ComponentWithOuia>
+                </Component>
+              </div>
+            </div>
+          </DataListToggle>
+          <DataListItemCells
+            dataListCells={
+              Array [
+                <DataListCell>
+                  <span
+                    id="item-id"
+                  >
+                    NaN. undefined
+                     
+                  </span>
+                </DataListCell>,
+                <DataListCell>
+                  <span
+                    id="item-id-state"
+                    style={
+                      Object {
+                        "textTransform": "capitalize",
+                      }
+                    }
+                  >
+                    no-state
+                     
+                  </span>
+                </DataListCell>,
+                <DataListCell>
+                  <Level>
+                    <LevelItem />
+                  </Level>
+                </DataListCell>,
+                <DataListCell
+                  aria-label="Actions"
+                  aria-labelledby="request-item-id check-request-actionitem-id"
+                  className="pf-c-data-list__action"
+                  id="workflow-item-id"
+                />,
+              ]
+            }
+            key=".1"
+            rowid="check-stage-item-id"
+          >
+            <div
+              className="pf-c-data-list__item-content"
+            >
+              <DataListCell
+                key="item-id"
+              >
+                <div
+                  className="pf-c-data-list__cell"
+                >
+                  <span
+                    id="item-id"
+                  >
+                    NaN. undefined
+                     
+                  </span>
+                </div>
+              </DataListCell>
+              <DataListCell
+                key="item-id-state"
+              >
+                <div
+                  className="pf-c-data-list__cell"
+                >
+                  <span
+                    id="item-id-state"
+                    style={
+                      Object {
+                        "textTransform": "capitalize",
+                      }
+                    }
+                  >
+                    no-state
+                     
+                  </span>
+                </div>
+              </DataListCell>
+              <DataListCell
+                key="item-id-action"
+              >
+                <div
+                  className="pf-c-data-list__cell"
+                >
+                  <Level>
+                    <div
+                      className="pf-l-level"
+                    >
+                      <LevelItem>
+                        <div />
+                      </LevelItem>
+                    </div>
+                  </Level>
+                </div>
+              </DataListCell>
+              <DataListCell
+                aria-label="Actions"
+                aria-labelledby="request-item-id check-request-actionitem-id"
+                className="pf-c-data-list__action"
+                id="workflow-item-id"
+                key="request-item-id"
+              >
+                <div
+                  aria-label="Actions"
+                  aria-labelledby="request-item-id check-request-actionitem-id"
+                  className="pf-c-data-list__cell pf-c-data-list__action"
+                  id="workflow-item-id"
+                />
+              </DataListCell>
+            </div>
+          </DataListItemCells>
+        </div>
+      </DataListItemRow>
+      <DataListContent
+        aria-label="Stage Content Details"
+        isHidden={true}
+        key=".1"
+        rowid="check-stage-item-id"
+      >
+        <section
+          aria-label="Stage Content Details"
+          className="pf-c-data-list__expandable-content"
+          hidden={true}
+          id=""
+        >
+          <div
+            className="pf-c-data-list__expandable-content-body"
+          >
+            <Stack
+              gutter="md"
+            >
+              <div
+                className="pf-l-stack pf-m-gutter"
+              >
+                <StackItem>
+                  <div
+                    className="pf-l-stack__item"
+                  >
+                    <TextContent
+                      component="h6"
+                    >
+                      <div
+                        className="pf-c-content"
+                        component="h6"
+                      >
+                        <ActionTranscript
+                          actionList={Array []}
+                        >
+                          <Stack>
+                            <div
+                              className="pf-l-stack"
+                            />
+                          </Stack>
+                        </ActionTranscript>
+                      </div>
+                    </TextContent>
+                  </div>
+                </StackItem>
+              </div>
+            </Stack>
+          </div>
+        </section>
+      </DataListContent>
+    </li>
+  </DataListItem>
+</Stage>
+`;

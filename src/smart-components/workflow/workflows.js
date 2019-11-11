@@ -41,9 +41,9 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
   const routes = () => <Fragment>
     <Route exact path="/workflows/add-workflow" render={ props => <AddWorkflow { ...props }
       postMethod={ fetchData } /> }/>
-    <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType= 'info' { ...props }
+    <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType='info' { ...props }
       postMethod={ fetchData } /> }/>
-    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType= 'stages' rbacGroups={ rbacGroups }{ ...props }
+    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType='stages' rbacGroups={ rbacGroups }{ ...props }
       postMethod={ fetchData } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }
@@ -95,7 +95,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
       </Link>
     </ToolbarItem>
     <ToolbarItem>
-      <Link id="remove-multiple-workflows" className= { anyWorkflowsSelected() ? '' : 'disabled-link' } to={ { pathname: '/workflows/remove' } }>
+      <Link id="remove-multiple-workflows" className={ anyWorkflowsSelected() ? '' : 'disabled-link' } to={ { pathname: '/workflows/remove' } }>
         <Button
           variant="link"
           isDisabled={ !anyWorkflowsSelected() }
