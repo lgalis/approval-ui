@@ -123,6 +123,7 @@ exports[`<StageInformation /> should render correctly 1`] = `
                     isValid={true}
                     name="workflow-description"
                     onChange={[Function]}
+                    resizeOrientation="both"
                     type="text"
                     value="Stage info description test"
                   >

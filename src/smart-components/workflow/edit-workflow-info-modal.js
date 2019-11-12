@@ -25,7 +25,7 @@ const EditWorkflowInfoModal = ({
   const handleChange = data => setFormData({ ...formData, ...data });
 
   useEffect(() => {
-    fetchWorkflow(id).then((data) => { setFormData({ ...formData, ...data.value });});
+    fetchWorkflow(id).then((data) => setFormData({ ...formData, ...data.value }));
   }, []);
 
   const onSave = () => {
@@ -49,30 +49,33 @@ const EditWorkflowInfoModal = ({
       title={ `Edit workflow's information` }
       width={ '40%' }
       isOpen
-      onClose={ onCancel }
-      onSave={ onSave }>
+      onClose={ onCancel }>
       <Stack gutter="md">
         <StackItem>
-          <FormGroup>
+          <FormGroup fieldId="edito-workflow-info-modal-info">
             { isFetching && <WorkflowStageLoader/> }
             { !isFetching && (
-              <StageInformation formData = { formData }
-                handleChange = { handleChange }
-                title = { `Make any changes to workflow ${workflow.name}` }/>) }
+              <StageInformation formData={ formData }
+                handleChange={ handleChange }
+                title={ `Make any changes to workflow ${workflow.name}` }/>) }
           </FormGroup>
         </StackItem>
         <StackItem>
           <ActionGroup>
             <Split gutter="md">
               <SplitItem>
-                <Button aria-label={ 'Save' }
+                <Button
+                  aria-label={ 'Save' }
+                  id="save-edit-workflow-info"
                   variant="primary"
                   type="submit"
                   isDisabled={ isFetching }
                   onClick={ onSave }>Save</Button>
               </SplitItem>
               <SplitItem>
-                <Button  aria-label='Cancel'
+                <Button
+                  id="cancel-edit-workflow-info"
+                  aria-label='Cancel'
                   variant='secondary'
                   type='button'
                   onClick={ onCancel }>Cancel</Button>

@@ -37,10 +37,10 @@ const SummaryContent = ({ formData }) => {
                 </GridItem>
               </Grid>
               <Grid gutter="md">
-                <GridItem span = { 2 }>
+                <GridItem span={ 2 }>
                   <Text className="data-table-detail heading" component={ TextVariants.h5 }>Description</Text>
                 </GridItem>
-                <GridItem span = { 10 }>
+                <GridItem span={ 10 }>
                   <Text className="data-table-detail content" component={ TextVariants.p }>{ description }</Text>
                 </GridItem>
               </Grid>
