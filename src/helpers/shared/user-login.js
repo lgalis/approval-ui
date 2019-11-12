@@ -7,6 +7,9 @@ import { WorkflowApi, ActionApi, RequestApi, TemplateApi, StageApi } from '@redh
 const axiosInstance = axios.create();
 
 const resolveInterceptor = response => response.data || response;
+const errorInterceptor = (error = {}) => {
+  throw { ...error.response };
+};
 
 // check identity before each request. If the token is expired it will log out user
 axiosInstance.interceptors.request.use(async config => {
@@ -14,6 +17,7 @@ axiosInstance.interceptors.request.use(async config => {
   return config;
 });
 axiosInstance.interceptors.response.use(resolveInterceptor);
+axiosInstance.interceptors.response.use(null, errorInterceptor);
 
 // Approval Apis
 

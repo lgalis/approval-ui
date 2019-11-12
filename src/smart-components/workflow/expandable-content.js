@@ -21,8 +21,8 @@ const ExpandableContent = ({ description, groupRefs, groupNames }) => (
 
 ExpandableContent.propTypes = {
   description: PropTypes.string,
-  groupRefs: PropTypes.array.required,
-  groupNames: PropTypes.array.required
+  groupRefs: PropTypes.array.isRequired,
+  groupNames: PropTypes.array.isRequired
 };
 
 export default ExpandableContent;

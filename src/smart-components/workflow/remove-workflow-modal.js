@@ -31,14 +31,13 @@ const RemoveWorkflowModal = ({
       isOpen
       isSmall
       width={ '40%' }
-      title = { '' }
+      title={ '' }
       onClose={ onCancel }
-      onSave={ onSubmit }
       actions={ [
-        <Button key="cancel" variant="secondary" type="button" onClick={ onCancel }>
+        <Button id="cancel-remove-workflow" key="cancel" variant="secondary" type="button" onClick={ onCancel }>
           Cancel
         </Button>,
-        <Button key="submit" variant="primary" type="button" onClick={ onSubmit }>
+        <Button id="submit-remove-workflow" key="submit" variant="primary" type="button" onClick={ onSubmit }>
           Confirm
         </Button>
       ] }

@@ -179,7 +179,7 @@ describe('Workflow actions', () => {
     }, {
       type: `${ADD_WORKFLOW}_REJECTED`,
       meta: expect.any(Object),
-      payload: expect.any(Error),
+      payload: expect.any(Object),
       error: true
     }];
     store.dispatch(addWorkflow({ foo: 'bar' })).catch(() => {
@@ -243,7 +243,7 @@ describe('Workflow actions', () => {
       type: `${UPDATE_WORKFLOW}_REJECTED`,
       meta: expect.any(Object),
       error: true,
-      payload: expect.any(Error)
+      payload: expect.any(Object)
     }];
     store.dispatch(updateWorkflow({ id: '321', foo: 'bar' })).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
@@ -294,7 +294,7 @@ describe('Workflow actions', () => {
       }
     }, expect.objectContaining({
       type: `${REMOVE_WORKFLOW}_REJECTED`,
-      payload: expect.any(Error)
+      payload: expect.any(Object)
     }) ];
     store.dispatch(removeWorkflow('123')).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
@@ -344,11 +344,14 @@ describe('Workflow actions', () => {
       payload: {
         dismissable: true,
         title: 'Error',
-        variant: 'danger'
+        variant: 'danger',
+        description: undefined,
+        sentryId: undefined
       }
-    }, expect.objectContaining({
+    },
+    expect.objectContaining({
       type: `${REMOVE_WORKFLOWS}_REJECTED`,
-      payload: expect.any(Error)
+      payload: expect.any(Object)
     }) ];
     store.dispatch(removeWorkflows([ '123', '321' ])).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
