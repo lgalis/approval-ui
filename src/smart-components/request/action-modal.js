@@ -16,31 +16,31 @@ const ActionModal = ({
   addNotification,
   createStageAction,
   closeUrl,
-  postMethod
+  postMethod,
+  fetchRequest
 }) => {
   const [ selectedRequest, setSelectedRequest ] = useState({});
 
-  const setRequestData = (requestData) => {
-    setSelectedRequest(requestData);
-  };
-
-  const fetchData = () => {
-    fetchRequest(id).payload.then((data) => setRequestData(data)).catch(() => setRequestData(undefined));
-  };
-
   useEffect(() => {
-    fetchData();
+    fetchRequest(id).then((data) => setSelectedRequest(data.value));
   }, []);
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
     const activeStage =  selectedRequest.stages[selectedRequest.active_stage - 1];
     const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
     if (activeStage) {
-      return postMethod ? createStageAction(actionName, activeStage.id,
-        { operation: operationType[actionType], ...data }).then(() => postMethod()).then(() => push(closeUrl)) :
-        createStageAction(actionName, activeStage.id,
-          { operation: operationType[actionType], ...data }).then(() => push(closeUrl));
+      return postMethod ?
+        createStageAction(
+          actionName,
+          activeStage.id,
+          { operation: operationType[actionType], ...data }
+        ).then(() => postMethod()).then(() => push(closeUrl))
+        : createStageAction(
+          actionName,
+          activeStage.id,
+          { operation: operationType[actionType], ...data }
+        ).then(() => push(closeUrl));
     }
     else {
       const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;

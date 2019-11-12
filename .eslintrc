@@ -179,6 +179,7 @@
 		/**
 		* custom rules
 		*/
-		"prefer-const": "error"
+		"prefer-const": "error",
+		"react/jsx-equals-spacing": [2, "never"]
 	}
 }

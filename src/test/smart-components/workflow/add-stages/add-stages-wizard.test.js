@@ -1,9 +1,11 @@
 import React from 'react';
 import thunk from 'redux-thunk';
+import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store' ;
 import { shallowToJson } from 'enzyme-to-json';
+import AsyncSelect from 'react-select/async';
 
 import { MemoryRouter, Route } from 'react-router-dom';
 import promiseMiddleware from 'redux-promise-middleware';
@@ -100,6 +102,45 @@ describe('<AddWorkflow />', () => {
     setImmediate(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
+    });
+  });
+
+  it('should travers over all wizard pages and call onSave function', async(done) => {
+    expect.assertions(1);
+    const store = mockStore(initialState);
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/templates`, mockOnce({ body: { data: [{ id: '123' }]}}));
+    apiClientMock.post(`${APPROVAL_API_BASE}/templates/123/workflows`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ group_refs: [ '1' ]});
+      done();
+      return res.status(200);
+    }));
+
+    const wrapper = mount(
+      <ComponentWrapper store={ store }>
+        <Route path="/workflows/add-workflow/" render={ () => <AddWorkflow { ...initialProps } formData={ { wfGroups: [{}]} } /> } />
+      </ComponentWrapper>
+    );
+
+    wrapper.find('button').at(1).simulate('click');
+    wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
+    setImmediate(async() => {
+      wrapper.update();
+      wrapper.find('button#add-workflow-stage').first().simulate('click');
+
+      await act(async() => {
+        wrapper.find(AsyncSelect).props().onChange({ value: '1', label: 'foo' });
+      });
+      wrapper.update();
+      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
+      wrapper.update();
+
+      /**
+       * submit wizard
+       */
+      await act(async() => {
+        wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
+      });
     });
   });
 });

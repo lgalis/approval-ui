@@ -11,6 +11,12 @@ import { Section } from '@redhat-cloud-services/frontend-components';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/components/TableToolbar';
 import { DataListLoader } from './loader-placeholders';
 
+/**
+ * Need to optimize this component
+ * There is 7 renders before first table render
+ * Should be just 2 - Loader -> Table
+ */
+
 export const TableToolbarView = ({
   request,
   isSelectable,
