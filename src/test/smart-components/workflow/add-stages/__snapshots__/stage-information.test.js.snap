@@ -79,6 +79,7 @@ exports[`<StageInformation /> should render correctly 1`] = `
                     name="workflow-name"
                     onChange={[Function]}
                     type="text"
+                    validated="default"
                     value="Stage info name test"
                   >
                     <input
@@ -125,6 +126,7 @@ exports[`<StageInformation /> should render correctly 1`] = `
                     onChange={[Function]}
                     resizeOrientation="both"
                     type="text"
+                    validated="default"
                     value="Stage info description test"
                   >
                     <textarea
