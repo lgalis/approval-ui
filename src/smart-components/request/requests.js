@@ -14,7 +14,7 @@ import { Stack, StackItem } from '@patternfly/react-core';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 const columns = [{
-  title: 'RequestId',
+  title: 'Name',
   cellFormatters: [ expandable ]
 },
 'Requester',
