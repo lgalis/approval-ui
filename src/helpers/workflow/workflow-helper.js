@@ -17,7 +17,8 @@ export async function fetchWorkflowsWithGroups({ limit = 10, offset = 0 }) {
       wfWithGroups = await fetchGroupNames(wf.group_refs);
     }
     catch (error) {
-      if (!(error.response && error.response.status === 404)) {
+      console.log( 'Debug 1', error);
+      if (!(error && error.status === 404)) {
         throw error;
       }
     }
@@ -36,7 +37,8 @@ export async function fetchWorkflowWithGroups(id) {
     wfWithGroups = await fetchGroupNames(wfData.group_refs);
   }
   catch (error) {
-    if (!(error.response && error.response.status === 404)) {
+    console.log( 'Debug 2', error);
+    if (!(error && error.status === 404)) {
       throw error;
     }
   }
