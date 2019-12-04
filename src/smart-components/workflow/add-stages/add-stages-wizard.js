@@ -25,7 +25,7 @@ const AddWorkflow = ({
 
   const steps = [
     { name: 'General Information', component: <StageInformation formData={ formData } handleChange={ handleChange } /> },
-    { name: 'Set Stages', component: <SetStages formData={ formData }
+    { name: 'Set Groups', component: <SetStages formData={ formData }
       handleChange={ handleChange } options={ rbacGroups } /> },
     { name: 'Review', component: <SummaryContent formData={ formData }
       options={ rbacGroups } />, nextButtonText: 'Confirm' }

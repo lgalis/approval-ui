@@ -37,9 +37,9 @@ const EditWorkflowInfoModal = ({
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: `Edit workflow's stages`,
+      title: `Edit workflow's groups`,
       dismissable: true,
-      description: `Edit workflow's stages was cancelled by the user.`
+      description: `Edit workflow's groups was cancelled by the user.`
     });
     push('/workflows');
   };
