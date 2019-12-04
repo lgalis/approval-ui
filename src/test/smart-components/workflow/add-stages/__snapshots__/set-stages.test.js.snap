@@ -75,7 +75,7 @@ exports[`<SetStages /> should render correctly 1`] = `
                               title={null}
                             />,
                             " ",
-                            "Add a stage",
+                            "Add a group",
                           ],
                           "id": "add-workflow-stage",
                           "isInline": true,
@@ -134,7 +134,7 @@ exports[`<SetStages /> should render correctly 1`] = `
                             </svg>
                           </PlusIcon>
                            
-                          Add a stage
+                          Add a group
                         </button>
                       </Button>
                     </ComponentWithOuia>
