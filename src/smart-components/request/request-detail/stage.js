@@ -138,6 +138,8 @@ Stage.propTypes = {
   isLoading: PropTypes.bool,
   isActive: PropTypes.bool,
   item: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
     state: PropTypes.string,
     request_id: PropTypes.string,
     stageActions: PropTypes.shape({

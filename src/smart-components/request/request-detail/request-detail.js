@@ -75,7 +75,10 @@ const RequestDetail = ({
 
 RequestDetail.propTypes = {
   match: PropTypes.shape({
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
+    params: PropTypes.shape({
+      id: PropTypes.string
+    })
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired

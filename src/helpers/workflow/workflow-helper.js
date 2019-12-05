@@ -8,7 +8,12 @@ export async function fetchWorkflows({ appName = undefined, objectId = undefined
   return await workflowApi.listWorkflows(appName, objectId, objectType, limit, offset, filter);
 }
 
-export async function fetchWorkflowsWithGroups({ appName = undefined, objectId = undefined, objectType = undefined, limit = 10, offset = 0, filter = '' }) {
+export async function fetchWorkflowsWithGroups({ appName = undefined,
+  objectId = undefined,
+  objectType = undefined,
+  limit = 10,
+  offset = 0,
+  filter = '' }) {
   const wfData = await workflowApi.listWorkflows(appName, objectId, objectType, limit, offset, filter);
   const workflows = wfData.data;
   return Promise.all(workflows.map(async wf => {
