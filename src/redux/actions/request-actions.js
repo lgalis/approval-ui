@@ -8,12 +8,12 @@ export const fetchRequests = (options = {}) => ({
 
 export const fetchRequest = (apiProps) => ({
   type: ActionTypes.FETCH_REQUEST,
-  payload: RequestHelper.fetchRequestWithStagesAndActions(apiProps)
+  payload: RequestHelper.fetchRequestWithActions(apiProps)
 });
 
-export const createStageAction = (actionName, stageId, actionIn) => ({
-  type: ActionTypes.CREATE_STAGE_ACTION,
-  payload: RequestHelper.createStageAction(stageId, actionIn),
+export const createRequestAction = (actionName, requestId, actionIn) => ({
+  type: ActionTypes.CREATE_REQUEST_ACTION,
+  payload: RequestHelper.createRequestAction(requestId, actionIn),
   meta: {
     notifications: {
       fulfilled: {
