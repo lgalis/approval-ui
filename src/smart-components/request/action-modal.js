@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { createStageAction, fetchRequest } from '../../redux/actions/request-actions';
+import { createRequestAction, fetchRequest } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 
 const ActionModal = ({
@@ -14,7 +14,7 @@ const ActionModal = ({
   match: { params: { id }},
   actionType,
   addNotification,
-  createStageAction,
+  createRequestAction,
   closeUrl,
   postMethod,
   fetchRequest
@@ -31,12 +31,12 @@ const ActionModal = ({
     const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
     if (activeStage) {
       return postMethod ?
-        createStageAction(
+        createRequestAction(
           actionName,
           activeStage.id,
           { operation: operationType[actionType], ...data }
         ).then(() => postMethod()).then(() => push(closeUrl))
-        : createStageAction(
+        : createRequestAction(
           actionName,
           activeStage.id,
           { operation: operationType[actionType], ...data }
@@ -92,7 +92,7 @@ ActionModal.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   addNotification: PropTypes.func.isRequired,
-  createStageAction: PropTypes.func.isRequired,
+  createRequestAction: PropTypes.func.isRequired,
   fetchRequest: PropTypes.func,
   postMethod: PropTypes.func,
   selectedRequest: PropTypes.object,
@@ -110,7 +110,7 @@ const mapStateToProps = ({ requestReducer: { isRequestDataLoading }}) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   fetchRequest,
-  createStageAction
+  createRequestAction
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActionModal));

@@ -97,16 +97,13 @@ describe('Request actions', () => {
         data: [{
           id: '11',
           name: 'request' }],
-        stages: [{ id: '10',
-          name: 'stage',
-          stageActions: {
-            data: [
-              {
-                id: '9',
-                name: 'action'
-              }
-            ]}
-        }]
+        requestActions: {
+          data: [
+            {
+              id: '9',
+              name: 'action'
+            }
+          ]}
       },
       type: `${FETCH_REQUEST}_FULFILLED`
     }];
@@ -120,11 +117,11 @@ describe('Request actions', () => {
       }
     }));
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/11/groups', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/11/requests', mockOnce({
       body: {
         data: [{
           id: '10',
-          name: 'stage'
+          name: 'subrequest'
         }]
       }
     }));
@@ -143,7 +140,7 @@ describe('Request actions', () => {
     });
   });
 
-  it('createStageAction should create correct actions on success ', (done) => {
+  it('createRequestAction should create correct actions on success ', (done) => {
     expect.assertions(2);
     const store = mockStore({});
 
@@ -176,11 +173,11 @@ describe('Request actions', () => {
     });
   });
 
-  it('createStageAction should create correct actions when failed ', (done) => {
+  it('createRequestAction should create correct actions when failed ', (done) => {
     expect.assertions(2);
     const store = mockStore({});
 
-    apiClientMock.post(`${APPROVAL_API_BASE}/stages/123/actions`, mockOnce((req, res) => {
+    apiClientMock.post(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce((req, res) => {
       expect(JSON.parse(req.body())).toEqual('actionIn');
       return res.status(500);
     }));
