@@ -33,7 +33,7 @@ describe('Request reducer', () => {
     };
     expect(reducer(
       { ...requestsInitialState, isRequestDataLoading: true },
-      { type: `${FETCH_REQUEST}_FULFILLED`, payload: 'single request' },
+      { type: `${FETCH_REQUEST}_FULFILLED`, payload: 'single request' }
     ))
     .toEqual(expectedState);
 

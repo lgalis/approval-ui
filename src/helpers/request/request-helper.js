@@ -12,11 +12,8 @@ export async function fetchRequest(id) {
 }
 
 export async function fetchRequestWithActions(id) {
-  console.log('DEBUG - fetchRequestWithActions: id', id);
   const requestData = await requestApi.showRequest(id);
-  console.log('DEBUG - fetchRequestWithActions: requestData', requestData);
-  const requestActions = await actionApi.listActionsByRequest(id);
-  console.log('DEBUG - fetchRequestWithActions: requestData', requestActions);
+  const requestActions = [];
   return { ...requestData, actions: requestActions };
 }
 
