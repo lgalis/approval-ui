@@ -1,44 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Stage /> should render correctly 1`] = `
-<Stage
+exports[`<Request /> should render correctly 1`] = `
+<Request
   isExpanded={false}
   item={
     Object {
-      "id": "item-id",
-      "request_id": "request-id",
-      "stageActions": Object {
+      "actions": Object {
         "data": Array [],
       },
+      "id": "item-id",
       "state": "no-state",
     }
   }
   toggleExpand={[MockFunction]}
 >
   <DataListItem
-    aria-labelledby="check-stage-item-id"
+    aria-labelledby="check-request-item-id"
     isExpanded={false}
-    key="stage-item-id"
+    key="request-item-id"
   >
     <li
-      aria-labelledby="check-stage-item-id"
+      aria-labelledby="check-request-item-id"
       className="pf-c-data-list__item"
     >
       <DataListItemRow
         key=".0"
-        rowid="check-stage-item-id"
+        rowid="check-request-item-id"
       >
         <div
           className="pf-c-data-list__item-row"
         >
           <DataListToggle
             aria-label="Toggle details for"
-            aria-labelledby="stage-item-id stage-item-id"
-            id="stage-item-id"
+            aria-labelledby="request-item-id request-item-id"
+            id="request-item-id"
             isExpanded={false}
             key=".0"
             onClick={[Function]}
-            rowid="check-stage-item-id"
+            rowid="check-request-item-id"
           >
             <div
               className="pf-c-data-list__item-control"
@@ -52,7 +51,7 @@ exports[`<Stage /> should render correctly 1`] = `
                   aria-expanded={false}
                   aria-label="Toggle details for"
                   aria-labelledby={null}
-                  id="stage-item-id"
+                  id="request-item-id"
                   variant="plain"
                 >
                   <ComponentWithOuia
@@ -69,7 +68,7 @@ exports[`<Stage /> should render correctly 1`] = `
                           size="sm"
                           title={null}
                         />,
-                        "id": "stage-item-id",
+                        "id": "request-item-id",
                         "variant": "plain",
                       }
                     }
@@ -80,7 +79,7 @@ exports[`<Stage /> should render correctly 1`] = `
                       aria-expanded={false}
                       aria-label="Toggle details for"
                       aria-labelledby={null}
-                      id="stage-item-id"
+                      id="request-item-id"
                       ouiaContext={
                         Object {
                           "isOuia": false,
@@ -97,7 +96,7 @@ exports[`<Stage /> should render correctly 1`] = `
                         aria-labelledby={null}
                         className="pf-c-button pf-m-plain"
                         disabled={false}
-                        id="stage-item-id"
+                        id="request-item-id"
                         tabIndex={null}
                         type="button"
                       >
@@ -172,7 +171,7 @@ exports[`<Stage /> should render correctly 1`] = `
               ]
             }
             key=".1"
-            rowid="check-stage-item-id"
+            rowid="check-request-item-id"
           >
             <div
               className="pf-c-data-list__item-content"
@@ -246,13 +245,13 @@ exports[`<Stage /> should render correctly 1`] = `
         </div>
       </DataListItemRow>
       <DataListContent
-        aria-label="Stage Content Details"
+        aria-label="Request Content Details"
         isHidden={true}
         key=".1"
-        rowid="check-stage-item-id"
+        rowid="check-request-item-id"
       >
         <section
-          aria-label="Stage Content Details"
+          aria-label="Request Content Details"
           className="pf-c-data-list__expandable-content"
           hidden={true}
           id=""
@@ -278,7 +277,11 @@ exports[`<Stage /> should render correctly 1`] = `
                         component="h6"
                       >
                         <ActionTranscript
-                          actionList={Array []}
+                          actionList={
+                            Object {
+                              "data": Array [],
+                            }
+                          }
                         >
                           <Stack>
                             <div
@@ -297,5 +300,5 @@ exports[`<Stage /> should render correctly 1`] = `
       </DataListContent>
     </li>
   </DataListItem>
-</Stage>
+</Request>
 `;

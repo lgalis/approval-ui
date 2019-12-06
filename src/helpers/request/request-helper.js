@@ -13,7 +13,7 @@ export async function fetchRequest(id) {
 
 export async function fetchRequestWithActions(id) {
   const requestData = await requestApi.showRequest(id);
-  const requestActions = [];
+  const requestActions = await actionApi.listActionsByRequest(id);
   return { ...requestData, actions: requestActions };
 }
 

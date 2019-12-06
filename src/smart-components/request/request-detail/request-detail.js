@@ -8,7 +8,7 @@ import { Section } from '@redhat-cloud-services/frontend-components';
 import '../../../App.scss';
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
-import RequestStageTranscript from './request-stage-transcript';
+import RequestTranscript from './request-transcript';
 import { fetchRequest } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
@@ -43,7 +43,7 @@ const RequestDetail = ({
             <RequestInfoBar request={ selectedRequest }/>
           </GridItem>
           <GridItem md={ 10 } className="detail-pane">
-            <RequestStageTranscript request={ selectedRequest } url={ url }/>
+            <RequestTranscript request={ selectedRequest } url={ url }/>
           </GridItem>
         </Fragment>
       );

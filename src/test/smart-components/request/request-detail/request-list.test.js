@@ -1,11 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import StageList from '../../../../smart-components/request/request-detail/stage-list';
+import RequestList from '../../../../smart-components/request/request-detail/request-list';
 import { DataListLoader } from '../../../../presentational-components/shared/loader-placeholders';
-import Stage from '../../../../smart-components/request/request-detail/stage';
+import Stage from '../../../../smart-components/request/request-detail/request';
 
-describe('<StageList />', () => {
+describe('<RequestList />', () => {
   let initialProps;
   beforeEach(() => {
     initialProps = {
@@ -15,12 +15,12 @@ describe('<StageList />', () => {
   });
 
   it('should render in loading', () => {
-    const wrapper = mount(<StageList { ...initialProps } isLoading/>);
+    const wrapper = mount(<RequestList { ...initialProps } isLoading/>);
     expect(wrapper.find(DataListLoader)).toHaveLength(1);
   });
 
   it('should expact stage list item', () => {
-    const wrapper = mount(<StageList { ...initialProps } items={ [{
+    const wrapper = mount(<RequestList { ...initialProps } items={ [{
       id: 'foo',
       stageActions: {
         data: []

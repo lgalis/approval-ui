@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import { MemoryRouter } from 'react-router-dom';
-import Stage from '../../../../smart-components/request/request-detail/stage';
+import Request from '../../../../smart-components/request/request-detail/request';
 
 const ComponentWrapper = ({ children }) => (
   <MemoryRouter initialEntries={ [ '/foo' ] }>
@@ -10,7 +10,7 @@ const ComponentWrapper = ({ children }) => (
   </MemoryRouter>
 );
 
-describe('<Stage />', () => {
+describe('<Request />', () => {
   let initialProps;
   beforeEach(() => {
     initialProps = {
@@ -19,8 +19,7 @@ describe('<Stage />', () => {
       item: {
         id: 'item-id',
         state: 'no-state',
-        request_id: 'request-id',
-        stageActions: {
+        actions: {
           data: []
         }
       }
@@ -28,20 +27,19 @@ describe('<Stage />', () => {
   });
 
   it('should render correctly', () => {
-    const wrapper = mount(<ComponentWrapper><Stage { ...initialProps } /></ComponentWrapper>).find(Stage);
+    const wrapper = mount(<ComponentWrapper><Request { ...initialProps } /></ComponentWrapper>).find(Request);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
   it('should render item in active state with link', () => {
     const wrapper = mount(
       <ComponentWrapper>
-        <Stage
+        <Request
           { ...initialProps }
           item={ {
-            id: 'item-id',
+            id: '111',
             state: 'notified',
-            request_id: 'request-id',
-            stageActions: {
+            actions: {
               data: []
             }
           } }
@@ -56,22 +54,21 @@ describe('<Stage />', () => {
     wrapper.find('Link#approve-request-id').simulate('click', { button: 0 });
     wrapper.update();
     const history = wrapper.find(MemoryRouter).instance().history;
-    expect(history.location.pathname).toEqual('/requests/detail/request-id/approve');
+    expect(history.location.pathname).toEqual('/requests/detail/111/approve');
     wrapper.find('Link#deny-request-id').simulate('click', { button: 0 });
-    expect(history.location.pathname).toEqual('/requests/detail/request-id/deny');
+    expect(history.location.pathname).toEqual('/requests/detail/111/deny');
   });
 
   it('should expand item', () => {
     const toggleExpand = jest.fn();
     const wrapper = mount(
       <ComponentWrapper>
-        <Stage
+        <Request
           { ...initialProps }
           item={ {
             id: 'item-id',
             state: 'notified',
-            request_id: 'request-id',
-            stageActions: {
+            actions: {
               data: []
             }
           } }
@@ -83,20 +80,20 @@ describe('<Stage />', () => {
     wrapper.update();
     wrapper.find('button.pf-c-button.pf-m-plain').simulate('click');
     wrapper.update();
-    expect(toggleExpand).toHaveBeenCalledWith('stage-item-id');
+    expect(toggleExpand).toHaveBeenCalledWith('request-item-id');
   });
 
   it('should expand kebab menu', () => {
     const toggleExpand = jest.fn();
     const wrapper = mount(
       <ComponentWrapper>
-        <Stage
+        <Request
           { ...initialProps }
           item={ {
             id: 'item-id',
             state: 'notified',
             request_id: 'request-id',
-            stageActions: {
+            actions: {
               data: []
             }
           } }
@@ -106,9 +103,9 @@ describe('<Stage />', () => {
       </ComponentWrapper>
     );
     wrapper.update();
-    wrapper.find('#stage-request-dropdown-request-id').first().simulate('click');
+    wrapper.find('#request-request-dropdown-request-id').first().simulate('click');
     wrapper.update();
-    wrapper.find('Link#stage-request-id-request-comment').first().simulate('click', { button: 0 });
+    wrapper.find('Link#request-request-id-request-comment').first().simulate('click', { button: 0 });
     wrapper.update();
   });
 });
