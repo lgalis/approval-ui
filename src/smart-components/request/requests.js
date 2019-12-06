@@ -47,7 +47,6 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
   const areActionsDisabled = (requestData) => requestData && requestData.state ? !isRequestStateActive(requestData.state.title) : true;
 
   const actionResolver = (requestData, { rowIndex }) => {
-    console.log('actionResolver - requestData.id', requestData.id);
     return (rowIndex === 1 || areActionsDisabled(requestData) ? null :
       [
         {

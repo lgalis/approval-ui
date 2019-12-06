@@ -145,7 +145,7 @@ Request.propTypes = {
     })
   }).isRequired,
   idx: PropTypes.number,
-  isExpanded: PropTypes.func.isRequired,
+  isExpanded: PropTypes.bool.isRequired,
   toggleExpand: PropTypes.func.isRequired,
   noItems: PropTypes.string
 };

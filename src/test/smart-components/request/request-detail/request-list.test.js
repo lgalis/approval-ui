@@ -19,10 +19,10 @@ describe('<RequestList />', () => {
     expect(wrapper.find(DataListLoader)).toHaveLength(1);
   });
 
-  it('should expact stage list item', () => {
+  it('should expect a request list item', () => {
     const wrapper = mount(<RequestList { ...initialProps } items={ [{
       id: 'foo',
-      stageActions: {
+      actions: {
         data: []
       }
     }] }/>);
@@ -30,6 +30,6 @@ describe('<RequestList />', () => {
     const button = wrapper.find('button.pf-c-button.pf-m-plain');
     expect(button.props().className).toEqual('pf-c-button pf-m-plain');
     button.simulate('click');
-    expect(wrapper.state()).toEqual({ expanded: [ 'stage-foo' ]});
+    expect(wrapper.state()).toEqual({ expanded: [ 'request-foo' ]});
   });
 });

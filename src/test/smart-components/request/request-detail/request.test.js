@@ -48,14 +48,14 @@ describe('<Request />', () => {
       </ComponentWrapper>
     );
     wrapper.update();
-    expect(wrapper.find('a#approve-request-id')).toHaveLength(1);
-    expect(wrapper.find('a#deny-request-id')).toHaveLength(1);
+    expect(wrapper.find('a#approve-111')).toHaveLength(1);
+    expect(wrapper.find('a#deny-111')).toHaveLength(1);
 
-    wrapper.find('Link#approve-request-id').simulate('click', { button: 0 });
+    wrapper.find('Link#approve-111').simulate('click', { button: 0 });
     wrapper.update();
     const history = wrapper.find(MemoryRouter).instance().history;
     expect(history.location.pathname).toEqual('/requests/detail/111/approve');
-    wrapper.find('Link#deny-request-id').simulate('click', { button: 0 });
+    wrapper.find('Link#deny-111').simulate('click', { button: 0 });
     expect(history.location.pathname).toEqual('/requests/detail/111/deny');
   });
 
@@ -80,7 +80,7 @@ describe('<Request />', () => {
     wrapper.update();
     wrapper.find('button.pf-c-button.pf-m-plain').simulate('click');
     wrapper.update();
-    expect(toggleExpand).toHaveBeenCalledWith('request-item-id');
+    expect(toggleExpand).toHaveBeenCalledWith('request-111');
   });
 
   it('should expand kebab menu', () => {
@@ -92,7 +92,6 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
-            request_id: 'request-id',
             actions: {
               data: []
             }
@@ -103,9 +102,9 @@ describe('<Request />', () => {
       </ComponentWrapper>
     );
     wrapper.update();
-    wrapper.find('#request-request-dropdown-request-id').first().simulate('click');
+    wrapper.find('#request-request-dropdown-111').first().simulate('click');
     wrapper.update();
-    wrapper.find('Link#request-request-id-request-comment').first().simulate('click', { button: 0 });
+    wrapper.find('Link#request-111-request-comment').first().simulate('click', { button: 0 });
     wrapper.update();
   });
 });

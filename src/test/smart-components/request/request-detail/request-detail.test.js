@@ -44,7 +44,7 @@ describe('<RequestDetail />', () => {
 
   it('should render request loader', async done => {
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/stages`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
     const store = mockStore(initialState);
     let wrapper;
 

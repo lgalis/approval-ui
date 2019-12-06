@@ -74,7 +74,7 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ],
@@ -109,7 +109,7 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ],
@@ -144,7 +144,7 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ],
@@ -178,7 +178,7 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ],
@@ -209,7 +209,7 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ],

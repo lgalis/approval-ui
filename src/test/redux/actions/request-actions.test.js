@@ -97,10 +97,10 @@ describe('Request actions', () => {
         data: [{
           id: '11',
           name: 'request' }],
-        requestActions: {
+        actions: {
           data: [
             {
-              id: '9',
+              id: '11',
               name: 'action'
             }
           ]}
@@ -129,7 +129,7 @@ describe('Request actions', () => {
     apiClientMock.get(APPROVAL_API_BASE + '/requests/11/actions', mockOnce({
       body: {
         data: [{
-          id: '9',
+          id: '11',
           name: 'action'
         }]
       }
