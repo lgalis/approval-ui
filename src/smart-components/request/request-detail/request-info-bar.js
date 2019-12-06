@@ -21,14 +21,6 @@ const RequestInfoBar = ({ request }) => {
       <Text component={ TextVariants.small }>Order Parameters: </Text>
       <Text component={ TextVariants.small }>Requester: </Text>
       <Text component={ TextVariants.h6 }>{ request.requester_name }</Text>
-      <Text component={ TextVariants.h6 }>Project: <br/> </Text>
-      { request.content.params && Object.keys(request.content.params).map(param => {
-        return ((request.content.params[param]) &&
-                  <Text key={ param } component={ TextVariants.small }>
-                    { `${param}: ${request.content.params[param]}` }
-                  </Text>);
-      })
-      }
     </TextContent>
   );
 };
