@@ -65,7 +65,7 @@ describe('<RequestDetail />', () => {
         foo: 'bar'
       }}
     }}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/stages`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
     const store = mockStore(
       initialState = {
         requestReducer: {

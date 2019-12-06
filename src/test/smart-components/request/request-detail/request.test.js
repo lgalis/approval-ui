@@ -17,7 +17,7 @@ describe('<Request />', () => {
       isExpanded: false,
       toggleExpand: jest.fn(),
       item: {
-        id: 'item-id',
+        id: '111',
         state: 'no-state',
         actions: {
           data: []
@@ -66,7 +66,7 @@ describe('<Request />', () => {
         <Request
           { ...initialProps }
           item={ {
-            id: 'item-id',
+            id: '111',
             state: 'notified',
             actions: {
               data: []
@@ -90,7 +90,7 @@ describe('<Request />', () => {
         <Request
           { ...initialProps }
           item={ {
-            id: 'item-id',
+            id: '111',
             state: 'notified',
             request_id: 'request-id',
             actions: {

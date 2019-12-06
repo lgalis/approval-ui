@@ -8,36 +8,36 @@ exports[`<Request /> should render correctly 1`] = `
       "actions": Object {
         "data": Array [],
       },
-      "id": "item-id",
+      "id": "111",
       "state": "no-state",
     }
   }
   toggleExpand={[MockFunction]}
 >
   <DataListItem
-    aria-labelledby="check-request-item-id"
+    aria-labelledby="check-request-111"
     isExpanded={false}
-    key="request-item-id"
+    key="request-111"
   >
     <li
-      aria-labelledby="check-request-item-id"
+      aria-labelledby="check-request-111"
       className="pf-c-data-list__item"
     >
       <DataListItemRow
         key=".0"
-        rowid="check-request-item-id"
+        rowid="check-request-111"
       >
         <div
           className="pf-c-data-list__item-row"
         >
           <DataListToggle
             aria-label="Toggle details for"
-            aria-labelledby="request-item-id request-item-id"
-            id="request-item-id"
+            aria-labelledby="request-111 request-111"
+            id="request-111"
             isExpanded={false}
             key=".0"
             onClick={[Function]}
-            rowid="check-request-item-id"
+            rowid="check-request-111"
           >
             <div
               className="pf-c-data-list__item-control"
@@ -51,7 +51,7 @@ exports[`<Request /> should render correctly 1`] = `
                   aria-expanded={false}
                   aria-label="Toggle details for"
                   aria-labelledby={null}
-                  id="request-item-id"
+                  id="request-111"
                   variant="plain"
                 >
                   <ComponentWithOuia
@@ -68,7 +68,7 @@ exports[`<Request /> should render correctly 1`] = `
                           size="sm"
                           title={null}
                         />,
-                        "id": "request-item-id",
+                        "id": "request-111",
                         "variant": "plain",
                       }
                     }
@@ -79,7 +79,7 @@ exports[`<Request /> should render correctly 1`] = `
                       aria-expanded={false}
                       aria-label="Toggle details for"
                       aria-labelledby={null}
-                      id="request-item-id"
+                      id="request-111"
                       ouiaContext={
                         Object {
                           "isOuia": false,
@@ -96,7 +96,7 @@ exports[`<Request /> should render correctly 1`] = `
                         aria-labelledby={null}
                         className="pf-c-button pf-m-plain"
                         disabled={false}
-                        id="request-item-id"
+                        id="request-111"
                         tabIndex={null}
                         type="button"
                       >
@@ -138,7 +138,7 @@ exports[`<Request /> should render correctly 1`] = `
               Array [
                 <DataListCell>
                   <span
-                    id="item-id"
+                    id="111"
                   >
                     NaN. undefined
                      
@@ -146,7 +146,7 @@ exports[`<Request /> should render correctly 1`] = `
                 </DataListCell>,
                 <DataListCell>
                   <span
-                    id="item-id-state"
+                    id="111-state"
                     style={
                       Object {
                         "textTransform": "capitalize",
@@ -164,26 +164,26 @@ exports[`<Request /> should render correctly 1`] = `
                 </DataListCell>,
                 <DataListCell
                   aria-label="Actions"
-                  aria-labelledby="request-item-id check-request-actionitem-id"
+                  aria-labelledby="request-111 check-request-action111"
                   className="pf-c-data-list__action"
-                  id="workflow-item-id"
+                  id="workflow-111"
                 />,
               ]
             }
             key=".1"
-            rowid="check-request-item-id"
+            rowid="check-request-111"
           >
             <div
               className="pf-c-data-list__item-content"
             >
               <DataListCell
-                key="item-id"
+                key="111"
               >
                 <div
                   className="pf-c-data-list__cell"
                 >
                   <span
-                    id="item-id"
+                    id="111"
                   >
                     NaN. undefined
                      
@@ -191,13 +191,13 @@ exports[`<Request /> should render correctly 1`] = `
                 </div>
               </DataListCell>
               <DataListCell
-                key="item-id-state"
+                key="111-state"
               >
                 <div
                   className="pf-c-data-list__cell"
                 >
                   <span
-                    id="item-id-state"
+                    id="111-state"
                     style={
                       Object {
                         "textTransform": "capitalize",
@@ -210,7 +210,7 @@ exports[`<Request /> should render correctly 1`] = `
                 </div>
               </DataListCell>
               <DataListCell
-                key="item-id-action"
+                key="111-action"
               >
                 <div
                   className="pf-c-data-list__cell"
@@ -228,16 +228,16 @@ exports[`<Request /> should render correctly 1`] = `
               </DataListCell>
               <DataListCell
                 aria-label="Actions"
-                aria-labelledby="request-item-id check-request-actionitem-id"
+                aria-labelledby="request-111 check-request-action111"
                 className="pf-c-data-list__action"
-                id="workflow-item-id"
-                key="request-item-id"
+                id="workflow-111"
+                key="request-111"
               >
                 <div
                   aria-label="Actions"
-                  aria-labelledby="request-item-id check-request-actionitem-id"
+                  aria-labelledby="request-111 check-request-action111"
                   className="pf-c-data-list__cell pf-c-data-list__action"
-                  id="workflow-item-id"
+                  id="workflow-111"
                 />
               </DataListCell>
             </div>
@@ -248,7 +248,7 @@ exports[`<Request /> should render correctly 1`] = `
         aria-label="Request Content Details"
         isHidden={true}
         key=".1"
-        rowid="check-request-item-id"
+        rowid="check-request-111"
       >
         <section
           aria-label="Request Content Details"
