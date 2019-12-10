@@ -1,47 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Requests /> should render correctly 1`] = `
-<ContextProvider
-  value={null}
->
-  <Requests
-    fetchRequests={[Function]}
-    isLoading={false}
-    pagination={Object {}}
-    requests={Array []}
-    store={
-      Object {
-        "clearActions": [Function],
-        "dispatch": [Function],
-        "getActions": [Function],
-        "getState": [Function],
-        "replaceReducer": [Function],
-        "subscribe": [Function],
-      }
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
     }
-  />
-</ContextProvider>
+  }
+>
+  <MemoryRouter
+    initialEntries={
+      Array [
+        "/requests",
+      ]
+    }
+  >
+    <IntlProvider
+      locale="en"
+    >
+      <Connect(Requests) />
+    </IntlProvider>
+  </MemoryRouter>
+</Provider>
 `;
 
 exports[`<Requests /> should render correctly in loading state 1`] = `
-<ContextProvider
-  value={null}
->
-  <Requests
-    fetchRequests={[Function]}
-    isLoading={false}
-    pagination={Object {}}
-    requests={Array []}
-    store={
-      Object {
-        "clearActions": [Function],
-        "dispatch": [Function],
-        "getActions": [Function],
-        "getState": [Function],
-        "replaceReducer": [Function],
-        "subscribe": [Function],
-      }
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
     }
-  />
-</ContextProvider>
+  }
+>
+  <MemoryRouter
+    initialEntries={
+      Array [
+        "/requests",
+      ]
+    }
+  >
+    <IntlProvider
+      locale="en"
+    >
+      <Connect(Requests)
+        isLoading={true}
+      />
+    </IntlProvider>
+  </MemoryRouter>
+</Provider>
 `;
