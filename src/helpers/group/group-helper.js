@@ -14,7 +14,7 @@ export async function fetchGroupNames(groupRefs) {
         const group = await api.getGroup(id);
         return group.name;
       } catch (error) {
-        if (!(error && error.status === 404)) {
+        if (error.status !== 404) {
           throw error;
         }
         else {
