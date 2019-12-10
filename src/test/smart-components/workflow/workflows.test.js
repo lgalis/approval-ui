@@ -60,13 +60,13 @@ describe('<Workflows />', () => {
 
   it('should render correctly', () => {
     const store = mockStore(initialState);
-    const wrapper = shallow(<Workflows store={ store } { ...initialProps } />);
+    const wrapper = shallow(<ComponentWrapper store={ store }><Workflows { ...initialProps } /></ComponentWrapper>);
     expect(shallowToJson(wrapper)).toMatchSnapshot();
   });
 
   it('should render correctly in loading state', () => {
     const store = mockStore(initialState);
-    const wrapper = shallow(<Workflows store={ store } { ...initialProps } isLoading />);
+    const wrapper = shallow(<ComponentWrapper store={ store }><Workflows { ...initialProps } isLoading /></ComponentWrapper>);
     expect(shallowToJson(wrapper)).toMatchSnapshot();
   });
 
