@@ -12,8 +12,6 @@ export const createRows = (data, filterValue) =>
     requester_name,
     created_at,
     updated_at,
-    active_stage,
-    total_stages,
     state,
     decision,
     reason,
@@ -24,7 +22,7 @@ export const createRows = (data, filterValue) =>
       state,
       cells: [ <Fragment key={ id }><Link to={ `/requests/detail/${id}` }>
         <Button variant="link"> { name } </Button></Link></Fragment>, requester_name,
-      timeAgo(created_at), timeAgo(updated_at), `${active_stage} of ${total_stages}`, decision ]
+      timeAgo(created_at), timeAgo(updated_at), state, decision ]
     }, {
       parent: key * 2,
       fullWidth: true,

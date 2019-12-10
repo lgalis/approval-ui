@@ -124,7 +124,11 @@ EditWorkflowStagesModal.propTypes = {
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
     label: PropTypes.string.isRequired
   })).isRequired,
-  isFetching: PropTypes.bool
+  isFetching: PropTypes.bool,
+  item: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
+  })
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

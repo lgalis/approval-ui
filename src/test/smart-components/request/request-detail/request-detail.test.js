@@ -12,7 +12,7 @@ import RequestDetail from '../../../../smart-components/request/request-detail/r
 import { RequestLoader } from '../../../../presentational-components/shared/loader-placeholders';
 import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 import RequestInfoBar from '../../../../smart-components/request/request-detail/request-info-bar';
-import RequestStageTranscript from '../../../../smart-components/request/request-detail/request-stage-transcript';
+import RequestTranscript from '../../../../smart-components/request/request-detail/request-transcript';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo/123' ]}) => (
   <Provider store={ store }>
@@ -44,7 +44,7 @@ describe('<RequestDetail />', () => {
 
   it('should render request loader', async done => {
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/stages`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
     const store = mockStore(initialState);
     let wrapper;
 
@@ -65,7 +65,7 @@ describe('<RequestDetail />', () => {
         foo: 'bar'
       }}
     }}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/stages`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
     const store = mockStore(
       initialState = {
         requestReducer: {
@@ -84,7 +84,7 @@ describe('<RequestDetail />', () => {
     });
     wrapper.update();
     expect(wrapper.find(RequestInfoBar)).toHaveLength(1);
-    expect(wrapper.find(RequestStageTranscript)).toHaveLength(1);
+    expect(wrapper.find(RequestTranscript)).toHaveLength(1);
     done();
   });
 });

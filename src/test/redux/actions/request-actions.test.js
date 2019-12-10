@@ -5,10 +5,10 @@ import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-service
 import {
   FETCH_REQUESTS,
   FETCH_REQUEST,
-  CREATE_STAGE_ACTION
+  CREATE_REQUEST_ACTION
 } from '../../../redux/action-types';
 import {
-  createStageAction,
+  createRequestAction,
   fetchRequests,
   fetchRequest
 } from '../../../redux/actions/request-actions';
@@ -97,16 +97,13 @@ describe('Request actions', () => {
         data: [{
           id: '11',
           name: 'request' }],
-        stages: [{ id: '10',
-          name: 'stage',
-          stageActions: {
-            data: [
-              {
-                id: '9',
-                name: 'action'
-              }
-            ]}
-        }]
+        actions: {
+          data: [
+            {
+              id: '11',
+              name: 'action'
+            }
+          ]}
       },
       type: `${FETCH_REQUEST}_FULFILLED`
     }];
@@ -120,19 +117,19 @@ describe('Request actions', () => {
       }
     }));
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/11/stages', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/11/requests', mockOnce({
       body: {
         data: [{
           id: '10',
-          name: 'stage'
+          name: 'subrequest'
         }]
       }
     }));
 
-    apiClientMock.get(APPROVAL_API_BASE + '/stages/10/actions', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/11/actions', mockOnce({
       body: {
         data: [{
-          id: '9',
+          id: '11',
           name: 'action'
         }]
       }
@@ -143,17 +140,17 @@ describe('Request actions', () => {
     });
   });
 
-  it('createStageAction should create correct actions on success ', (done) => {
+  it('createRequestAction should create correct actions on success ', (done) => {
     expect.assertions(2);
     const store = mockStore({});
 
-    apiClientMock.post(`${APPROVAL_API_BASE}/stages/123/actions`, mockOnce((req, res) => {
+    apiClientMock.post(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce((req, res) => {
       expect(JSON.parse(req.body())).toEqual('actionIn');
       return res.status(200).body({ foo: 'bar' });
     }));
 
     const expectedActions = [{
-      type: `${CREATE_STAGE_ACTION}_PENDING`,
+      type: `${CREATE_REQUEST_ACTION}_PENDING`,
       meta: expect.any(Object)
     }, {
       type: ADD_NOTIFICATION,
@@ -165,28 +162,28 @@ describe('Request actions', () => {
         variant: 'success'
       }
     }, {
-      type: `${CREATE_STAGE_ACTION}_FULFILLED`,
+      type: `${CREATE_REQUEST_ACTION}_FULFILLED`,
       meta: expect.any(Object),
       payload: { foo: 'bar' }
     }];
 
-    store.dispatch(createStageAction('actionName', '123', 'actionIn')).then(() => {
+    store.dispatch(createRequestAction('actionName', '123', 'actionIn')).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });
   });
 
-  it('createStageAction should create correct actions when failed ', (done) => {
+  it('createRequestAction should create correct actions when failed ', (done) => {
     expect.assertions(2);
     const store = mockStore({});
 
-    apiClientMock.post(`${APPROVAL_API_BASE}/stages/123/actions`, mockOnce((req, res) => {
+    apiClientMock.post(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce((req, res) => {
       expect(JSON.parse(req.body())).toEqual('actionIn');
       return res.status(500);
     }));
 
     const expectedActions = [{
-      type: `${CREATE_STAGE_ACTION}_PENDING`,
+      type: `${CREATE_REQUEST_ACTION}_PENDING`,
       meta: expect.any(Object)
     }, {
       type: ADD_NOTIFICATION,
@@ -199,10 +196,10 @@ describe('Request actions', () => {
 
       }
     }, expect.objectContaining({
-      type: `${CREATE_STAGE_ACTION}_REJECTED`
+      type: `${CREATE_REQUEST_ACTION}_REJECTED`
     }) ];
 
-    store.dispatch(createStageAction('actionName', '123', 'actionIn')).catch(() => {
+    store.dispatch(createRequestAction('actionName', '123', 'actionIn')).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });

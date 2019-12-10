@@ -20,9 +20,11 @@ const operationIcon = {
 };
 
 export const ActionTranscript = actionList => {
+  // TODO - remove actionList.actionList after the new Apis are working - it is only for old style requests
+  const actions = actionList.data || actionList.actionList.data;
   return (
     <Stack>
-      { actionList.actionList.map(actionItem =>
+      { actions.map(actionItem =>
         <div key={ `${actionItem.id}-action` }>
           <TextContent><Text style={ { marginBottom: 0 } } className="data-table-detail content" component={ TextVariants.small }>
             { `${timeAgo(actionItem.created_at)}` }
