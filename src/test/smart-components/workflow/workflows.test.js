@@ -74,12 +74,12 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
-    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`,
+      mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { data: []}}));
@@ -112,8 +112,7 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -144,12 +143,12 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
-    }]}}));
+    apiClientMock.get('/api/approval/v1.0/workflows?limit=10&offset=0&filter=',
+      mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
     await act(async()=> {
@@ -181,8 +180,7 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -212,8 +210,7 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
