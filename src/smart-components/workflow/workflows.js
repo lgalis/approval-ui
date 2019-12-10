@@ -22,17 +22,17 @@ const columns = [{
 'Description'
 ];
 
-const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, history, rbacGroups }) => {
+const Workflows = ({ fetchWorkflows, isLoading, pagination, history }) => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
   const [ filterValue, setFilterValue ] = useState(undefined);
   const [ workflows, setWorkflows ] = useState([]);
 
   useEffect(() => {
-    fetchRbacGroups();
+    fetchWorkflows({ ...pagination, name: filterValue }).then(({ value: { data }}) => setWorkflows(data));
   }, []);
 
-  const fetchData = () => {
-    fetchWorkflows().then(({ value: { data }}) => setWorkflows(data));
+  const fetchData = (config) => {
+    fetchWorkflows(config);
   };
 
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
@@ -43,7 +43,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
       postMethod={ fetchData } /> }/>
     <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType='info' { ...props }
       postMethod={ fetchData } /> }/>
-    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType='stages' rbacGroups={ rbacGroups }{ ...props }
+    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType='stages' { ...props }
       postMethod={ fetchData } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }
@@ -78,7 +78,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
       }
     ];
 
-  const setCheckedWorkflows = (checkedWorkflows) =>
+  const setCheckedItems = (checkedWorkflows) =>
     setSelectedWorkflows (checkedWorkflows.map(wf => wf.id));
 
   const anyWorkflowsSelected = () => selectedWorkflows.length > 0;
@@ -126,7 +126,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
         titlePlural="workflows"
         titleSingular="workflow"
         pagination={ pagination }
-        setCheckedItems={ setCheckedWorkflows }
+        setCheckedItems={ setCheckedItems }
         toolbarButtons={ toolbarButtons }
         filterValue={ filterValue }
         setFilterValue={ setFilterValue }
@@ -136,10 +136,9 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
   );
 };
 
-const mapStateToProps = ({ workflowReducer: { workflows, isLoading }, groupReducer: { groups }}) => ({
+const mapStateToProps = ({ workflowReducer: { workflows, isLoading }}) => ({
   workflows: workflows.data,
   pagination: workflows.meta,
-  rbacGroups: groups,
   isLoading
 });
 
@@ -159,9 +158,7 @@ Workflows.propTypes = {
   platforms: PropTypes.array,
   isLoading: PropTypes.bool,
   fetchWorkflows: PropTypes.func.isRequired,
-  fetchRbacGroups: PropTypes.func.isRequired,
   selectedWorkflows: PropTypes.array,
-  rbacGroups: PropTypes.array,
   pagination: PropTypes.shape({
     limit: PropTypes.number.isRequired,
     offset: PropTypes.number.isRequired,
