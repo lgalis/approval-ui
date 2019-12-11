@@ -1,7 +1,6 @@
-import { getActionApi, getRequestApi, getStageApi } from '../shared/user-login';
+import { getActionApi, getRequestApi } from '../shared/user-login';
 
 const requestApi = getRequestApi();
-const stageApi = getStageApi();
 const actionApi = getActionApi();
 
 export function fetchRequests({ limit, offset }) {
@@ -12,24 +11,12 @@ export async function fetchRequest(id) {
   return await requestApi.showRequest(id);
 }
 
-export async function fetchRequestWithStagesAndActions(id) {
+export async function fetchRequestWithActions(id) {
   const requestData = await requestApi.showRequest(id);
-  const requestStages = await fetchStagesWithActions(id);
-  return { ...requestData, stages: requestStages.data };
+  const requestActions = await actionApi.listActionsByRequest(id);
+  return { ...requestData, actions: requestActions };
 }
 
-export async function fetchStagesWithActions(requestId) {
-  const requestStages = await stageApi.listStagesByRequest(requestId);
-  const stages = requestStages.data;
-  return Promise.all(stages.map(async stage => {
-    const stageWithActions = await actionApi.listActionsByStage(stage.id);
-    return { ...stage, stageActions: stageWithActions };
-  })).then(data => ({
-    ...requestStages,
-    data
-  }));
-}
-
-export async function createStageAction (stageId, actionIn) {
-  return await actionApi.createAction(stageId, actionIn);
+export async function createRequestAction (requestId, actionIn) {
+  return await actionApi.createAction(requestId, actionIn);
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import FormRenderer from '../common/form-renderer';
 import { withRouter } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { createStageAction, fetchRequest } from '../../redux/actions/request-actions';
+import { createRequestAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 
 const ActionModal = ({
@@ -14,44 +14,24 @@ const ActionModal = ({
   match: { params: { id }},
   actionType,
   addNotification,
-  createStageAction,
+  createRequestAction,
   closeUrl,
-  postMethod,
-  fetchRequest
+  postMethod
 }) => {
-  const [ selectedRequest, setSelectedRequest ] = useState({});
-
-  useEffect(() => {
-    fetchRequest(id).then((data) => setSelectedRequest(data.value));
-  }, []);
-
   const onSubmit = (data) => {
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
-    const activeStage =  selectedRequest.stages[selectedRequest.active_stage - 1];
     const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
-    if (activeStage) {
-      return postMethod ?
-        createStageAction(
-          actionName,
-          activeStage.id,
-          { operation: operationType[actionType], ...data }
-        ).then(() => postMethod()).then(() => push(closeUrl))
-        : createStageAction(
-          actionName,
-          activeStage.id,
-          { operation: operationType[actionType], ...data }
-        ).then(() => push(closeUrl));
-    }
-    else {
-      const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
-      addNotification({
-        variant: 'warning',
-        title: actionName,
-        dismissable: true,
-        description: `${actionName} - no active stage.`
-      });
-      push(closeUrl);
-    }
+    return postMethod ?
+      createRequestAction(
+        actionName,
+        id,
+        { operation: operationType[actionType], ...data }
+      ).then(() => postMethod()).then(() => push(closeUrl))
+      : createRequestAction(
+        actionName,
+        id,
+        { operation: operationType[actionType], ...data }
+      ).then(() => push(closeUrl));
   };
 
   const onCancel = () => {
@@ -92,10 +72,8 @@ ActionModal.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   addNotification: PropTypes.func.isRequired,
-  createStageAction: PropTypes.func.isRequired,
-  fetchRequest: PropTypes.func,
+  createRequestAction: PropTypes.func.isRequired,
   postMethod: PropTypes.func,
-  selectedRequest: PropTypes.object,
   id: PropTypes.string,
   actionType: PropTypes.string,
   closeUrl: PropTypes.string,
@@ -103,14 +81,9 @@ ActionModal.propTypes = {
   location: PropTypes.object
 };
 
-const mapStateToProps = ({ requestReducer: { isRequestDataLoading }}) => ({
-  isLoading: isRequestDataLoading
-});
-
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
-  fetchRequest,
-  createStageAction
+  createRequestAction
 }, dispatch);
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActionModal));
+export default withRouter(connect(null, mapDispatchToProps)(ActionModal));

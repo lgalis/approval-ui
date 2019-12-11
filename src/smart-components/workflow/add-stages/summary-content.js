@@ -48,7 +48,7 @@ const SummaryContent = ({ formData }) => {
                 <Text key={ stage.value }
                   className="data-table-detail content"
                   component={ TextVariants.p }>
-                  { `Stage ${idx + 1} : ${wfGroups[idx].label}` }
+                  { `Group ${idx + 1} : ${wfGroups[idx].label}` }
                 </Text>) }
             </StackItem>
           </Stack>

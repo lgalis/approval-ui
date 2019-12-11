@@ -48,7 +48,7 @@ const EditWorkflowStagesModal = ({
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: `Edit workflow's stages`,
+      title: `Edit workflow's groups`,
       dismissable: true,
       description: `Edit workflow's stages was cancelled by the user.`
     });
@@ -57,7 +57,7 @@ const EditWorkflowStagesModal = ({
 
   return (
     <Modal
-      title={ `Edit workflow's stages` }
+      title={ `Edit workflow's groups` }
       width={ '40%' }
       isOpen
       onClose={ onCancel }>
@@ -74,7 +74,7 @@ const EditWorkflowStagesModal = ({
                 <SetStages className="stages-modal" formData={ formData }
                   handleChange={ handleChange }
                   options={ rbacGroups }
-                  title={ `Add or remove ${formData.name}'s stages` }/>
+                  title={ `Add or remove ${formData.name}'s groups` }/>
               </StackItem>) }
           </FormGroup>
         </StackItem>
@@ -124,7 +124,11 @@ EditWorkflowStagesModal.propTypes = {
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
     label: PropTypes.string.isRequired
   })).isRequired,
-  isFetching: PropTypes.bool
+  isFetching: PropTypes.bool,
+  item: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
+  })
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
