@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react';
 import propTypes from 'prop-types';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components';
 import { DataList } from '@patternfly/react-core';
-import Stage from './stage';
+import Request from './request';
 import { DataListLoader } from '../../../presentational-components/shared/loader-placeholders';
 
-class StageList extends Component {
+class RequestList extends Component {
   state = {
     expanded: []
   };
@@ -37,12 +37,12 @@ class StageList extends Component {
         { this.props.items.length > 0 && (
           <DataList aria-label="Expandable data list">
             { this.props.items.map((item, idx) => (
-              <Stage
+              <Request
                 key={ item.id }
                 item={ item }
                 idx={ idx }
-                isActive={ idx + 1 === this.props.active_stage }
-                isExpanded={ this.isExpanded(`stage-${item.id}`) }
+                isActive={ idx + 1 === this.props.active_request }
+                isExpanded={ this.isExpanded(`request-${item.id}`) }
                 toggleExpand={ this.toggleExpand }
               />)) }
           </DataList>)
@@ -52,16 +52,16 @@ class StageList extends Component {
   };
 }
 
-StageList.propTypes = {
+RequestList.propTypes = {
   isLoading: propTypes.bool,
   items: propTypes.array,
   noItems: propTypes.string,
-  active_stage: propTypes.number
+  active_request: propTypes.number
 };
 
-StageList.defaultProps = {
+RequestList.defaultProps = {
   items: []
 };
 
-export default StageList;
+export default RequestList;
 
