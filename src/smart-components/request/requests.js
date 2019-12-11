@@ -14,13 +14,13 @@ import { Stack, StackItem } from '@patternfly/react-core';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 
 const columns = [{
-  title: 'RequestId',
+  title: 'Name',
   cellFormatters: [ expandable ]
 },
 'Requester',
 'Opened',
 'Updated',
-'Stage Status',
+'State',
 'Decision'
 ];
 
@@ -44,7 +44,7 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
       postMethod={ fetchData }/> } />
   </Fragment>;
 
-  const areActionsDisabled = (requestData) => { return !isRequestStateActive(requestData.state);};
+  const areActionsDisabled = (requestData) => requestData && requestData.state ? !isRequestStateActive(requestData.state.title) : true;
 
   const actionResolver = (requestData, { rowIndex }) => {
     return (rowIndex === 1 || areActionsDisabled(requestData) ? null :

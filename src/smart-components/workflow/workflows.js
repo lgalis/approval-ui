@@ -66,7 +66,7 @@ const Workflows = ({ fetchRbacGroups, fetchWorkflows, isLoading, pagination, his
       },
 
       {
-        title: 'Edit stages',
+        title: 'Edit groups',
         onClick: (_event, _rowId, workflow) =>
           history.push(`/workflows/edit-stages/${workflow.id}`)
       },

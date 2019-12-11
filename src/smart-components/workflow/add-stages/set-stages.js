@@ -58,7 +58,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
   const createStageInput = (idx) => (
     <StackItem key={ `Stack_${idx + 1}` }>
       <FormGroup
-        label={ `Stage ${idx + 1}` }
+        label={ `Group ${idx + 1}` }
         fieldId={ `${idx + 1}_stage_label` }
       >
         <Grid gutter="md">
@@ -66,8 +66,8 @@ const SetStages = ({ formData, handleChange, options, title }) => {
             <AsyncSelect
               cacheOptions
               isClearable
-              label={ `${idx + 1} Stage` }
-              aria-label={ `${idx + 1} Stage` }
+              label={ `${idx + 1} Group` }
+              aria-label={ `${idx + 1} Group` }
               onToggle={ onToggle }
               key={ `stage-${idx + 1}` }
               onChange={ (e) => onStageChange(e, idx) }
@@ -93,14 +93,14 @@ const SetStages = ({ formData, handleChange, options, title }) => {
     <Fragment>
       <Stack gutter="md">
         <StackItem>
-          <Title size="md">{ title || 'Set stages' }</Title>
+          <Title size="md">{ title || 'Set groups' }</Title>
         </StackItem>
         <StackItem>
           <Stack gutter="sm">
             { stageValues.map((_stage, idx) => createStageInput(idx)) }
             <StackItem style={ { borderTop: 10 } }>
               <Button id="add-workflow-stage" variant="link" isInline onClick={ addStage }>
-                <PlusIcon/> { `Add ${ stageValues.length > 0 ? 'another' : 'a'} stage` }
+                <PlusIcon/> { `Add ${ stageValues.length > 0 ? 'another' : 'a'} group` }
               </Button>
             </StackItem>
           </Stack>

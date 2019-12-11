@@ -47,7 +47,7 @@ describe('Workflow actions', () => {
       type: `${FETCH_WORKFLOWS}_FULFILLED`
     }];
 
-    apiClientMock.get(APPROVAL_API_BASE + '/workflows?limit=10&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows?limit=10&offset=0&filter=', mockOnce({
       body: {
         data: [{
           label: 'workflow',
@@ -80,7 +80,7 @@ describe('Workflow actions', () => {
 
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + '/workflows?limit=10&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows?limit=10&offset=0&filter=', mockOnce({
       status: 500
     }));
 

@@ -9,7 +9,6 @@ import thunk from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import ActionModal from '../../../smart-components/request/action-modal';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
-import { FETCH_REQUEST } from '../../../redux/action-types';
 
 const ComponentWrapper = ({ store, children }) => (
   <Provider store={ store }>
@@ -44,20 +43,9 @@ describe('<ActionModal />', () => {
     let wrapper;
 
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {
-      active_stage: 1
+      comment: 'test'
     }}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/stages`, mockOnce({ body: { data: [{
-      id: 'active-stage',
-      stages: [{ foo: 'bar' }],
-      active_stage: 1
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/stages/active-stage/actions`, mockOnce({ body: {
-      id: 'active-stage',
-      stages: [{ foo: 'bar' }],
-      active_stage: 1
-    }}));
-
-    apiClientMock.post(`${APPROVAL_API_BASE}/stages/active-stage/actions`, mockOnce((req, response) => {
+    apiClientMock.post(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce((req, response) => {
       expect(JSON.parse(req.body())).toEqual({ comments: 'foo' });
       return response.status(200);
     }));
@@ -84,74 +72,11 @@ describe('<ActionModal />', () => {
     done();
   });
 
-  it('should render action modal and create notification for missing stage', async done => {
-    const store = mockStore(initialState);
-    let wrapper;
-
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/stages`, mockOnce({ body: { data: [{
-      id: 'active-stage',
-      stages: [],
-      active_stage: 1
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/stages/active-stage/actions`, mockOnce({ body: {
-      id: 'active-stage',
-      stages: [],
-      active_stage: 1
-    }}));
-
-    await act(async() => {
-      wrapper = mount(
-        <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" component={ props => <ActionModal { ...props } { ...initialProps } /> } />
-        </ComponentWrapper>
-      );
-    });
-    wrapper.update();
-
-    const textarea = wrapper.find('textarea#comments');
-    textarea.getDOMNode().value = 'foo';
-    textarea.simulate('change');
-    wrapper.update();
-
-    await act(async() => {
-      wrapper.find('button').last().simulate('click');
-    });
-    wrapper.update();
-
-    const expectedActions = [
-      { type: `${FETCH_REQUEST}_PENDING` },
-      { type: `${FETCH_REQUEST}_FULFILLED`, payload: { stages: expect.any(Array) }},
-      {
-        type: '@@INSIGHTS-CORE/NOTIFICATIONS/ADD_NOTIFICATION',
-        payload: {
-          variant: 'warning',
-          title: 'undefined Request',
-          dismissable: true,
-          description: 'undefined Request - no active stage.'
-        }
-      }
-    ];
-    expect(store.getActions()).toEqual(expectedActions);
-    done();
-  });
-
   it('should call cancel callback', async done => {
     const store = mockStore(initialState);
     let wrapper;
 
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/stages`, mockOnce({ body: { data: [{
-      id: 'active-stage',
-      stages: [],
-      active_stage: 1
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/stages/active-stage/actions`, mockOnce({ body: {
-      id: 'active-stage',
-      stages: [],
-      active_stage: 1
-    }}));
-
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
@@ -165,8 +90,6 @@ describe('<ActionModal />', () => {
     wrapper.update();
 
     const expectedActions = [
-      { type: `${FETCH_REQUEST}_PENDING` },
-      { type: `${FETCH_REQUEST}_FULFILLED`, payload: { stages: expect.any(Array) }},
       {
         type: '@@INSIGHTS-CORE/NOTIFICATIONS/ADD_NOTIFICATION',
         payload: {
