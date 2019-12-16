@@ -90,7 +90,7 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Open action drop down and click on edit stages action
+     * Open action drop down and click on edit info action
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
@@ -124,7 +124,7 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Open action drop down and click on edit stages action
+     * Open action drop down and click on edit groups action
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
@@ -158,16 +158,16 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Open action drop down and click on edit stages action
+     * Open action drop down and click on delete action
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('a.pf-c-dropdown__menu-item').at(1).simulate('click');
+      wrapper.find('a.pf-c-dropdown__menu-item').at(2).simulate('click');
     });
 
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-stages/edit-id');
-    expect(wrapper.find(EditWorkflowStagesModal)).toHaveLength(1);
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/remove/edit-id');
+    expect(wrapper.find(RemoveWorkflowModal)).toHaveLength(1);
     done();
   });
 

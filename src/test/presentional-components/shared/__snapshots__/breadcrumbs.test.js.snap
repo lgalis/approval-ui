@@ -24,12 +24,12 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
         Object {
           "children": Array [
             <BreadcrumbItem>
-              <ForwardRef
+              <NavLink
                 exact={true}
                 to="/first-level"
               >
                 First level
-              </ForwardRef>
+              </NavLink>
             </BreadcrumbItem>,
             <BreadcrumbItem
               isActive={true}
@@ -68,28 +68,15 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
                 >
                   <Link
                     aria-current={null}
-                    to={
-                      Object {
-                        "hash": "",
-                        "pathname": "/first-level",
-                        "search": "",
-                        "state": null,
-                      }
-                    }
+                    to="/first-level"
                   >
-                    <LinkAnchor
+                    <a
                       aria-current={null}
                       href="/first-level"
-                      navigate={[Function]}
+                      onClick={[Function]}
                     >
-                      <a
-                        aria-current={null}
-                        href="/first-level"
-                        onClick={[Function]}
-                      >
-                        First level
-                      </a>
-                    </LinkAnchor>
+                      First level
+                    </a>
                   </Link>
                 </NavLink>
                 <span
