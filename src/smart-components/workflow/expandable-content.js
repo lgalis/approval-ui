@@ -11,12 +11,11 @@ const ExpandableContent = ({ description, groupRefs }) => {
     await Promise.all(groupRefs.map(async (ref) => {
       names.push(await fetchGroupName(ref));
     }));
-    console.log('Debug2 - names: ', names);
     return names;
   };
 
   useEffect(() => {
-    fetchGroupNames(groupRefs).then((data) => { setGroupNames(data); console.log('Debug3 - names: ', data, groupNames);});
+    fetchGroupNames(groupRefs).then((data) => setGroupNames(data));
   }, []);
 
   return (
