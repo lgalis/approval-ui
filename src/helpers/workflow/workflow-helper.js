@@ -5,7 +5,7 @@ const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
 export async function fetchWorkflows({ appName = undefined, objectId = undefined, objectType = undefined, limit = 10, offset = 0, filter = '' }) {
-  return await workflowApi.listWorkflows(appName, objectId, objectType, limit, offset, filter);
+  return workflowApi.listWorkflows(appName, objectId, objectType, limit, offset, filter);
 }
 
 export async function fetchWorkflowsWithGroups({ appName = undefined,

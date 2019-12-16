@@ -8,7 +8,6 @@ import configureStore from 'redux-mock-store' ;
 import { shallowToJson } from 'enzyme-to-json';
 import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
-
 import Workflows from '../../../smart-components/workflow/workflows';
 import { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
@@ -74,15 +73,14 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`,
-      mockOnce({ body: { data: [{
-        id: 'edit-id',
-        name: 'foo',
-        group_refs: [ 'group-1' ]
-      }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
@@ -92,7 +90,7 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Open action drop down and click on edit action
+     * Open action drop down and click on edit stages action
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
@@ -143,14 +141,14 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get('/api/approval/v1.0/workflows?limit=10&offset=0&filter=',
-      mockOnce({ body: { data: [{
-        id: 'edit-id',
-        name: 'foo',
-        group_refs: [ 'group-1' ]
-      }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
@@ -160,16 +158,16 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Open action drop down and click on delete action
+     * Open action drop down and click on edit stages action
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('a.pf-c-dropdown__menu-item').at(2).simulate('click');
+      wrapper.find('a.pf-c-dropdown__menu-item').at(1).simulate('click');
     });
 
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/remove/edit-id');
-    expect(wrapper.find(RemoveWorkflowModal)).toHaveLength(1);
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-stages/edit-id');
+    expect(wrapper.find(EditWorkflowStagesModal)).toHaveLength(1);
     done();
   });
 
@@ -180,7 +178,8 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
-      group_refs: [ 'group-1' ]
+      group_refs: [ 'group-1' ],
+      group_names: [ 'group-name-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));

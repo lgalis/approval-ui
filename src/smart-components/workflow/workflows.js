@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
@@ -27,12 +27,8 @@ const Workflows = ({ fetchWorkflows, isLoading, pagination, history }) => {
   const [ filterValue, setFilterValue ] = useState(undefined);
   const [ workflows, setWorkflows ] = useState([]);
 
-  useEffect(() => {
+  const fetchData = () => {
     fetchWorkflows({ ...pagination, name: filterValue }).then(({ value: { data }}) => setWorkflows(data));
-  }, []);
-
-  const fetchData = (config) => {
-    fetchWorkflows(config);
   };
 
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
