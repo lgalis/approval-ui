@@ -27,7 +27,13 @@ export async function fetchGroupNames(groupRefs) {
 
 export const fetchGroupName = (id) =>
   getAxiosInstance().get(`${RBAC_API_BASE}/groups/${id}/`)
-  .then((data) => data.name);
+  .then((data) => data.name).catch((error) => {
+    if (error.status !== 404) {
+      throw error;
+    } else {
+      return id;
+    }
+  });
 
 export const fetchFilterGroups = (filterValue) =>
   getAxiosInstance().get(`${RBAC_API_BASE}/groups/${filterValue.length > 0
