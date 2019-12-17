@@ -8,12 +8,8 @@ const ExpandableContent = ({ description, groupRefs }) => {
   const [ groupNames, setGroupNames ] = useState([]);
   const [ isLoaded, setIsLoaded ] = useState();
 
-  const fetchGroupNames = async() => {
-    const names = [];
-    await Promise.all(groupRefs.map(async (ref) => {
-      names.push(await fetchGroupName(ref));
-    }));
-    return names;
+  const fetchGroupNames = () => {
+    return Promise.all(groupRefs.map((ref) => fetchGroupName(ref)));
   };
 
   useEffect(() => {
