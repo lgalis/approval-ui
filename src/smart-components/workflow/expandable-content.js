@@ -46,8 +46,7 @@ ExpandableContent.defaultProps = {
 ExpandableContent.propTypes = {
   description: PropTypes.string,
   groupRefs: PropTypes.array.isRequired,
-  groupNames: PropTypes.array,
-  isLoaded: PropTypes.bool
+  groupNames: PropTypes.array
 };
 
 export default ExpandableContent;
