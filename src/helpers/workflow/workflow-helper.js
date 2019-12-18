@@ -4,7 +4,7 @@ import { fetchGroupNames } from '../group/group-helper';
 const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
-export async function fetchWorkflows({ appName = undefined, objectId = undefined, objectType = undefined, limit = 10, offset = 0, filter = '' }) {
+export function fetchWorkflows({ appName = undefined, objectId = undefined, objectType = undefined, limit = 10, offset = 0, filter = '' }) {
   return workflowApi.listWorkflows(appName, objectId, objectType, limit, offset, filter);
 }
 
