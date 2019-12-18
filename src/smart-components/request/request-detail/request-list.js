@@ -41,7 +41,7 @@ class RequestList extends Component {
                 key={ item.id }
                 item={ item }
                 idx={ idx }
-                isActive={ idx + 1 === this.props.active_request }
+                isActive={ idx === 0 }
                 isExpanded={ this.isExpanded(`request-${item.id}`) }
                 toggleExpand={ this.toggleExpand }
               />)) }

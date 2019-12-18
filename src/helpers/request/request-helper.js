@@ -11,10 +11,21 @@ export async function fetchRequest(id) {
   return await requestApi.showRequest(id);
 }
 
+export const fetchRequestActions = (id) => {
+  return actionApi.listActionsByRequest(id);
+};
+
 export async function fetchRequestWithActions(id) {
-  const requestData = await requestApi.showRequest(id);
-  const requestActions = await actionApi.listActionsByRequest(id);
-  return { ...requestData, actions: requestActions };
+  let requestData = await requestApi.showRequest(id);
+  const requestActions = await fetchRequestActions(id);
+
+  if (requestData.number_of_children > 0) {
+    const subRequests = await requestApi.listRequestsByRequest(id);
+    const promises = subRequests.data.map(request => fetchRequestWithActions(request.id));
+    const subRequestsWithActions = await Promise.all(promises);
+    requestData = { ...requestData, children: subRequestsWithActions };
+  }
+  return  { ...requestData, actions: requestActions };
 }
 
 export async function createRequestAction (requestId, actionIn) {
