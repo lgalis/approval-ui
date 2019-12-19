@@ -106,7 +106,7 @@ describe('<AddWorkflow />', () => {
   });
 
   it('should travers over all wizard pages and call onSave function', async(done) => {
-    expect.assertions(1);
+    expect.assertions(2);
     const store = mockStore(initialState);
 
     apiClientMock.get(`${APPROVAL_API_BASE}/templates`, mockOnce({ body: { data: [{ id: '123' }]}}));
