@@ -8,7 +8,6 @@ import configureStore from 'redux-mock-store' ;
 import { shallowToJson } from 'enzyme-to-json';
 import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
-
 import Workflows from '../../../smart-components/workflow/workflows';
 import { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
@@ -77,12 +76,11 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
@@ -92,7 +90,7 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Open action drop down and click on edit action
+     * Open action drop down and click on edit info action
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
@@ -112,8 +110,7 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -127,7 +124,7 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Open action drop down and click on edit stages action
+     * Open action drop down and click on edit groups action
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
@@ -147,11 +144,11 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
@@ -212,8 +209,7 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
