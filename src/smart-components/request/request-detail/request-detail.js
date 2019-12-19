@@ -35,12 +35,12 @@ const RequestDetail = () => {
       }
     }) => ({ selectedRequest, requestContent })
   );
-  const { match } = useRouteMatch('/requests/detail/:id');
+  const { params, url } = useRouteMatch('/requests/detail/:id');
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchRequest(match.params.id));
-    dispatch(fetchRequestContent(match.params.id))
+    dispatch(fetchRequest(params.id));
+    dispatch(fetchRequestContent(params.id))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }));
   }, []);
 
@@ -59,7 +59,7 @@ const RequestDetail = () => {
             <RequestInfoBar request={ selectedRequest } requestContent={ requestContent }/>
           </GridItem>
           <GridItem md={ 10 } className="detail-pane">
-            <RequestTranscript request={ selectedRequest } url={ match.url }/>
+            <RequestTranscript request={ selectedRequest } url={ url }/>
           </GridItem>
         </Fragment>
       );
@@ -69,16 +69,16 @@ const RequestDetail = () => {
   return (
     <Fragment>
       <Route exact path="/requests/detail/:id/add_comment" render={ props =>
-        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ match.url } /> }/>
+        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ url } /> }/>
       <Route exact path="/requests/detail/:id/approve" render={ props =>
-        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ match.url }/> } />
+        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ url }/> } />
       <Route exact path="/requests/detail/:id/deny" render={ props =>
-        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ match.url } /> } />
+        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ url } /> } />
       <TopToolbar
         breadcrumbs={ [{ title: 'Request Queue', to: '/requests', id: 'requests' }] }
         paddingBottom={ true }
       >
-        <TopToolbarTitle title={ `Request ${match.id}` } />
+        <TopToolbarTitle title={ `Request ${params.id}` } />
       </TopToolbar>
       <Section type="content">
         <Grid gutter="md">
