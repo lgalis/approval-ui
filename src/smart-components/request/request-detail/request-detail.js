@@ -35,12 +35,12 @@ const RequestDetail = () => {
       }
     }) => ({ selectedRequest, requestContent })
   );
-  const match = useRouteMatch('/requests/detail/:id');
+  const { match } = useRouteMatch('/requests/detail/:id');
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchRequest(match.id));
-    dispatch(fetchRequestContent(match.id))
+    dispatch(fetchRequest(match.params.id));
+    dispatch(fetchRequestContent(match.params.id))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }));
   }, []);
 
@@ -69,11 +69,11 @@ const RequestDetail = () => {
   return (
     <Fragment>
       <Route exact path="/requests/detail/:id/add_comment" render={ props =>
-        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ match.url } postMethod={ fetchData }/> }/>
+        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ match.url } /> }/>
       <Route exact path="/requests/detail/:id/approve" render={ props =>
-        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ match.url } postMethod={ fetchData } /> } />
+        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ match.url }/> } />
       <Route exact path="/requests/detail/:id/deny" render={ props =>
-        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ match.url } postMethod={ fetchData }/> } />
+        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ match.url } /> } />
       <TopToolbar
         breadcrumbs={ [{ title: 'Request Queue', to: '/requests', id: 'requests' }] }
         paddingBottom={ true }
