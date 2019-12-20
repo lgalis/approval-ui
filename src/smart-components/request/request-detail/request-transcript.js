@@ -5,14 +5,13 @@ import RequestList from './request-list';
 
 const RequestTranscript = ({ request }) => (<Fragment>
   <Title size="sm" style={ { paddingLeft: '32px' } }> Request transcript </Title>
-  <RequestList items={ [ request ] }/>
+  <RequestList items={ request.children ? request.children : [ request ] }/>
 </Fragment>);
 
 RequestTranscript.propTypes = {
   request: PropTypes.shape({
     content: PropTypes.object,
-    stages: PropTypes.array,
-    active_stage: PropTypes.string
+    children: PropTypes.array
   }).isRequired
 };
 

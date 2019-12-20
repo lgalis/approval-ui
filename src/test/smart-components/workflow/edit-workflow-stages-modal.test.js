@@ -8,7 +8,7 @@ import configureStore from 'redux-mock-store' ;
 import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 
-import { APPROVAL_API_BASE } from '../../../utilities/constants';
+import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import EditWorkflowStagesModal from '../../../smart-components/workflow/edit-workflow-stages-modal';
 import { WorkflowStageLoader } from '../../../presentational-components/shared/loader-placeholders';
 import SetStages from '../../../smart-components/workflow/add-stages/set-stages';
@@ -34,7 +34,8 @@ describe('<EditWorkflowStagesModal />', () => {
   });
 
   it('should mount with loader placeholder', async done => {
-    const store = mockStore({ workflowReducer: { isRecordLoading: true }});
+    const store = mockStore({ workflowReducer: { isRecordLoading: true },
+      groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
 
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
@@ -56,9 +57,11 @@ describe('<EditWorkflowStagesModal />', () => {
   });
 
   it('should mount with no groups title', async done => {
-    const store = mockStore({ workflowReducer: { isRecordLoading: false, rbacGroups: []}});
+    const store = mockStore({ workflowReducer: { isRecordLoading: false },
+      groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
 
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -74,14 +77,15 @@ describe('<EditWorkflowStagesModal />', () => {
 
     wrapper.update();
     expect(wrapper.find(WorkflowStageLoader)).toHaveLength(0);
-    expect(wrapper.find('h2.pf-c-title').last().text()).toEqual('No groups available.');
     done();
   });
 
   it('should mount with SetStages child component', async done => {
-    const store = mockStore({ workflowReducer: { isRecordLoading: false }});
+    const store = mockStore({ workflowReducer: { isRecordLoading: false },
+      groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
 
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -92,10 +96,7 @@ describe('<EditWorkflowStagesModal />', () => {
           <Route path="/foo/:id" render={ props => <EditWorkflowStagesModal
             { ...props }
             { ...initialProps }
-            rbacGroups={ [{
-              value: '123',
-              label: 'Group 1'
-            }] } /> }/>
+          /> }/>
         </ComponentWrapper>
       );
 
@@ -107,9 +108,11 @@ describe('<EditWorkflowStagesModal />', () => {
   });
 
   it('should call onCancel and push to history', async done => {
-    const store = mockStore({ workflowReducer: { isRecordLoading: true }});
+    const store = mockStore({ workflowReducer: { isRecordLoading: false },
+      groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
 
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -133,10 +136,12 @@ describe('<EditWorkflowStagesModal />', () => {
   });
 
   it('should call onSave and push to history', async done => {
-    const store = mockStore({ workflowReducer: { isRecordLoading: false }});
+    const store = mockStore({ workflowReducer: { isRecordLoading: false },
+      groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     const postMethod = jest.fn().mockImplementation(() => new Promise(resolve => resolve(true)));
     let wrapper;
 
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
