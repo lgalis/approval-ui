@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem, Title } from '@patternfly/react-core';
+import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
@@ -17,7 +17,6 @@ const EditWorkflowStagesModal = ({
   addNotification,
   fetchWorkflow,
   updateWorkflow,
-  rbacGroups,
   postMethod,
   isFetching
 }) => {
@@ -65,15 +64,10 @@ const EditWorkflowStagesModal = ({
         <StackItem>
           <FormGroup fieldId="workflow-stages-formgroup">
             { isFetching && <WorkflowStageLoader/> }
-            { !isFetching && rbacGroups.length === 0 && (
-              <Title headingLevel="h2" size="1xl">
-                    No groups available.
-              </Title>) }
-            { !isFetching && rbacGroups.length > 0 && (
+            { !isFetching && (
               <StackItem className="stages-modal">
                 <SetStages className="stages-modal" formData={ formData }
                   handleChange={ handleChange }
-                  options={ rbacGroups }
                   title={ `Add or remove ${formData.name}'s groups` }/>
               </StackItem>) }
           </FormGroup>

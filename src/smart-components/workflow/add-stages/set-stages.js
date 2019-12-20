@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 import asyncDebounce from '../../../utilities/async-debounce';
 import { fetchFilterGroups } from '../../../helpers/group/group-helper';
+import { WorkflowStageLoader } from '../../../presentational-components/shared/loader-placeholders';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button,
   FormGroup,
   Grid,
@@ -12,17 +14,28 @@ import { Button,
   StackItem,
   Title
 } from '@patternfly/react-core';
+import { fetchRbacGroups } from '../../../redux/actions/group-actions';
 
-const SetStages = ({ formData, handleChange, options, title }) => {
+const SetStages = ({ formData, handleChange, title }) => {
   const [ isExpanded, setExpanded ] = useState(false);
   const [ stageValues, setStageValues ] = useState([]);
   const [ stageIndex, setStageIndex ] = useState(1);
   const [ inputValue, setInputValue ] = useState([]);
+  const [ isFetching, setIsFetching ] = useState([]);
+
+  const defaultOptions = useSelector(({ groupReducer: { groups }}) => groups || []);
 
   const onInputChange = (newValue) => {
     const value = newValue.replace(/\W/g, '');
     setInputValue(value);
   };
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    setIsFetching(true);
+    dispatch(
+      fetchRbacGroups()).then(() => setIsFetching(false));
+  }, []);
 
   useEffect(() => {
     setStageValues(formData.wfGroups ? formData.wfGroups : []);
@@ -75,7 +88,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
               inpuValue={ inputValue }
               isexpanded={ isExpanded }
               loadOptions={ asyncDebounce(loadGroupOptions) }
-              defaultOptions={ options }
+              defaultOptions={ defaultOptions }
               onInputChange={ (e) => onInputChange(e, idx) }
             />
           </GridItem>
@@ -96,6 +109,8 @@ const SetStages = ({ formData, handleChange, options, title }) => {
           <Title size="md">{ title || 'Set groups' }</Title>
         </StackItem>
         <StackItem>
+          { isFetching && <WorkflowStageLoader/> }
+          { !isFetching &&
           <Stack gutter="sm">
             { stageValues.map((_stage, idx) => createStageInput(idx)) }
             <StackItem style={ { borderTop: 10 } }>
@@ -103,7 +118,7 @@ const SetStages = ({ formData, handleChange, options, title }) => {
                 <PlusIcon/> { `Add ${ stageValues.length > 0 ? 'another' : 'a'} group` }
               </Button>
             </StackItem>
-          </Stack>
+          </Stack> }
         </StackItem>
       </Stack>
     </Fragment>
@@ -115,7 +130,6 @@ SetStages.propTypes = {
   description: PropTypes.string,
   title: PropTypes.string,
   formData: PropTypes.object,
-  options: PropTypes.array,
   handleChange: PropTypes.func
 };
 

@@ -1,9 +1,9 @@
 import { FETCH_RBAC_GROUPS } from '../action-types';
-import { getRbacGroups } from '../../helpers/group/group-helper';
+import * as GroupHelper from '../../helpers/group/group-helper';
 
 export const fetchRbacGroups = () => ({
   type: FETCH_RBAC_GROUPS,
-  payload: getRbacGroups().then(({ data }) => [
+  payload: GroupHelper.getRbacGroups().then(({ data }) => [
     ...data.map(({ uuid, name }) => ({ value: uuid, label: name }))
   ])
 });

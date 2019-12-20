@@ -3,7 +3,7 @@ import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
 
 export const fetchWorkflows = (options = {}) => ({
   type: ActionTypes.FETCH_WORKFLOWS,
-  payload: WorkflowHelper.fetchWorkflowsWithGroups(options)
+  payload: WorkflowHelper.fetchWorkflows(options)
 });
 
 export const fetchWorkflow = apiProps => ({

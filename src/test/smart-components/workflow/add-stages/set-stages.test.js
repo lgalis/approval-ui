@@ -1,14 +1,29 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
-import toJson from 'enzyme-to-json';
+import thunk from 'redux-thunk';
 import SetStages from '../../../../smart-components/workflow/add-stages/set-stages';
 import { TrashIcon } from '@patternfly/react-icons';
 import AsyncSelect from 'react-select/async';
 import { RBAC_API_BASE } from '../../../../utilities/constants';
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
+import configureStore from 'redux-mock-store' ;
+import promiseMiddleware from 'redux-promise-middleware';
+import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 
 describe('<SetStages />', () => {
   let initialProps;
+  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  let mockStore;
+
+  const ComponentWrapper = ({ store, initialEntries, children }) => (
+    <Provider store={ store }>
+      <MemoryRouter initialEntries={ initialEntries } keyLength={ 0 }>
+        { children }
+      </MemoryRouter>
+    </Provider>
+  );
 
   beforeEach(() => {
     initialProps = {
@@ -16,26 +31,26 @@ describe('<SetStages />', () => {
         wfGroups: []
       },
       handleChange: jest.fn(),
-      options: [],
+      defaultOptions: [],
       title: 'Set stages test'
     };
+    mockStore = configureStore(middlewares);
   });
 
-  it('should render correctly', () => {
-    const wrapper = mount(<SetStages { ...initialProps } />);
-    expect(toJson(wrapper)).toMatchSnapshot();
-  });
-
-  it('should call remove stage callback', () => {
+  it('should call remove stage callback', async () => {
+    const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
     const handleChange = jest.fn();
-    act(() => {
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    await act(async() => {
       wrapper = mount(
-        <SetStages
-          { ...initialProps }
-          formData={ { wfGroups: [{ id: 'should be in callback' }, { id: 'should not be in callback' }]} }
-          handleChange={ handleChange }
-        />);
+        <ComponentWrapper store={ store } >
+          <SetStages
+            { ...initialProps }
+            formData={ { wfGroups: [{ id: 'should be in callback' }, { id: 'should not be in callback' }]} }
+            handleChange={ handleChange }
+          />
+        </ComponentWrapper>);
     });
     wrapper.update();
 
@@ -43,14 +58,17 @@ describe('<SetStages />', () => {
     expect(handleChange).toHaveBeenCalledWith({ wfGroups: [{ id: 'should be in callback' }]});
   });
 
-  it('should call add stage callback', () => {
+  it('should call add stage callback', async () => {
+    const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     let wrapper;
-    act(() => {
+    await act(async() => {
       wrapper = mount(
-        <SetStages
-          { ...initialProps }
-          formData={ { wfGroups: []} }
-        />);
+        <ComponentWrapper store={ store } >
+          <SetStages
+            { ...initialProps }
+            formData={ { wfGroups: []} }
+          /></ComponentWrapper>);
     });
     wrapper.update();
 
@@ -64,17 +82,19 @@ describe('<SetStages />', () => {
     expect(wrapper.find(TrashIcon)).toHaveLength(1);
   });
 
-  it('should call onInputChange callback', (done) => {
+  it('should call onInputChange callback', async (done) => {
+    const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
-    act(() => {
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    await act(async() => {
       wrapper = mount(
-        <SetStages
-          { ...initialProps }
-          formData={ { wfGroups: [{}]} }
-        />);
+        <ComponentWrapper store={ store } >
+          <SetStages
+            { ...initialProps }
+            formData={ { wfGroups: [{}]} }
+          /></ComponentWrapper>);
     });
     wrapper.update();
-
     const selectInput = wrapper.find('input');
     selectInput.getDOMNode().value = 'foo';
     selectInput.simulate('change');
@@ -83,20 +103,24 @@ describe('<SetStages />', () => {
     done();
   });
 
-  it('should call loadOptions request for async select', (done) => {
+  it('should call loadOptions request for async select', async (done) => {
     expect.assertions(1);
+    const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
+
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/?name=foo`, mockOnce((req, res) => {
       expect(req).toBeTruthy();
       done();
       return res.status(200);
     }));
     let wrapper;
-    act(() => {
+    await act(async() => {
       wrapper = mount(
-        <SetStages
-          { ...initialProps }
-          formData={ { wfGroups: [{}]} }
-        />);
+        <ComponentWrapper store={ store } >
+          <SetStages
+            { ...initialProps }
+            formData={ { wfGroups: [{}]} }
+          /></ComponentWrapper>);
     });
     wrapper.update();
 
@@ -109,17 +133,21 @@ describe('<SetStages />', () => {
     }, 251);
   });
 
-  it('should call handleChange prop', (done) => {
+  it('should call handleChange prop', async (done) => {
+    const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
+
     let wrapper;
     const handleChange = jest.fn();
-    act(() => {
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    await act(async() => {
       wrapper = mount(
-        <SetStages
-          { ...initialProps }
-          formData={ { wfGroups: [{}]} }
-          options={ [{ label: 'foo', value: '1' }] }
-          handleChange={ handleChange }
-        />);
+        <ComponentWrapper store={ store } >
+          <SetStages
+            { ...initialProps }
+            formData={ { wfGroups: [{}]} }
+            options={ [{ label: 'foo', value: '1' }] }
+            handleChange={ handleChange }
+          /></ComponentWrapper>);
     });
     wrapper.update();
 
