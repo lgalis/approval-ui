@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useReducer } from 'react';
-import PropTypes from 'prop-types';
-import { BrowserRouter as Router, Route, useParams, useLocation } from 'react-router-dom';
+import { Route, useParams, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { Section } from '@redhat-cloud-services/frontend-components';
@@ -88,10 +87,6 @@ const RequestDetail = () => {
       </Section>
     </Fragment>
   );
-};
-
-RequestDetail.propTypes = {
-  isLoading: PropTypes.bool
 };
 
 export default RequestDetail;
