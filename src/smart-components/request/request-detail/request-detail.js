@@ -39,8 +39,7 @@ const RequestDetail = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchRequest(id));
-    dispatch(fetchRequestContent(id))
+    Promise.all([ dispatch(fetchRequest(id)), dispatch(fetchRequestContent(id)) ])
     .then(() => stateDispatch({ type: 'setFetching', payload: false }));
   }, []);
 
