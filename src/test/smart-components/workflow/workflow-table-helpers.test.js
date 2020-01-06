@@ -6,22 +6,24 @@ describe('workflow table helpers', () => {
       id: '1',
       name: 'foo',
       description: 'bar',
+      sequence: '1',
       group_refs: [ 'group_refs' ],
       group_names: [ 'group_names' ]
     }, {
       name: 'should be in result',
       id: '2',
       description: 'baz',
+      sequence: '2',
       group_refs: [ 'group_refs' ],
       group_names: [ 'group_names' ]
     }, {
       name: 'Always approve',
       id: 3,
-      description: 'hould not be in result'
+      description: 'should not be in result'
     }];
 
     const expectedData = [{
-      cells: [ 'should be in result', 'baz' ],
+      cells: [ 'should be in result', 'baz', '2' ],
       id: '2',
       isOpen: false,
       selected: false
