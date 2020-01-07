@@ -45,6 +45,8 @@ describe('<RequestDetail />', () => {
   it('should render request loader', async done => {
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
+      product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     const store = mockStore(initialState);
     let wrapper;
 
@@ -60,25 +62,40 @@ describe('<RequestDetail />', () => {
   });
 
   it('should render request details', async done => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {
-      content: { params: {
-        foo: 'bar'
-      }}
-    }}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
+      product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     const store = mockStore(
       initialState = {
         requestReducer: {
+          selectedRequest: { actions: { data: [{ id: '266', created_at: '2019-12-20',
+            request_id: '123', processed_by: 'system', operation: 'start' }]},
+          created_at: '2019-12-20',
+          decision: 'undecided',
+          group_name: 'Test Group',
+          id: '269',
+          name: 'Test Product',
+          notified_at: '2019-12-20',
+          number_of_children: 0,
+          number_of_finished_children: 0,
+          owner: 'test_owner',
+          requester_name: 'A Name',
+          state: 'notified',
+          workflow_id: '123' },
+          requestContent: { order_id: '363',
+            params: {},
+            portfolio: 'Portfolio',
+            product: 'Product' },
           isRequestDataLoading: false
         }
       }
     );
     let wrapper;
-
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" render={ props => <RequestDetail { ...props } { ...initialProps } /> } />
+          <Route path="/foo/:id" render={ props => <RequestDetail { ...props } { ...initialProps } isFetching={ false }/> } />
         </ComponentWrapper>
       );
     });
