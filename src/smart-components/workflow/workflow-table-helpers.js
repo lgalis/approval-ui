@@ -10,13 +10,14 @@ export const createRows = (data, filterValue) =>
     { id,
       name,
       description,
+      sequence,
       group_refs,
       group_names }, key) => ([
     ...acc, {
       id,
       isOpen: false,
       selected: false,
-      cells: [ name, description ]
+      cells: [ name, description, sequence ]
     }, {
       parent: key * 2,
       cells: [{ title: <ExpandableContent description={ description } groupRefs={ group_refs } groupNames={ group_names } /> }]

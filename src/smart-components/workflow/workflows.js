@@ -19,7 +19,8 @@ const columns = [{
   title: 'Name',
   cellFormatters: [ expandable ]
 },
-'Description'
+'Description',
+'Sequence'
 ];
 
 const Workflows = ({ fetchWorkflows, isLoading, pagination, history }) => {
