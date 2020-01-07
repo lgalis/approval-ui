@@ -11,6 +11,11 @@ export const fetchRequest = (apiProps) => ({
   payload: RequestHelper.fetchRequestWithActions(apiProps)
 });
 
+export const fetchRequestContent = (apiProps) => ({
+  type: ActionTypes.FETCH_REQUEST_CONTENT,
+  payload: RequestHelper.fetchRequestContent(apiProps)
+});
+
 export const createRequestAction = (actionName, requestId, actionIn) => ({
   type: ActionTypes.CREATE_REQUEST_ACTION,
   payload: RequestHelper.createRequestAction(requestId, actionIn),

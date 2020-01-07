@@ -1,4 +1,5 @@
-import { getActionApi, getRequestApi } from '../shared/user-login';
+import { getActionApi, getRequestApi, getAxiosInstance } from '../shared/user-login';
+import { APPROVAL_API_BASE } from '../../utilities/constants';
 
 const requestApi = getRequestApi();
 const actionApi = getActionApi();
@@ -13,6 +14,10 @@ export async function fetchRequest(id) {
 
 export const fetchRequestActions = (id) => {
   return actionApi.listActionsByRequest(id);
+};
+
+export const fetchRequestContent = (id) => {
+  return getAxiosInstance().get(`${APPROVAL_API_BASE}/requests/${id}/content`);
 };
 
 export async function fetchRequestWithActions(id) {
