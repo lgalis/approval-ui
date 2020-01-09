@@ -44,7 +44,8 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
       postMethod={ fetchData }/> } />
   </Fragment>;
 
-  const areActionsDisabled = (requestData) => requestData && requestData.state ? !isRequestStateActive(requestData.state.title) : true;
+  const areActionsDisabled = (requestData) => requestData &&
+    requestData.state ? !isRequestStateActive(requestData.state.title) && !requestData.numberOfChildren : true;
 
   const actionResolver = (requestData, { rowIndex }) => {
     return (rowIndex === 1 || areActionsDisabled(requestData) ? null :
