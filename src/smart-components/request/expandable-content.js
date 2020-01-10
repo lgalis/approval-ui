@@ -12,8 +12,8 @@ const ExpandedItem = (data) => {
   </TextContent>);
 };
 
-const ExpandableContent = ({ id, content, state, reason }) => {
-  const requestActive = isRequestStateActive(state);
+const ExpandableContent = ({ id, number_of_children, content, state, reason }) => {
+  const requestActive = isRequestStateActive(state) && !number_of_children;
   return (
     <Fragment>
       <Level>
@@ -52,6 +52,7 @@ const ExpandableContent = ({ id, content, state, reason }) => {
 ExpandableContent.propTypes = {
   id: PropTypes.string,
   content: PropTypes.object,
+  number_of_children: PropTypes.string,
   uname: PropTypes.string,
   state: PropTypes.string,
   reason: PropTypes.string

@@ -15,11 +15,13 @@ export const createRows = (data, filterValue) =>
     state,
     decision,
     reason,
+    number_of_children,
     content }, key) => ([
     ...acc, {
       id,
       isOpen: false,
       state,
+      number_of_children,
       cells: [ <Fragment key={ id }><Link to={ `/requests/detail/${id}` }>
         <Button variant="link"> { name } </Button></Link></Fragment>, requester_name,
       timeAgo(created_at), timeAgo(updated_at), state, decision ]
