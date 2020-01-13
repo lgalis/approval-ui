@@ -3,11 +3,13 @@ import {
   FETCH_REQUEST_CONTENT,
   FETCH_REQUESTS
 } from '../../redux/action-types';
+import { defaultSettings } from '../../helpers/shared/pagination';
 
 // Initial State
 export const requestsInitialState = {
-  requests: [],
-
+  requests: {
+    meta: defaultSettings
+  },
   filterValue: '',
   isRequestDataLoading: false
 };

@@ -17,7 +17,7 @@ import { RequestLoader } from './presentational-components/shared/loader-placeho
  *         see the difference with DashboardMap and InventoryDeployments.
  *
  */
-const Requests = lazy(() => import('./smart-components/request/requests'));
+const Requests = lazy(() => import('./smart-components/request/request-list'));
 const Workflows = lazy(() => import('./smart-components/workflow/workflows'));
 
 const paths = {

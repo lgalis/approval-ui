@@ -4,8 +4,8 @@ import { APPROVAL_API_BASE } from '../../utilities/constants';
 const requestApi = getRequestApi();
 const actionApi = getActionApi();
 
-export function fetchRequests({ limit, offset }) {
-  return requestApi.listRequests(undefined, limit, offset);
+export function fetchRequests({ limit, offset, filter }) {
+  return requestApi.listRequests(undefined, limit, offset, filter);
 }
 
 export async function fetchRequest(id) {
