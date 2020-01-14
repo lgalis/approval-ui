@@ -1,7 +1,7 @@
-import React, { Fragment, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { Fragment, useEffect, useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows } from '../../redux/actions/workflow-actions';
@@ -9,11 +9,13 @@ import AddWorkflow from './add-stages/add-stages-wizard';
 import EditWorkflowInfo from './edit-workflow-info-modal';
 import EditWorkflowStages from './edit-workflow-stages-modal';
 import RemoveWorkflow from './remove-workflow-modal';
-import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { createRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
+import { defaultSettings } from '../../helpers/shared/pagination';
+import asyncDebounce from '../../utilities/async-debounce';
+import { scrollToTop } from '../../helpers/shared/helpers';
 
 const columns = [{
   title: 'Name',
@@ -23,13 +25,72 @@ const columns = [{
 'Sequence'
 ];
 
-const Workflows = ({ fetchWorkflows, isLoading, pagination, history }) => {
+const initialState = {
+  filterValue: '',
+  isOpen: false,
+  isFetching: true,
+  isFiltering: false
+};
+
+const workflowsListState = (state, action) => {
+  switch (action.type) {
+    case 'setFetching':
+      return { ...state, isFetching: action.payload };
+    case 'setFilterValue':
+      return { ...state, filterValue: action.payload };
+    case 'setFilteringFlag':
+      return { ...state, isFiltering: action.payload };
+    default:
+      return state;
+  }
+};
+
+const Workflows = () => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
-  const [ filterValue, setFilterValue ] = useState(undefined);
-  const [ workflows, setWorkflows ] = useState([]);
+  const [{ filterValue, isFetching, isFiltering }, stateDispatch ] = useReducer(
+    workflowsListState,
+    initialState
+  );
 
   const fetchData = () => {
-    fetchWorkflows({ ...pagination, filter: filterValue }).then(({ value: { data }}) => setWorkflows(data));
+    fetchWorkflows(filterValue, meta);
+  };
+
+  const { data, meta } = useSelector(
+    ({ workflowReducer: { workflows }}) => workflows
+  );
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const debouncedFilter = asyncDebounce(
+    (value, dispatch, filteringCallback, meta = defaultSettings) => {
+      filteringCallback(true);
+      dispatch(fetchWorkflows(value, meta)).then(() =>
+        filteringCallback(false)
+      );
+    },
+    1000
+  );
+
+  useEffect(() => {
+    dispatch(
+      fetchWorkflows(filterValue, defaultSettings)
+    ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
+    scrollToTop();
+  }, []);
+
+  const handleFilterChange = (value) => {
+    stateDispatch({ type: 'setFilterValue', payload: value });
+    debouncedFilter(
+      value,
+      dispatch,
+      (isFiltering) =>
+        stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
+      {
+        ...meta,
+        offset: 0
+      }
+    );
   };
 
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
@@ -105,45 +166,39 @@ const Workflows = ({ fetchWorkflows, isLoading, pagination, history }) => {
     </ToolbarItem>
   </ToolbarGroup>;
 
-  return (
-    <Fragment>
-      <TopToolbar>
-        <TopToolbarTitle title="Approval" />
-        <AppTabs tabItems={ tabItems }/>
-      </TopToolbar>
-      <TableToolbarView
-        data={ workflows }
-        isSelectable={ true }
-        createRows={ createRows }
-        columns={ columns }
-        fetchData={ fetchData }
-        request={ fetchWorkflows }
-        routes={ routes }
-        actionResolver={ actionResolver }
-        titlePlural="workflows"
-        titleSingular="workflow"
-        pagination={ pagination }
-        setCheckedItems={ setCheckedItems }
-        toolbarButtons={ toolbarButtons }
-        filterValue={ filterValue }
-        setFilterValue={ setFilterValue }
-        isLoading={ isLoading }
-      />
-    </Fragment>
-  );
-};
-
-const mapStateToProps = ({ workflowReducer: { workflows, isLoading }}) => ({
-  workflows: workflows.data,
-  pagination: workflows.meta,
-  isLoading
-});
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchWorkflows: apiProps => dispatch(fetchWorkflows(apiProps)),
-    fetchRbacGroups: apiProps => dispatch(fetchRbacGroups(apiProps))
+  const renderList = () => {
+    console.log('DEBUG - data: meta:  ', data, meta);
+    const workflowRows = data ? createRows(data) : [];
+    console.log('DEBUG - workflowRows:  ', workflowRows);
+    return (
+      <Fragment>
+        <TopToolbar>
+          <TopToolbarTitle title="Approval"/>
+          <AppTabs tabItems={ tabItems }/>
+        </TopToolbar>
+        <TableToolbarView
+          data={ data }
+          isSelectable={ true }
+          createRows={ createRows }
+          columns={ columns }
+          fetchData={ fetchData }
+          request={ fetchWorkflows }
+          routes={ routes }
+          actionResolver={ actionResolver }
+          titlePlural="workflows"
+          titleSingular="workflow"
+          pagination={ meta }
+          setCheckedItems={ setCheckedItems }
+          toolbarButtons={ toolbarButtons }
+          filterValue={ filterValue }
+          setFilterValue={ handleFilterChange }
+          isLoading={ isFetching || isFiltering }
+        />
+      </Fragment>
+    );
   };
+
+  return renderList();
 };
 
 Workflows.propTypes = {
@@ -170,4 +225,4 @@ Workflows.defaultProps = {
   pagination: {}
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Workflows);
+export default Workflows;

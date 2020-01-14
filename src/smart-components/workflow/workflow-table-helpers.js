@@ -2,10 +2,9 @@ import React from 'react';
 
 import ExpandableContent from './expandable-content';
 
-export const createRows = (data, filterValue) =>
+export const createRows = (data) =>
   data.filter(item => {
-    const filter = filterValue ? item.name.includes(filterValue) : true;
-    return (item.name !== 'Always approve') && filter;
+    return (item.name !== 'Always approve');
   }).reduce((acc,
     { id,
       name,

@@ -6,8 +6,7 @@ import { APPROVAL_API_BASE } from '../../utilities/constants';
 const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
-export function fetchWorkflows(pagination = { limit: defaultSettings.limit, offset: defaultSettings.offset },
-  filter = '') {
+export function fetchWorkflows(filter = '', pagination = defaultSettings) {
   const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
   const filterQuery = `&filter[name][contains]=${filter}`;
   return getAxiosInstance().get(

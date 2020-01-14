@@ -48,18 +48,14 @@ export const TableToolbarView = ({
     scrollToTop();
   }, []);
 
-  const handleOnPerPageSelect = limit => request({
-    offset: pagination.offset,
-    limit
-  }).then(({ value: { data }}) => setRows(createRows(data, filterValue)));
+  const handleOnPerPageSelect = limit => request(filterValue, { ...pagination, limit });
 
-  const handleSetPage = (number, debounce) => {
+  const handleSetPage = (number) => {
     const options = {
       offset: getNewPage(number, pagination.limit),
       limit: pagination.limit
     };
-    const requestFunc = () => request(options);
-    return debounce ? debouncePromise(request, 250)() : requestFunc().then(({ value: { data }}) => setRows(createRows(data, filterValue)));
+    return request(filterValue, options);
   };
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
