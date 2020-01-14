@@ -29,7 +29,7 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
   const [ requests, setRequests ] = useState([]);
 
   const fetchData = () => {
-    fetchRequests().then(({ value: { data }}) => setRequests(data));
+    fetchRequests(filterValue, pagination).then(({ value: { data }}) => setRequests(data));
   };
 
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' }, { eventKey: 1, title: 'Workflows', name: '/workflows' }];
