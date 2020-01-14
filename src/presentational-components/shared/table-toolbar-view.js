@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
-import debouncePromise from 'awesome-debounce-promise';
 import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
-import { Pagination } from '@redhat-cloud-services/frontend-components';
-import { scrollToTop, getCurrentPage, getNewPage } from '../../helpers/shared/helpers';
+import { Pagination } from '@patternfly/react-core';
+import { scrollToTop } from '../../helpers/shared/helpers';
 import { defaultSettings  } from '../../helpers/shared/pagination';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
 import { Section } from '@redhat-cloud-services/frontend-components';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/components/TableToolbar';
 import { DataListLoader } from './loader-placeholders';
+import AsyncPagination from '../../smart-components/common/async-pagination';
 
 /**
  * Need to optimize this component
@@ -47,16 +47,6 @@ export const TableToolbarView = ({
   useEffect(() => {
     scrollToTop();
   }, []);
-
-  const handleOnPerPageSelect = limit => request(filterValue, { ...pagination, limit });
-
-  const handleSetPage = (number) => {
-    const options = {
-      offset: getNewPage(number, pagination.limit),
-      limit: pagination.limit
-    };
-    return request(filterValue, options);
-  };
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
     {
@@ -101,13 +91,11 @@ export const TableToolbarView = ({
           <Toolbar>
             <ToolbarGroup>
               <ToolbarItem>
-                <Pagination
-                  itemsPerPage={ pagination.limit }
-                  numberOfItems={ pagination.count }
-                  onPerPageSelect={ handleOnPerPageSelect }
-                  page={ getCurrentPage(pagination.limit, pagination.offset) }
-                  onSetPage={ handleSetPage }
-                  direction="down"
+                <AsyncPagination
+                  apiRequest={ request }
+                  isDisabled={ isLoading }
+                  meta={ pagination }
+                  isCompact
                 />
               </ToolbarItem>
             </ToolbarGroup>

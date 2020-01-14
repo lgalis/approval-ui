@@ -141,6 +141,13 @@ const Workflows = () => {
 
   const anyWorkflowsSelected = () => selectedWorkflows.length > 0;
 
+  const handlePagination = (_apiProps, pagination) => {
+    stateDispatch({ type: 'setFetching', payload: true });
+    dispatch(fetchWorkflows(filterValue, pagination))
+    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
+    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
+  };
+
   const toolbarButtons = () => <ToolbarGroup>
     <ToolbarItem>
       <Link id="add-workflow-link" to="/workflows/add-workflow">
@@ -167,9 +174,6 @@ const Workflows = () => {
   </ToolbarGroup>;
 
   const renderList = () => {
-    console.log('DEBUG - data: meta:  ', data, meta);
-    const workflowRows = data ? createRows(data) : [];
-    console.log('DEBUG - workflowRows:  ', workflowRows);
     return (
       <Fragment>
         <TopToolbar>
@@ -182,7 +186,7 @@ const Workflows = () => {
           createRows={ createRows }
           columns={ columns }
           fetchData={ fetchData }
-          request={ fetchWorkflows }
+          request={ handlePagination }
           routes={ routes }
           actionResolver={ actionResolver }
           titlePlural="workflows"

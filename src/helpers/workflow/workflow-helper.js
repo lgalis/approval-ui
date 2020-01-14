@@ -8,7 +8,7 @@ const templateApi = getTemplateApi();
 
 export function fetchWorkflows(filter = '', pagination = defaultSettings) {
   const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
-  const filterQuery = `&filter[name][contains]=${filter}`;
+  const filterQuery = `&filter[name][contains_i]=${filter}`;
   return getAxiosInstance().get(
     `${APPROVAL_API_BASE}/workflows/?${filterQuery}${paginationQuery}`
   );
