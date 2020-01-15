@@ -168,15 +168,13 @@ describe('<TableToolbarView />', () => {
       wrapper = mount(<TableToolbarView { ...initialProps } request={ request } />);
     });
 
-    const paginationInput = wrapper.find('input[type="number"]').last();
-    paginationInput.getDOMNode().value = 2;
-    paginationInput.simulate('change');
+    const paginationInput = wrapper.find('button').last();
     await act(async() => {
-      paginationInput.simulate('keypress', { key: 'Enter' });
+      paginationInput.simulate('click');
     });
 
     setTimeout(() => {
-      expect(request).toHaveBeenCalledWith();
+      expect(request).toHaveBeenCalledWith(undefined, { limit: 50, offset: 50 });
       done();
     }, 251);
   });

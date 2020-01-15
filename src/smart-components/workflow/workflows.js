@@ -207,26 +207,17 @@ const Workflows = () => {
 
 Workflows.propTypes = {
   history: PropTypes.shape({
-    goBack: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired
   }).isRequired,
   workflows: PropTypes.array,
-  platforms: PropTypes.array,
   isLoading: PropTypes.bool,
-  fetchWorkflows: PropTypes.func.isRequired,
-  selectedWorkflows: PropTypes.array,
-  pagination: PropTypes.shape({
-    limit: PropTypes.number.isRequired,
-    offset: PropTypes.number.isRequired,
-    count: PropTypes.number.isRequired
-  })
+  selectedWorkflows: PropTypes.array
 };
 
 Workflows.defaultProps = {
   workflows: [],
   rbacGroups: {},
-  isLoading: false,
-  pagination: {}
+  isLoading: false
 };
 
 export default Workflows;

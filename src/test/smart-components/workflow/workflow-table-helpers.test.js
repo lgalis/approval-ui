@@ -24,6 +24,22 @@ describe('workflow table helpers', () => {
     }];
 
     const expectedData = [{
+      cells: [ 'foo', 'bar', '2' ],
+      id: '1',
+      isOpen: false,
+      selected: false
+    },
+    {
+      cells: [{
+        title: <ExpandableContent
+          description="bar"
+          groupNames={ [ 'group_names' ] }
+          groupRefs={ [ 'group_refs' ] }
+          iFetching={ false }
+        />
+      }],
+      parent: 0
+    },      {
       cells: [ 'should be in result', 'baz', '1' ],
       id: '2',
       isOpen: false,
@@ -37,7 +53,7 @@ describe('workflow table helpers', () => {
           iFetching={ false }
         />
       }],
-      parent: 0
+      parent: 2
     }];
     expect(createRows(data, 'result')).toEqual(expectedData);
   });

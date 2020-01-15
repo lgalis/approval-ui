@@ -26,12 +26,10 @@ exports[`<Workflows /> should render correctly 1`] = `
       <Workflows
         history={
           Object {
-            "goBack": [MockFunction],
             "push": [MockFunction],
           }
         }
         isLoading={false}
-        pagination={Object {}}
         rbacGroups={Object {}}
         workflows={Array []}
       />
@@ -66,12 +64,10 @@ exports[`<Workflows /> should render correctly in loading state 1`] = `
       <Workflows
         history={
           Object {
-            "goBack": [MockFunction],
             "push": [MockFunction],
           }
         }
         isLoading={true}
-        pagination={Object {}}
         rbacGroups={Object {}}
         workflows={Array []}
       />
