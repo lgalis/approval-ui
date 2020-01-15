@@ -81,7 +81,7 @@ export const TableToolbarView = ({
         <LevelItem>
           <Toolbar>
             <FilterToolbar onFilterChange={ value => setFilterValue(value) } searchValue={ filterValue }
-              placeholder={ `Find a ${titleSingular}` }/>
+              placeholder={ `Filter by ${titleSingular}` }/>
             { toolbarButtons() }
           </Toolbar>
         </LevelItem>
