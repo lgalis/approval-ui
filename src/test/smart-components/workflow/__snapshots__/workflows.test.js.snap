@@ -23,13 +23,17 @@ exports[`<Workflows /> should render correctly 1`] = `
     <IntlProvider
       locale="en"
     >
-      <Connect(Workflows)
+      <Workflows
         history={
           Object {
             "goBack": [MockFunction],
             "push": [MockFunction],
           }
         }
+        isLoading={false}
+        pagination={Object {}}
+        rbacGroups={Object {}}
+        workflows={Array []}
       />
     </IntlProvider>
   </MemoryRouter>
@@ -59,7 +63,7 @@ exports[`<Workflows /> should render correctly in loading state 1`] = `
     <IntlProvider
       locale="en"
     >
-      <Connect(Workflows)
+      <Workflows
         history={
           Object {
             "goBack": [MockFunction],
@@ -67,6 +71,9 @@ exports[`<Workflows /> should render correctly in loading state 1`] = `
           }
         }
         isLoading={true}
+        pagination={Object {}}
+        rbacGroups={Object {}}
+        workflows={Array []}
       />
     </IntlProvider>
   </MemoryRouter>

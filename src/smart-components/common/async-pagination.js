@@ -35,16 +35,16 @@ const AsyncPagination = ({
   };
 
   return (
-    <div className={className}>
+    <div className={ className }>
       <Pagination
-        perPage={limit || 50}
-        itemCount={count || 0}
-        onPerPageSelect={handleOnPerPageSelect}
-        page={getCurrentPage(limit, offset)}
-        onSetPage={handleSetPage}
+        perPage={ limit || 50 }
+        itemCount={ count || 0 }
+        onPerPageSelect={ handleOnPerPageSelect }
+        page={ getCurrentPage(limit, offset) }
+        onSetPage={ handleSetPage }
         direction="down"
-        isCompact={isCompact}
-        {...props}
+        isCompact={ isCompact }
+        { ...props }
       />
     </div>
   );
