@@ -6,8 +6,14 @@ import {
 
 // Initial State
 export const requestsInitialState = {
-  requests: [],
-
+  requests: {
+    data: [],
+    meta: {
+      count: 0,
+      limit: 10,
+      offset: 0
+    }
+  },
   filterValue: '',
   isRequestDataLoading: false
 };

@@ -5,10 +5,9 @@ import { defaultSettings } from '../shared/pagination';
 const requestApi = getRequestApi();
 const actionApi = getActionApi();
 
-export function fetchRequests(pagination = { limit: defaultSettings.limit, offset: defaultSettings.offset },
-  filter = '') {
+export function fetchRequests(filter = '', pagination = defaultSettings) {
   const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
-  const filterQuery = `&filter[name][contains]=${filter}`;
+  const filterQuery = `&filter[name][contains_i]=${filter}`;
   return getAxiosInstance().get(
     `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}`
   );
