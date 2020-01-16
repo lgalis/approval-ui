@@ -5,7 +5,6 @@ import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { defaultSettings  } from '../../helpers/shared/pagination';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
 import { Section } from '@redhat-cloud-services/frontend-components';
-import { TableToolbar } from '@redhat-cloud-services/frontend-components/components/TableToolbar';
 import { DataListLoader } from './loader-placeholders';
 import AsyncPagination from '../../smart-components/common/async-pagination';
 
@@ -67,7 +66,7 @@ export const TableToolbarView = ({
     : setRows((rows) => setSelected(rows, id));
 
   const renderToolbar = (isLoading) => {
-    return (<TableToolbar>
+    return (<Toolbar className={ `pf-u-pt-lg pf-u-pr-lg pf-u-pl-lg pf-u-pb-lg top-toolbar` }>
       <Level style={ { flex: 1 } }>
         <LevelItem>
           <Toolbar>
@@ -92,7 +91,7 @@ export const TableToolbarView = ({
           </Toolbar>
         </LevelItem>
       </Level>
-    </TableToolbar>);
+    </Toolbar>);
   };
 
   return (
@@ -119,7 +118,6 @@ export const TableToolbarView = ({
 TableToolbarView.propTypes = {
   isSelectable: propTypes.bool,
   createRows: propTypes.func.isRequired,
-  request: propTypes.func.isRequired,
   columns: propTypes.array.isRequired,
   toolbarButtons: propTypes.func,
   fetchData: propTypes.func.isRequired,
