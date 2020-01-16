@@ -26,6 +26,15 @@ const columns = [{
 'Decision'
 ];
 
+const debouncedFilter = asyncDebounce(
+  (filter, dispatch, filteringCallback, meta = defaultSettings) => {
+    filteringCallback(true);
+    dispatch(fetchRequests(filter, meta)).then(() =>
+      filteringCallback(false)
+    );
+  },
+  1000
+);
 const initialState = {
   filterValue: '',
   isOpen: false,
@@ -51,26 +60,12 @@ const Requests = () => {
     requestsListState,
     initialState
   );
-
-  const fetchData = () => {
-    fetchRequests(filterValue, meta);
-  };
-
   const { data, meta } = useSelector(
     ({ requestReducer: { requests }}) => requests
   );
+
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const debouncedFilter = asyncDebounce(
-    (value, dispatch, filteringCallback, meta = defaultSettings) => {
-      filteringCallback(true);
-      dispatch(fetchRequests(value, meta)).then(() =>
-        filteringCallback(false)
-      );
-    },
-    1000
-  );
 
   useEffect(() => {
     dispatch(
@@ -93,16 +88,17 @@ const Requests = () => {
     );
   };
 
-  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' }, { eventKey: 1, title: 'Workflows', name: '/workflows' }];
+  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
+    { eventKey: 1, title: 'Workflows', name: '/workflows' }];
 
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
       actionType={ 'Add Comment' }
-      postMethod={ fetchData } /> }/>
+      postMethod={ fetchRequests } /> }/>
     <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' }
-      postMethod={ fetchData }/> } />
+      postMethod={ fetchRequests }/> } />
     <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' }
-      postMethod={ fetchData }/> } />
+      postMethod={ fetchRequests }/> } />
   </Fragment>;
 
   const areActionsDisabled = (requestData) => requestData &&
@@ -137,14 +133,14 @@ const Requests = () => {
           data={ data }
           createRows={ createRows }
           columns={ columns }
-          fetchData={ fetchData }
-          request={ handlePagination }
+          fetchData={ handlePagination }
           routes={ routes }
           actionResolver={ actionResolver }
           areActionsDisabled={ areActionsDisabled }
           titlePlural="requests"
           titleSingular="request"
           pagination={ meta }
+          handlePagination={ handlePagination }
           filterValue={ filterValue }
           setFilterValue={ handleFilterChange }
           isLoading={ isFetching || isFiltering }

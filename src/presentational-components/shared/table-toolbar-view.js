@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
-import { scrollToTop } from '../../helpers/shared/helpers';
 import { defaultSettings  } from '../../helpers/shared/pagination';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
 import { Section } from '@redhat-cloud-services/frontend-components';
@@ -17,12 +16,11 @@ import AsyncPagination from '../../smart-components/common/async-pagination';
  */
 
 export const TableToolbarView = ({
-  request,
   isSelectable,
   createRows,
   columns,
-  toolbarButtons,
   fetchData,
+  toolbarButtons,
   data,
   actionResolver,
   routes,
@@ -36,16 +34,8 @@ export const TableToolbarView = ({
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
-    fetchData(setRows, filterValue, pagination);
-  }, [ filterValue, pagination.limit, pagination.offset ]);
-
-  useEffect(() => {
-    setRows(createRows(data, filterValue));
+    setRows(createRows(data));
   }, [ data ]);
-
-  useEffect(() => {
-    scrollToTop();
-  }, []);
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
     {
@@ -91,7 +81,7 @@ export const TableToolbarView = ({
             <ToolbarGroup>
               <ToolbarItem>
                 <AsyncPagination
-                  apiRequest={ request }
+                  apiRequest={ fetchData }
                   isDisabled={ isLoading }
                   meta={ pagination }
                   isCompact
@@ -144,7 +134,7 @@ TableToolbarView.propTypes = {
   actionResolver: propTypes.func,
   setCheckedItems: propTypes.func,
   filterValue: propTypes.string,
-  setFilterValue: propTypes.func,
+  onFilterChange: propTypes.func,
   isLoading: propTypes.bool
 };
 

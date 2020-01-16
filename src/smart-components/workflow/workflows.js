@@ -25,6 +25,15 @@ const columns = [{
 'Sequence'
 ];
 
+const debouncedFilter = asyncDebounce(
+  (filter, dispatch, filteringCallback, meta = defaultSettings) => {
+    filteringCallback(true);
+    dispatch(fetchWorkflows(filter, meta)).then(() =>
+      filteringCallback(false)
+    );
+  },
+  1000
+);
 const initialState = {
   filterValue: '',
   isOpen: false,
@@ -51,26 +60,12 @@ const Workflows = () => {
     workflowsListState,
     initialState
   );
-
-  const fetchData = () => {
-    fetchWorkflows(filterValue, meta);
-  };
-
   const { data, meta } = useSelector(
     ({ workflowReducer: { workflows }}) => workflows
   );
+
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const debouncedFilter = asyncDebounce(
-    (value, dispatch, filteringCallback, meta = defaultSettings) => {
-      filteringCallback(true);
-      dispatch(fetchWorkflows(value, meta)).then(() =>
-        filteringCallback(false)
-      );
-    },
-    1000
-  );
 
   useEffect(() => {
     dispatch(
@@ -96,21 +91,28 @@ const Workflows = () => {
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
     { eventKey: 1, title: 'Workflows', name: '/workflows' }];
 
+  const handlePagination = (_apiProps, pagination) => {
+    stateDispatch({ type: 'setFetching', payload: true });
+    dispatch(fetchWorkflows(filterValue, pagination))
+    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
+    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
+  };
+
   const routes = () => <Fragment>
     <Route exact path="/workflows/add-workflow" render={ props => <AddWorkflow { ...props }
-      postMethod={ fetchData } /> }/>
+      postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType='info' { ...props }
-      postMethod={ fetchData } /> }/>
+      postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType='stages' { ...props }
-      postMethod={ fetchData } /> }/>
+      postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }
-        fetchData={ fetchData }
+        fetchData={ handlePagination }
         setSelectedWorkflows={ setSelectedWorkflows } /> }/>
     <Route exact path="/workflows/remove"
       render={ props => <RemoveWorkflow { ...props }
         ids={ selectedWorkflows }
-        fetchData={ fetchData }
+        fetchData={ handlePagination }
         setSelectedWorkflows={ setSelectedWorkflows } /> }/>
   </Fragment>;
 
@@ -140,13 +142,6 @@ const Workflows = () => {
     setSelectedWorkflows (checkedWorkflows.map(wf => wf.id));
 
   const anyWorkflowsSelected = () => selectedWorkflows.length > 0;
-
-  const handlePagination = (_apiProps, pagination) => {
-    stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchWorkflows(filterValue, pagination))
-    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
-    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
-  };
 
   const toolbarButtons = () => <ToolbarGroup>
     <ToolbarItem>
@@ -185,8 +180,7 @@ const Workflows = () => {
           isSelectable={ true }
           createRows={ createRows }
           columns={ columns }
-          fetchData={ fetchData }
-          request={ handlePagination }
+          fetchData={ handlePagination }
           routes={ routes }
           actionResolver={ actionResolver }
           titlePlural="workflows"
