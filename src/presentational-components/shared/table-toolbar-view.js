@@ -29,8 +29,9 @@ export const TableToolbarView = ({
   pagination,
   setCheckedItems,
   filterValue,
-  isLoading,
-  setFilterValue }) => {
+  onFilterChange,
+  isLoading
+}) => {
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export const TableToolbarView = ({
       <Level style={ { flex: 1 } }>
         <LevelItem>
           <Toolbar>
-            <FilterToolbar onFilterChange={ value => setFilterValue(value) } searchValue={ filterValue }
+            <FilterToolbar onFilterChange={ onFilterChange } searchValue={ filterValue } isClearable={ true }
               placeholder={ `Filter by ${titleSingular}` }/>
             { toolbarButtons() }
           </Toolbar>

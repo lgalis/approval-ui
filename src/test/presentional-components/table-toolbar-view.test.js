@@ -48,16 +48,16 @@ describe('<TableToolbarView />', () => {
   });
 
   it('should call filtering callback', async done => {
-    const setFilterValue = jest.fn();
+    const onFilterChange = jest.fn();
     let wrapper;
 
     await act(async() => {
-      wrapper = mount(<TableToolbarView { ...initialProps } setFilterValue={ setFilterValue } />);
+      wrapper = mount(<TableToolbarView { ...initialProps } onFilterChange={ onFilterChange } />);
     });
     const input = wrapper.find('input').first();
     input.getDOMNode().value = 'foo';
     input.simulate('change');
-    expect(setFilterValue).toHaveBeenCalledWith('foo');
+    expect(onFilterChange).toHaveBeenCalledWith('foo', expect.any(Object));
     done();
   });
 
@@ -165,7 +165,7 @@ describe('<TableToolbarView />', () => {
     let wrapper;
 
     await act(async() => {
-      wrapper = mount(<TableToolbarView { ...initialProps } request={ request } />);
+      wrapper = mount(<TableToolbarView { ...initialProps } fetchData={ request } />);
     });
 
     const paginationInput = wrapper.find('button').last();

@@ -142,7 +142,7 @@ const Requests = () => {
           pagination={ meta }
           handlePagination={ handlePagination }
           filterValue={ filterValue }
-          setFilterValue={ handleFilterChange }
+          onFilterChange={ handleFilterChange }
           isLoading={ isFetching || isFiltering }
         />
       </Fragment>);

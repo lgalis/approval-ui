@@ -189,7 +189,7 @@ const Workflows = () => {
           setCheckedItems={ setCheckedItems }
           toolbarButtons={ toolbarButtons }
           filterValue={ filterValue }
-          setFilterValue={ handleFilterChange }
+          onFilterChange={ handleFilterChange }
           isLoading={ isFetching || isFiltering }
         />
       </Fragment>
