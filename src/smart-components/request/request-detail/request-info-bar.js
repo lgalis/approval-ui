@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Text, TextContent, TextVariants } from '@patternfly/react-core';
 
 const RequestInfoBar = ({ request, requestContent }) => {
-  console.log('DEBUG info bar: request, requestContent: ', request, requestContent);
   return (
     <TextContent>
       <Text component={ TextVariants.small }>Product: <br/></Text>
