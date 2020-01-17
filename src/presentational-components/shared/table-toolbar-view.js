@@ -66,7 +66,7 @@ export const TableToolbarView = ({
     ? setRows(rows.map(row => ({ ...row, selected })))
     : setRows((rows) => setSelected(rows, id));
 
-  const renderToolbar = () => {
+  const renderToolbar = (isLoading) => {
     return (<TableToolbar>
       <Level style={ { flex: 1 } }>
         <LevelItem>
@@ -96,10 +96,10 @@ export const TableToolbarView = ({
   };
 
   return (
-    isLoading ? <DataListLoader/> :
-      <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
-        { routes() }
-        { renderToolbar() }
+    <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
+      { routes() }
+      { renderToolbar(isLoading) }
+      { isLoading ? <DataListLoader/> :
         <Table
           aria-label={ `${titlePlural} table` }
           onCollapse={ onCollapse }
@@ -111,8 +111,8 @@ export const TableToolbarView = ({
         >
           <TableHeader />
           <TableBody />
-        </Table>
-      </Section>
+        </Table> }
+    </Section>
   );
 };
 
