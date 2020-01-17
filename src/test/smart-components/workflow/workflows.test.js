@@ -39,7 +39,6 @@ describe('<Workflows />', () => {
   beforeEach(() => {
     initialProps = {
       history: {
-        goBack: jest.fn(),
         push: jest.fn()
       }
     };
@@ -49,10 +48,22 @@ describe('<Workflows />', () => {
       groupReducer: { ...groupsInitialState },
       workflowReducer: {
         ...workflowsInitialState,
-        data: [{
-          id: '123',
-          name: 'foo'
-        }]
+        workflows: {
+          data: [{
+            id: 'edit-id',
+            name: 'foo',
+            group_refs: [ 'group-1' ]
+          }],
+          meta: {
+            count: 0,
+            limit: 10,
+            offset: 0
+          }
+        },
+        workflow: {},
+        filterValue: '',
+        isLoading: false,
+        isRecordLoading: false
       }
     };
   });
@@ -73,7 +84,12 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ]
@@ -103,11 +119,16 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should redirect to Edit workflow stages page', async done => {
+  it('should redirect to Edit workflow groups page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ]
@@ -141,7 +162,12 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ]
@@ -175,11 +201,16 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ],
       group_names: [ 'group-name-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -206,13 +237,20 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ],
+      group_names: [ 'group-name-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ]
     }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
+
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
