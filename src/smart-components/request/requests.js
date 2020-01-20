@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { expandable } from '@patternfly/react-table';
-import { fetchRequests } from '../../redux/actions/request-actions';
+import { fetchRequests, expandRequest } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
@@ -122,6 +122,11 @@ const Requests = () => {
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
 
+  const onCollapse = (id, setRows, setOpen) => {
+    dispatch(expandRequest(id));
+    setRows((rows) => setOpen(rows, id));
+  };
+
   const renderRequestsList = () => {
     return (
       <Fragment>
@@ -144,6 +149,7 @@ const Requests = () => {
           filterValue={ filterValue }
           onFilterChange={ handleFilterChange }
           isLoading={ isFetching || isFiltering }
+          onCollapse={ onCollapse }
         />
       </Fragment>);
   };
@@ -156,7 +162,7 @@ const Requests = () => {
   );
 };
 
-Requests.PropTypes = {
+Requests.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }),

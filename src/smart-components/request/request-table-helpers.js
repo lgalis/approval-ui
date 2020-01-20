@@ -23,9 +23,14 @@ export const createRows = (data) =>
       isOpen: false,
       state,
       number_of_children,
-      cells: [ <Fragment key={ id }><Link to={ `/requests/detail/${id}` }>
-        <Button variant="link"> { name } </Button></Link></Fragment>, requester_name,
-      timeAgo(created_at), finished_at ? timeAgo(finished_at) : timeAgo(notified_at), state, decision ]
+      cells: [
+        <Fragment key={ id }><Link to={ `/requests/detail/${id}` }><Button variant="link"> { name } </Button></Link></Fragment>,
+        requester_name,
+        timeAgo(created_at),
+        finished_at ? timeAgo(finished_at) : timeAgo(notified_at),
+        state,
+        decision
+      ]
     }, {
       parent: key * 2,
       fullWidth: true,

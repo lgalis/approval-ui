@@ -29,7 +29,8 @@ export const TableToolbarView = ({
   setCheckedItems,
   filterValue,
   onFilterChange,
-  isLoading
+  isLoading,
+  onCollapse
 }) => {
   const [ rows, setRows ] = useState([]);
 
@@ -59,7 +60,9 @@ export const TableToolbarView = ({
     return newData;
   };
 
-  const onCollapse = (_event, _index, _isOpen, { id }) => setRows((rows) => setOpen(rows, id));
+  const onCollapseInternal = (_event, _index, _isOpen, { id }) => onCollapse ?
+    onCollapse(id, setRows, setOpen) :
+    setRows((rows) => setOpen(rows, id));
 
   const selectRow = (_event, selected, index, { id } = {}) => index === -1
     ? setRows(rows.map(row => ({ ...row, selected })))
@@ -101,7 +104,7 @@ export const TableToolbarView = ({
       { isLoading ? <DataListLoader/> :
         <Table
           aria-label={ `${titlePlural} table` }
-          onCollapse={ onCollapse }
+          onCollapse={ onCollapseInternal }
           rows={ rows }
           cells={ columns }
           onSelect={ isSelectable && selectRow }
@@ -134,7 +137,8 @@ TableToolbarView.propTypes = {
   setCheckedItems: propTypes.func,
   filterValue: propTypes.string,
   onFilterChange: propTypes.func,
-  isLoading: propTypes.bool
+  isLoading: propTypes.bool,
+  onCollapse: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
