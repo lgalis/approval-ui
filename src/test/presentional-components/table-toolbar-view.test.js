@@ -160,6 +160,45 @@ describe('<TableToolbarView />', () => {
     done();
   });
 
+  it('should expand row correctly with custom onCollapse', async () => {
+    let wrapper;
+    const createRows = () => [{
+      id: 1,
+      isOpen: false,
+      cells: [ 'name - 1', 'description - 1' ]
+    }, {
+      id: 2,
+      parent: 1,
+      cells: [ 'name - 2', 'description' ]
+    }];
+
+    const onCollapseSpy = jest.fn().mockImplementation((id, setRows, setOpen) => setRows((rows) => setOpen(rows, id)));
+
+    await act(async() => {
+      wrapper = mount(
+        <TableToolbarView
+          { ...initialProps }
+          columns={ [{ title: 'Name', cellFormatters: [ expandable ]}, 'Description' ] }
+          createRows={ createRows }
+          onCollapse={ onCollapseSpy }
+        />);
+    });
+    wrapper.update();
+
+    const expandableRow = wrapper.find('.pf-c-table__expandable-row');
+
+    expect(expandableRow.props().hidden).toEqual(true);
+    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain');
+
+    await act(async () => {
+      wrapper.find('button.pf-c-button').last().simulate('click');
+    });
+    wrapper.update();
+
+    expandableRow.update();
+    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain pf-m-expanded');
+  });
+
   it('should send async requests on pagination', async done => {
     const request = jest.fn().mockImplementation(() => new Promise(resolve => resolve([])));
     let wrapper;

@@ -5,12 +5,14 @@ import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-service
 import {
   FETCH_REQUESTS,
   FETCH_REQUEST,
-  CREATE_REQUEST_ACTION
+  CREATE_REQUEST_ACTION,
+  OPEN_REQUEST
 } from '../../../redux/action-types';
 import {
   createRequestAction,
   fetchRequests,
-  fetchRequest
+  fetchRequest,
+  openRequest
 } from '../../../redux/actions/request-actions';
 import {
   APPROVAL_API_BASE
@@ -202,6 +204,14 @@ describe('Request actions', () => {
     store.dispatch(createRequestAction('actionName', '123', 'actionIn')).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
+    });
+  });
+
+  it('creates object for opening a request', () => {
+    const id = '546451';
+    expect(openRequest(id)).toEqual({
+      type: OPEN_REQUEST,
+      payload: id
     });
   });
 });

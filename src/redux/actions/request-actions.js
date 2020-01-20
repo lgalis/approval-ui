@@ -34,3 +34,8 @@ export const createRequestAction = (actionName, requestId, actionIn) => ({
     }
   }
 });
+
+export const openRequest = (id) => ({
+  type: ActionTypes.OPEN_REQUEST,
+  payload: id
+});
