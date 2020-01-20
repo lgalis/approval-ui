@@ -25,14 +25,14 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
   const [ isLoading, setIsLoading ] = useState(true);
   const [ fetchStarted, setIsFetching ] = useState(false);
 
-  const openedRequests = useSelector(({ requestReducer: { openedRequests }}) => openedRequests);
+  const expandedRequests = useSelector(({ requestReducer: { expandedRequests }}) => expandedRequests);
 
   useEffect(() => {
-    if (!fetchStarted && isLoading && openedRequests.includes(id)) {
+    if (!fetchStarted && isLoading && expandedRequests.includes(id)) {
       setIsFetching(true);
       fetchRequestContent(id).then((data) => { setRequestContent(data); setIsLoading(false); }).catch(() => setIsLoading(false));
     }
-  }, [ openedRequests ]);
+  }, [ expandedRequests ]);
 
   if (isLoading) {
     return (<Bullseye>

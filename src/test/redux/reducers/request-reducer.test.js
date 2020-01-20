@@ -4,7 +4,7 @@ import { callReducer } from '../redux-helpers';
 import {
   FETCH_REQUEST,
   FETCH_REQUESTS,
-  OPEN_REQUEST
+  EXPAND_REQUEST
 } from '../../../redux/action-types';
 
 describe('Request reducer', () => {
@@ -16,7 +16,7 @@ describe('Request reducer', () => {
   });
 
   it('should set loading state', () => {
-    const expectedState = { isRequestDataLoading: true, openedRequests: []};
+    const expectedState = { isRequestDataLoading: true, expandedRequests: []};
     expect(reducer(initialState, { type: `${FETCH_REQUESTS}_PENDING` })).toEqual(expectedState);
   });
 
@@ -41,8 +41,8 @@ describe('Request reducer', () => {
 
   it('should set opened request', () => {
     const id = '54787';
-    initialState = { openedRequests: [ '123' ]};
-    const expectedState = { openedRequests: [ '123', id ]};
-    expect(reducer(initialState, { type: OPEN_REQUEST, payload: id })).toEqual(expectedState);
+    initialState = { expandedRequests: [ '123' ]};
+    const expectedState = { expandedRequests: [ '123', id ]};
+    expect(reducer(initialState, { type: EXPAND_REQUEST, payload: id })).toEqual(expectedState);
   });
 });

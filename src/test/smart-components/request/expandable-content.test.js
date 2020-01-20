@@ -65,7 +65,7 @@ describe('requests - expendableContent', () => {
     beforeEach(() => {
       id = '656646842';
       mockStore = configureStore(middlewares);
-      initialState = { requestReducer: { openedRequests: []}};
+      initialState = { requestReducer: { expandedRequests: []}};
       mockStoreFn = jest.fn().mockImplementation(() => initialState);
       store = mockStore(mockStoreFn);
       initialProps = { id, number_of_children: '', state: 'state', reason: 'reason' };
@@ -84,8 +84,8 @@ describe('requests - expendableContent', () => {
       expect(wrapper.find(Bullseye)).toHaveLength(1);
     });
 
-    it('calls API fetch when openedRequests is changed only one time', async () => {
-      mockStoreFn.mockImplementation(() => ({ requestReducer: { openedRequests: [ id ]}}));
+    it('calls API fetch when expandedRequests is changed only one time', async () => {
+      mockStoreFn.mockImplementation(() => ({ requestReducer: { expandedRequests: [ id ]}}));
 
       let wrapper;
 
@@ -104,7 +104,7 @@ describe('requests - expendableContent', () => {
     });
 
     it('renders with buttons', async () => {
-      mockStoreFn.mockImplementation(() => ({ requestReducer: { openedRequests: [ id ]}}));
+      mockStoreFn.mockImplementation(() => ({ requestReducer: { expandedRequests: [ id ]}}));
 
       let wrapper;
 

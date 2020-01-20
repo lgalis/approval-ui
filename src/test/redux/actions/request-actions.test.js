@@ -6,13 +6,13 @@ import {
   FETCH_REQUESTS,
   FETCH_REQUEST,
   CREATE_REQUEST_ACTION,
-  OPEN_REQUEST
+  EXPAND_REQUEST
 } from '../../../redux/action-types';
 import {
   createRequestAction,
   fetchRequests,
   fetchRequest,
-  openRequest
+  expandRequest
 } from '../../../redux/actions/request-actions';
 import {
   APPROVAL_API_BASE
@@ -209,8 +209,8 @@ describe('Request actions', () => {
 
   it('creates object for opening a request', () => {
     const id = '546451';
-    expect(openRequest(id)).toEqual({
-      type: OPEN_REQUEST,
+    expect(expandRequest(id)).toEqual({
+      type: EXPAND_REQUEST,
       payload: id
     });
   });

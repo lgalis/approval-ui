@@ -103,6 +103,6 @@ describe('<Requests />', () => {
     wrapper.update();
 
     expect(contentSpy).toHaveBeenCalled();
-    expect(store.getState().requestReducer.openedRequests).toEqual([ request.id ]);
+    expect(store.getState().requestReducer.expandedRequests).toEqual([ request.id ]);
   });
 });
