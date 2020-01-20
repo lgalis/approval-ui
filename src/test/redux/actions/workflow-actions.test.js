@@ -8,7 +8,8 @@ import {
   ADD_WORKFLOW,
   UPDATE_WORKFLOW,
   REMOVE_WORKFLOW,
-  REMOVE_WORKFLOWS
+  REMOVE_WORKFLOWS,
+  EXPAND_WORKFLOW
 } from '../../../redux/action-types';
 import {
   addWorkflow,
@@ -16,7 +17,8 @@ import {
   fetchWorkflow,
   removeWorkflow,
   removeWorkflows,
-  updateWorkflow
+  updateWorkflow,
+  expandWorkflow
 } from '../../../redux/actions/workflow-actions';
 import {
   APPROVAL_API_BASE
@@ -356,6 +358,14 @@ describe('Workflow actions', () => {
     store.dispatch(removeWorkflows([ '123', '321' ])).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
+    });
+  });
+
+  it('creates object for expanding a worklow', () => {
+    const id = '546451';
+    expect(expandWorkflow(id)).toEqual({
+      type: EXPAND_WORKFLOW,
+      payload: id
     });
   });
 });

@@ -1,20 +1,25 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
+import { useSelector } from 'react-redux';
 import { fetchGroupName } from '../../helpers/group/group-helper';
 import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components';
 
-const ExpandableContent = ({ description, groupRefs }) => {
+const ExpandableContent = ({ description, groupRefs, id }) => {
   const [ groupNames, setGroupNames ] = useState([]);
   const [ isLoaded, setIsLoaded ] = useState();
+  const [ fetching, setFetching ] = useState();
 
-  const fetchGroupNames = () => {
-    return Promise.all(groupRefs.map((ref) => fetchGroupName(ref)));
-  };
+  const expandedWorkflows = useSelector(({ workflowReducer: { expandedWorkflows }}) => expandedWorkflows);
+
+  const fetchGroupNames = () => Promise.all(groupRefs.map((ref) => fetchGroupName(ref)));
 
   useEffect(() => {
-    fetchGroupNames(groupRefs).then((data) => { setGroupNames(data); setIsLoaded(true); }).catch(() => setIsLoaded(true));
-  }, []);
+    if (!isLoaded && expandedWorkflows.includes(id) && !fetching) {
+      setFetching(true);
+      fetchGroupNames(groupRefs).then((data) => { setGroupNames(data); setIsLoaded(true); }).catch(() => setIsLoaded(true));
+    }
+  }, [ expandedWorkflows ]);
 
   return (
     <Fragment>
@@ -36,18 +41,13 @@ const ExpandableContent = ({ description, groupRefs }) => {
         </Fragment>
       </TextContent>
     </Fragment>
-  );};
-
-ExpandableContent.defaultProps = {
-  groupNames: [],
-  iFetching: false
+  );
 };
 
 ExpandableContent.propTypes = {
   description: PropTypes.string,
   groupRefs: PropTypes.array.isRequired,
-  groupNames: PropTypes.array
+  id: PropTypes.string.isRequired
 };
 
 export default ExpandableContent;
-
