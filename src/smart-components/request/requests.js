@@ -22,7 +22,7 @@ const columns = [{
 'Requester',
 'Opened',
 'Updated',
-'State',
+'Status',
 'Decision'
 ];
 

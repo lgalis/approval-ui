@@ -143,7 +143,7 @@ const Workflows = () => {
 
   const anyWorkflowsSelected = () => selectedWorkflows.length > 0;
 
-  const toolbarButtons = () => <ToolbarGroup>
+  const toolbarButtons = () => <ToolbarGroup className={ `pf-u-pl-lg top-toolbar` }>
     <ToolbarItem>
       <Link id="add-workflow-link" to="/workflows/add-workflow">
         <Button

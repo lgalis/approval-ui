@@ -10,12 +10,14 @@ export const createRows = (data) =>
     name,
     requester_name,
     created_at,
-    updated_at,
+    notified_at,
+    finished_at,
     state,
     decision,
     reason,
     number_of_children,
-    content }, key) => ([
+    content
+  }, key) => ([
     ...acc, {
       id,
       isOpen: false,
@@ -23,14 +25,16 @@ export const createRows = (data) =>
       number_of_children,
       cells: [ <Fragment key={ id }><Link to={ `/requests/detail/${id}` }>
         <Button variant="link"> { name } </Button></Link></Fragment>, requester_name,
-      timeAgo(created_at), timeAgo(updated_at), state, decision ]
+      timeAgo(created_at), finished_at ? timeAgo(finished_at) : timeAgo(notified_at), state, decision ]
     }, {
       parent: key * 2,
       fullWidth: true,
-      cells: [{ title: <ExpandableContent id={ id }
-        content={ content }
-        state={ state }
-        reason={ reason }/> }]
+      cells: [{
+        title: <ExpandableContent id={ id }
+          content={ content }
+          state={ state }
+          reason={ reason }/>
+      }]
     }
   ]), []);
 
