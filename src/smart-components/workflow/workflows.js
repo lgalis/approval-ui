@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
-import { fetchWorkflows } from '../../redux/actions/workflow-actions';
+import { fetchWorkflows, expandWorkflow } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-stages/add-stages-wizard';
 import EditWorkflowInfo from './edit-workflow-info-modal';
 import EditWorkflowStages from './edit-workflow-stages-modal';
@@ -139,9 +139,9 @@ const Workflows = () => {
     ];
 
   const setCheckedItems = (checkedWorkflows) =>
-    setSelectedWorkflows (checkedWorkflows.map(wf => wf.id));
+    setSelectedWorkflows(checkedWorkflows.map(wf => wf.id));
 
-  const anyWorkflowsSelected = () => selectedWorkflows.length > 0;
+  const anyWorkflowsSelected = selectedWorkflows.length > 0;
 
   const toolbarButtons = () => <ToolbarGroup className={ `pf-u-pl-lg top-toolbar` }>
     <ToolbarItem>
@@ -155,11 +155,11 @@ const Workflows = () => {
       </Link>
     </ToolbarItem>
     <ToolbarItem>
-      <Link id="remove-multiple-workflows" className={ anyWorkflowsSelected() ? '' : 'disabled-link' } to={ { pathname: '/workflows/remove' } }>
+      <Link id="remove-multiple-workflows" className={ anyWorkflowsSelected ? '' : 'disabled-link' } to={ { pathname: '/workflows/remove' } }>
         <Button
           variant="link"
-          isDisabled={ !anyWorkflowsSelected() }
-          style={ { color: anyWorkflowsSelected() ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
+          isDisabled={ !anyWorkflowsSelected }
+          style={ { color: anyWorkflowsSelected ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
           aria-label="Delete Workflow"
         >
           Delete
@@ -168,35 +168,37 @@ const Workflows = () => {
     </ToolbarItem>
   </ToolbarGroup>;
 
-  const renderList = () => {
-    return (
-      <Fragment>
-        <TopToolbar>
-          <TopToolbarTitle title="Approval"/>
-          <AppTabs tabItems={ tabItems }/>
-        </TopToolbar>
-        <TableToolbarView
-          data={ data }
-          isSelectable={ true }
-          createRows={ createRows }
-          columns={ columns }
-          fetchData={ handlePagination }
-          routes={ routes }
-          actionResolver={ actionResolver }
-          titlePlural="workflows"
-          titleSingular="workflow"
-          pagination={ meta }
-          setCheckedItems={ setCheckedItems }
-          toolbarButtons={ toolbarButtons }
-          filterValue={ filterValue }
-          onFilterChange={ handleFilterChange }
-          isLoading={ isFetching || isFiltering }
-        />
-      </Fragment>
-    );
+  const onCollapse = (id, setRows, setOpen) => {
+    dispatch(expandWorkflow(id));
+    setRows((rows) => setOpen(rows, id));
   };
 
-  return renderList();
+  return (
+    <Fragment>
+      <TopToolbar>
+        <TopToolbarTitle title="Approval"/>
+        <AppTabs tabItems={ tabItems }/>
+      </TopToolbar>
+      <TableToolbarView
+        data={ data }
+        isSelectable={ true }
+        createRows={ createRows }
+        columns={ columns }
+        fetchData={ handlePagination }
+        routes={ routes }
+        actionResolver={ actionResolver }
+        titlePlural="workflows"
+        titleSingular="workflow"
+        pagination={ meta }
+        setCheckedItems={ setCheckedItems }
+        toolbarButtons={ toolbarButtons }
+        filterValue={ filterValue }
+        onFilterChange={ handleFilterChange }
+        isLoading={ isFetching || isFiltering }
+        onCollapse={ onCollapse }
+      />
+    </Fragment>
+  );
 };
 
 Workflows.propTypes = {

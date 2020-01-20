@@ -76,3 +76,8 @@ export const removeWorkflows = (workflows) => ({
     }
   }
 });
+
+export const expandWorkflow = (id) => ({
+  type: ActionTypes.EXPAND_WORKFLOW,
+  payload: id
+});

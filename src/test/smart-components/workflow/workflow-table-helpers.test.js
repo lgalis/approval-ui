@@ -33,9 +33,8 @@ describe('workflow table helpers', () => {
       cells: [{
         title: <ExpandableContent
           description="bar"
-          groupNames={ [ 'group_names' ] }
           groupRefs={ [ 'group_refs' ] }
-          iFetching={ false }
+          id="1"
         />
       }],
       parent: 0
@@ -48,9 +47,8 @@ describe('workflow table helpers', () => {
       cells: [{
         title: <ExpandableContent
           description="baz"
-          groupNames={ [ 'group_names' ] }
           groupRefs={ [ 'group_refs' ] }
-          iFetching={ false }
+          id="2"
         />
       }],
       parent: 2
