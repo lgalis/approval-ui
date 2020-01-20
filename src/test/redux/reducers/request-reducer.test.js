@@ -16,7 +16,7 @@ describe('Request reducer', () => {
   });
 
   it('should set loading state', () => {
-    const expectedState = { isRequestDataLoading: true };
+    const expectedState = { isRequestDataLoading: true, openedRequests: []};
     expect(reducer(initialState, { type: `${FETCH_REQUESTS}_PENDING` })).toEqual(expectedState);
   });
 

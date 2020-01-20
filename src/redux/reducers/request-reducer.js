@@ -20,7 +20,7 @@ export const requestsInitialState = {
   openedRequests: []
 };
 
-const setLoadingState = state => ({ ...state, isRequestDataLoading: true });
+const setLoadingState = state => ({ ...state, isRequestDataLoading: true, openedRequests: []});
 const setRequests = (state, { payload }) => ({ ...state, requests: payload, isRequestDataLoading: false });
 const selectRequest = (state, { payload }) => ({ ...state, selectedRequest: payload, isRequestDataLoading: false });
 const setRequestContent = (state, { payload }) => ({ ...state, requestContent: payload, isRequestDataLoading: false });
