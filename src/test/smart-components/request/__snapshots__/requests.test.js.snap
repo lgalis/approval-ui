@@ -23,7 +23,10 @@ exports[`<Requests /> should render correctly 1`] = `
     <IntlProvider
       locale="en"
     >
-      <Connect(Requests) />
+      <Requests
+        isLoading={false}
+        requests={Array []}
+      />
     </IntlProvider>
   </MemoryRouter>
 </Provider>
@@ -52,8 +55,9 @@ exports[`<Requests /> should render correctly in loading state 1`] = `
     <IntlProvider
       locale="en"
     >
-      <Connect(Requests)
+      <Requests
         isLoading={true}
+        requests={Array []}
       />
     </IntlProvider>
   </MemoryRouter>
