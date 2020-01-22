@@ -1,9 +1,9 @@
 import * as ActionTypes from '../action-types';
 import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
 
-export const fetchWorkflows = (options = {}) => ({
+export const fetchWorkflows = (filter, pagination) => ({
   type: ActionTypes.FETCH_WORKFLOWS,
-  payload: WorkflowHelper.fetchWorkflows(options)
+  payload: WorkflowHelper.fetchWorkflows(filter, pagination)
 });
 
 export const fetchWorkflow = apiProps => ({
@@ -75,4 +75,9 @@ export const removeWorkflows = (workflows) => ({
       }
     }
   }
+});
+
+export const expandWorkflow = (id) => ({
+  type: ActionTypes.EXPAND_WORKFLOW,
+  payload: id
 });

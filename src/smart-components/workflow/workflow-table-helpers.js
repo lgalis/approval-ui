@@ -2,17 +2,17 @@ import React from 'react';
 
 import ExpandableContent from './expandable-content';
 
-export const createRows = (data, filterValue) =>
+export const createRows = (data) =>
   data.filter(item => {
-    const filter = filterValue ? item.name.includes(filterValue) : true;
-    return (item.name !== 'Always approve') && filter;
+    return (item.name !== 'Always approve');
   }).reduce((acc,
-    { id,
+    {
+      id,
       name,
       description,
       sequence,
-      group_refs,
-      group_names }, key) => ([
+      group_refs
+    }, key) => ([
     ...acc, {
       id,
       isOpen: false,
@@ -20,7 +20,11 @@ export const createRows = (data, filterValue) =>
       cells: [ name, description, sequence ]
     }, {
       parent: key * 2,
-      cells: [{ title: <ExpandableContent description={ description } groupRefs={ group_refs } groupNames={ group_names } /> }]
+      cells: [{ title: <ExpandableContent
+        description={ description }
+        groupRefs={ group_refs }
+        id={ id }
+      /> }]
     }
   ]), []);
 

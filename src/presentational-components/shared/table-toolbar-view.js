@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
-import debouncePromise from 'awesome-debounce-promise';
 import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
-import { Pagination } from '@redhat-cloud-services/frontend-components';
-import { scrollToTop, getCurrentPage, getNewPage } from '../../helpers/shared/helpers';
 import { defaultSettings  } from '../../helpers/shared/pagination';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
 import { Section } from '@redhat-cloud-services/frontend-components';
-import { TableToolbar } from '@redhat-cloud-services/frontend-components/components/TableToolbar';
 import { DataListLoader } from './loader-placeholders';
+import AsyncPagination from '../../smart-components/common/async-pagination';
 
 /**
  * Need to optimize this component
@@ -18,12 +15,11 @@ import { DataListLoader } from './loader-placeholders';
  */
 
 export const TableToolbarView = ({
-  request,
   isSelectable,
   createRows,
   columns,
-  toolbarButtons,
   fetchData,
+  toolbarButtons,
   data,
   actionResolver,
   routes,
@@ -32,35 +28,15 @@ export const TableToolbarView = ({
   pagination,
   setCheckedItems,
   filterValue,
+  onFilterChange,
   isLoading,
-  setFilterValue }) => {
+  onCollapse
+}) => {
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
-    fetchData(setRows, filterValue, pagination);
-  }, [ filterValue, pagination.limit, pagination.offset ]);
-
-  useEffect(() => {
-    setRows(createRows(data, filterValue));
+    setRows(createRows(data));
   }, [ data ]);
-
-  useEffect(() => {
-    scrollToTop();
-  }, []);
-
-  const handleOnPerPageSelect = limit => request({
-    offset: pagination.offset,
-    limit
-  }).then(({ value: { data }}) => setRows(createRows(data, filterValue)));
-
-  const handleSetPage = (number, debounce) => {
-    const options = {
-      offset: getNewPage(number, pagination.limit),
-      limit: pagination.limit
-    };
-    const requestFunc = () => request(options);
-    return debounce ? debouncePromise(request, 250)() : requestFunc().then(({ value: { data }}) => setRows(createRows(data, filterValue)));
-  };
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
     {
@@ -84,19 +60,21 @@ export const TableToolbarView = ({
     return newData;
   };
 
-  const onCollapse = (_event, _index, _isOpen, { id }) => setRows((rows) => setOpen(rows, id));
+  const onCollapseInternal = (_event, _index, _isOpen, { id }) => onCollapse ?
+    onCollapse(id, setRows, setOpen) :
+    setRows((rows) => setOpen(rows, id));
 
   const selectRow = (_event, selected, index, { id } = {}) => index === -1
     ? setRows(rows.map(row => ({ ...row, selected })))
     : setRows((rows) => setSelected(rows, id));
 
-  const renderToolbar = () => {
-    return (<TableToolbar>
+  const renderToolbar = (isLoading) => {
+    return (<Toolbar className={ `pf-u-pt-lg pf-u-pr-lg pf-u-pl-lg pf-u-pb-lg top-toolbar` }>
       <Level style={ { flex: 1 } }>
         <LevelItem>
           <Toolbar>
-            <FilterToolbar onFilterChange={ value => setFilterValue(value) } searchValue={ filterValue }
-              placeholder={ `Find a ${titleSingular}` }/>
+            <FilterToolbar onFilterChange={ onFilterChange } searchValue={ filterValue } isClearable={ true }
+              placeholder={ `Filter by ${titleSingular}` }/>
             { toolbarButtons() }
           </Toolbar>
         </LevelItem>
@@ -105,30 +83,28 @@ export const TableToolbarView = ({
           <Toolbar>
             <ToolbarGroup>
               <ToolbarItem>
-                <Pagination
-                  itemsPerPage={ pagination.limit }
-                  numberOfItems={ pagination.count }
-                  onPerPageSelect={ handleOnPerPageSelect }
-                  page={ getCurrentPage(pagination.limit, pagination.offset) }
-                  onSetPage={ handleSetPage }
-                  direction="down"
+                <AsyncPagination
+                  apiRequest={ fetchData }
+                  isDisabled={ isLoading }
+                  meta={ pagination }
+                  isCompact
                 />
               </ToolbarItem>
             </ToolbarGroup>
           </Toolbar>
         </LevelItem>
       </Level>
-    </TableToolbar>);
+    </Toolbar>);
   };
 
   return (
-    isLoading ? <DataListLoader/> :
-      <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
-        { routes() }
-        { renderToolbar() }
+    <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
+      { routes() }
+      { renderToolbar(isLoading) }
+      { isLoading ? <DataListLoader/> :
         <Table
           aria-label={ `${titlePlural} table` }
-          onCollapse={ onCollapse }
+          onCollapse={ onCollapseInternal }
           rows={ rows }
           cells={ columns }
           onSelect={ isSelectable && selectRow }
@@ -137,15 +113,14 @@ export const TableToolbarView = ({
         >
           <TableHeader />
           <TableBody />
-        </Table>
-      </Section>
+        </Table> }
+    </Section>
   );
 };
 
 TableToolbarView.propTypes = {
   isSelectable: propTypes.bool,
   createRows: propTypes.func.isRequired,
-  request: propTypes.func.isRequired,
   columns: propTypes.array.isRequired,
   toolbarButtons: propTypes.func,
   fetchData: propTypes.func.isRequired,
@@ -161,8 +136,9 @@ TableToolbarView.propTypes = {
   actionResolver: propTypes.func,
   setCheckedItems: propTypes.func,
   filterValue: propTypes.string,
-  setFilterValue: propTypes.func,
-  isLoading: propTypes.bool
+  onFilterChange: propTypes.func,
+  isLoading: propTypes.bool,
+  onCollapse: propTypes.func
 };
 
 TableToolbarView.defaultProps = {

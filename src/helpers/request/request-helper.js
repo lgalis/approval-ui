@@ -1,11 +1,16 @@
 import { getActionApi, getRequestApi, getAxiosInstance } from '../shared/user-login';
 import { APPROVAL_API_BASE } from '../../utilities/constants';
+import { defaultSettings } from '../shared/pagination';
 
 const requestApi = getRequestApi();
 const actionApi = getActionApi();
 
-export function fetchRequests({ limit, offset }) {
-  return requestApi.listRequests(undefined, limit, offset);
+export function fetchRequests(filter = '', pagination = defaultSettings) {
+  const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
+  const filterQuery = `&filter[name][contains_i]=${filter}`;
+  return getAxiosInstance().get(
+    `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}`
+  );
 }
 
 export async function fetchRequest(id) {
@@ -30,6 +35,7 @@ export async function fetchRequestWithActions(id) {
     const subRequestsWithActions = await Promise.all(promises);
     requestData = { ...requestData, children: subRequestsWithActions };
   }
+
   return  { ...requestData, actions: requestActions };
 }
 

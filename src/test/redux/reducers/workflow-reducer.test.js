@@ -3,7 +3,8 @@ import { callReducer } from '../redux-helpers';
 
 import {
   FETCH_WORKFLOW,
-  FETCH_WORKFLOWS
+  FETCH_WORKFLOWS,
+  EXPAND_WORKFLOW
 } from '../../../redux/action-types';
 
 describe('Workflow reducer', () => {
@@ -15,7 +16,7 @@ describe('Workflow reducer', () => {
   });
 
   it('should set loading state', () => {
-    const expectedState = { isLoading: true };
+    const expectedState = { isLoading: true, expandedWorkflows: []};
     expect(reducer(initialState, { type: `${FETCH_WORKFLOWS}_PENDING` })).toEqual(expectedState);
   });
 
@@ -35,4 +36,10 @@ describe('Workflow reducer', () => {
     expect(reducer({ ...workflowsInitialState }, { type: `${FETCH_WORKFLOW}_FULFILLED`, payload: 'my workflow' })).toEqual(expectedState);
   });
 
+  it('should set expanded workflow', () => {
+    const id = '54787';
+    initialState = { expandedWorkflows: [ '123' ]};
+    const expectedState = { expandedWorkflows: [ '123', id ]};
+    expect(reducer(initialState, { type: EXPAND_WORKFLOW, payload: id })).toEqual(expectedState);
+  });
 });

@@ -1,9 +1,9 @@
 import * as ActionTypes from '../action-types';
 import * as RequestHelper from '../../helpers/request/request-helper';
 
-export const fetchRequests = (options = {}) => ({
+export const fetchRequests = (filter, pagination) => ({
   type: ActionTypes.FETCH_REQUESTS,
-  payload: RequestHelper.fetchRequests(options)
+  payload: RequestHelper.fetchRequests(filter, pagination)
 });
 
 export const fetchRequest = (apiProps) => ({
@@ -33,4 +33,9 @@ export const createRequestAction = (actionName, requestId, actionIn) => ({
       }
     }
   }
+});
+
+export const expandRequest = (id) => ({
+  type: ActionTypes.EXPAND_REQUEST,
+  payload: id
 });
