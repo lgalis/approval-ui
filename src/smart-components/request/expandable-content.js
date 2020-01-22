@@ -20,7 +20,7 @@ ExpandedItem.propTypes = {
 };
 
 const ExpandableContent = ({ id, number_of_children, state, reason }) => {
-  const requestActive = isRequestStateActive(state) && !number_of_children;
+  const requestActive = isRequestStateActive(state) && number_of_children === 0;
   const [ requestContent, setRequestContent ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ fetchStarted, setIsFetching ] = useState(false);

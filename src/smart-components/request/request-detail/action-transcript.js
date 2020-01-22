@@ -20,7 +20,9 @@ const operationIcon = {
 };
 
 export const ActionTranscript = actionList => {
+  console.log('Debug ActionTranscript - actionList', actionList);
   const actions = actionList.data || actionList.actionList.data;
+  console.log('Debug ActionTranscript - actions', actions);
   return (
     <Stack>
       { actions.map(actionItem =>
