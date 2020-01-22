@@ -48,16 +48,16 @@ describe('<TableToolbarView />', () => {
   });
 
   it('should call filtering callback', async done => {
-    const setFilterValue = jest.fn();
+    const onFilterChange = jest.fn();
     let wrapper;
 
     await act(async() => {
-      wrapper = mount(<TableToolbarView { ...initialProps } setFilterValue={ setFilterValue } />);
+      wrapper = mount(<TableToolbarView { ...initialProps } onFilterChange={ onFilterChange } />);
     });
     const input = wrapper.find('input').first();
     input.getDOMNode().value = 'foo';
     input.simulate('change');
-    expect(setFilterValue).toHaveBeenCalledWith('foo');
+    expect(onFilterChange).toHaveBeenCalledWith('foo', expect.any(Object));
     done();
   });
 
@@ -160,23 +160,60 @@ describe('<TableToolbarView />', () => {
     done();
   });
 
+  it('should expand row correctly with custom onCollapse', async () => {
+    let wrapper;
+    const createRows = () => [{
+      id: 1,
+      isOpen: false,
+      cells: [ 'name - 1', 'description - 1' ]
+    }, {
+      id: 2,
+      parent: 1,
+      cells: [ 'name - 2', 'description' ]
+    }];
+
+    const onCollapseSpy = jest.fn().mockImplementation((id, setRows, setOpen) => setRows((rows) => setOpen(rows, id)));
+
+    await act(async() => {
+      wrapper = mount(
+        <TableToolbarView
+          { ...initialProps }
+          columns={ [{ title: 'Name', cellFormatters: [ expandable ]}, 'Description' ] }
+          createRows={ createRows }
+          onCollapse={ onCollapseSpy }
+        />);
+    });
+    wrapper.update();
+
+    const expandableRow = wrapper.find('.pf-c-table__expandable-row');
+
+    expect(expandableRow.props().hidden).toEqual(true);
+    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain');
+
+    await act(async () => {
+      wrapper.find('button.pf-c-button').last().simulate('click');
+    });
+    wrapper.update();
+
+    expandableRow.update();
+    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain pf-m-expanded');
+  });
+
   it('should send async requests on pagination', async done => {
     const request = jest.fn().mockImplementation(() => new Promise(resolve => resolve([])));
     let wrapper;
 
     await act(async() => {
-      wrapper = mount(<TableToolbarView { ...initialProps } request={ request } />);
+      wrapper = mount(<TableToolbarView { ...initialProps } fetchData={ request } />);
     });
 
-    const paginationInput = wrapper.find('input[type="number"]').last();
-    paginationInput.getDOMNode().value = 2;
-    paginationInput.simulate('change');
+    const paginationInput = wrapper.find('button').last();
     await act(async() => {
-      paginationInput.simulate('keypress', { key: 'Enter' });
+      paginationInput.simulate('click');
     });
 
     setTimeout(() => {
-      expect(request).toHaveBeenCalledWith();
+      expect(request).toHaveBeenCalledWith(undefined, { limit: 50, offset: 50 });
       done();
     }, 251);
   });

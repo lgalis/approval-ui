@@ -5,12 +5,14 @@ import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-service
 import {
   FETCH_REQUESTS,
   FETCH_REQUEST,
-  CREATE_REQUEST_ACTION
+  CREATE_REQUEST_ACTION,
+  EXPAND_REQUEST
 } from '../../../redux/action-types';
 import {
   createRequestAction,
   fetchRequests,
-  fetchRequest
+  fetchRequest,
+  expandRequest
 } from '../../../redux/actions/request-actions';
 import {
   APPROVAL_API_BASE
@@ -40,7 +42,7 @@ describe('Request actions', () => {
       }]},
       type: `${FETCH_REQUESTS}_FULFILLED`
     }];
-    apiClientMock.get(APPROVAL_API_BASE + '/requests?limit=10&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=%5Bobject%20Object%5D&limit=50&offset=0', mockOnce({
       body: {
         data: [{
           label: 'request',
@@ -202,6 +204,14 @@ describe('Request actions', () => {
     store.dispatch(createRequestAction('actionName', '123', 'actionIn')).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
+    });
+  });
+
+  it('creates object for opening a request', () => {
+    const id = '546451';
+    expect(expandRequest(id)).toEqual({
+      type: EXPAND_REQUEST,
+      payload: id
     });
   });
 });

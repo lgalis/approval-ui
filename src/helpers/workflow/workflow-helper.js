@@ -1,11 +1,17 @@
-import { getWorkflowApi, getTemplateApi } from '../shared/user-login';
+import { getWorkflowApi, getTemplateApi, getAxiosInstance } from '../shared/user-login';
 import { fetchGroupNames } from '../group/group-helper';
+import { defaultSettings } from '../shared/pagination';
+import { APPROVAL_API_BASE } from '../../utilities/constants';
 
 const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
-export function fetchWorkflows({ appName = undefined, objectId = undefined, objectType = undefined, limit = 10, offset = 0, filter = '' }) {
-  return workflowApi.listWorkflows(appName, objectId, objectType, limit, offset, filter);
+export function fetchWorkflows(filter = '', pagination = defaultSettings) {
+  const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
+  const filterQuery = `&filter[name][contains_i]=${filter}`;
+  return getAxiosInstance().get(
+    `${APPROVAL_API_BASE}/workflows/?${filterQuery}${paginationQuery}`
+  );
 }
 
 export async function fetchWorkflowsWithGroups({ appName = undefined,

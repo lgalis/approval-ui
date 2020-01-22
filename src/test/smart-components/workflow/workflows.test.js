@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import thunk from 'redux-thunk';
@@ -9,7 +10,7 @@ import { shallowToJson } from 'enzyme-to-json';
 import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
 import Workflows from '../../../smart-components/workflow/workflows';
-import { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
+import workflowReducer, { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import { groupsInitialState } from '../../../redux/reducers/group-reducer';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
@@ -17,6 +18,8 @@ import EditWorkflowInfoModal from '../../../smart-components/workflow/edit-workf
 import EditWorkflowStagesModal from '../../../smart-components/workflow/edit-workflow-stages-modal';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
 import AddStagesWizard from '../../../smart-components/workflow/add-stages/add-stages-wizard';
+import { Table, RowWrapper } from '@patternfly/react-table';
+import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 
 const ComponentWrapper = ({ store, initialEntries = [ '/workflows' ], children }) => (
   <Provider store={ store }>
@@ -39,7 +42,6 @@ describe('<Workflows />', () => {
   beforeEach(() => {
     initialProps = {
       history: {
-        goBack: jest.fn(),
         push: jest.fn()
       }
     };
@@ -49,12 +51,28 @@ describe('<Workflows />', () => {
       groupReducer: { ...groupsInitialState },
       workflowReducer: {
         ...workflowsInitialState,
-        data: [{
-          id: '123',
-          name: 'foo'
-        }]
+        workflows: {
+          data: [{
+            id: 'edit-id',
+            name: 'foo',
+            group_refs: [ 'group-1' ]
+          }],
+          meta: {
+            count: 0,
+            limit: 10,
+            offset: 0
+          }
+        },
+        workflow: {},
+        filterValue: '',
+        isLoading: false,
+        isRecordLoading: false
       }
     };
+  });
+
+  afterEach(() => {
+    apiClientMock.reset();
   });
 
   it('should render correctly', () => {
@@ -73,7 +91,12 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ]
@@ -103,11 +126,16 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should redirect to Edit workflow stages page', async done => {
+  it('should redirect to Edit workflow groups page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ]
@@ -141,7 +169,12 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ]
@@ -175,11 +208,16 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ],
       group_names: [ 'group-name-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
     }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -206,13 +244,20 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows?limit=10&offset=0&filter=`, mockOnce({ body: { data: [{
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ],
+      group_names: [ 'group-name-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
       name: 'foo',
       group_refs: [ 'group-1' ]
     }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
+
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
@@ -227,5 +272,42 @@ describe('<Workflows />', () => {
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/remove');
     expect(wrapper.find(RemoveWorkflowModal)).toHaveLength(1);
     done();
+  });
+
+  it('should expand workflow', async () => {
+    const id = 'edit-id';
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id,
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path="/workflows" component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    expect(wrapper.find(RowWrapper)).toHaveLength(2); // one item + expanded
+
+    const contentSpy = jest.fn().mockImplementation(mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, contentSpy);
+
+    await act(async () => {
+      wrapper.find(Table).props().onCollapse({}, {}, {}, { id });
+    });
+    wrapper.update();
+
+    expect(contentSpy).toHaveBeenCalled();
+    expect(storeReal.getState().workflowReducer.expandedWorkflows).toEqual([ id ]);
   });
 });
