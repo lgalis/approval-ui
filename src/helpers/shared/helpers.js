@@ -1,7 +1,7 @@
 import React from 'react';
 import { DateFormat } from '@redhat-cloud-services/frontend-components';
 
-const activeStates = [ 'notified', 'pending' ];
+const activeStates = [ 'notified' ];
 
 export const scrollToTop = () => document.getElementById('root').scrollTo({
   behavior: 'smooth',

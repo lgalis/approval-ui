@@ -15,8 +15,7 @@ export const createRows = (data) =>
     state,
     decision,
     reason,
-    number_of_children,
-    content
+    number_of_children
   }, key) => ([
     ...acc, {
       id,
@@ -36,7 +35,7 @@ export const createRows = (data) =>
       fullWidth: true,
       cells: [{
         title: <ExpandableContent id={ id }
-          content={ content }
+          number_of_children={ number_of_children }
           state={ state }
           reason={ reason }/>
       }]
