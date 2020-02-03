@@ -19,9 +19,22 @@ describe('<Request />', () => {
       item: {
         id: '111',
         state: 'no-state',
-        actions: {
-          data: []
-        }
+        actions: [
+          {
+            id: '1',
+            operation: 'start',
+            comments: null,
+            created_at: '2020-01-29T17:08:56.850Z',
+            processed_by: 'system'
+          },
+          {
+            id: '2',
+            operation: 'notify',
+            comments: null,
+            created_at: '2020-01-29T17:09:14.994Z',
+            processed_by: 'system'
+          }
+        ]
       }
     };
   });
@@ -39,11 +52,22 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
-            actions: {
-              data: []
-            }
-          } }
-          isActive
+            actions: [
+              {
+                id: '1',
+                operation: 'start',
+                comments: null,
+                created_at: '2020-01-29T17:08:56.850Z',
+                processed_by: 'system'
+              },
+              {
+                id: '2',
+                operation: 'notify',
+                comments: null,
+                created_at: '2020-01-29T17:09:14.994Z',
+                processed_by: 'system'
+              }
+            ]} }
         />
       </ComponentWrapper>
     );
@@ -68,9 +92,7 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
-            actions: {
-              data: []
-            }
+            actions: []
           } }
           isActive
           toggleExpand={ toggleExpand }
@@ -92,9 +114,7 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
-            actions: {
-              data: []
-            }
+            actions: []
           } }
           isActive
           toggleExpand={ toggleExpand }
