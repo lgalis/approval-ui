@@ -14,29 +14,32 @@ export function fetchRequests(filter = '', pagination = defaultSettings) {
   );
 }
 
-const requestTranscriptQuery = (parent_id) => ` 
-query {
-  requests (filter: { parent_id: ${parent_id}}) {
-    id
+const requestTranscriptQuery = (parent_id) => `query {
+  requests (filter: { parent_id: "${parent_id}" } ) {
     actions {
+      id
       operation 
       comments 
       created_at 
       processed_by
     }
+    id
+    name
     number_of_children
     decision
     description
+    group_name
     number_of_finished_children
     parent_id
+    state
+    workflow_id
   }
 }`;
 
-export const getRequestTranscript = (requestId) => {
+export const fetchRequestTranscript = (requestId) => {
   return graphqlInstance
   .post(`${APPROVAL_API_BASE}/graphql`, { query: requestTranscriptQuery(requestId) })
-  .then(({ data: { requests }}) => requests)
-  .then(([{ actions }]) => actions);
+  .then(({ data: { requests }}) => requests);
 };
 
 export async function fetchRequest(id) {
@@ -64,6 +67,21 @@ export async function fetchRequestWithActions(id) {
 
   return  { ...requestData, actions: requestActions };
 }
+
+;
+
+export async function fetchRequestWithSubrequests(id) {
+  let requestData = await requestApi.showRequest(id);
+
+  if (requestData.number_of_children > 0) {
+    const subRequests = await fetchRequestTranscript(id);
+    requestData = { ...requestData, children: subRequests };
+  }
+
+  return  { ...requestData };
+}
+
+;
 
 export async function createRequestAction (requestId, actionIn) {
   return await actionApi.createAction(requestId, actionIn);

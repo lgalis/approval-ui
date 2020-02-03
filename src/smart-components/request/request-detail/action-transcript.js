@@ -20,18 +20,21 @@ const operationIcon = {
 };
 
 export const ActionTranscript = actionList => {
-  const actions = actionList.data || actionList.actionList.data;
+  const actions = actionList.actionList;
   return (
     <Stack>
       { actions.map(actionItem =>
         <div key={ `${actionItem.id}-action` }>
-          <TextContent><Text style={ { marginBottom: 0 } } className="data-table-detail content" component={ TextVariants.small }>
+          <TextContent><Text key={ `${actionItem.id}-action-created_at` } style={ { marginBottom: 0 } }
+            className="data-table-detail content" component={ TextVariants.small }>
             { timeAgo(actionItem.created_at) }
           </Text>
-          <Text style={ { marginBottom: 0 } } className="data-table-detail content">
+          <Text key={ `${actionItem.id}-action-operation` }  style={ { marginBottom: 0 } }
+            className="data-table-detail content">
             { operationIcon[actionItem.operation] } { `${operationDisplayName[actionItem.operation]}  ${actionItem.processed_by}` }
           </Text>
-          { actionItem.comments && <Text style={ { marginBottom: 0 } } className="data-table-detail content" component={ TextVariants.h6 }>
+          { actionItem.comments && <Text key={ `${actionItem.id}-action-comments` } style={ { marginBottom: 0 } }
+            className="data-table-detail content" component={ TextVariants.h6 }>
             { `${actionItem.comments}` }
           </Text> } </TextContent>
           <br/>
