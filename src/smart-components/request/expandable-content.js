@@ -73,7 +73,7 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
 ExpandableContent.propTypes = {
   id: PropTypes.string,
   content: PropTypes.object,
-  number_of_children: PropTypes.string,
+  number_of_children: PropTypes.number,
   uname: PropTypes.string,
   state: PropTypes.string,
   reason: PropTypes.string

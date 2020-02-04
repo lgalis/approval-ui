@@ -1,9 +1,10 @@
-import { getActionApi, getRequestApi, getAxiosInstance } from '../shared/user-login';
+import { getActionApi, getRequestApi, getAxiosInstance, getGraphqlInstance } from '../shared/user-login';
 import { APPROVAL_API_BASE } from '../../utilities/constants';
 import { defaultSettings } from '../shared/pagination';
 
 const requestApi = getRequestApi();
 const actionApi = getActionApi();
+const graphqlInstance = getGraphqlInstance();
 
 export function fetchRequests(filter = '', pagination = defaultSettings) {
   const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
@@ -12,6 +13,34 @@ export function fetchRequests(filter = '', pagination = defaultSettings) {
     `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}`
   );
 }
+
+const requestTranscriptQuery = (parent_id) => `query {
+  requests (filter: { parent_id: "${parent_id}" } ) {
+    actions {
+      id
+      operation 
+      comments 
+      created_at 
+      processed_by
+    }
+    id
+    name
+    number_of_children
+    decision
+    description
+    group_name
+    number_of_finished_children
+    parent_id
+    state
+    workflow_id
+  }
+}`;
+
+export const fetchRequestTranscript = (requestId) => {
+  return graphqlInstance
+  .post(`${APPROVAL_API_BASE}/graphql`, { query: requestTranscriptQuery(requestId) })
+  .then(({ data: { requests }}) => requests);
+};
 
 export async function fetchRequest(id) {
   return await requestApi.showRequest(id);
@@ -38,6 +67,21 @@ export async function fetchRequestWithActions(id) {
 
   return  { ...requestData, actions: requestActions };
 }
+
+;
+
+export async function fetchRequestWithSubrequests(id) {
+  let requestData = await requestApi.showRequest(id);
+
+  if (requestData.number_of_children > 0) {
+    const subRequests = await fetchRequestTranscript(id);
+    requestData = { ...requestData, children: subRequests };
+  }
+
+  return  { ...requestData };
+}
+
+;
 
 export async function createRequestAction (requestId, actionIn) {
   return await actionApi.createAction(requestId, actionIn);

@@ -5,11 +5,9 @@ import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-service
 import {
   FETCH_REQUESTS,
   FETCH_REQUEST,
-  CREATE_REQUEST_ACTION,
   EXPAND_REQUEST
 } from '../../../redux/action-types';
 import {
-  createRequestAction,
   fetchRequests,
   fetchRequest,
   expandRequest
@@ -17,6 +15,7 @@ import {
 import {
   APPROVAL_API_BASE
 } from '../../../utilities/constants';
+import { mockGraphql } from '../../__mocks__/user-login';
 
 describe('Request actions', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
@@ -92,118 +91,109 @@ describe('Request actions', () => {
       }
     });
 
-    const expectedActions = [{
+    const expectedData = [{
       type: `${FETCH_REQUEST}_PENDING`
     }, {
       payload: {
-        data: [{
-          id: '11',
-          name: 'request' }],
-        actions: {
-          data: [
-            {
-              id: '11',
-              name: 'action'
-            }
-          ]}
+        data: {
+          id: '398',
+          state: 'notified',
+          decision: 'undecided',
+          created_at: '2020-01-29T16:55:03Z',
+          notified_at: '2020-01-29T17:09:15Z',
+          number_of_children: 3,
+          number_of_finished_children: 0,
+          owner: 'test',
+          requester_name: 'Test User',
+          name: 'Hello World',
+          group_name: 'GroupA'
+        }
       },
       type: `${FETCH_REQUEST}_FULFILLED`
     }];
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/11', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/111', mockOnce({
       body: {
-        data: [{
-          id: '11',
-          name: 'request'
-        }]
+        data: {
+          id: '398',
+          state: 'notified',
+          decision: 'undecided',
+          created_at: '2020-01-29T16:55:03Z',
+          notified_at: '2020-01-29T17:09:15Z',
+          number_of_children: 3,
+          number_of_finished_children: 0,
+          owner: 'test',
+          requester_name: 'Test User',
+          name: 'Hello World',
+          group_name: 'GroupA' }
       }
     }));
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/11/requests', mockOnce({
-      body: {
-        data: [{
-          id: '10',
-          name: 'subrequest'
-        }]
-      }
-    }));
+    mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, {
+      data: {
+        requests: [
+          {
+            actions: [],
+            id: '124',
+            name: 'Hello World',
+            number_of_children: '0',
+            decision: 'undecided',
+            description: null,
+            group_name: 'Catalog IQE approval',
+            number_of_finished_children: '0',
+            parent_id: '123',
+            state: 'pending',
+            workflow_id: '100'
+          },
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/11/actions', mockOnce({
-      body: {
-        data: [{
-          id: '11',
-          name: 'action'
-        }]
-      }
-    }));
+          {
+            actions: [],
+            id: '125',
+            name: 'Hello World',
+            number_of_children: '0',
+            decision: 'undecided',
+            description: null,
+            group_name: 'Group1',
+            number_of_finished_children: '0',
+            parent_id: '123',
+            state: 'pending',
+            workflow_id: '200'
+          },
 
-    return store.dispatch(fetchRequest(11)).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
+          {
+            actions: [
+              {
+                id: '1',
+                operation: 'start',
+                comments: null,
+                created_at: '2020-01-29T17:08:56.850Z',
+                processed_by: 'system'
+              },
+              {
+                id: '2',
+                operation: 'notify',
+                comments: null,
+                created_at: '2020-01-29T17:09:14.994Z',
+                processed_by: 'system'
+              }
+            ],
+            id: '126',
+            name: 'Hello World',
+            number_of_children: '0',
+            decision: 'undecided',
+            description: null,
+            group_name: 'Group2',
+            number_of_finished_children: '0',
+            parent_id: '123',
+            state: 'notified',
+            workflow_id: '300'
+          }
+        ]
+      }
     });
-  });
 
-  it('createRequestAction should create correct actions on success ', (done) => {
-    expect.assertions(2);
-    const store = mockStore({});
-
-    apiClientMock.post(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual('actionIn');
-      return res.status(200).body({ foo: 'bar' });
-    }));
-
-    const expectedActions = [{
-      type: `${CREATE_REQUEST_ACTION}_PENDING`,
-      meta: expect.any(Object)
-    }, {
-      type: ADD_NOTIFICATION,
-      payload: {
-        description: 'The actionName was successful.',
-        dismissDelay: 5000,
-        dismissable: true,
-        title: 'Success',
-        variant: 'success'
-      }
-    }, {
-      type: `${CREATE_REQUEST_ACTION}_FULFILLED`,
-      meta: expect.any(Object),
-      payload: { foo: 'bar' }
-    }];
-
-    store.dispatch(createRequestAction('actionName', '123', 'actionIn')).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-      done();
-    });
-  });
-
-  it('createRequestAction should create correct actions when failed ', (done) => {
-    expect.assertions(2);
-    const store = mockStore({});
-
-    apiClientMock.post(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual('actionIn');
-      return res.status(500);
-    }));
-
-    const expectedActions = [{
-      type: `${CREATE_REQUEST_ACTION}_PENDING`,
-      meta: expect.any(Object)
-    }, {
-      type: ADD_NOTIFICATION,
-      payload: {
-        description: 'The actionName action failed.',
-        dismissDelay: 5000,
-        dismissable: true,
-        title: 'actionName error',
-        variant: 'danger'
-
-      }
-    }, expect.objectContaining({
-      type: `${CREATE_REQUEST_ACTION}_REJECTED`
-    }) ];
-
-    store.dispatch(createRequestAction('actionName', '123', 'actionIn')).catch(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-      done();
+    return store.dispatch(fetchRequest(111)).then(() => {
+      expect(store.getActions()).toEqual(expectedData);
     });
   });
 
