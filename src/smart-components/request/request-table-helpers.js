@@ -26,7 +26,7 @@ export const createRows = (data) =>
         <Fragment key={ id }><Link to={ `/requests/detail/${id}` }><Button variant="link"> { name } </Button></Link></Fragment>,
         requester_name,
         timeAgo(created_at),
-        finished_at ? timeAgo(finished_at) : timeAgo(notified_at),
+        finished_at ? timeAgo(finished_at) : (notified_at ? timeAgo(notified_at) : timeAgo(created_at)),
         state,
         decision
       ]
