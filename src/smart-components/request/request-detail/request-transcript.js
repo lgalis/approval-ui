@@ -5,7 +5,7 @@ import RequestList from './request-list';
 
 const RequestTranscript = ({ request }) => (<Fragment>
   <Title size="sm" style={ { paddingLeft: '32px' } }> Request transcript </Title>
-  <RequestList items={ request.children ? request.children : [ request ] }/>
+  <RequestList items={ request.children && request.children.length > 0 ? request.children : [ request ] }/>
 </Fragment>);
 
 RequestTranscript.propTypes = {

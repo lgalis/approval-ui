@@ -22,9 +22,7 @@ describe('<RequestList />', () => {
   it('should expect a request list item', () => {
     const wrapper = mount(<RequestList { ...initialProps } items={ [{
       id: 'foo',
-      actions: {
-        data: []
-      }
+      actions: []
     }] }/>);
     expect(wrapper.find(Stage)).toHaveLength(1);
     const button = wrapper.find('button.pf-c-button.pf-m-plain');

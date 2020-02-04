@@ -30,7 +30,7 @@ const SummaryContent = ({ formData }) => {
             <StackItem>
               <Grid gutter="md">
                 <GridItem span={ 2 }>
-                  <Text className="data-table-detail heading" component={ TextVariants.h5 }>Group name</Text>
+                  <Text className="data-table-detail heading" component={ TextVariants.h5 }>Workflow name</Text>
                 </GridItem>
                 <GridItem span={ 10 }>
                   <Text className="data-table-detail content" component={ TextVariants.p }>{ name }</Text>
@@ -45,11 +45,21 @@ const SummaryContent = ({ formData }) => {
                 </GridItem>
               </Grid>
               { (wfGroups !== undefined) && wfGroups.map((stage, idx)  =>
-                <Text key={ stage.value }
-                  className="data-table-detail content"
-                  component={ TextVariants.p }>
-                  { `Group ${idx + 1} : ${wfGroups[idx].label}` }
-                </Text>) }
+              { return (<Fragment key={ `Group-${idx}` }>
+                <Grid gutter="md">
+                  <GridItem span={ 2 }>
+                    <Text key={ stage.value } className="data-table-detail heading" component={ TextVariants.h5 }>
+                      { `Group ${idx + 1}` }
+                    </Text>
+                  </GridItem>
+                  <GridItem span={ 10 }>
+                    <Text key={ stage.label } className="data-table-detail content" component={ TextVariants.p }>
+                      { `${wfGroups[idx].label}` }
+                    </Text>
+                  </GridItem>
+                </Grid>
+              </Fragment>); })
+              }
             </StackItem>
           </Stack>
         </StackItem>
