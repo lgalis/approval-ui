@@ -102,10 +102,10 @@ const Requests = () => {
   </Fragment>;
 
   const areActionsDisabled = (requestData) => requestData &&
-    requestData.state ? !isRequestStateActive(requestData.state.title) && !requestData.number_of_children : true;
+    requestData.props ? !isRequestStateActive(requestData.props.state) || requestData.props.number_of_children > 0 : true;
 
-  const actionResolver = (requestData, { rowIndex }) => {
-    return (rowIndex === 1 || areActionsDisabled(requestData) ? null :
+  const actionResolver = (requestData) => {
+    return (requestData && requestData.name && areActionsDisabled(requestData.name.title) ? null :
       [
         {
           title: 'Comment',
@@ -141,7 +141,6 @@ const Requests = () => {
           fetchData={ handlePagination }
           routes={ routes }
           actionResolver={ actionResolver }
-          areActionsDisabled={ areActionsDisabled }
           titlePlural="requests"
           titleSingular="request"
           pagination={ meta }

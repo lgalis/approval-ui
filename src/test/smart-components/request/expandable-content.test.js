@@ -68,7 +68,7 @@ describe('requests - expendableContent', () => {
       initialState = { requestReducer: { expandedRequests: []}};
       mockStoreFn = jest.fn().mockImplementation(() => initialState);
       store = mockStore(mockStoreFn);
-      initialProps = { id, number_of_children: '', state: 'state', reason: 'reason' };
+      initialProps = { id, number_of_children: 0, state: 'approved', reason: 'reason' };
       requestDetail = {
         product: 'CostManagement',
         platform: 'Linux',
@@ -109,7 +109,7 @@ describe('requests - expendableContent', () => {
       let wrapper;
 
       await act(async() => {
-        wrapper = mount(<ComponentWrapper store={ store }><ExpandableContent { ...initialProps } state="pending"/></ComponentWrapper>);
+        wrapper = mount(<ComponentWrapper store={ store }><ExpandableContent { ...initialProps } state="notified"/></ComponentWrapper>);
       });
 
       wrapper.update();
