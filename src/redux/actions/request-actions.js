@@ -8,7 +8,7 @@ export const fetchRequests = (filter, pagination) => ({
 
 export const fetchRequest = (apiProps) => ({
   type: ActionTypes.FETCH_REQUEST,
-  payload: RequestHelper.fetchRequestWithActions(apiProps)
+  payload: RequestHelper.fetchRequestWithSubrequests(apiProps)
 });
 
 export const fetchRequestContent = (apiProps) => ({
