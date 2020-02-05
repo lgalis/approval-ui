@@ -68,20 +68,19 @@ export async function fetchRequestWithActions(id) {
   return  { ...requestData, actions: requestActions };
 }
 
-;
-
 export async function fetchRequestWithSubrequests(id) {
   let requestData = await requestApi.showRequest(id);
 
   if (requestData.number_of_children > 0) {
     const subRequests = await fetchRequestTranscript(id);
     requestData = { ...requestData, children: subRequests };
+  } else {
+    const requestActions = await fetchRequestActions(id);
+    requestData = { ...requestData, actions: requestActions ? requestActions.data : []};
   }
 
   return  { ...requestData };
 }
-
-;
 
 export async function createRequestAction (requestId, actionIn) {
   return await actionApi.createAction(requestId, actionIn);
