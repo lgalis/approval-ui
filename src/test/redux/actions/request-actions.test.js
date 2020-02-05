@@ -91,12 +91,54 @@ describe('Request actions', () => {
       }
     });
 
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
+      body: {
+        data: [{
+          id: '111',
+          name: ''
+        }]
+      }
+    }));
+
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/111/actions', mockOnce({
+      body: {
+        data: [{
+          id: '222',
+          name: 'action'
+        }]
+      }
+    }));
+
     const expectedData = [{
       type: `${FETCH_REQUEST}_PENDING`
     }, {
       payload: {
         data: {
-          id: '398',
+          id: '111',
+          state: 'notified',
+          decision: 'undecided',
+          created_at: '2020-01-29T16:55:03Z',
+          notified_at: '2020-01-29T17:09:15Z',
+          number_of_children: 3,
+          number_of_finished_children: 0,
+          owner: 'test',
+          requester_name: 'Test User',
+          name: 'Hello World',
+          group_name: 'GroupA'
+        },
+        actions: [{
+          id: '222',
+          name: 'action'
+        }]
+
+      },
+      type: `${FETCH_REQUEST}_FULFILLED`
+    }];
+
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/111', mockOnce({
+      body: {
+        data: {
+          id: '111',
           state: 'notified',
           decision: 'undecided',
           created_at: '2020-01-29T16:55:03Z',
@@ -108,24 +150,6 @@ describe('Request actions', () => {
           name: 'Hello World',
           group_name: 'GroupA'
         }
-      },
-      type: `${FETCH_REQUEST}_FULFILLED`
-    }];
-
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/111', mockOnce({
-      body: {
-        data: {
-          id: '398',
-          state: 'notified',
-          decision: 'undecided',
-          created_at: '2020-01-29T16:55:03Z',
-          notified_at: '2020-01-29T17:09:15Z',
-          number_of_children: 3,
-          number_of_finished_children: 0,
-          owner: 'test',
-          requester_name: 'Test User',
-          name: 'Hello World',
-          group_name: 'GroupA' }
       }
     }));
 
