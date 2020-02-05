@@ -40,7 +40,29 @@ describe('<Request />', () => {
   });
 
   it('should render correctly', () => {
-    const wrapper = mount(<ComponentWrapper><Request { ...initialProps } /></ComponentWrapper>).find(Request);
+    const initialPropsNoDate = {
+      isExpanded: false,
+      toggleExpand: jest.fn(),
+      item: {
+        id: '111',
+        state: 'no-state',
+        actions: [
+          {
+            id: '1',
+            operation: 'start',
+            comments: null,
+            processed_by: 'system'
+          },
+          {
+            id: '2',
+            operation: 'notify',
+            comments: null,
+            processed_by: 'system'
+          }
+        ]
+      }
+    };
+    const wrapper = mount(<ComponentWrapper><Request { ...initialPropsNoDate } /></ComponentWrapper>).find(Request);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
