@@ -44,6 +44,7 @@ describe('<RequestDetail />', () => {
 
   it('should render request loader', async done => {
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     const store = mockStore(initialState);
@@ -62,6 +63,7 @@ describe('<RequestDetail />', () => {
 
   it('should render request details', async done => {
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     const store = mockStore(
