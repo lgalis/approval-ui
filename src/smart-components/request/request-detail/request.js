@@ -84,7 +84,7 @@ class Request extends Component {
           <DataListItemCells
             dataListCells={ [
               <DataListCell key={ item.id }>
-                <span id={ item.id }>{ `${this.props.idx + 1}. ${item.name}` } </span>
+                <span id={ `${item.id}-name` }>{ `${this.props.idx + 1}. ${item.parent_id ? item.group_name : item.name}` } </span>
               </DataListCell>,
               <DataListCell key={ `${item.id}-state` }>
                 <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
@@ -140,6 +140,8 @@ Request.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
     state: PropTypes.string,
+    parent_id: PropTypes.string,
+    group_name: PropTypes.string,
     requestActions: PropTypes.shape({
       data: PropTypes.array
     })
