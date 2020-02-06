@@ -38,7 +38,7 @@ describe('<RemoveWorkflowModal />', () => {
     initialState = {};
   });
 
-  it('should not render workflow modal', () => {
+  it('should not render approval process modal', () => {
     const store = mockStore(initialState);
     const wrapper = mount(
       <ComponentWrapper store={ store }>
@@ -48,7 +48,7 @@ describe('<RemoveWorkflowModal />', () => {
     expect(wrapper.find(Modal)).toHaveLength(0);
   });
 
-  it('should render workflow modal and call cancel callback', () => {
+  it('should render approval process modal and call cancel callback', () => {
     const store = mockStore(initialState);
     const wrapper = mount(
       <ComponentWrapper store={ store }>
@@ -63,7 +63,7 @@ describe('<RemoveWorkflowModal />', () => {
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/back-route');
   });
 
-  it('should remove single workflow and redirect', async done => {
+  it('should remove single approval processworkflow and redirect', async done => {
     expect.assertions(2);
     const store = mockStore(initialState);
     apiClientMock.delete(`${APPROVAL_API_BASE}/workflows/123`, mockOnce((req, res) => {

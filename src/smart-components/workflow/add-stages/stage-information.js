@@ -22,7 +22,7 @@ const StageInformation = ({ formData, handleChange, title = undefined }) => {
         <StackItem>
           <Form>
             <FormGroup
-              label="Workflow name"
+              label="Approval process name"
               isRequired
               fieldId="workflow-name"
             >

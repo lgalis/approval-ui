@@ -89,7 +89,7 @@ const Requests = () => {
   };
 
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
-    { eventKey: 1, title: 'Workflows', name: '/workflows' }];
+    { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
 
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }

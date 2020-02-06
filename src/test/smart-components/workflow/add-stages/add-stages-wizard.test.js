@@ -91,9 +91,9 @@ describe('<AddWorkflow />', () => {
       expect.objectContaining({
         type: ADD_NOTIFICATION,
         payload: expect.objectContaining({
-          title: 'Creating workflow',
+          title: 'Creating approval process',
           variant: 'warning',
-          description: 'Creating workflow was cancelled by the user.',
+          description: 'Creating approval process was cancelled by the user.',
           dismissable: true
         })
       }) ]);

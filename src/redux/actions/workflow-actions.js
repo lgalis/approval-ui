@@ -18,13 +18,13 @@ export const addWorkflow = (workflowData) => ({
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success adding workflow',
-        description: 'The workflow was added successfully.'
+        title: 'Success adding approval process',
+        description: 'The approval process was added successfully.'
       },
       rejected: {
         variant: 'danger',
-        title: 'Failed adding workflow',
-        description: 'The workflow was not added successfuly.'
+        title: 'Failed adding approval process',
+        description: 'The approval process was not added successfuly.'
       }
     }
   }
@@ -37,13 +37,13 @@ export const updateWorkflow = (workflowData) => ({
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success updating workflow',
-        description: 'The workflow was updated successfully.'
+        title: 'Success updating approval process',
+        description: 'The approval process was updated successfully.'
       },
       rejected: {
         variant: 'danger',
-        title: 'Failed updating workflow',
-        description: 'The workflow was not updated successfuly.'
+        title: 'Failed updating approval process',
+        description: 'The approval process was not updated successfuly.'
       }
     }
   }
@@ -56,8 +56,8 @@ export const removeWorkflow = (workflow) => ({
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success removing workflow',
-        description: 'The workflow was removed successfully.'
+        title: 'Success removing approval process',
+        description: 'The approval process was removed successfully.'
       }
     }
   }
@@ -70,8 +70,8 @@ export const removeWorkflows = (workflows) => ({
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success removing workflows',
-        description: 'The selected workflows were removed successfully.'
+        title: 'Success removing approval processes',
+        description: 'The selected approval processes were removed successfully.'
       }
     }
   }

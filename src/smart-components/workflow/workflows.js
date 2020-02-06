@@ -89,7 +89,7 @@ const Workflows = () => {
   };
 
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
-    { eventKey: 1, title: 'Workflows', name: '/workflows' }];
+    { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
 
   const handlePagination = (_apiProps, pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
@@ -148,9 +148,9 @@ const Workflows = () => {
       <Link id="add-workflow-link" to="/workflows/add-workflow">
         <Button
           variant="primary"
-          aria-label="Create workflow"
+          aria-label="Create approval process"
         >
-          Create workflow
+          Create approval process
         </Button>
       </Link>
     </ToolbarItem>
@@ -160,7 +160,7 @@ const Workflows = () => {
           variant="link"
           isDisabled={ !anyWorkflowsSelected }
           style={ { color: anyWorkflowsSelected ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
-          aria-label="Delete Workflow"
+          aria-label="Delete approval process"
         >
           Delete
         </Button>
@@ -187,8 +187,8 @@ const Workflows = () => {
         fetchData={ handlePagination }
         routes={ routes }
         actionResolver={ actionResolver }
-        titlePlural="workflows"
-        titleSingular="workflow"
+        titlePlural="approval processes"
+        titleSingular="approval process"
         pagination={ meta }
         setCheckedItems={ setCheckedItems }
         toolbarButtons={ toolbarButtons }
