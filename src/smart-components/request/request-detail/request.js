@@ -140,8 +140,8 @@ Request.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
     state: PropTypes.string,
-    parent_id: PropTypes.string,
-    group_name: PropTypes.string,
+    parent_id: PropTypes.string.isRequired,
+    group_name: PropTypes.string.isRequired,
     requestActions: PropTypes.shape({
       data: PropTypes.array
     })
