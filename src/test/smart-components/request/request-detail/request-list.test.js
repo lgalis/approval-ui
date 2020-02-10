@@ -30,4 +30,17 @@ describe('<RequestList />', () => {
     button.simulate('click');
     expect(wrapper.state()).toEqual({ expanded: [ 'request-foo' ]});
   });
+
+  it('should use the group name for sub-requests', () => {
+    const wrapper = mount(<RequestList { ...initialProps } items={ [{
+      id: '1',
+      parent_id: '100',
+      group_name: 'Group Name',
+      name: 'Name',
+      actions: []
+    }] }/>);
+    const title = wrapper.find('span');
+    expect(title.first().props()).toEqual({ children: [ '1. Group Name', ' ' ], id: '1-name' });
+  });
+
 });
