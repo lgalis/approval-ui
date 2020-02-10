@@ -7,10 +7,10 @@ import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackIt
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { WorkflowFormLoader } from '../../presentational-components/shared/loader-placeholders';
-import WorkflowForm from './add-stages/stage-information';
+import WorkflowForm from './add-stages/workflow-sequence';
 import '../../App.scss';
 
-const EditWorkflowInfoModal = ({
+const EditWorkflowSequenceModal = ({
   history: { push },
   match: { params: { id }},
   addNotification,
@@ -29,35 +29,35 @@ const EditWorkflowInfoModal = ({
   }, []);
 
   const onSave = () => {
-    const { name, description } = formData;
-    const workflowData = { id, name, description };
+    const { sequence } = formData;
+    const workflowData = { id, sequence };
     updateWorkflow(workflowData).then(() => postMethod()).then(() => push('/workflows'));
   };
 
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: `Edit approval process's groups`,
+      title: `Edit approval process' sequence`,
       dismissable: true,
-      description: `Edit approval process's groups was cancelled by the user.`
+      description: `Edit approval process' sequence was cancelled by the user.`
     });
     push('/workflows');
   };
 
   return (
     <Modal
-      title={ `Edit approval process's information` }
-      width={ '40%' }
+      title={ `Edit approval process' sequence` }
+      isSmall
       isOpen
       onClose={ onCancel }>
       <Stack gutter="md">
         <StackItem>
-          <FormGroup fieldId="edito-workflow-info-modal-info">
+          <FormGroup fieldId="edit-workflow-sequence-modal-info">
             { isFetching && <WorkflowFormLoader/> }
             { !isFetching && (
               <WorkflowForm formData={ formData }
                 handleChange={ handleChange }
-                title={ `Make any changes to approval process ${workflow.name}` }/>) }
+                title={ `Set the sequence for the approval process ${workflow.name}` }/>) }
           </FormGroup>
         </StackItem>
         <StackItem>
@@ -66,7 +66,7 @@ const EditWorkflowInfoModal = ({
               <SplitItem>
                 <Button
                   aria-label={ 'Save' }
-                  id="save-edit-workflow-info"
+                  id="save-edit-workflow-sequence"
                   variant="primary"
                   type="submit"
                   isDisabled={ isFetching }
@@ -74,7 +74,7 @@ const EditWorkflowInfoModal = ({
               </SplitItem>
               <SplitItem>
                 <Button
-                  id="cancel-edit-workflow-info"
+                  id="cancel-edit-workflow-sequence"
                   aria-label='Cancel'
                   variant='secondary'
                   type='button'
@@ -88,11 +88,11 @@ const EditWorkflowInfoModal = ({
   );
 };
 
-EditWorkflowInfoModal.defaultProps = {
+EditWorkflowSequenceModal.defaultProps = {
   isFetching: false
 };
 
-EditWorkflowInfoModal.propTypes = {
+EditWorkflowSequenceModal.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
@@ -119,4 +119,4 @@ const mapStateToProps = ({ workflowReducer: { workflow, isRecordLoading }}) => (
   isFetching: isRecordLoading
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowInfoModal));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowSequenceModal));

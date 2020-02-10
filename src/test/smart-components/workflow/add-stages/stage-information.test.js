@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import StageInformation from '../../../../smart-components/workflow/add-stages/stage-information';
+import WorkflowForm from '../../../../smart-components/workflow/add-stages/stage-information';
 
-describe('<StageInformation />', () => {
+describe('<WorkflowForm />', () => {
   let initialProps;
 
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('<StageInformation />', () => {
   });
 
   it('should render correctly', () => {
-    const wrapper = mount(<StageInformation { ...initialProps } />);
+    const wrapper = mount(<WorkflowForm { ...initialProps } />);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 });

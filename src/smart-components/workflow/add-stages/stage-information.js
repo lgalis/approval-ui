@@ -10,7 +10,7 @@ import {
   Title
 } from '@patternfly/react-core';
 
-const StageInformation = ({ formData, handleChange, title = undefined }) => {
+const WorkflowForm = ({ formData, handleChange, title = undefined }) => {
   const { name, description } = formData;
 
   return (
@@ -52,7 +52,7 @@ const StageInformation = ({ formData, handleChange, title = undefined }) => {
   );
 };
 
-StageInformation.propTypes = {
+WorkflowForm.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string,
   title: PropTypes.string,
@@ -60,4 +60,4 @@ StageInformation.propTypes = {
   handleChange: PropTypes.func.isRequired
 };
 
-export default StageInformation;
+export default WorkflowForm;

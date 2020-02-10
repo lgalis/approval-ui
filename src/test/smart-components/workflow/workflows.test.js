@@ -16,6 +16,7 @@ import { groupsInitialState } from '../../../redux/reducers/group-reducer';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import EditWorkflowInfoModal from '../../../smart-components/workflow/edit-workflow-info-modal';
 import EditWorkflowStagesModal from '../../../smart-components/workflow/edit-workflow-stages-modal';
+import EditWorkflowSequenceModal from '../../../smart-components/workflow/edit-workflow-sequence-modal';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
 import AddStagesWizard from '../../../smart-components/workflow/add-stages/add-stages-wizard';
 import { Table, RowWrapper } from '@patternfly/react-table';
@@ -165,6 +166,45 @@ describe('<Workflows />', () => {
     done();
   });
 
+  it('should redirect to Edit sequence page', async done => {
+    const store = mockStore(stateWithData);
+    let wrapper;
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ store }>
+          <Route path="/workflows" component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+    /**
+     * Open action drop down and click on edit info action
+     */
+    wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
+    await act(async() => {
+      wrapper.find('div.pf-c-dropdown__menu-item').at(2).simulate('click');
+    });
+
+    wrapper.update();
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-sequence/edit-id');
+    expect(wrapper.find(EditWorkflowSequenceModal)).toHaveLength(1);
+    done();
+  });
+
   it('should redirect to Delete approval process page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
@@ -195,7 +235,7 @@ describe('<Workflows />', () => {
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('div.pf-c-dropdown__menu-item').at(2).simulate('click');
+      wrapper.find('div.pf-c-dropdown__menu-item').at(3).simulate('click');
     });
 
     wrapper.update();
