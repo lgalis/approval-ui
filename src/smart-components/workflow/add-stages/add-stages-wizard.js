@@ -33,23 +33,23 @@ const AddWorkflow = ({
 
   const onSave = () => {
     const { name, description, wfGroups } = formData;
-    const workflowData = { name, description, group_refs: wfGroups.map(group => group.value) };
+    const workflowData = { name, description, group_refs: wfGroups ? wfGroups.map(group => group.value) : []};
     return addWorkflow(workflowData).then(() => postMethod()).then(() => (push('/workflows')));
   };
 
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: 'Creating workflow',
+      title: 'Creating approval process',
       dismissable: true,
-      description: 'Creating workflow was cancelled by the user.'
+      description: 'Creating approval process was cancelled by the user.'
     });
     push('/workflows');
   };
 
   return (
     <Wizard
-      title={ 'Create workflow' }
+      title={ 'Create approval process' }
       isOpen
       onClose={ onCancel }
       onSave={ onSave  }

@@ -46,7 +46,7 @@ exports[`<StageInformation /> should render correctly 1`] = `
               <FormGroup
                 fieldId="workflow-name"
                 isRequired={true}
-                label="Workflow name"
+                label="Approval process name"
               >
                 <div
                   className="pf-c-form__group"
@@ -58,7 +58,7 @@ exports[`<StageInformation /> should render correctly 1`] = `
                     <span
                       className="pf-c-form__label-text"
                     >
-                      Workflow name
+                      Approval process name
                     </span>
                     <span
                       aria-hidden="true"

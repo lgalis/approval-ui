@@ -81,7 +81,7 @@ describe('<EditWorkflowInfoModal />', () => {
     done();
   });
 
-  it('should call cancel callback and redirect to workflows', async done => {
+  it('should call cancel callback and redirect to approval processes', async done => {
     const store = mockStore(initialState);
     let wrapper;
 

@@ -126,7 +126,7 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should redirect to Edit workflow groups page', async done => {
+  it('should redirect to Edit approval process groups page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
 
@@ -165,7 +165,7 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should redirect to Delete workflow page', async done => {
+  it('should redirect to Delete approval process page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
 
@@ -204,7 +204,7 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should redirect to add workflow page', async done => {
+  it('should redirect to add approval process page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
 
@@ -230,7 +230,7 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Click on add workflow link
+     * Click on add approval process link
      */
     wrapper.find('Link#add-workflow-link').simulate('click', { button: 0 });
 
@@ -274,7 +274,7 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should expand workflow', async () => {
+  it('should expand approval process', async () => {
     const id = 'edit-id';
 
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{

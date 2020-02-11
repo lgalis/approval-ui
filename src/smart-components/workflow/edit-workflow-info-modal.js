@@ -37,16 +37,16 @@ const EditWorkflowInfoModal = ({
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: `Edit workflow's groups`,
+      title: `Edit approval process's groups`,
       dismissable: true,
-      description: `Edit workflow's groups was cancelled by the user.`
+      description: `Edit approval process's groups was cancelled by the user.`
     });
     push('/workflows');
   };
 
   return (
     <Modal
-      title={ `Edit workflow's information` }
+      title={ `Edit approval process's information` }
       width={ '40%' }
       isOpen
       onClose={ onCancel }>
@@ -57,7 +57,7 @@ const EditWorkflowInfoModal = ({
             { !isFetching && (
               <StageInformation formData={ formData }
                 handleChange={ handleChange }
-                title={ `Make any changes to workflow ${workflow.name}` }/>) }
+                title={ `Make any changes to approval process ${workflow.name}` }/>) }
           </FormGroup>
         </StackItem>
         <StackItem>

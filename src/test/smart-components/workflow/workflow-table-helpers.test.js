@@ -1,7 +1,7 @@
 import { createRows } from '../../../smart-components/workflow/workflow-table-helpers';
 import ExpandableContent from '../../../smart-components/workflow/expandable-content';
 
-describe('workflow table helpers', () => {
+describe('approval process table helpers', () => {
   it('should create rows correctly', () => {
     const data = [{
       id: '1',
