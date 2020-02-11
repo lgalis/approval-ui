@@ -139,7 +139,7 @@ const FormItemLoader = () => (
   </ContentLoader>
 );
 
-export const WorkflowFormLoader = () => (
+export const WorkflowInfoFormLoader = () => (
   <Form>
     <FormGroup fieldId="1">
       <FormItemLoader />

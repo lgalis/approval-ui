@@ -10,7 +10,7 @@ import {
   Title
 } from '@patternfly/react-core';
 
-const WorkflowForm = ({ formData, handleChange, title = undefined }) => {
+const WorkflowInfoForm = ({ formData, handleChange, title = undefined }) => {
   const { name, description } = formData;
 
   return (
@@ -52,7 +52,7 @@ const WorkflowForm = ({ formData, handleChange, title = undefined }) => {
   );
 };
 
-WorkflowForm.propTypes = {
+WorkflowInfoForm.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string,
   title: PropTypes.string,
@@ -60,4 +60,4 @@ WorkflowForm.propTypes = {
   handleChange: PropTypes.func.isRequired
 };
 
-export default WorkflowForm;
+export default WorkflowInfoForm;

@@ -7,7 +7,7 @@ import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackIt
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
-import { WorkflowFormLoader } from '../../presentational-components/shared/loader-placeholders';
+import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetStages from './add-stages/set-stages';
 import '../../App.scss';
 
@@ -63,7 +63,7 @@ const EditWorkflowStagesModal = ({
       <Stack gutter="md">
         <StackItem>
           <FormGroup fieldId="workflow-stages-formgroup">
-            { isFetching && <WorkflowFormLoader/> }
+            { isFetching && <WorkflowInfoFormLoader/> }
             { !isFetching && (
               <StackItem className="stages-modal">
                 <SetStages className="stages-modal" formData={ formData }

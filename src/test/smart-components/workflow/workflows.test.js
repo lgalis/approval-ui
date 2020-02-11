@@ -16,7 +16,6 @@ import { groupsInitialState } from '../../../redux/reducers/group-reducer';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import EditWorkflowInfoModal from '../../../smart-components/workflow/edit-workflow-info-modal';
 import EditWorkflowStagesModal from '../../../smart-components/workflow/edit-workflow-stages-modal';
-import EditWorkflowSequenceModal from '../../../smart-components/workflow/edit-workflow-sequence-modal';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
 import AddStagesWizard from '../../../smart-components/workflow/add-stages/add-stages-wizard';
 import { Table, RowWrapper } from '@patternfly/react-table';
@@ -201,7 +200,7 @@ describe('<Workflows />', () => {
 
     wrapper.update();
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-sequence/edit-id');
-    expect(wrapper.find(EditWorkflowSequenceModal)).toHaveLength(1);
+    expect(wrapper.find(EditWorkflowInfoModal)).toHaveLength(1);
     done();
   });
 

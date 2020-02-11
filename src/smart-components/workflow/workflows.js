@@ -7,7 +7,6 @@ import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows, expandWorkflow } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-stages/add-stages-wizard';
 import EditWorkflowInfo from './edit-workflow-info-modal';
-import EditWorkflowSequence from './edit-workflow-sequence-modal';
 import EditWorkflowStages from './edit-workflow-stages-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
@@ -106,7 +105,7 @@ const Workflows = () => {
       postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType='stages' { ...props }
       postMethod={ handlePagination } /> }/>
-    <Route exact path="/workflows/edit-sequence/:id" render={ props => <EditWorkflowSequence editType='info' { ...props }
+    <Route exact path="/workflows/edit-sequence/:id" render={ props => <EditWorkflowInfo editType='sequence' { ...props }
       postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }

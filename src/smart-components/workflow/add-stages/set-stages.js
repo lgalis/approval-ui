@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 import asyncDebounce from '../../../utilities/async-debounce';
 import { fetchFilterGroups } from '../../../helpers/group/group-helper';
-import { WorkflowFormLoader } from '../../../presentational-components/shared/loader-placeholders';
+import { WorkflowInfoFormLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button,
   FormGroup,
@@ -109,7 +109,7 @@ const SetStages = ({ formData, handleChange, title }) => {
           <Title size="md">{ title || 'Set groups' }</Title>
         </StackItem>
         <StackItem>
-          { isFetching && <WorkflowFormLoader/> }
+          { isFetching && <WorkflowInfoFormLoader/> }
           { !isFetching &&
           <Stack gutter="sm">
             { stageValues.map((_stage, idx) => createStageInput(idx)) }

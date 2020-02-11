@@ -10,7 +10,7 @@ import { notificationsMiddleware } from '@redhat-cloud-services/frontend-compone
 
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import EditWorkflowStagesModal from '../../../smart-components/workflow/edit-workflow-stages-modal';
-import { WorkflowFormLoader } from '../../../presentational-components/shared/loader-placeholders';
+import { WorkflowInfoFormLoader } from '../../../presentational-components/shared/loader-placeholders';
 import SetStages from '../../../smart-components/workflow/add-stages/set-stages';
 
 describe('<EditWorkflowStagesModal />', () => {
@@ -52,7 +52,7 @@ describe('<EditWorkflowStagesModal />', () => {
     });
 
     wrapper.update();
-    expect(wrapper.find(WorkflowFormLoader)).toHaveLength(1);
+    expect(wrapper.find(WorkflowInfoFormLoader)).toHaveLength(1);
     done();
   });
 
@@ -76,7 +76,7 @@ describe('<EditWorkflowStagesModal />', () => {
     });
 
     wrapper.update();
-    expect(wrapper.find(WorkflowFormLoader)).toHaveLength(0);
+    expect(wrapper.find(WorkflowInfoFormLoader)).toHaveLength(0);
     done();
   });
 
