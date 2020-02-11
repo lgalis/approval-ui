@@ -67,36 +67,47 @@ exports[`<StageInformation /> should render correctly 1`] = `
                       *
                     </span>
                   </label>
-                  <TextInput
+                  <ForwardRef
                     aria-describedby="workflow-name"
-                    aria-label={null}
-                    className=""
                     id="workflow-name"
-                    isDisabled={false}
-                    isReadOnly={false}
                     isRequired={true}
-                    isValid={true}
                     name="workflow-name"
                     onChange={[Function]}
                     type="text"
-                    validated="default"
                     value="Stage info name test"
                   >
-                    <input
+                    <TextInputBase
                       aria-describedby="workflow-name"
-                      aria-invalid={false}
                       aria-label={null}
-                      className="pf-c-form-control"
-                      disabled={false}
+                      className=""
                       id="workflow-name"
+                      innerRef={null}
+                      isDisabled={false}
+                      isReadOnly={false}
+                      isRequired={true}
+                      isValid={true}
                       name="workflow-name"
                       onChange={[Function]}
-                      readOnly={false}
-                      required={true}
                       type="text"
+                      validated="default"
                       value="Stage info name test"
-                    />
-                  </TextInput>
+                    >
+                      <input
+                        aria-describedby="workflow-name"
+                        aria-invalid={false}
+                        aria-label={null}
+                        className="pf-c-form-control"
+                        disabled={false}
+                        id="workflow-name"
+                        name="workflow-name"
+                        onChange={[Function]}
+                        readOnly={false}
+                        required={true}
+                        type="text"
+                        value="Stage info name test"
+                      />
+                    </TextInputBase>
+                  </ForwardRef>
                 </div>
               </FormGroup>
               <FormGroup

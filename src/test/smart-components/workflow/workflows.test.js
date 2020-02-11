@@ -117,7 +117,7 @@ describe('<Workflows />', () => {
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('a.pf-c-dropdown__menu-item').first().simulate('click');
+      wrapper.find('div.pf-c-dropdown__menu-item').first().simulate('click');
     });
 
     wrapper.update();
@@ -156,7 +156,7 @@ describe('<Workflows />', () => {
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('a.pf-c-dropdown__menu-item').at(1).simulate('click');
+      wrapper.find('div.pf-c-dropdown__menu-item').at(1).simulate('click');
     });
 
     wrapper.update();
@@ -195,7 +195,7 @@ describe('<Workflows />', () => {
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('a.pf-c-dropdown__menu-item').at(2).simulate('click');
+      wrapper.find('div.pf-c-dropdown__menu-item').at(2).simulate('click');
     });
 
     wrapper.update();
