@@ -4,7 +4,7 @@ import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfl
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { defaultSettings  } from '../../helpers/shared/pagination';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
-import { Section } from '@redhat-cloud-services/frontend-components';
+import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
 import { DataListLoader } from './loader-placeholders';
 import AsyncPagination from '../../smart-components/common/async-pagination';
 

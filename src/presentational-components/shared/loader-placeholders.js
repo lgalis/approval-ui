@@ -11,7 +11,7 @@ import {
   Form,
   FormGroup
 } from '@patternfly/react-core';
-import { Section } from '@redhat-cloud-services/frontend-components';
+import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
 import ContentLoader from 'react-content-loader';
 
 export const RequestInfoBarLoader = () => (

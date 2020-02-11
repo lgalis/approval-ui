@@ -1,5 +1,5 @@
 import React from 'react';
-import { DateFormat } from '@redhat-cloud-services/frontend-components';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/components/DateFormat';
 
 const activeStates = [ 'notified' ];
 
