@@ -27,7 +27,7 @@ const WorkflowSequence = ({ formData, handleChange, title = undefined }) => {
             >
               <TextInput
                 isRequired
-                type="text"
+                type="number"
                 id="workflow-sequence"
                 name="workflow-sequence"
                 aria-describedby="workflow-name"

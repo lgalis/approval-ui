@@ -46,6 +46,15 @@ const EditWorkflowInfoModal = ({
     push('/workflows');
   };
 
+  const formValid = () => {
+    console.log('Debug - formData, valid', formData, (editType === 'sequence' ?
+      formData.sequence && formData.sequence.length > 0 :
+      formData.name && formData.name.length > 0));
+    return (editType === 'sequence' ?
+      formData.sequence && formData.sequence.toString().length > 0 :
+      formData.name && formData.name.length > 0);
+  };
+
   return (
     <Modal
       title={ `Edit approval process` }
@@ -75,7 +84,7 @@ const EditWorkflowInfoModal = ({
                   id="save-edit-workflow-info"
                   variant="primary"
                   type="submit"
-                  isDisabled={ isFetching }
+                  isDisabled={ isFetching || !formValid(formData) }
                   onClick={ onSave }>Save</Button>
               </SplitItem>
               <SplitItem>
