@@ -18,6 +18,7 @@ import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
+
 const columns = [{
   title: 'Name',
   cellFormatters: [ expandable ]
@@ -210,7 +211,7 @@ const Workflows = () => {
             PrimaryAction={ () =>
               filterValue !== '' ? (
                 <Button onClick={ () => handleFilterChange('') } variant="link">
-                          Clear all filters
+                  Clear all filters
                 </Button>
               ) : null
             }
@@ -221,7 +222,6 @@ const Workflows = () => {
             }
           />
         ) }
-
       />
     </Fragment>
   );

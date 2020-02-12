@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import { Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
 import { fetchRequests, expandRequest } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
@@ -14,6 +15,8 @@ import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
+import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
+import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 
 const columns = [{
   title: 'Name',
@@ -149,6 +152,24 @@ const Requests = () => {
           onFilterChange={ handleFilterChange }
           isLoading={ isFetching || isFiltering }
           onCollapse={ onCollapse }
+          renderEmptyState={ () => (
+            <TableEmptyState
+              title={ filterValue === '' ? 'No requests' : 'No results found' }
+              Icon={ SearchIcon }
+              PrimaryAction={ () =>
+                filterValue !== '' ? (
+                  <Button onClick={ () => handleFilterChange('') } variant="link">
+                            Clear all filters
+                  </Button>
+                ) : null
+              }
+              description={
+                filterValue === ''
+                  ? 'No requests.'
+                  : 'No results match the filter critera. Remove all filters or clear all filters to show results.'
+              }
+            />
+          ) }
         />
       </Fragment>);
   };
