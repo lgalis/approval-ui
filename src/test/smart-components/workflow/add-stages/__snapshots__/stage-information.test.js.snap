@@ -9,6 +9,24 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
     }
   }
   handleChange={[MockFunction]}
+  isValid={
+    [MockFunction] {
+      "calls": Array [
+        Array [],
+        Array [],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+      ],
+    }
+  }
   title="Set stage info test"
 >
   <Stack
@@ -45,6 +63,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
             >
               <FormGroup
                 fieldId="workflow-name"
+                helperTextInvalid="Enter a name for the approval process"
                 isRequired={true}
                 label="Approval process name"
               >

@@ -10,7 +10,7 @@ import {
   Title
 } from '@patternfly/react-core';
 
-const WorkflowInfoForm = ({ formData, handleChange, title = undefined }) => {
+const WorkflowInfoForm = ({ formData, handleChange, isValid, title = undefined }) => {
   const { name, description } = formData;
 
   return (
@@ -25,6 +25,8 @@ const WorkflowInfoForm = ({ formData, handleChange, title = undefined }) => {
               label="Approval process name"
               isRequired
               fieldId="workflow-name"
+              isValid={ isValid() }
+              helperTextInvalid={ 'Enter a name for the approval process' }
             >
               <TextInput
                 isRequired
@@ -33,6 +35,7 @@ const WorkflowInfoForm = ({ formData, handleChange, title = undefined }) => {
                 name="workflow-name"
                 aria-describedby="workflow-name"
                 value={ name }
+                isValid={ isValid() }
                 onChange={ (_, event) => handleChange({ name: event.currentTarget.value }) }
               />
             </FormGroup>
@@ -57,7 +60,8 @@ WorkflowInfoForm.propTypes = {
   description: PropTypes.string,
   title: PropTypes.string,
   formData: PropTypes.object,
-  handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired,
+  isValid: PropTypes.func.isRequired
 };
 
 export default WorkflowInfoForm;

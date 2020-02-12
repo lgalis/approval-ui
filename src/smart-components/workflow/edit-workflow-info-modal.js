@@ -30,7 +30,18 @@ const EditWorkflowInfoModal = ({
     fetchWorkflow(id).then((data) => setFormData({ ...formData, ...data.value }));
   }, []);
 
+  const isSequenceValid = () =>
+    formData.sequence && formData.sequence >= 0;
+
+  const isInfoValid = () =>
+    formData.name && formData.name.length > 0;
+
+  const formValid = () =>(editType === 'sequence' ?
+    isSequenceValid() : isInfoValid());
+
   const onSave = () => {
+    if (!formValid()) {return;}
+
     const { name, description, sequence } = formData;
     const workflowData = { id, name, description, sequence };
     updateWorkflow(workflowData).then(() => postMethod()).then(() => push('/workflows'));
@@ -46,10 +57,6 @@ const EditWorkflowInfoModal = ({
     push('/workflows');
   };
 
-  const formValid = () =>(editType === 'sequence' ?
-    formData.sequence && formData.sequence.toString().length > 0 :
-    formData.name && formData.name.length > 0);
-
   return (
     <Modal
       title={ `Edit approval process` }
@@ -63,9 +70,11 @@ const EditWorkflowInfoModal = ({
             { !isFetching && (editType === 'info' ?
               <WorkflowInfoForm formData={ formData }
                 handleChange={ handleChange }
+                isValid={ isInfoValid }
                 title={ `Make any changes to approval process ${workflow.name}` }/> :
               <WorkflowSequenceForm formData={ formData }
                 handleChange={ handleChange }
+                isValid={ isSequenceValid }
                 title={ `Set the sequence for the approval process ${workflow.name}` }/>
             ) }
           </FormGroup>

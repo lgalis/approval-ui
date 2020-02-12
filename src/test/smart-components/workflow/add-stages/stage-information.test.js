@@ -13,6 +13,7 @@ describe('<WorkflowInfoForm />', () => {
         description: 'Stage info description test'
       },
       handleChange: jest.fn(),
+      isValid: jest.fn(),
       title: 'Set stage info test'
     };
   });

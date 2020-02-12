@@ -23,8 +23,13 @@ const AddWorkflow = ({
     setValues({ ...formData,  ...data });
   };
 
+  const isInfoValid = () =>
+    formData.name && formData.name.length > 0;
+
   const steps = [
-    { name: 'General information', component: <WorkflowInfoForm formData={ formData } handleChange={ handleChange } /> },
+    { name: 'General information', component: <WorkflowInfoForm formData={ formData }
+      handleChange={ handleChange }
+      isValid={ isInfoValid }/> },
     { name: 'Set groups', component: <SetStages formData={ formData }
       handleChange={ handleChange } options={ rbacGroups } /> },
     { name: 'Review', component: <SummaryContent formData={ formData }
