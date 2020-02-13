@@ -9,9 +9,9 @@ import thunk from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 
 import EditWorkflowInfoModal from '../../../../smart-components/workflow/edit-workflow-info-modal';
-import StageInformation from '../../../../smart-components/workflow/add-stages/stage-information';
+import WorkflowInfoForm from '../../../../smart-components/workflow/add-stages/stage-information';
 import { APPROVAL_API_BASE } from '../../../../utilities/constants';
-import { WorkflowStageLoader } from '../../../../presentational-components/shared/loader-placeholders';
+import { WorkflowInfoFormLoader } from '../../../../presentational-components/shared/loader-placeholders';
 
 const ComponentWrapper = ({ store, children }) => (
   <Provider store={ store }>
@@ -43,7 +43,7 @@ describe('<EditWorkflowInfoModal />', () => {
     };
   });
 
-  it('should render StageInformation and fetch data', async done => {
+  it('should render WorkflowInfoForm and fetch data', async done => {
     const store = mockStore(initialState);
     let wrapper;
 
@@ -57,11 +57,11 @@ describe('<EditWorkflowInfoModal />', () => {
     });
     wrapper.update();
 
-    expect(wrapper.find(StageInformation)).toHaveLength(1);
+    expect(wrapper.find(WorkflowInfoForm)).toHaveLength(1);
     done();
   });
 
-  it('should render WorkflowStageLoader', async done => {
+  it('should render WorkflowInfoFormLoader', async done => {
     const store = mockStore({
       workflowReducer: { isRecordLoading: true }
     });
@@ -77,7 +77,7 @@ describe('<EditWorkflowInfoModal />', () => {
     });
     wrapper.update();
 
-    expect(wrapper.find(WorkflowStageLoader)).toHaveLength(1);
+    expect(wrapper.find(WorkflowInfoFormLoader)).toHaveLength(1);
     done();
   });
 

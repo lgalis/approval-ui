@@ -7,7 +7,7 @@ import { Wizard } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, fetchWorkflow } from '../../../redux/actions/workflow-actions';
 import SummaryContent from './summary-content';
-import StageInformation from './stage-information';
+import WorkflowInfoForm from './stage-information';
 import SetStages from './set-stages';
 
 const AddWorkflow = ({
@@ -23,8 +23,13 @@ const AddWorkflow = ({
     setValues({ ...formData,  ...data });
   };
 
+  const isInfoValid = () =>
+    formData.name && formData.name.length > 0;
+
   const steps = [
-    { name: 'General information', component: <StageInformation formData={ formData } handleChange={ handleChange } /> },
+    { name: 'General information', component: <WorkflowInfoForm formData={ formData }
+      handleChange={ handleChange }
+      isValid={ isInfoValid }/> },
     { name: 'Set groups', component: <SetStages formData={ formData }
       handleChange={ handleChange } options={ rbacGroups } /> },
     { name: 'Review', component: <SummaryContent formData={ formData }

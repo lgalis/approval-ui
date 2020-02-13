@@ -6,8 +6,9 @@ import { withRouter } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
-import { WorkflowStageLoader } from '../../presentational-components/shared/loader-placeholders';
-import StageInformation from './add-stages/stage-information';
+import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
+import WorkflowInfoForm from './add-stages/stage-information';
+import WorkflowSequenceForm from './add-stages/workflow-sequence';
 import '../../App.scss';
 
 const EditWorkflowInfoModal = ({
@@ -18,7 +19,8 @@ const EditWorkflowInfoModal = ({
   updateWorkflow,
   postMethod,
   workflow,
-  isFetching
+  isFetching,
+  editType
 }) => {
   const [ formData, setFormData ] = useState({});
 
@@ -28,36 +30,53 @@ const EditWorkflowInfoModal = ({
     fetchWorkflow(id).then((data) => setFormData({ ...formData, ...data.value }));
   }, []);
 
+  const isSequenceValid = () =>
+    formData.sequence && formData.sequence >= 0;
+
+  const isInfoValid = () =>
+    formData.name && formData.name.length > 0;
+
+  const formValid = () =>(editType === 'sequence' ?
+    isSequenceValid() : isInfoValid());
+
   const onSave = () => {
-    const { name, description } = formData;
-    const workflowData = { id, name, description };
+    if (!formValid()) {return;}
+
+    const { name, description, sequence } = formData;
+    const workflowData = { id, name, description, sequence };
     updateWorkflow(workflowData).then(() => postMethod()).then(() => push('/workflows'));
   };
 
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: `Edit approval process's groups`,
+      title: `Edit approval process`,
       dismissable: true,
-      description: `Edit approval process's groups was cancelled by the user.`
+      description: `Edit approval process was cancelled by the user.`
     });
     push('/workflows');
   };
 
   return (
     <Modal
-      title={ `Edit approval process's information` }
+      title={ `Edit approval process` }
       width={ '40%' }
       isOpen
       onClose={ onCancel }>
       <Stack gutter="md">
         <StackItem>
-          <FormGroup fieldId="edito-workflow-info-modal-info">
-            { isFetching && <WorkflowStageLoader/> }
-            { !isFetching && (
-              <StageInformation formData={ formData }
+          <FormGroup fieldId="edit-workflow-info-modal-info">
+            { isFetching && <WorkflowInfoFormLoader/> }
+            { !isFetching && (editType === 'info' ?
+              <WorkflowInfoForm formData={ formData }
                 handleChange={ handleChange }
-                title={ `Make any changes to approval process ${workflow.name}` }/>) }
+                isValid={ isInfoValid }
+                title={ `Make any changes to approval process ${workflow.name}` }/> :
+              <WorkflowSequenceForm formData={ formData }
+                handleChange={ handleChange }
+                isValid={ isSequenceValid }
+                title={ `Set the sequence for the approval process ${workflow.name}` }/>
+            ) }
           </FormGroup>
         </StackItem>
         <StackItem>
@@ -69,7 +88,7 @@ const EditWorkflowInfoModal = ({
                   id="save-edit-workflow-info"
                   variant="primary"
                   type="submit"
-                  isDisabled={ isFetching }
+                  validated={ !isFetching && formValid(formData) }
                   onClick={ onSave }>Save</Button>
               </SplitItem>
               <SplitItem>
@@ -89,7 +108,8 @@ const EditWorkflowInfoModal = ({
 };
 
 EditWorkflowInfoModal.defaultProps = {
-  isFetching: false
+  isFetching: false,
+  editType: 'info'
 };
 
 EditWorkflowInfoModal.propTypes = {

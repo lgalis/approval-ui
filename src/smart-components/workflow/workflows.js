@@ -105,6 +105,8 @@ const Workflows = () => {
       postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType='stages' { ...props }
       postMethod={ handlePagination } /> }/>
+    <Route exact path="/workflows/edit-sequence/:id" render={ props => <EditWorkflowInfo editType='sequence' { ...props }
+      postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }
         fetchData={ handlePagination }
@@ -129,7 +131,11 @@ const Workflows = () => {
         onClick: (_event, _rowId, workflow) =>
           history.push(`/workflows/edit-stages/${workflow.id}`)
       },
-
+      {
+        title: 'Edit sequence',
+        onClick: (_event, _rowId, workflow) =>
+          history.push(`/workflows/edit-sequence/${workflow.id}`)
+      },
       {
         title: 'Delete',
         style: { color: 'var(--pf-global--danger-color--100)'	},
