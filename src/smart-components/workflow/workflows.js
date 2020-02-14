@@ -218,7 +218,7 @@ const Workflows = () => {
             description={
               filterValue === ''
                 ? 'No approval processes.'
-                : 'No results match the filter critera. Remove all filters or clear all filters to show results.'
+                : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
             }
           />
         ) }

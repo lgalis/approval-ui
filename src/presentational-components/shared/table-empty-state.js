@@ -10,6 +10,7 @@ import {
   TextContent,
   TextVariants
 } from '@patternfly/react-core';
+import { EmptyTable } from '@redhat-cloud-services/frontend-components';
 import { Link }  from 'react-router-dom';
 
 const TableEmptyState = ({
@@ -19,7 +20,9 @@ const TableEmptyState = ({
   PrimaryAction,
   renderDescription
 }) => (
-  <div className="pf-u-mt-xl">
+  <EmptyTable centered
+    aria-label={ `No records` }
+  >
     <EmptyState className="pf-u-ml-auto pf-u-mr-auto">
       <EmptyStateIcon icon={ Icon } />
       <TextContent>
@@ -33,7 +36,7 @@ const TableEmptyState = ({
         { PrimaryAction && <PrimaryAction /> }
       </EmptyStateSecondaryActions>
     </EmptyState>
-  </div>
+  </EmptyTable>
 );
 
 TableEmptyState.defaultProps = {
