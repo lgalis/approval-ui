@@ -21,7 +21,7 @@ const TableEmptyState = ({
   renderDescription
 }) => (
   <EmptyTable centered
-    aria-label={ `No records` }
+    aria-label="No records"
   >
     <EmptyState className="pf-u-ml-auto pf-u-mr-auto">
       <EmptyStateIcon icon={ Icon } />
