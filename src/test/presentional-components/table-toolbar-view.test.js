@@ -188,7 +188,7 @@ describe('<TableToolbarView />', () => {
       wrapper.update();
     });
     expandableRow.update();
-    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain pf-m-expanded');
+    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain');
     done();
   });
 
@@ -228,7 +228,7 @@ describe('<TableToolbarView />', () => {
     wrapper.update();
 
     expandableRow.update();
-    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain pf-m-expanded');
+    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain');
   });
 
   it('should send async requests on pagination', async done => {
