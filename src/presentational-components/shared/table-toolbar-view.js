@@ -30,7 +30,8 @@ export const TableToolbarView = ({
   filterValue,
   onFilterChange,
   isLoading,
-  onCollapse
+  onCollapse,
+  renderEmptyState
 }) => {
   const [ rows, setRows ] = useState([]);
 
@@ -101,7 +102,10 @@ export const TableToolbarView = ({
     <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
       { routes() }
       { renderToolbar(isLoading) }
-      { isLoading ? <DataListLoader/> :
+      { isLoading && <DataListLoader/> }
+      { !isLoading && rows.length === 0 ? (
+        renderEmptyState()
+      ) :
         <Table
           aria-label={ `${titlePlural} table` }
           onCollapse={ onCollapseInternal }
@@ -138,7 +142,8 @@ TableToolbarView.propTypes = {
   filterValue: propTypes.string,
   onFilterChange: propTypes.func,
   isLoading: propTypes.bool,
-  onCollapse: propTypes.func
+  onCollapse: propTypes.func,
+  renderEmptyState: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
@@ -147,5 +152,6 @@ TableToolbarView.defaultProps = {
   pagination: defaultSettings,
   toolbarButtons: () => null,
   isSelectable: null,
-  routes: () => null
+  routes: () => null,
+  renderEmptyState: () => null
 };

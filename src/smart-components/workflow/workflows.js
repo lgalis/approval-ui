@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
+import { SearchIcon } from '@patternfly/react-icons';
 import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows, expandWorkflow } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-stages/add-stages-wizard';
@@ -16,6 +17,7 @@ import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
+import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 
 const columns = [{
   title: 'Name',
@@ -202,6 +204,24 @@ const Workflows = () => {
         onFilterChange={ handleFilterChange }
         isLoading={ isFetching || isFiltering }
         onCollapse={ onCollapse }
+        renderEmptyState={ () => (
+          <TableEmptyState
+            title={ filterValue === '' ? 'No approval processes' : 'No results found' }
+            Icon={ SearchIcon }
+            PrimaryAction={ () =>
+              filterValue !== '' ? (
+                <Button onClick={ () => handleFilterChange('') } variant="link">
+                  Clear all filters
+                </Button>
+              ) : null
+            }
+            description={
+              filterValue === ''
+                ? 'No approval processes.'
+                : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
+            }
+          />
+        ) }
       />
     </Fragment>
   );
