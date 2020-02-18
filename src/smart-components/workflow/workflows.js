@@ -124,6 +124,7 @@ const Workflows = () => {
         onClick: (_event, _rowId, workflow) =>
           history.push(`/workflows/edit-info/${workflow.id}`)
       },
+
       {
         title: 'Edit groups',
         onClick: (_event, _rowId, workflow) =>
