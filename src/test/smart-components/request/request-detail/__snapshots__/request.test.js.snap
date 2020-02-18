@@ -8,14 +8,12 @@ exports[`<Request /> should render correctly 1`] = `
       "actions": Array [
         Object {
           "comments": null,
-          "created_at": "2020-01-29T17:08:56.850Z",
           "id": "1",
           "operation": "start",
           "processed_by": "system",
         },
         Object {
           "comments": null,
-          "created_at": "2020-01-29T17:09:14.994Z",
           "id": "2",
           "operation": "notify",
           "processed_by": "system",
@@ -294,14 +292,12 @@ exports[`<Request /> should render correctly 1`] = `
                             Array [
                               Object {
                                 "comments": null,
-                                "created_at": "2020-01-29T17:08:56.850Z",
                                 "id": "1",
                                 "operation": "start",
                                 "processed_by": "system",
                               },
                               Object {
                                 "comments": null,
-                                "created_at": "2020-01-29T17:09:14.994Z",
                                 "id": "2",
                                 "operation": "notify",
                                 "processed_by": "system",
@@ -339,152 +335,11 @@ exports[`<Request /> should render correctly 1`] = `
                                           }
                                         }
                                       >
-                                        <span
-                                          key="2020-01-29T17:08:56.850Z"
-                                        >
+                                        <span>
                                           <DateFormat
-                                            date="2020-01-29T17:08:56.850Z"
                                             type="relative"
                                           >
-                                            <Tooltip
-                                              appendTo={[Function]}
-                                              aria="describedby"
-                                              boundary="window"
-                                              className=""
-                                              content={
-                                                <div>
-                                                  29 Jan 2020 17:08:56 UTC
-                                                </div>
-                                              }
-                                              distance={15}
-                                              enableFlip={true}
-                                              entryDelay={500}
-                                              exitDelay={500}
-                                              flipBehavior={
-                                                Array [
-                                                  "top",
-                                                  "right",
-                                                  "bottom",
-                                                  "left",
-                                                  "top",
-                                                  "right",
-                                                  "bottom",
-                                                ]
-                                              }
-                                              id=""
-                                              isAppLauncher={false}
-                                              isContentLeftAligned={false}
-                                              isVisible={false}
-                                              maxWidth="18.75rem"
-                                              position="top"
-                                              tippyProps={Object {}}
-                                              trigger="mouseenter focus"
-                                              zIndex={9999}
-                                            >
-                                              <PopoverBase
-                                                animateFill={false}
-                                                appendTo={[Function]}
-                                                aria="describedby"
-                                                arrow={true}
-                                                boundary="window"
-                                                content={
-                                                  <div
-                                                    className=""
-                                                    id=""
-                                                    role="tooltip"
-                                                  >
-                                                    <TooltipContent
-                                                      isLeftAligned={false}
-                                                    >
-                                                      <div>
-                                                        29 Jan 2020 17:08:56 UTC
-                                                      </div>
-                                                    </TooltipContent>
-                                                  </div>
-                                                }
-                                                delay={
-                                                  Array [
-                                                    500,
-                                                    500,
-                                                  ]
-                                                }
-                                                distance={15}
-                                                flip={true}
-                                                flipBehavior={
-                                                  Array [
-                                                    "top",
-                                                    "right",
-                                                    "bottom",
-                                                    "left",
-                                                    "top",
-                                                    "right",
-                                                    "bottom",
-                                                  ]
-                                                }
-                                                isVisible={false}
-                                                lazy={true}
-                                                maxWidth="18.75rem"
-                                                onCreate={[Function]}
-                                                performance={true}
-                                                placement="top"
-                                                popperOptions={
-                                                  Object {
-                                                    "modifiers": Object {
-                                                      "hide": Object {
-                                                        "enabled": true,
-                                                      },
-                                                      "preventOverflow": Object {
-                                                        "enabled": true,
-                                                      },
-                                                    },
-                                                  }
-                                                }
-                                                theme="pf-tooltip"
-                                                trigger="mouseenter focus"
-                                                zIndex={9999}
-                                              >
-                                                <span>
-                                                  6 days ago
-                                                </span>
-                                                <Portal
-                                                  containerInfo={
-                                                    <div>
-                                                      <div
-                                                        class=""
-                                                        id=""
-                                                        role="tooltip"
-                                                      >
-                                                        <div
-                                                          class="pf-c-tooltip__content"
-                                                        >
-                                                          <div>
-                                                            29 Jan 2020 17:08:56 UTC
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  }
-                                                >
-                                                  <div
-                                                    className=""
-                                                    id=""
-                                                    role="tooltip"
-                                                  >
-                                                    <TooltipContent
-                                                      isLeftAligned={false}
-                                                    >
-                                                      <div
-                                                        className="pf-c-tooltip__content"
-                                                      >
-                                                        <div>
-                                                          29 Jan 2020 17:08:56 UTC
-                                                        </div>
-                                                      </div>
-                                                    </TooltipContent>
-                                                  </div>
-                                                </Portal>
-                                              </PopoverBase>
-                                            </Tooltip>
+                                            Invalid Date
                                           </DateFormat>
                                         </span>
                                       </small>
@@ -568,152 +423,11 @@ exports[`<Request /> should render correctly 1`] = `
                                           }
                                         }
                                       >
-                                        <span
-                                          key="2020-01-29T17:09:14.994Z"
-                                        >
+                                        <span>
                                           <DateFormat
-                                            date="2020-01-29T17:09:14.994Z"
                                             type="relative"
                                           >
-                                            <Tooltip
-                                              appendTo={[Function]}
-                                              aria="describedby"
-                                              boundary="window"
-                                              className=""
-                                              content={
-                                                <div>
-                                                  29 Jan 2020 17:09:14 UTC
-                                                </div>
-                                              }
-                                              distance={15}
-                                              enableFlip={true}
-                                              entryDelay={500}
-                                              exitDelay={500}
-                                              flipBehavior={
-                                                Array [
-                                                  "top",
-                                                  "right",
-                                                  "bottom",
-                                                  "left",
-                                                  "top",
-                                                  "right",
-                                                  "bottom",
-                                                ]
-                                              }
-                                              id=""
-                                              isAppLauncher={false}
-                                              isContentLeftAligned={false}
-                                              isVisible={false}
-                                              maxWidth="18.75rem"
-                                              position="top"
-                                              tippyProps={Object {}}
-                                              trigger="mouseenter focus"
-                                              zIndex={9999}
-                                            >
-                                              <PopoverBase
-                                                animateFill={false}
-                                                appendTo={[Function]}
-                                                aria="describedby"
-                                                arrow={true}
-                                                boundary="window"
-                                                content={
-                                                  <div
-                                                    className=""
-                                                    id=""
-                                                    role="tooltip"
-                                                  >
-                                                    <TooltipContent
-                                                      isLeftAligned={false}
-                                                    >
-                                                      <div>
-                                                        29 Jan 2020 17:09:14 UTC
-                                                      </div>
-                                                    </TooltipContent>
-                                                  </div>
-                                                }
-                                                delay={
-                                                  Array [
-                                                    500,
-                                                    500,
-                                                  ]
-                                                }
-                                                distance={15}
-                                                flip={true}
-                                                flipBehavior={
-                                                  Array [
-                                                    "top",
-                                                    "right",
-                                                    "bottom",
-                                                    "left",
-                                                    "top",
-                                                    "right",
-                                                    "bottom",
-                                                  ]
-                                                }
-                                                isVisible={false}
-                                                lazy={true}
-                                                maxWidth="18.75rem"
-                                                onCreate={[Function]}
-                                                performance={true}
-                                                placement="top"
-                                                popperOptions={
-                                                  Object {
-                                                    "modifiers": Object {
-                                                      "hide": Object {
-                                                        "enabled": true,
-                                                      },
-                                                      "preventOverflow": Object {
-                                                        "enabled": true,
-                                                      },
-                                                    },
-                                                  }
-                                                }
-                                                theme="pf-tooltip"
-                                                trigger="mouseenter focus"
-                                                zIndex={9999}
-                                              >
-                                                <span>
-                                                  6 days ago
-                                                </span>
-                                                <Portal
-                                                  containerInfo={
-                                                    <div>
-                                                      <div
-                                                        class=""
-                                                        id=""
-                                                        role="tooltip"
-                                                      >
-                                                        <div
-                                                          class="pf-c-tooltip__content"
-                                                        >
-                                                          <div>
-                                                            29 Jan 2020 17:09:14 UTC
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  }
-                                                >
-                                                  <div
-                                                    className=""
-                                                    id=""
-                                                    role="tooltip"
-                                                  >
-                                                    <TooltipContent
-                                                      isLeftAligned={false}
-                                                    >
-                                                      <div
-                                                        className="pf-c-tooltip__content"
-                                                      >
-                                                        <div>
-                                                          29 Jan 2020 17:09:14 UTC
-                                                        </div>
-                                                      </div>
-                                                    </TooltipContent>
-                                                  </div>
-                                                </Portal>
-                                              </PopoverBase>
-                                            </Tooltip>
+                                            Invalid Date
                                           </DateFormat>
                                         </span>
                                       </small>
