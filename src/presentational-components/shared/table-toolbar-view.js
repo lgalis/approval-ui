@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { defaultSettings  } from '../../helpers/shared/pagination';
 import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
-import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
+import { Section } from '@redhat-cloud-services/frontend-components';
 import { DataListLoader } from './loader-placeholders';
 import AsyncPagination from '../../smart-components/common/async-pagination';
+import BottomPaginationContainer from '../../presentational-components/shared/bottom-pagination-container';
 
 /**
  * Need to optimize this component
@@ -106,20 +107,32 @@ export const TableToolbarView = ({
       { !isLoading && rows.length === 0 ? (
         renderEmptyState()
       ) :
-        <Table
-          aria-label={ `${titlePlural} table` }
-          onCollapse={ onCollapseInternal }
-          rows={ rows }
-          cells={ columns }
-          onSelect={ isSelectable && selectRow }
-          actionResolver={ actionResolver }
-          className="table-fix"
-        >
-          <TableHeader />
-          <TableBody />
-        </Table> }
-    </Section>
-  );
+        <Fragment>
+          <Table
+            aria-label={ `${titlePlural} table` }
+            onCollapse={ onCollapseInternal }
+            rows={ rows }
+            cells={ columns }
+            onSelect={ isSelectable && selectRow }
+            actionResolver={ actionResolver }
+            className="table-fix"
+          >
+            <TableHeader />
+            <TableBody/>
+          </Table>
+          { pagination.count > 0 &&
+            <BottomPaginationContainer>
+              <AsyncPagination
+                dropDirection="up"
+                meta={ pagination }
+                apiRequest={ fetchData }
+              />
+            </BottomPaginationContainer>
+          }
+        </Fragment>
+      }
+
+    </Section>);
 };
 
 TableToolbarView.propTypes = {
