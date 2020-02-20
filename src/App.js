@@ -1,50 +1,61 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Routes } from './Routes';
-import './App.scss';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { Main } from '@redhat-cloud-services/frontend-components/components/Main';
 import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications/';
+
+import { Routes } from './Routes';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
+import { SET_OPENAPI_SCHEMA, SET_USER_ACCESS } from './redux/action-types';
+
+import 'whatwg-fetch';
+
+// react-int eng locale data
 import { IntlProvider } from 'react-intl';
 
 import '@redhat-cloud-services/frontend-components-notifications/index.css';
-import './App.scss';
+import '@redhat-cloud-services/frontend-components/index.css';
+import { getAxiosInstance, getRbacRoleApi } from './helpers/shared/user-login';
+import { APPROVAL_API_BASE } from './utilities/constants';
 
-class App extends Component {
-  state = {
-    chromeNavAvailable: true,
-    auth: false
-  }
+const App = () => {
+  const [ auth, setAuth ] = useState(false);
+  const dispatch = useDispatch();
 
-  componentDidMount () {
+  useEffect(() => {
     insights.chrome.init();
-    insights.chrome.auth.getUser().then(() => this.setState({ auth: true }));
+    Promise.all([
+      getAxiosInstance()
+      .get(`${APPROVAL_API_BASE}/openapi.json`)
+      .then((payload) => dispatch({ type: SET_OPENAPI_SCHEMA, payload })),
+      getRbacRoleApi()
+      .getRoles({ scope: 'principal' })
+      .then(({ data }) =>
+        dispatch({
+          type: SET_USER_ACCESS,
+          payload: data
+        })
+      ),
+      insights.chrome.auth.getUser()
+    ]).then(() => setAuth(true));
+
     insights.chrome.identifyApp('approval');
+  }, []);
+
+  if (!auth) {
+    return <AppPlaceholder />;
   }
 
-  render () {
-    const { auth } = this.state;
-    if (!auth) {
-      return <AppPlaceholder />;
-    }
-
-    return (
-      <IntlProvider locale="en">
-        <React.Fragment>
-          <NotificationsPortal />
-          <Main style={ { marginLeft: 0, padding: 0 } }>
-            <Routes />
-          </Main>
-        </React.Fragment>
-      </IntlProvider>
-    );
-  }
-}
-
-App.propTypes = {
-  history: PropTypes.object
+  return (
+    <IntlProvider locale="en">
+      <React.Fragment>
+        <NotificationsPortal />
+        <Main className="pf-u-p-0 pf-u-ml-0">
+          <Routes />
+        </Main>
+      </React.Fragment>
+    </IntlProvider>
+  );
 };
 
-export default withRouter (connect()(App));
+export default App;
