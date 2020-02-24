@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { Main } from '@redhat-cloud-services/frontend-components/components/Main';
 import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications/';
-
 import { Routes } from './Routes';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
-import { SET_OPENAPI_SCHEMA, SET_USER_ACCESS } from './redux/action-types';
+import { SET_USER_ROLES } from './redux/action-types';
+import { defaultSettings } from './helpers/shared/pagination';
 
 import 'whatwg-fetch';
 
@@ -15,8 +14,7 @@ import { IntlProvider } from 'react-intl';
 
 import '@redhat-cloud-services/frontend-components-notifications/index.css';
 import '@redhat-cloud-services/frontend-components/index.css';
-import { getAxiosInstance, getRbacRoleApi } from './helpers/shared/user-login';
-import { APPROVAL_API_BASE } from './utilities/constants';
+import { getRbacRoleApi } from './helpers/shared/user-login';
 
 const App = () => {
   const [ auth, setAuth ] = useState(false);
@@ -25,14 +23,11 @@ const App = () => {
   useEffect(() => {
     insights.chrome.init();
     Promise.all([
-      getAxiosInstance()
-      .get(`${APPROVAL_API_BASE}/openapi.json`)
-      .then((payload) => dispatch({ type: SET_OPENAPI_SCHEMA, payload })),
       getRbacRoleApi()
-      .listRoles({ scope: 'principal' })
+      .listRoles(defaultSettings.limit, 0, '', 'principal')
       .then(({ data }) =>
         dispatch({
-          type: SET_USER_ACCESS,
+          type: SET_USER_ROLES,
           payload: data
         })
       ),
@@ -51,7 +46,7 @@ const App = () => {
       <React.Fragment>
         <NotificationsPortal />
         <Main className="pf-u-p-0 pf-u-ml-0">
-          <Routes />
+          <Routes/>
         </Main>
       </React.Fragment>
     </IntlProvider>

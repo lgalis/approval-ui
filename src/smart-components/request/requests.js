@@ -66,9 +66,13 @@ const Requests = () => {
   const { data, meta } = useSelector(
     ({ requestReducer: { requests }}) => requests
   );
+  const userRoles = useSelector(
+    ({ rolesReducer: { userRoles }}) => userRoles);
 
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const isApprovalAdmin = () => userRoles.find(role => role.name === 'Approval Administrator') !== undefined;
 
   useEffect(() => {
     dispatch(
@@ -131,11 +135,12 @@ const Requests = () => {
   };
 
   const renderRequestsList = () => {
+    const showTabs = isApprovalAdmin();
     return (
       <Fragment>
         <TopToolbar>
           <TopToolbarTitle title="Approval"/>
-          <AppTabs tabItems={ tabItems }/>
+          { showTabs && <AppTabs tabItems={ tabItems } /> }
         </TopToolbar>
         <TableToolbarView
           data={ data }
