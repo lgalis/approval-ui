@@ -105,15 +105,15 @@ const Requests = () => {
   </Fragment>;
 
   const areActionsDisabled = (requestData) => requestData &&
-    requestData.props ? !isRequestStateActive(requestData.props.state) || requestData.props.number_of_children > 0 : true;
+    requestData.state ?
+    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 : true;
 
   const actionResolver = (requestData) => {
-    return (requestData && requestData.name && areActionsDisabled(requestData.name.title) ? null :
+    return (requestData && requestData.id && areActionsDisabled(requestData) ? null :
       [
         {
           title: 'Comment',
-          onClick: () =>
-            history.push(`/requests/add_comment/${requestData.id}`)
+          onClick: () => history.push(`/requests/add_comment/${requestData.id}`)
         }
       ]);
   };
