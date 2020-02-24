@@ -29,7 +29,7 @@ const App = () => {
       .get(`${APPROVAL_API_BASE}/openapi.json`)
       .then((payload) => dispatch({ type: SET_OPENAPI_SCHEMA, payload })),
       getRbacRoleApi()
-      .getRoles({ scope: 'principal' })
+      .listRoles({ scope: 'principal' })
       .then(({ data }) =>
         dispatch({
           type: SET_USER_ACCESS,
