@@ -17,6 +17,7 @@ import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
+import { isApprovalAdmin } from '../../helpers/shared/helpers';
 
 const columns = [{
   title: 'Name',
@@ -71,8 +72,6 @@ const Requests = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const isApprovalAdmin = () => userRoles.find(role => role.name === 'Approval Administrator') !== undefined;
 
   useEffect(() => {
     dispatch(
@@ -135,7 +134,7 @@ const Requests = () => {
   };
 
   const renderRequestsList = () => {
-    const showTabs = isApprovalAdmin();
+    const showTabs = isApprovalAdmin(userRoles);
     return (
       <Fragment>
         <TopToolbar>
