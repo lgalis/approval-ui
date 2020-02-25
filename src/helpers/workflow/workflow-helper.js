@@ -1,27 +1,29 @@
-import { getWorkflowApi, getTemplateApi } from '../shared/user-login';
+import { getWorkflowApi, getTemplateApi, getAxiosInstance } from '../shared/user-login';
 import { fetchGroupNames } from '../group/group-helper';
+import { defaultSettings } from '../shared/pagination';
+import { APPROVAL_API_BASE } from '../../utilities/constants';
 
 const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
-export async function fetchWorkflows({ limit = 10, offset = 0 }) {
-  return await workflowApi.listWorkflows(limit, offset);
+export function fetchWorkflows(filter = '', pagination = defaultSettings) {
+  const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
+  const filterQuery = `&filter[name][contains_i]=${filter}`;
+  return getAxiosInstance().get(
+    `${APPROVAL_API_BASE}/workflows/?${filterQuery}${paginationQuery}`
+  );
 }
 
-export async function fetchWorkflowsWithGroups({ limit = 10, offset = 0 }) {
-  const wfData = await workflowApi.listWorkflows(limit, offset);
+export async function fetchWorkflowsWithGroups({ appName = undefined,
+  objectId = undefined,
+  objectType = undefined,
+  limit = 10,
+  offset = 0,
+  filter = '' }) {
+  const wfData = await workflowApi.listWorkflows(appName, objectId, objectType, limit, offset, filter);
   const workflows = wfData.data;
   return Promise.all(workflows.map(async wf => {
-    let wfWithGroups = [];
-    try {
-      wfWithGroups = await fetchGroupNames(wf.group_refs);
-    }
-    catch (error) {
-      if (!(error.response && error.response.status === 404)) {
-        throw error;
-      }
-    }
-
+    const wfWithGroups = await fetchGroupNames(wf.group_refs);
     return { ...wf, group_names: wfWithGroups };
   })).then(data => ({
     ...wfData,
@@ -31,16 +33,7 @@ export async function fetchWorkflowsWithGroups({ limit = 10, offset = 0 }) {
 
 export async function fetchWorkflowWithGroups(id) {
   const wfData = await workflowApi.showWorkflow(id);
-  let wfWithGroups = [];
-  try {
-    wfWithGroups = await fetchGroupNames(wfData.group_refs);
-  }
-  catch (error) {
-    if (!(error.response && error.response.status === 404)) {
-      throw error;
-    }
-  }
-
+  const  wfWithGroups = await fetchGroupNames(wfData.group_refs);
   return { ...wfData, group_names: wfWithGroups };
 }
 
@@ -48,8 +41,8 @@ export async function fetchWorkflow(id) {
   return await workflowApi.showWorkflow(id);
 }
 
-export async function updateWorkflow(data) {
-  return await workflowApi.updateWorkflow(data.id, data);
+export function updateWorkflow(data) {
+  return workflowApi.updateWorkflow(data.id, data);
 }
 
 export  function addWorkflow(workflow) {

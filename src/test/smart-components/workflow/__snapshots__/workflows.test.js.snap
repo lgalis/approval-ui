@@ -1,63 +1,77 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Workflows /> should render correctly 1`] = `
-<ContextProvider
-  value={null}
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
 >
-  <Workflows
-    fetchRbacGroups={[Function]}
-    fetchWorkflows={[Function]}
-    isLoading={false}
-    pagination={
-      Object {
-        "count": 0,
-        "limit": 10,
-        "offset": 0,
-      }
+  <MemoryRouter
+    initialEntries={
+      Array [
+        "/workflows",
+      ]
     }
-    rbacGroups={Array []}
-    store={
-      Object {
-        "clearActions": [Function],
-        "dispatch": [Function],
-        "getActions": [Function],
-        "getState": [Function],
-        "replaceReducer": [Function],
-        "subscribe": [Function],
-      }
-    }
-    workflows={Array []}
-  />
-</ContextProvider>
+  >
+    <IntlProvider
+      locale="en"
+    >
+      <Workflows
+        history={
+          Object {
+            "push": [MockFunction],
+          }
+        }
+        isLoading={false}
+        rbacGroups={Object {}}
+        workflows={Array []}
+      />
+    </IntlProvider>
+  </MemoryRouter>
+</Provider>
 `;
 
 exports[`<Workflows /> should render correctly in loading state 1`] = `
-<ContextProvider
-  value={null}
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
 >
-  <Workflows
-    fetchRbacGroups={[Function]}
-    fetchWorkflows={[Function]}
-    isLoading={false}
-    pagination={
-      Object {
-        "count": 0,
-        "limit": 10,
-        "offset": 0,
-      }
+  <MemoryRouter
+    initialEntries={
+      Array [
+        "/workflows",
+      ]
     }
-    rbacGroups={Array []}
-    store={
-      Object {
-        "clearActions": [Function],
-        "dispatch": [Function],
-        "getActions": [Function],
-        "getState": [Function],
-        "replaceReducer": [Function],
-        "subscribe": [Function],
-      }
-    }
-    workflows={Array []}
-  />
-</ContextProvider>
+  >
+    <IntlProvider
+      locale="en"
+    >
+      <Workflows
+        history={
+          Object {
+            "push": [MockFunction],
+          }
+        }
+        isLoading={true}
+        rbacGroups={Object {}}
+        workflows={Array []}
+      />
+    </IntlProvider>
+  </MemoryRouter>
+</Provider>
 `;

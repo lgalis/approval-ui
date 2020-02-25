@@ -24,7 +24,7 @@ import {
   LevelItem
 } from '@patternfly/react-core';
 
-class Stage extends Component {
+class Request extends Component {
   state = {
     isKebabOpen: false
   };
@@ -39,16 +39,20 @@ class Stage extends Component {
     this.setState({ isKebabOpen: !this.state.isKebabOpen });
   };
 
-  buildStageActionKebab = (stage) => {
+  buildRequestActionKebab = (request) => {
     return (
       <Dropdown
         position={ DropdownPosition.right }
         onSelect={ this.onKebabSelect }
-        toggle={ <KebabToggle onToggle={ this.onKebabToggle }/> }
-        isOpen = { this.state.isKebabOpen }
+        toggle={ <KebabToggle id={ `request-request-dropdown-${request.id}` } onToggle={ this.onKebabToggle }/> }
+        isOpen={ this.state.isKebabOpen }
         dropdownItems={ [
-          <DropdownItem aria-label="Add Comment" key={ `add_comment_${stage.id}` }>
-            <Link to={ `/requests/detail/${stage.request_id}/add_comment` } className="pf-c-dropdown__menu-item">
+          <DropdownItem aria-label="Add Comment" key={ `add_comment_${request.id}` }>
+            <Link
+              id={ `request-${request.id}-request-comment` }
+              to={ `/requests/detail/${request.id}/add_comment` }
+              className="pf-c-dropdown__menu-item"
+            >
               Comment
             </Link>
           </DropdownItem>
@@ -58,28 +62,28 @@ class Stage extends Component {
     );
   };
 
-  fetchStageDetails = (stage) => {
-    return <ActionTranscript actionList={ stage.stageActions.data }/>;
+  fetchRequestDetails = (request) => {
+    return <ActionTranscript actionList={ request.actions }/>;
   };
 
   render() {
-    const { item } = this.props;
+    const { item, isExpanded } = this.props;
     const requestActive = isRequestStateActive(item.state);
     return (
-      <DataListItem key={ `stage-${item.id}` }
-        aria-labelledby={ `check-stage-${item.id}` }
-        isExpanded={ this.props.isExpanded(`stage-${item.id}`) }>
+      <DataListItem key={ `request-${item.id}` }
+        aria-labelledby={ `check-request-${item.id}` }
+        isExpanded={ isExpanded }>
         <DataListItemRow>
           <DataListToggle
-            onClick={ () => this.props.toggleExpand(`stage-${item.id}`) }
-            isExpanded={ this.props.isExpanded(`stage-${item.id}`) }
-            id={ `stage-${item.id}` }
-            aria-labelledby={ `stage-${item.id} stage-${item.id}` }
+            onClick={ () => this.props.toggleExpand(`request-${item.id}`) }
+            isExpanded={ isExpanded }
+            id={ `request-${item.id}` }
+            aria-labelledby={ `request-${item.id} request-${item.id}` }
             aria-label="Toggle details for"
           />
           <DataListItemCells
             dataListCells={ [
-              <DataListCell key ={ item.id }>
+              <DataListCell key={ item.id }>
                 <span id={ item.id }>{ `${this.props.idx + 1}. ${item.name}` } </span>
               </DataListCell>,
               <DataListCell key={ `${item.id}-state` }>
@@ -88,14 +92,14 @@ class Stage extends Component {
               <DataListCell key={ `${item.id}-action` }>
                 <Level>
                   <LevelItem>
-                    { (requestActive && this.props.isActive) &&
+                    { (requestActive) &&
                     <div>
-                      <Link to={ `/requests/detail/${item.request_id}/approve` }>
+                      <Link id={ `approve-${item.id}` } to={ `/requests/detail/${item.id}/approve` }>
                         <Button variant="link" aria-label="Approve Request">
                           Approve
                         </Button>
                       </Link>
-                      <Link to={ `/requests/detail/${item.request_id}/deny` }>
+                      <Link id={ `deny-${item.id}` } to={ `/requests/detail/${item.id}/deny` }>
                         <Button variant="link" className="destructive-color" aria-label="Deny Request">
                           Deny
                         </Button>
@@ -110,16 +114,16 @@ class Stage extends Component {
                 aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
                 id={ `workflow-${item.id}` }
                 aria-label="Actions">
-                { requestActive && this.props.isActive  && this.buildStageActionKebab(item) }
+                { requestActive && this.buildRequestActionKebab(item) }
               </DataListCell>
             ] }/>
         </DataListItemRow>
-        <DataListContent aria-label="Stage Content Details"
-          isHidden={ !this.props.isExpanded(`stage-${item.id}`) }>
+        <DataListContent aria-label="Request Content Details"
+          isHidden={ !isExpanded }>
           <Stack gutter="md">
             <StackItem>
               <TextContent component={ TextVariants.h6 }>
-                { this.fetchStageDetails(item) }
+                { this.fetchRequestDetails(item) }
               </TextContent>
             </StackItem>
           </Stack>
@@ -130,14 +134,20 @@ class Stage extends Component {
   };
 }
 
-Stage.propTypes = {
+Request.propTypes = {
   isLoading: PropTypes.bool,
-  isActive: PropTypes.bool,
-  item: PropTypes.object,
+  item: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    state: PropTypes.string,
+    requestActions: PropTypes.shape({
+      data: PropTypes.array
+    })
+  }).isRequired,
   idx: PropTypes.number,
-  isExpanded: PropTypes.func.isRequired,
+  isExpanded: PropTypes.bool.isRequired,
   toggleExpand: PropTypes.func.isRequired,
   noItems: PropTypes.string
 };
 
-export default Stage;
+export default Request;

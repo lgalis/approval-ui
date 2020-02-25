@@ -24,11 +24,11 @@ const AddWorkflow = ({
   };
 
   const steps = [
-    { name: 'General Information', component: <StageInformation formData = { formData } handleChange = { handleChange } /> },
-    { name: 'Set Stages', component: <SetStages formData = { formData }
+    { name: 'General information', component: <StageInformation formData={ formData } handleChange={ handleChange } /> },
+    { name: 'Set groups', component: <SetStages formData={ formData }
       handleChange={ handleChange } options={ rbacGroups } /> },
-    { name: 'Review', component: <SummaryContent formData = { formData }
-      options = { rbacGroups } />, nextButtonText: 'Confirm' }
+    { name: 'Review', component: <SummaryContent formData={ formData }
+      options={ rbacGroups } />, nextButtonText: 'Confirm' }
   ];
 
   const onSave = () => {
@@ -41,6 +41,7 @@ const AddWorkflow = ({
     addNotification({
       variant: 'warning',
       title: 'Creating workflow',
+      dismissable: true,
       description: 'Creating workflow was cancelled by the user.'
     });
     push('/workflows');
@@ -52,7 +53,7 @@ const AddWorkflow = ({
       isOpen
       onClose={ onCancel }
       onSave={ onSave  }
-      steps= { steps }
+      steps={ steps }
     />
   );
 };

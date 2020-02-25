@@ -2,30 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, TextContent, TextVariants } from '@patternfly/react-core';
 
-const RequestInfoBar = ({ request }) => {
+const RequestInfoBar = ({ request, requestContent }) => {
   return (
     <TextContent>
       <Text component={ TextVariants.small }>Product: <br/></Text>
-      <Text>{ request.content ? request.content.product : 'Unknown' }</Text>
-      <Text component={ TextVariants.small }>
-              Portfolio:
-        <br/>
-      </Text>
-      <Text>
-        { request.content ? request.content.portfolio : '' }
-      </Text>
+      <Text>{ requestContent ? requestContent.product : '' }</Text>
+      <Text component={ TextVariants.small }>Portfolio: <br/></Text>
+      <Text>{ requestContent ? requestContent.portfolio : '' }</Text>
       <Text component={ TextVariants.small }>Platform: <br/></Text>
-      <Text>{ request.content ? request.content.platform : '' }</Text>
-      <Text component={ TextVariants.small }>Project: <br/></Text>
-      <Text>{ request.content ? request.content.project : '' }</Text>
-      <Text component={ TextVariants.small }>Order Parameters: </Text>
-      <Text component={ TextVariants.h6 }>Requester: <br/>{ request.requester }
-      </Text>
-      <Text component={ TextVariants.h6 }>Project: <br/> </Text>
-      { request.content.params && Object.keys(request.content.params).map(param => {
-        return ((request.content.params[param]) &&
+      <Text>{ requestContent ? requestContent.platform : ' ' }</Text>
+      <Text component={ TextVariants.small }>Requester: </Text>
+      <Text component={ TextVariants.h6 }>{ request.requester_name }</Text>
+      <Text component={ TextVariants.h6 }>Order Parameters: <br/> </Text>
+      { requestContent.params && Object.keys(requestContent.params).map(param => {
+        return ((requestContent.params[param]) &&
                   <Text key={ param } component={ TextVariants.small }>
-                    { `${param}: ${request.content.params[param]}` }
+                    { `${param}: ${requestContent.params[param]}` }
                   </Text>);
       })
       }
@@ -35,9 +27,9 @@ const RequestInfoBar = ({ request }) => {
 
 RequestInfoBar.propTypes = {
   request: PropTypes.shape({
-    content: PropTypes.object,
-    requester: PropTypes.string
-  }).isRequired
+    requester_name: PropTypes.string
+  }).isRequired,
+  requestContent: PropTypes.object
 };
 export default RequestInfoBar;
 

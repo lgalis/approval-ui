@@ -57,7 +57,7 @@ StageInformation.propTypes = {
   description: PropTypes.string,
   title: PropTypes.string,
   formData: PropTypes.object,
-  handleChange: PropTypes.func.required
+  handleChange: PropTypes.func.isRequired
 };
 
 export default StageInformation;

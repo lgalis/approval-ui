@@ -4,15 +4,18 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-services/frontend-components-notifications';
 import {
   FETCH_REQUESTS,
-  FETCH_REQUEST
+  FETCH_REQUEST,
+  EXPAND_REQUEST
 } from '../../../redux/action-types';
 import {
   fetchRequests,
-  fetchRequest
+  fetchRequest,
+  expandRequest
 } from '../../../redux/actions/request-actions';
 import {
   APPROVAL_API_BASE
 } from '../../../utilities/constants';
+import { mockGraphql } from '../../__mocks__/user-login';
 
 describe('Request actions', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
@@ -38,7 +41,7 @@ describe('Request actions', () => {
       }]},
       type: `${FETCH_REQUESTS}_FULFILLED`
     }];
-    apiClientMock.get(APPROVAL_API_BASE + '/requests?limit=10&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=%5Bobject%20Object%5D&limit=50&offset=0', mockOnce({
       body: {
         data: [{
           label: 'request',
@@ -88,56 +91,141 @@ describe('Request actions', () => {
       }
     });
 
-    const expectedActions = [{
-      type: `${FETCH_REQUEST}_PENDING`
-    }, {
-      payload: {
-        data: [{
-          id: '11',
-          name: 'request' }],
-        stages: [{ id: '10',
-          name: 'stage',
-          stageActions: {
-            data: [
-              {
-                id: '9',
-                name: 'action'
-              }
-            ]}
-        }]
-      },
-      type: `${FETCH_REQUEST}_FULFILLED`
-    }];
-
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/11', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
       body: {
         data: [{
-          id: '11',
-          name: 'request'
+          id: '111',
+          name: ''
         }]
       }
     }));
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/11/stages', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/111/actions', mockOnce({
       body: {
         data: [{
-          id: '10',
-          name: 'stage'
-        }]
-      }
-    }));
-
-    apiClientMock.get(APPROVAL_API_BASE + '/stages/10/actions', mockOnce({
-      body: {
-        data: [{
-          id: '9',
+          id: '222',
           name: 'action'
         }]
       }
     }));
 
-    return store.dispatch(fetchRequest(11)).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
+    const expectedData = [{
+      type: `${FETCH_REQUEST}_PENDING`
+    }, {
+      payload: {
+        data: {
+          id: '111',
+          state: 'notified',
+          decision: 'undecided',
+          created_at: '2020-01-29T16:55:03Z',
+          notified_at: '2020-01-29T17:09:15Z',
+          number_of_children: 3,
+          number_of_finished_children: 0,
+          owner: 'test',
+          requester_name: 'Test User',
+          name: 'Hello World',
+          group_name: 'GroupA'
+        },
+        actions: [{
+          id: '222',
+          name: 'action'
+        }]
+
+      },
+      type: `${FETCH_REQUEST}_FULFILLED`
+    }];
+
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/111', mockOnce({
+      body: {
+        data: {
+          id: '111',
+          state: 'notified',
+          decision: 'undecided',
+          created_at: '2020-01-29T16:55:03Z',
+          notified_at: '2020-01-29T17:09:15Z',
+          number_of_children: 3,
+          number_of_finished_children: 0,
+          owner: 'test',
+          requester_name: 'Test User',
+          name: 'Hello World',
+          group_name: 'GroupA'
+        }
+      }
+    }));
+
+    mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, {
+      data: {
+        requests: [
+          {
+            actions: [],
+            id: '124',
+            name: 'Hello World',
+            number_of_children: '0',
+            decision: 'undecided',
+            description: null,
+            group_name: 'Catalog IQE approval',
+            number_of_finished_children: '0',
+            parent_id: '123',
+            state: 'pending',
+            workflow_id: '100'
+          },
+
+          {
+            actions: [],
+            id: '125',
+            name: 'Hello World',
+            number_of_children: '0',
+            decision: 'undecided',
+            description: null,
+            group_name: 'Group1',
+            number_of_finished_children: '0',
+            parent_id: '123',
+            state: 'pending',
+            workflow_id: '200'
+          },
+
+          {
+            actions: [
+              {
+                id: '1',
+                operation: 'start',
+                comments: null,
+                created_at: '2020-01-29T17:08:56.850Z',
+                processed_by: 'system'
+              },
+              {
+                id: '2',
+                operation: 'notify',
+                comments: null,
+                created_at: '2020-01-29T17:09:14.994Z',
+                processed_by: 'system'
+              }
+            ],
+            id: '126',
+            name: 'Hello World',
+            number_of_children: '0',
+            decision: 'undecided',
+            description: null,
+            group_name: 'Group2',
+            number_of_finished_children: '0',
+            parent_id: '123',
+            state: 'notified',
+            workflow_id: '300'
+          }
+        ]
+      }
+    });
+
+    return store.dispatch(fetchRequest(111)).then(() => {
+      expect(store.getActions()).toEqual(expectedData);
+    });
+  });
+
+  it('creates object for opening a request', () => {
+    const id = '546451';
+    expect(expandRequest(id)).toEqual({
+      type: EXPAND_REQUEST,
+      payload: id
     });
   });
 });

@@ -1,38 +1,95 @@
-import React, { Fragment, useState } from 'react';
-import { connect } from 'react-redux';
-import propTypes from 'prop-types';
-import { Route, Switch } from 'react-router-dom';
+import React, { Fragment, useEffect, useReducer } from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { expandable } from '@patternfly/react-table';
-import { fetchRequests } from '../../redux/actions/request-actions';
+import { fetchRequests, expandRequest } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import RequestDetail from './request-detail/request-detail';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
-import { Stack, StackItem } from '@patternfly/react-core';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
+import { defaultSettings } from '../../helpers/shared/pagination';
+import asyncDebounce from '../../utilities/async-debounce';
+import { scrollToTop } from '../../helpers/shared/helpers';
 
 const columns = [{
-  title: 'RequestId',
+  title: 'Name',
   cellFormatters: [ expandable ]
 },
 'Requester',
 'Opened',
 'Updated',
-'Stage Status',
+'Status',
 'Decision'
 ];
 
-const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
-  const [ filterValue, setFilterValue ] = useState('');
-  const [ requests, setRequests ] = useState([]);
+const debouncedFilter = asyncDebounce(
+  (filter, dispatch, filteringCallback, meta = defaultSettings) => {
+    filteringCallback(true);
+    dispatch(fetchRequests(filter, meta)).then(() =>
+      filteringCallback(false)
+    );
+  },
+  1000
+);
+const initialState = {
+  filterValue: '',
+  isOpen: false,
+  isFetching: true,
+  isFiltering: false
+};
 
-  const fetchData = () => {
-    fetchRequests().then(({ value: { data }}) => setRequests(data));
+const requestsListState = (state, action) => {
+  switch (action.type) {
+    case 'setFetching':
+      return { ...state, isFetching: action.payload };
+    case 'setFilterValue':
+      return { ...state, filterValue: action.payload };
+    case 'setFilteringFlag':
+      return { ...state, isFiltering: action.payload };
+    default:
+      return state;
+  }
+};
+
+const Requests = () => {
+  const [{ filterValue, isFetching, isFiltering }, stateDispatch ] = useReducer(
+    requestsListState,
+    initialState
+  );
+  const { data, meta } = useSelector(
+    ({ requestReducer: { requests }}) => requests
+  );
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    dispatch(
+      fetchRequests(filterValue, defaultSettings)
+    ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
+    scrollToTop();
+  }, []);
+
+  const handleFilterChange = (value) => {
+    stateDispatch({ type: 'setFilterValue', payload: value });
+    debouncedFilter(
+      value,
+      dispatch,
+      (isFiltering) =>
+        stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
+      {
+        ...meta,
+        offset: 0
+      }
+    );
   };
 
-  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' }, { eventKey: 1, title: 'Workflows', name: '/workflows' }];
+  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
+    { eventKey: 1, title: 'Workflows', name: '/workflows' }];
 
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
@@ -44,10 +101,11 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
       postMethod={ fetchRequests }/> } />
   </Fragment>;
 
-  const areActionsDisabled = (requestData) => { return !isRequestStateActive(requestData.state);};
+  const areActionsDisabled = (requestData) => requestData &&
+    requestData.props ? !isRequestStateActive(requestData.props.state) || requestData.props.number_of_children > 0 : true;
 
-  const actionResolver = (requestData, { rowIndex }) => {
-    return (rowIndex === 1 || areActionsDisabled(requestData) ? null :
+  const actionResolver = (requestData) => {
+    return (requestData && requestData.name && areActionsDisabled(requestData.name.title) ? null :
       [
         {
           title: 'Comment',
@@ -57,33 +115,43 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
       ]);
   };
 
-  const renderRequestsList = () =>
-    <Stack>
-      <StackItem>
+  const handlePagination = (_apiProps, pagination) => {
+    stateDispatch({ type: 'setFetching', payload: true });
+    dispatch(fetchRequests(filterValue, pagination))
+    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
+    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
+  };
+
+  const onCollapse = (id, setRows, setOpen) => {
+    dispatch(expandRequest(id));
+    setRows((rows) => setOpen(rows, id));
+  };
+
+  const renderRequestsList = () => {
+    return (
+      <Fragment>
         <TopToolbar>
-          <TopToolbarTitle title="Approval" />
+          <TopToolbarTitle title="Approval"/>
           <AppTabs tabItems={ tabItems }/>
         </TopToolbar>
-      </StackItem>
-      <StackItem>
         <TableToolbarView
-          data={ requests }
+          data={ data }
           createRows={ createRows }
           columns={ columns }
-          fetchData={ fetchData }
-          request={ fetchRequests }
+          fetchData={ handlePagination }
           routes={ routes }
           actionResolver={ actionResolver }
-          areActionsDisabled={ areActionsDisabled }
           titlePlural="requests"
           titleSingular="request"
-          pagination={ pagination }
+          pagination={ meta }
+          handlePagination={ handlePagination }
           filterValue={ filterValue }
-          setFilterValue={ setFilterValue }
-          isLoading={ isLoading }
+          onFilterChange={ handleFilterChange }
+          isLoading={ isFetching || isFiltering }
+          onCollapse={ onCollapse }
         />
-      </StackItem>
-    </Stack>;
+      </Fragment>);
+  };
 
   return (
     <Switch>
@@ -94,38 +162,16 @@ const Requests = ({ fetchRequests, isLoading, pagination, history }) => {
 };
 
 Requests.propTypes = {
-  history: propTypes.shape({
-    goBack: propTypes.func.isRequired,
-    push: propTypes.func.isRequired
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
   }),
-  filteredItems: propTypes.array,
-  requests: propTypes.array,
-  platforms: propTypes.array,
-  isLoading: propTypes.bool,
-  filterValue: propTypes.string,
-  setFilterValue: propTypes.func,
-  fetchRequests: propTypes.func.isRequired,
-  pagination: propTypes.shape({
-    limit: propTypes.number,
-    offset: propTypes.number,
-    count: propTypes.number
-  })
+  requests: PropTypes.array,
+  isLoading: PropTypes.bool
 };
 
 Requests.defaultProps = {
   requests: [],
-  isLoading: false,
-  pagination: {}
+  isLoading: false
 };
 
-const mapStateToProps = ({ requestReducer: { requests, isRequestDataLoading }}) => ({
-  requests: requests.data,
-  pagination: requests.meta,
-  isLoading: isRequestDataLoading
-});
-
-const mapDispatchToProps = dispatch => ({
-  fetchRequests: apiProps => dispatch(fetchRequests(apiProps))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Requests);
+export default Requests;

@@ -42,7 +42,7 @@ export const RequestLoader = ({ items, ...props }) => (
       <GridItem md={ 2 } className="detail-pane">
         <RequestInfoBarLoader/>
       </GridItem>
-      <GridItem md={ 10 } className = "detail-pane">
+      <GridItem md={ 10 } className="detail-pane">
         <DataList aria-label="datalist-placeholder" style={ { margin: 32 } }>
           { [ ...Array(items) ].map((_item, index) => (
             <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
@@ -94,31 +94,29 @@ export const AppPlaceholder = props => (
 );
 
 export const DataListLoader = ({ items, ...props }) => (
-  <Section type="content">
-    <DataList aria-labelledby="datalist-placeholder">
-      { [ ...Array(items) ].map((_item, index) => (
-        <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
-          <DataListItemRow aria-label="datalist-item-placeholder-row">
-            <DataListItemCells dataListCells={ [
-              <DataListCell key="1">
-                <ContentLoader
-                  height={ 12 }
-                  width={ 300 }
-                  speed={ 2 }
-                  primaryColor="#FFFFFF"
-                  secondaryColor="#ecebeb"
-                  { ...props }>
-                  <rect x="0" y="0" rx="0" ry="0" width="300" height="12" />
-                </ContentLoader>
-              </DataListCell>
-            ] }
-            />
-          </DataListItemRow>
+  <DataList aria-label="data-list-loader" aria-labelledby="datalist-placeholder">
+    { [ ...Array(items) ].map((_item, index) => (
+      <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
+        <DataListItemRow aria-label="datalist-item-placeholder-row">
+          <DataListItemCells dataListCells={ [
+            <DataListCell key="1">
+              <ContentLoader
+                height={ 12 }
+                width={ 300 }
+                speed={ 2 }
+                primaryColor="#FFFFFF"
+                secondaryColor="#ecebeb"
+                { ...props }>
+                <rect x="0" y="0" rx="0" ry="0" width="300" height="12" />
+              </ContentLoader>
+            </DataListCell>
+          ] }
+          />
+        </DataListItemRow>
 
-        </DataListItem>
-      )) }
-    </DataList>
-  </Section>
+      </DataListItem>
+    )) }
+  </DataList>
 );
 
 DataListLoader.propTypes = {

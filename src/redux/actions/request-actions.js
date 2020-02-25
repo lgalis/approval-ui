@@ -1,24 +1,24 @@
 import * as ActionTypes from '../action-types';
 import * as RequestHelper from '../../helpers/request/request-helper';
 
-export const fetchRequests = (options = {}) => ({
+export const fetchRequests = (filter, pagination) => ({
   type: ActionTypes.FETCH_REQUESTS,
-  payload: RequestHelper.fetchRequests(options)
+  payload: RequestHelper.fetchRequests(filter, pagination)
 });
 
 export const fetchRequest = (apiProps) => ({
   type: ActionTypes.FETCH_REQUEST,
-  payload: RequestHelper.fetchRequestWithStagesAndActions(apiProps)
+  payload: RequestHelper.fetchRequestWithSubrequests(apiProps)
 });
 
-export const fetchStagesForRequest = apiProps => ({
-  type: ActionTypes.FETCH_STAGES_FOR_REQUEST,
-  payload: RequestHelper.fetchStagesForRequest(apiProps)
+export const fetchRequestContent = (apiProps) => ({
+  type: ActionTypes.FETCH_REQUEST_CONTENT,
+  payload: RequestHelper.fetchRequestContent(apiProps)
 });
 
-export const createStageAction = (actionName, stageId, actionIn) => ({
-  type: ActionTypes.CREATE_STAGE_ACTION,
-  payload: RequestHelper.createStageAction(stageId, actionIn),
+export const createRequestAction = (actionName, requestId, actionIn) => ({
+  type: ActionTypes.CREATE_REQUEST_ACTION,
+  payload: RequestHelper.createRequestAction(requestId, actionIn),
   meta: {
     notifications: {
       fulfilled: {
@@ -33,4 +33,9 @@ export const createStageAction = (actionName, stageId, actionIn) => ({
       }
     }
   }
+});
+
+export const expandRequest = (id) => ({
+  type: ActionTypes.EXPAND_REQUEST,
+  payload: id
 });
