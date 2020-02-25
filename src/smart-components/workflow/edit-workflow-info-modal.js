@@ -50,9 +50,9 @@ const EditWorkflowInfoModal = ({
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: `Edit approval process`,
+      title: `Edit approval process's info`,
       dismissable: true,
-      description: `Edit approval process was cancelled by the user.`
+      description: `Edit approval process's info was cancelled by the user.`
     });
     push('/workflows');
   };
