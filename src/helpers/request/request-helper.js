@@ -6,14 +6,12 @@ const requestApi = getRequestApi();
 const actionApi = getActionApi();
 const graphqlInstance = getGraphqlInstance();
 
-export function fetchRequests(filter = '', pagination = defaultSettings, persona = 'approval/approver') {
+export function fetchRequests(filter = '', pagination = defaultSettings, persona = undefined) {
   const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
-  const filterQuery = `&filter[name][contains_i]=${filter}`;
-  return getAxiosInstance()({
-    method: 'get',
-    url: `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}`,
-    headers: { 'x-rh-persona': persona }
-  });
+  const filterQuery = `filter[name][contains_i]=${filter}`;
+  const fetchUrl = `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}`;
+  const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
+  return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 }
 
 const requestTranscriptQuery = (parent_id) => `query {
@@ -30,7 +28,7 @@ const requestTranscriptQuery = (parent_id) => `query {
     number_of_children
     decision
     description
-    group_name'
+    group_name
     number_of_finished_children
     parent_id
     state

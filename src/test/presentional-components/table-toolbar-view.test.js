@@ -74,7 +74,7 @@ describe('<TableToolbarView />', () => {
     await act(async() => {
       wrapper = mount(<TableToolbarView { ...initialProps } isLoading={ true } />);
     });
-    expect(wrapper.find(Table)).toHaveLength(1);
+    expect(wrapper.find(Table)).toHaveLength(0);
     expect(wrapper.find(DataListLoader)).toHaveLength(1);
     done();
   });

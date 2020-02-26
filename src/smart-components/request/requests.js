@@ -17,7 +17,6 @@ import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
-import { isApprovalAdmin } from '../../helpers/shared/helpers';
 
 const columns = [{
   title: 'Name',
@@ -67,8 +66,6 @@ const Requests = () => {
   const { data, meta } = useSelector(
     ({ requestReducer: { requests }}) => requests
   );
-  const userRoles = useSelector(
-    ({ rolesReducer: { userRoles }}) => userRoles);
 
   const approvalAdmin = useSelector(
     ({ rolesReducer: { approvalAdmin }}) => approvalAdmin);
@@ -138,12 +135,11 @@ const Requests = () => {
   };
 
   const renderRequestsList = () => {
-    const showTabs = isApprovalAdmin(userRoles);
     return (
       <Fragment>
         <TopToolbar>
           <TopToolbarTitle title="Approval"/>
-          { showTabs && <AppTabs tabItems={ tabItems } /> }
+          { approvalAdmin && <AppTabs tabItems={ tabItems } /> }
         </TopToolbar>
         <TableToolbarView
           data={ data }
