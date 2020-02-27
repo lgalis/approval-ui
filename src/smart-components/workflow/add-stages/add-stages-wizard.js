@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Wizard } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { addWorkflow, fetchWorkflow } from '../../../redux/actions/workflow-actions';
+import { addWorkflow, fetchWorkflowWithGroupNames } from '../../../redux/actions/workflow-actions';
 import SummaryContent from './summary-content';
 import WorkflowInfoForm from './stage-information';
 import SetStages from './set-stages';
@@ -75,7 +75,7 @@ AddWorkflow.propTypes = {
   addWorkflow: PropTypes.func.isRequired,
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
-  fetchWorkflow: PropTypes.func.isRequired,
+  fetchWorkflowWithGroupNames: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
@@ -92,7 +92,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
-  fetchWorkflow
+  fetchWorkflowWithGroupNames
 }, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddWorkflow));
