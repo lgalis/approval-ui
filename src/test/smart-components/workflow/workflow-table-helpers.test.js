@@ -17,10 +17,6 @@ describe('approval process table helpers', () => {
       sequence: '1',
       group_refs: [ 'group_refs' ],
       group_names: [ 'group_names' ]
-    }, {
-      name: 'Always approve',
-      id: 3,
-      description: 'should not be in result'
     }];
 
     const expectedData = [{
