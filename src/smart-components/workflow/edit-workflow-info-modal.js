@@ -23,11 +23,12 @@ const EditWorkflowInfoModal = ({
   editType
 }) => {
   const [ formData, setFormData ] = useState({});
+  const [ initialValue, setInitialValue ] = useState({});
 
   const handleChange = data => setFormData({ ...formData, ...data });
 
   useEffect(() => {
-    fetchWorkflow(id).then((data) => setFormData({ ...formData, ...data.value }));
+    fetchWorkflow(id).then((data) => { setFormData({ ...formData, ...data.value }); setInitialValue({ ...data.value });});
   }, []);
 
   const isSequenceValid = () =>
@@ -73,7 +74,7 @@ const EditWorkflowInfoModal = ({
           <FormGroup fieldId="edit-workflow-info-modal-info">
             { isFetching && <WorkflowInfoFormLoader/> }
             { !isFetching && (editType === 'info' ?
-              <WorkflowInfoForm formData={ formData }
+              <WorkflowInfoForm formData={ formData } initialValue={ initialValue }
                 handleChange={ handleChange }
                 isValid={ isInfoValid }
                 title={ `Make any changes to approval process ${workflow.name}` }/> :

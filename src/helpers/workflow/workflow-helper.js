@@ -24,6 +24,10 @@ export async function fetchWorkflow(id) {
   return await workflowApi.showWorkflow(id);
 }
 
+export function fetchWorkflowByName(name) {
+  return fetchWorkflows(name);
+}
+
 export function updateWorkflow(data) {
   return workflowApi.updateWorkflow(data.id, data);
 }

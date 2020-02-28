@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
@@ -9,9 +9,32 @@ import {
   TextArea,
   Title
 } from '@patternfly/react-core';
+import asyncDebounce from '../../../utilities/async-debounce';
+import { fetchWorkflowByName } from '../../../helpers/workflow/workflow-helper';
 
-const WorkflowInfoForm = ({ formData, handleChange, isValid, title = undefined }) => {
+const WorkflowInfoForm = ({ formData, initialValue, handleChange, isValid, title = undefined }) => {
   const { name, description } = formData;
+  const [ error, setError ] = useState(undefined);
+
+  const validateName = (name) => fetchWorkflowByName(name)
+  .then(({ data }) => {
+    return data.find(wf => name === wf.name)
+      ? 'Name has already been taken'
+      : undefined;
+  });
+
+  const setResult = (result) => {
+    setError(result);
+    isValid(!result);
+  };
+
+  const debouncedValidator = (data, validateCallback) => asyncDebounce(validateName(data.name).then((result) => validateCallback(result)));
+
+  const handleNameChange = () => {
+    if (!initialValue || initialValue.name !== formData.name) {
+      debouncedValidator(formData, setResult);
+    }
+  };
 
   return (
     <Fragment>
@@ -25,8 +48,8 @@ const WorkflowInfoForm = ({ formData, handleChange, isValid, title = undefined }
               label="Approval process name"
               isRequired
               fieldId="workflow-name"
-              isValid={ isValid() }
-              helperTextInvalid={ 'Enter a name for the approval process' }
+              isValid={ !error && isValid() }
+              helperTextInvalid={ error || 'Enter a name for the approval process' }
             >
               <TextInput
                 isRequired
@@ -35,8 +58,9 @@ const WorkflowInfoForm = ({ formData, handleChange, isValid, title = undefined }
                 name="workflow-name"
                 aria-describedby="workflow-name"
                 value={ name }
-                isValid={ isValid() }
-                onChange={ (_, event) => handleChange({ name: event.currentTarget.value }) }
+                isValid={ !error && isValid() }
+                onBlur={ handleNameChange }
+                onChange={ (_, event) => { setError(undefined); handleChange({ name: event.currentTarget.value }); } }
               />
             </FormGroup>
             <FormGroup label="Description" fieldId="workflow-description">
@@ -61,7 +85,9 @@ WorkflowInfoForm.propTypes = {
   title: PropTypes.string,
   formData: PropTypes.object,
   handleChange: PropTypes.func.isRequired,
-  isValid: PropTypes.func.isRequired
+  isValid: PropTypes.func.isRequired,
+  initialValue: PropTypes.shape({
+    name: PropTypes.string })
 };
 
 export default WorkflowInfoForm;
