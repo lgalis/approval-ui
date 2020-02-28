@@ -1,3 +1,4 @@
+
 import React, { Fragment, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
@@ -108,6 +109,7 @@ export const TableToolbarView = ({
         renderEmptyState()
       ) :
         <Fragment>
+          { !isLoading &&
           <Table
             aria-label={ `${titlePlural} table` }
             onCollapse={ onCollapseInternal }
@@ -119,7 +121,7 @@ export const TableToolbarView = ({
           >
             <TableHeader />
             <TableBody/>
-          </Table>
+          </Table> }
           { pagination.count > 0 &&
             <BottomPaginationContainer>
               <AsyncPagination
@@ -131,7 +133,6 @@ export const TableToolbarView = ({
           }
         </Fragment>
       }
-
     </Section>);
 };
 

@@ -48,18 +48,23 @@ const EditWorkflowInfoModal = ({
   };
 
   const onCancel = () => {
+    const { title, description } =
+        editType === 'sequence' ? { title: `Edit approval process's sequence`,
+          description: `Edit approval process's sequence was cancelled by the user.` } :
+          { title: `Edit approval process's information`,
+            description: `Edit approval process's information was cancelled by the user.` };
     addNotification({
       variant: 'warning',
-      title: `Edit approval process's info`,
+      title,
       dismissable: true,
-      description: `Edit approval process's info was cancelled by the user.`
+      description
     });
     push('/workflows');
   };
 
   return (
     <Modal
-      title={ `Edit approval process` }
+      title={ editType === 'sequence' ? 'Edit sequence' : 'Edit information' }
       width={ '40%' }
       isOpen
       onClose={ onCancel }>

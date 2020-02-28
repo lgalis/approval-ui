@@ -2,6 +2,7 @@ import React from 'react';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/components/DateFormat';
 
 const activeStates = [ 'notified' ];
+const APPROVAL_ADMINISTRATOR_ROLE = 'Approval Administrator';
 
 export const scrollToTop = () => document.getElementById('root').scrollTo({
   behavior: 'smooth',
@@ -21,3 +22,6 @@ export const timeAgo = (date) => (
   </span>
 );
 
+export const isApprovalAdmin = (userRoles) => {
+  return userRoles.find(role => role.name === APPROVAL_ADMINISTRATOR_ROLE) !== undefined;
+};

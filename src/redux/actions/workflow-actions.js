@@ -8,7 +8,12 @@ export const fetchWorkflows = (filter, pagination) => ({
 
 export const fetchWorkflow = apiProps => ({
   type: ActionTypes.FETCH_WORKFLOW,
-  payload: WorkflowHelper.fetchWorkflowWithGroups(apiProps)
+  payload: WorkflowHelper.fetchWorkflow(apiProps)
+});
+
+export const fetchWorkflowWithGroupNames = apiProps => ({
+  type: ActionTypes.FETCH_WORKFLOW_WITH_GROUP_NAMES,
+  payload: WorkflowHelper.fetchWorkflowWithGroupNames(apiProps)
 });
 
 export const addWorkflow = (workflowData) => ({

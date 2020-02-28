@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
+import { addWorkflow, updateWorkflow, fetchWorkflowWithGroupNames } from '../../redux/actions/workflow-actions';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetStages from './add-stages/set-stages';
@@ -15,7 +15,7 @@ const EditWorkflowStagesModal = ({
   history: { push },
   match: { params: { id }},
   addNotification,
-  fetchWorkflow,
+  fetchWorkflowWithGroupNames,
   updateWorkflow,
   postMethod,
   isFetching
@@ -35,7 +35,7 @@ const EditWorkflowStagesModal = ({
   };
 
   useEffect(() => {
-    fetchWorkflow(id).then((result) => setValues(initialValues(result.value)));
+    fetchWorkflowWithGroupNames(id).then((result) => setValues(initialValues(result.value)));
   }, []);
 
   const onSave = () => {
@@ -108,7 +108,7 @@ EditWorkflowStagesModal.propTypes = {
   addWorkflow: PropTypes.func.isRequired,
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
-  fetchWorkflow: PropTypes.func.isRequired,
+  fetchWorkflowWithGroupNames: PropTypes.func.isRequired,
   fetchRbacGroups: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
@@ -129,7 +129,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchWorkflow,
+  fetchWorkflowWithGroupNames,
   fetchRbacGroups
 }, dispatch);
 

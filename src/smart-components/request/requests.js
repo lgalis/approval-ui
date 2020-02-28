@@ -30,9 +30,9 @@ const columns = [{
 ];
 
 const debouncedFilter = asyncDebounce(
-  (filter, dispatch, filteringCallback, meta = defaultSettings) => {
+  (filter, dispatch, filteringCallback, persona, meta = defaultSettings) => {
     filteringCallback(true);
-    dispatch(fetchRequests(filter, meta)).then(() =>
+    dispatch(fetchRequests(filter, persona, meta)).then(() =>
       filteringCallback(false)
     );
   },
@@ -67,12 +67,15 @@ const Requests = () => {
     ({ requestReducer: { requests }}) => requests
   );
 
+  const approvalAdmin = useSelector(
+    ({ rolesReducer: { approvalAdmin }}) => approvalAdmin);
+
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     dispatch(
-      fetchRequests(filterValue, defaultSettings)
+      fetchRequests(filterValue, defaultSettings, approvalAdmin ? 'approval/admin' : undefined)
     ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
     scrollToTop();
   }, []);
@@ -87,7 +90,8 @@ const Requests = () => {
       {
         ...meta,
         offset: 0
-      }
+      },
+      approvalAdmin ? 'approval/admin' : undefined
     );
   };
 
@@ -120,7 +124,7 @@ const Requests = () => {
 
   const handlePagination = (_apiProps, pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchRequests(filterValue, pagination))
+    dispatch(fetchRequests(filterValue, pagination, approvalAdmin ? 'approval/admin' : undefined))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -135,7 +139,7 @@ const Requests = () => {
       <Fragment>
         <TopToolbar>
           <TopToolbarTitle title="Approval"/>
-          <AppTabs tabItems={ tabItems }/>
+          { approvalAdmin && <AppTabs tabItems={ tabItems } /> }
         </TopToolbar>
         <TableToolbarView
           data={ data }
