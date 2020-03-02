@@ -24,6 +24,7 @@ const EditWorkflowInfoModal = ({
 }) => {
   const [ formData, setFormData ] = useState({});
   const [ initialValue, setInitialValue ] = useState({});
+  const [ isValid, setIsValid ] = useState(true);
 
   const handleChange = data => setFormData({ ...formData, ...data });
 
@@ -31,17 +32,8 @@ const EditWorkflowInfoModal = ({
     fetchWorkflow(id).then((data) => { setFormData({ ...formData, ...data.value }); setInitialValue({ ...data.value });});
   }, []);
 
-  const isSequenceValid = () =>
-    formData.sequence && formData.sequence >= 0;
-
-  const isInfoValid = () =>
-    formData.name && formData.name.length > 0;
-
-  const formValid = () =>(editType === 'sequence' ?
-    isSequenceValid() : isInfoValid());
-
   const onSave = () => {
-    if (!formValid()) {return;}
+    if (!isValid) {return;}
 
     const { name, description, sequence } = formData;
     const workflowData = { id, name, description, sequence };
@@ -76,11 +68,14 @@ const EditWorkflowInfoModal = ({
             { !isFetching && (editType === 'info' ?
               <WorkflowInfoForm formData={ formData } initialValue={ initialValue }
                 handleChange={ handleChange }
-                isValid={ isInfoValid }
+                isValid={ isValid }
+                setIsValid={ setIsValid }
                 title={ `Make any changes to approval process ${workflow.name}` }/> :
               <WorkflowSequenceForm formData={ formData }
+                initialValue={ initialValue }
                 handleChange={ handleChange }
-                isValid={ isSequenceValid }
+                isValid={ isValid }
+                setIsValid={ setIsValid }
                 title={ `Set the sequence for the approval process ${workflow.name}` }/>
             ) }
           </FormGroup>
@@ -94,7 +89,6 @@ const EditWorkflowInfoModal = ({
                   id="save-edit-workflow-info"
                   variant="primary"
                   type="submit"
-                  validated={ !isFetching && formValid(formData) }
                   onClick={ onSave }>Save</Button>
               </SplitItem>
               <SplitItem>

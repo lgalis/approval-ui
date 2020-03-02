@@ -108,20 +108,29 @@ describe('<AddWorkflow />', () => {
   it('should travers over all wizard pages and call onSave function', async(done) => {
     expect.assertions(2);
     const store = mockStore(initialState);
-
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=Test3&limit=50&offset=0`,
+      mockOnce({ body: { data: [{ id: '123' }]}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/templates`, mockOnce({ body: { data: [{ id: '123' }]}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
     apiClientMock.post(`${APPROVAL_API_BASE}/templates/123/workflows`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual({ group_refs: [ '1' ]});
+      expect(JSON.parse(req.body())).toEqual({ name: 'Test3', group_refs: [ '1' ]});
       done();
       return res.status(200);
     }));
 
     const wrapper = mount(
       <ComponentWrapper store={ store }>
-        <Route path="/workflows/add-workflow/" render={ () => <AddWorkflow { ...initialProps } formData={ { wfGroups: [{}]} } /> } />
+        <Route path="/workflows/add-workflow/" render={ () => <AddWorkflow { ...initialProps } formData={ { name: 'Test1', wfGroups: [{}]} } /> } />
       </ComponentWrapper>
     );
 
+    await act(async() => {
+      //wrapper.find('input').simulate('change', { target: { name: 'Test2' }});
+      const input = wrapper.find('input').at(0);
+      input.instance().value = 'Test3';
+      input.simulate('change');
+    });
+    wrapper.update();
     wrapper.find('button').at(1).simulate('click');
     wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
     setImmediate(async() => {
