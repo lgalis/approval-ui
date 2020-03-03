@@ -9,8 +9,13 @@ import {
   Title
 } from '@patternfly/react-core';
 
-const WorkflowSequence = ({ formData, handleChange, isValid, title = undefined }) => {
+const WorkflowSequence = ({ formData, handleChange, isValid, setIsValid, title = undefined }) => {
   const { sequence } = formData;
+
+  const handleSequenceChange = (sequence) => {
+    setIsValid(sequence >= 0);
+    handleChange({ sequence });
+  };
 
   return (
     <Fragment>
@@ -24,18 +29,18 @@ const WorkflowSequence = ({ formData, handleChange, isValid, title = undefined }
               label="Enter sequence"
               isRequired
               fieldId="workflow-sequence"
-              isValid={ isValid() }
+              isValid={ isValid }
               helperTextInvalid={ 'Enter a positive number' }
             >
               <TextInput
                 isRequired
                 type="number"
                 id="workflow-sequence"
-                isValid={ isValid() }
+                isValid={ isValid }
                 name="workflow-sequence"
                 aria-describedby="workflow-name"
                 value={ sequence }
-                onChange={ (_, event) => handleChange({ sequence: event.currentTarget.value }) }
+                onChange={ (_, event) => handleSequenceChange(event.currentTarget.value) }
               />
             </FormGroup>
           </Form>
@@ -50,7 +55,8 @@ WorkflowSequence.propTypes = {
   title: PropTypes.string,
   formData: PropTypes.object,
   handleChange: PropTypes.func.isRequired,
-  isValid: PropTypes.func.isRequired
+  setIsValid: PropTypes.func.isRequired,
+  isValid: PropTypes.bool
 };
 
 export default WorkflowSequence;

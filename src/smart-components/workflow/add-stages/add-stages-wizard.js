@@ -18,18 +18,18 @@ const AddWorkflow = ({
   rbacGroups
 }) => {
   const [ formData, setValues ] = useState({});
+  const [ isValid, setIsValid ] = useState(formData.name !== undefined && formData.name.length > 0);
 
   const handleChange = data => {
     setValues({ ...formData,  ...data });
   };
 
-  const isInfoValid = () =>
-    formData.name && formData.name.length > 0;
-
   const steps = [
-    { name: 'General information', component: <WorkflowInfoForm formData={ formData }
-      handleChange={ handleChange }
-      isValid={ isInfoValid }/> },
+    { name: 'General information',
+      enableNext: isValid && formData.name && formData.name.length > 0,
+      component: <WorkflowInfoForm formData={ formData }
+        handleChange={ handleChange }
+        isValid={ isValid } setIsValid={ setIsValid }/> },
     { name: 'Set groups', component: <SetStages formData={ formData }
       handleChange={ handleChange } options={ rbacGroups } /> },
     { name: 'Review', component: <SummaryContent formData={ formData }

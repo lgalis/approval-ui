@@ -106,6 +106,11 @@ describe('<EditWorkflowInfoModal />', () => {
     let wrapper;
 
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=name&limit=50&offset=0`,
+      mockOnce({ body: { data: [{
+        id: '123',
+        name: 'foo'
+      }]}}));
     apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/123`, mockOnce((req, res) => {
       expect(JSON.parse(req.body())).toEqual({
         id: '123',

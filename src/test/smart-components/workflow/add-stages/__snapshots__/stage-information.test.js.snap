@@ -9,24 +9,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
     }
   }
   handleChange={[MockFunction]}
-  isValid={
-    [MockFunction] {
-      "calls": Array [
-        Array [],
-        Array [],
-      ],
-      "results": Array [
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-      ],
-    }
-  }
+  isValid={[MockFunction]}
   title="Set stage info test"
 >
   <Stack
@@ -65,6 +48,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                 fieldId="workflow-name"
                 helperTextInvalid="Enter a name for the approval process"
                 isRequired={true}
+                isValid={[MockFunction]}
                 label="Approval process name"
               >
                 <div
@@ -90,6 +74,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                     aria-describedby="workflow-name"
                     id="workflow-name"
                     isRequired={true}
+                    isValid={[MockFunction]}
                     name="workflow-name"
                     onChange={[Function]}
                     type="text"
@@ -104,7 +89,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                       isDisabled={false}
                       isReadOnly={false}
                       isRequired={true}
-                      isValid={true}
+                      isValid={[MockFunction]}
                       name="workflow-name"
                       onChange={[Function]}
                       type="text"
