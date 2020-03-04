@@ -1,7 +1,7 @@
 import { createRows } from '../../../smart-components/workflow/workflow-table-helpers';
 import ExpandableContent from '../../../smart-components/workflow/expandable-content';
 
-describe('workflow table helpers', () => {
+describe('approval process table helpers', () => {
   it('should create rows correctly', () => {
     const data = [{
       id: '1',
@@ -17,10 +17,6 @@ describe('workflow table helpers', () => {
       sequence: '1',
       group_refs: [ 'group_refs' ],
       group_names: [ 'group_names' ]
-    }, {
-      name: 'Always approve',
-      id: 3,
-      description: 'should not be in result'
     }];
 
     const expectedData = [{

@@ -30,7 +30,7 @@ const SummaryContent = ({ formData }) => {
             <StackItem>
               <Grid gutter="md">
                 <GridItem span={ 2 }>
-                  <Text className="data-table-detail heading" component={ TextVariants.h5 }>Workflow name</Text>
+                  <Text className="data-table-detail heading" component={ TextVariants.h5 }>Name</Text>
                 </GridItem>
                 <GridItem span={ 10 }>
                   <Text className="data-table-detail content" component={ TextVariants.p }>{ name }</Text>

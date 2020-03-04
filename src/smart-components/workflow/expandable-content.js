@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
 import { useSelector } from 'react-redux';
 import { fetchGroupName } from '../../helpers/group/group-helper';
-import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components';
+import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components/components/Skeleton';
 
 const ExpandableContent = ({ description, groupRefs, id }) => {
   const [ groupNames, setGroupNames ] = useState([]);

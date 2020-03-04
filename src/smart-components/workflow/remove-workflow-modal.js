@@ -48,8 +48,8 @@ const RemoveWorkflowModal = ({
             <FormattedMessage
               id="remove-workflow-modal"
               defaultMessage={ `Removing {count, number} {count, plural,
-              one {workflow}
-              other {workflows}
+              one {approval process}
+              other {approval processes}
             }` }
               values={ {
                 count: workflowId !== undefined ? 1 : ids.length

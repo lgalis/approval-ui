@@ -3,9 +3,7 @@ import React from 'react';
 import ExpandableContent from './expandable-content';
 
 export const createRows = (data) =>
-  data.filter(item => {
-    return (item.name !== 'Always approve');
-  }).reduce((acc,
+  data.reduce((acc,
     {
       id,
       name,

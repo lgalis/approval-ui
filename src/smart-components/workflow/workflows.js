@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
+import { SearchIcon } from '@patternfly/react-icons';
 import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows, expandWorkflow } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-stages/add-stages-wizard';
@@ -16,6 +17,7 @@ import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
+import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 
 const columns = [{
   title: 'Name',
@@ -89,7 +91,7 @@ const Workflows = () => {
   };
 
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
-    { eventKey: 1, title: 'Workflows', name: '/workflows' }];
+    { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
 
   const handlePagination = (_apiProps, pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
@@ -104,6 +106,8 @@ const Workflows = () => {
     <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType='info' { ...props }
       postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType='stages' { ...props }
+      postMethod={ handlePagination } /> }/>
+    <Route exact path="/workflows/edit-sequence/:id" render={ props => <EditWorkflowInfo editType='sequence' { ...props }
       postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/remove/:id"
       render={ props => <RemoveWorkflow { ...props }
@@ -130,7 +134,11 @@ const Workflows = () => {
         onClick: (_event, _rowId, workflow) =>
           history.push(`/workflows/edit-stages/${workflow.id}`)
       },
-
+      {
+        title: 'Edit sequence',
+        onClick: (_event, _rowId, workflow) =>
+          history.push(`/workflows/edit-sequence/${workflow.id}`)
+      },
       {
         title: 'Delete',
         style: { color: 'var(--pf-global--danger-color--100)'	},
@@ -149,9 +157,9 @@ const Workflows = () => {
       <Link id="add-workflow-link" to="/workflows/add-workflow">
         <Button
           variant="primary"
-          aria-label="Create workflow"
+          aria-label="Create approval process"
         >
-          Create workflow
+          Create approval process
         </Button>
       </Link>
     </ToolbarItem>
@@ -161,7 +169,7 @@ const Workflows = () => {
           variant="link"
           isDisabled={ !anyWorkflowsSelected }
           style={ { color: anyWorkflowsSelected ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
-          aria-label="Delete Workflow"
+          aria-label="Delete approval process"
         >
           Delete
         </Button>
@@ -188,8 +196,8 @@ const Workflows = () => {
         fetchData={ handlePagination }
         routes={ routes }
         actionResolver={ actionResolver }
-        titlePlural="workflows"
-        titleSingular="workflow"
+        titlePlural="approval processes"
+        titleSingular="approval process"
         pagination={ meta }
         setCheckedItems={ setCheckedItems }
         toolbarButtons={ toolbarButtons }
@@ -197,6 +205,24 @@ const Workflows = () => {
         onFilterChange={ handleFilterChange }
         isLoading={ isFetching || isFiltering }
         onCollapse={ onCollapse }
+        renderEmptyState={ () => (
+          <TableEmptyState
+            title={ filterValue === '' ? 'No approval processes' : 'No results found' }
+            Icon={ SearchIcon }
+            PrimaryAction={ () =>
+              filterValue !== '' ? (
+                <Button onClick={ () => handleFilterChange('') } variant="link">
+                  Clear all filters
+                </Button>
+              ) : null
+            }
+            description={
+              filterValue === ''
+                ? 'No approval processes.'
+                : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
+            }
+          />
+        ) }
       />
     </Fragment>
   );

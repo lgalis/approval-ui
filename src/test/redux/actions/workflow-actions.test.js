@@ -24,7 +24,7 @@ import {
   APPROVAL_API_BASE
 } from '../../../utilities/constants';
 
-describe('Workflow actions', () => {
+describe('Approval process actions', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
 
@@ -32,7 +32,7 @@ describe('Workflow actions', () => {
     mockStore = configureStore(middlewares);
   });
 
-  it('should dispatch correct actions after fetching workflows', () => {
+  it('should dispatch correct actions after fetching approval processes', () => {
     const store = mockStore({
       workflowReducer: {
         isLoading: false
@@ -63,7 +63,7 @@ describe('Workflow actions', () => {
     });
   });
 
-  it('should dispatch error notification if fetch workflows fails', () => {
+  it('should dispatch error notification if fetch approval processes fails', () => {
     const store = mockStore({
       workflowReducer: {
         isLoading: false
@@ -92,7 +92,7 @@ describe('Workflow actions', () => {
     });
   });
 
-  it('should dispatch correct actions after fetching one workflow', () => {
+  it('should dispatch correct actions after fetching one approval process', () => {
     const store = mockStore({
       workflowReducer: {
         isLoading: false
@@ -140,10 +140,10 @@ describe('Workflow actions', () => {
     }, {
       type: ADD_NOTIFICATION,
       payload: {
-        description: 'The workflow was added successfully.',
+        description: 'The approval process was added successfully.',
         dismissDelay: 5000,
         dismissable: true,
-        title: 'Success adding workflow',
+        title: 'Success adding approval process',
         variant: 'success'
       }
     }, {
@@ -172,10 +172,10 @@ describe('Workflow actions', () => {
     }, {
       type: ADD_NOTIFICATION,
       payload: {
-        description: 'The workflow was not added successfuly.',
+        description: 'The approval process was not added successfuly.',
         dismissDelay: 5000,
         dismissable: true,
-        title: 'Failed adding workflow',
+        title: 'Failed adding approval process',
         variant: 'danger'
       }
     }, {
@@ -204,10 +204,10 @@ describe('Workflow actions', () => {
     }, {
       type: ADD_NOTIFICATION,
       payload: {
-        description: 'The workflow was updated successfully.',
+        description: 'The approval process was updated successfully.',
         dismissDelay: 5000,
         dismissable: true,
-        title: 'Success updating workflow',
+        title: 'Success updating approval process',
         variant: 'success'
       }
     }, {
@@ -235,10 +235,10 @@ describe('Workflow actions', () => {
     }, {
       type: ADD_NOTIFICATION,
       payload: {
-        description: 'The workflow was not updated successfuly.',
+        description: 'The approval process was not updated successfuly.',
         dismissDelay: 5000,
         dismissable: true,
-        title: 'Failed updating workflow',
+        title: 'Failed updating approval process',
         variant: 'danger'
       }
     }, {
@@ -264,10 +264,10 @@ describe('Workflow actions', () => {
     }, {
       type: ADD_NOTIFICATION,
       payload: {
-        description: 'The workflow was removed successfully.',
+        description: 'The approval process was removed successfully.',
         dismissDelay: 5000,
         dismissable: true,
-        title: 'Success removing workflow',
+        title: 'Success removing approval process',
         variant: 'success'
       }
     }, expect.objectContaining({
@@ -316,10 +316,10 @@ describe('Workflow actions', () => {
     }, {
       type: ADD_NOTIFICATION,
       payload: {
-        description: 'The selected workflows were removed successfully.',
+        description: 'The selected approval processes were removed successfully.',
         dismissDelay: 5000,
         dismissable: true,
-        title: 'Success removing workflows',
+        title: 'Success removing approval processes',
         variant: 'success'
       }
     }, expect.objectContaining({
