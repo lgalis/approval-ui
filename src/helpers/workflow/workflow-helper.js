@@ -14,24 +14,7 @@ export function fetchWorkflows(filter = '', pagination = defaultSettings) {
   );
 }
 
-export async function fetchWorkflowsWithGroups({ appName = undefined,
-  objectId = undefined,
-  objectType = undefined,
-  limit = 10,
-  offset = 0,
-  filter = '' }) {
-  const wfData = await workflowApi.listWorkflows(appName, objectId, objectType, limit, offset, filter);
-  const workflows = wfData.data;
-  return Promise.all(workflows.map(async wf => {
-    const wfWithGroups = await fetchGroupNames(wf.group_refs);
-    return { ...wf, group_names: wfWithGroups };
-  })).then(data => ({
-    ...wfData,
-    data
-  }));
-}
-
-export async function fetchWorkflowWithGroups(id) {
+export async function fetchWorkflowWithGroupNames(id) {
   const wfData = await workflowApi.showWorkflow(id);
   const  wfWithGroups = await fetchGroupNames(wfData.group_refs);
   return { ...wfData, group_names: wfWithGroups };
@@ -39,6 +22,10 @@ export async function fetchWorkflowWithGroups(id) {
 
 export async function fetchWorkflow(id) {
   return await workflowApi.showWorkflow(id);
+}
+
+export function fetchWorkflowByName(name) {
+  return fetchWorkflows(name);
 }
 
 export function updateWorkflow(data) {

@@ -12,6 +12,7 @@ describe('<TableToolbarView />', () => {
   beforeEach(() => {
     initialProps = {
       createRows: () => [],
+      rows: [],
       request: () => new Promise(resolve => resolve([])),
       columns: [],
       fetchData: () => new Promise(resolve => resolve([])),
@@ -24,11 +25,24 @@ describe('<TableToolbarView />', () => {
     };
   });
 
-  it('should mount correctly', async done => {
+  it('should display the table', async done => {
     let wrapper;
+    const createRows = () => [{
+      id: 1,
+      cells: [ 'name', 'description' ]
+    }];
 
     await act(async() => {
-      wrapper = mount(<TableToolbarView { ...initialProps } />);
+      wrapper = mount(
+        <TableToolbarView
+          { ...initialProps }
+          columns={ [{ title: 'Name', cellFormatters: [ expandable ]}, 'Description' ] }
+          createRows={ createRows }
+        />);
+    });
+
+    act(() => {
+      wrapper.update();
     });
     expect(wrapper.find(Table)).toHaveLength(1);
     expect(wrapper.find(TableHeader)).toHaveLength(1);
@@ -36,11 +50,29 @@ describe('<TableToolbarView />', () => {
     done();
   });
 
+  it('should display the empty state', async done => {
+    let wrapper;
+    const renderEmptyState = jest.fn();
+    await act(async() => {
+      wrapper = mount(<TableToolbarView { ...initialProps } isLoading={ false } renderEmptyState={ renderEmptyState } />);
+    });
+
+    act(() => {
+      wrapper.update();
+    });
+
+    expect(renderEmptyState).toHaveBeenCalled();
+    expect(wrapper.find(Table)).toHaveLength(0);
+    expect(wrapper.find(TableHeader)).toHaveLength(0);
+    expect(wrapper.find(TableBody)).toHaveLength(0);
+    done();
+  });
+
   it('should mount correctly in loading state', async done => {
     let wrapper;
 
     await act(async() => {
-      wrapper = mount(<TableToolbarView { ...initialProps } isLoading />);
+      wrapper = mount(<TableToolbarView { ...initialProps } isLoading={ true } />);
     });
     expect(wrapper.find(Table)).toHaveLength(0);
     expect(wrapper.find(DataListLoader)).toHaveLength(1);
@@ -156,7 +188,7 @@ describe('<TableToolbarView />', () => {
       wrapper.update();
     });
     expandableRow.update();
-    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain pf-m-expanded');
+    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain');
     done();
   });
 
@@ -196,7 +228,7 @@ describe('<TableToolbarView />', () => {
     wrapper.update();
 
     expandableRow.update();
-    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain pf-m-expanded');
+    expect(wrapper.find('button.pf-c-button').last().props().className).toEqual('pf-c-button pf-m-plain');
   });
 
   it('should send async requests on pagination', async done => {

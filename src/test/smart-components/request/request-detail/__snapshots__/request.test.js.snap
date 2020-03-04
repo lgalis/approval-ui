@@ -33,6 +33,7 @@ exports[`<Request /> should render correctly 1`] = `
     <li
       aria-labelledby="check-request-111"
       className="pf-c-data-list__item"
+      id=""
     >
       <DataListItemRow
         key=".0"
@@ -149,7 +150,7 @@ exports[`<Request /> should render correctly 1`] = `
               Array [
                 <DataListCell>
                   <span
-                    id="111"
+                    id="111-name"
                   >
                     NaN. undefined
                      
@@ -194,7 +195,7 @@ exports[`<Request /> should render correctly 1`] = `
                   className="pf-c-data-list__cell"
                 >
                   <span
-                    id="111"
+                    id="111-name"
                   >
                     NaN. undefined
                      

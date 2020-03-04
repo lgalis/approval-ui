@@ -7,6 +7,7 @@ describe('Redux store', () => {
       groupReducer: expect.any(Object),
       requestReducer: expect.any(Object),
       workflowReducer: expect.any(Object),
+      rolesReducer: expect.any(Object),
       notifications: []
     };
     expect(approvalStore.dispatch).toBeInstanceOf(Function);

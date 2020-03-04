@@ -64,7 +64,7 @@ describe('<ActionModal />', () => {
     wrapper.update();
 
     await act(async() => {
-      wrapper.find('button').last().simulate('click');
+      wrapper.find('form').simulate('submit');
     });
     wrapper.update();
 
