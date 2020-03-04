@@ -11,8 +11,17 @@ import groupReducer, { groupsInitialState } from '../redux/reducers/group-reduce
 import rolesReducer, { rolesInitialState } from '../redux/reducers/roles-reducer';
 
 const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware(), notificationsMiddleware({
-  errorTitleKey: [ 'message' ],
-  errorDescriptionKey: [ 'errors', 'stack' ]
+  errorTitleKey: [ 'errors', 'message', 'statusText' ],
+  errorDescriptionKey: [
+    'data.errors[0].detail',
+    'data.errors',
+    'data.error',
+    'data.message',
+    'response.body.errors',
+    'data',
+    'errorMessage',
+    'stack'
+  ]
 }), reduxLogger ]);
 
 registry.register({

@@ -45,9 +45,11 @@ exports[`<AddWorkflow /> should post a warning message on Cancel 1`] = `
     }
     initialIndex={1}
   >
-    <withRouter(Connect(AddWorkflow))
+    <AddWorkflow
       handleChange={[MockFunction]}
+      initialValues={Object {}}
       postMethod={[MockFunction]}
+      rbacGroups={Array []}
       uuid="123"
     />
   </MemoryRouter>

@@ -168,16 +168,19 @@ describe('Approval process actions', () => {
 
     const expectedActions = [{
       type: `${ADD_WORKFLOW}_PENDING`,
-      meta: expect.any(Object)
-    }, {
+      meta: { notifications: {
+        fulfilled: {
+          description: 'The approval process was added successfully.',
+          title: 'Success adding approval process',
+          variant: 'success'
+        }
+      }}}, {
       type: ADD_NOTIFICATION,
-      payload: {
-        description: 'The approval process was not added successfuly.',
-        dismissDelay: 5000,
+      payload: expect.objectContaining({
         dismissable: true,
-        title: 'Failed adding approval process',
+        title: 'Error',
         variant: 'danger'
-      }
+      })
     }, {
       type: `${ADD_WORKFLOW}_REJECTED`,
       meta: expect.any(Object),
@@ -235,10 +238,8 @@ describe('Approval process actions', () => {
     }, {
       type: ADD_NOTIFICATION,
       payload: {
-        description: 'The approval process was not updated successfuly.',
-        dismissDelay: 5000,
         dismissable: true,
-        title: 'Failed updating approval process',
+        title: 'Error',
         variant: 'danger'
       }
     }, {

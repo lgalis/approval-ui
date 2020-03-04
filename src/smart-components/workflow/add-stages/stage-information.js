@@ -42,7 +42,6 @@ const WorkflowInfoForm = ({ formData, initialValue, handleChange, isValid, setIs
       setError(undefined);
       setIsValid(true);
     }
-    console.log('DEBUG - name, isValid, error', name, isValid, error);
     handleChange({ name });
   };
 
