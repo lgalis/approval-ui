@@ -25,11 +25,6 @@ export const addWorkflow = (workflowData) => ({
         variant: 'success',
         title: 'Success adding approval process',
         description: 'The approval process was added successfully.'
-      },
-      rejected: {
-        variant: 'danger',
-        title: 'Failed adding approval process',
-        description: 'The approval process was not added successfuly.'
       }
     }
   }
@@ -44,11 +39,6 @@ export const updateWorkflow = (workflowData) => ({
         variant: 'success',
         title: 'Success updating approval process',
         description: 'The approval process was updated successfully.'
-      },
-      rejected: {
-        variant: 'danger',
-        title: 'Failed updating approval process',
-        description: 'The approval process was not updated successfuly.'
       }
     }
   }
