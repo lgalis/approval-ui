@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../utilities/constants';
-import { GroupApi } from '@redhat-cloud-services/rbac-client';
+import { GroupApi, RoleApi } from '@redhat-cloud-services/rbac-client';
 import { WorkflowApi, ActionApi, RequestApi, TemplateApi } from '@redhat-cloud-services/approval-client';
 
 const axiosInstance = axios.create();
@@ -27,6 +27,7 @@ const requestApi = new RequestApi(undefined, APPROVAL_API_BASE, axiosInstance);
 const templateApi = new TemplateApi(undefined, APPROVAL_API_BASE, axiosInstance);
 
 const rbacGroupApi = new GroupApi(undefined, RBAC_API_BASE, axiosInstance);
+const rbacRoleApi = new RoleApi(undefined, RBAC_API_BASE, axiosInstance);
 
 // Approval APIs
 export function getRequestApi() {
@@ -51,6 +52,10 @@ export function getRbacGroupApi() {
 
 export function getAxiosInstance() {
   return axiosInstance;
+}
+
+export function getRbacRoleApi() {
+  return rbacRoleApi;
 }
 
 const grapqlInstance = axios.create();

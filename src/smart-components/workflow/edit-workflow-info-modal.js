@@ -6,8 +6,9 @@ import { withRouter } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
-import { WorkflowStageLoader } from '../../presentational-components/shared/loader-placeholders';
-import StageInformation from './add-stages/stage-information';
+import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
+import WorkflowInfoForm from './add-stages/stage-information';
+import WorkflowSequenceForm from './add-stages/workflow-sequence';
 import '../../App.scss';
 
 const EditWorkflowInfoModal = ({
@@ -18,46 +19,65 @@ const EditWorkflowInfoModal = ({
   updateWorkflow,
   postMethod,
   workflow,
-  isFetching
+  isFetching,
+  editType
 }) => {
   const [ formData, setFormData ] = useState({});
+  const [ initialValue, setInitialValue ] = useState({});
+  const [ isValid, setIsValid ] = useState(true);
 
   const handleChange = data => setFormData({ ...formData, ...data });
 
   useEffect(() => {
-    fetchWorkflow(id).then((data) => setFormData({ ...formData, ...data.value }));
+    fetchWorkflow(id).then((data) => { setFormData({ ...formData, ...data.value }); setInitialValue({ ...data.value });});
   }, []);
 
   const onSave = () => {
-    const { name, description } = formData;
-    const workflowData = { id, name, description };
+    if (!isValid) {return;}
+
+    const { name, description, sequence } = formData;
+    const workflowData = { id, name, description, sequence };
     updateWorkflow(workflowData).then(() => postMethod()).then(() => push('/workflows'));
   };
 
   const onCancel = () => {
+    const { title, description } =
+        editType === 'sequence' ? { title: `Edit approval process's sequence`,
+          description: `Edit approval process's sequence was cancelled by the user.` } :
+          { title: `Edit approval process's information`,
+            description: `Edit approval process's information was cancelled by the user.` };
     addNotification({
       variant: 'warning',
-      title: `Edit workflow's groups`,
+      title,
       dismissable: true,
-      description: `Edit workflow's groups was cancelled by the user.`
+      description
     });
     push('/workflows');
   };
 
   return (
     <Modal
-      title={ `Edit workflow's information` }
+      title={ editType === 'sequence' ? 'Edit sequence' : 'Edit information' }
       width={ '40%' }
       isOpen
       onClose={ onCancel }>
       <Stack gutter="md">
         <StackItem>
-          <FormGroup fieldId="edito-workflow-info-modal-info">
-            { isFetching && <WorkflowStageLoader/> }
-            { !isFetching && (
-              <StageInformation formData={ formData }
+          <FormGroup fieldId="edit-workflow-info-modal-info">
+            { isFetching && <WorkflowInfoFormLoader/> }
+            { !isFetching && (editType === 'info' ?
+              <WorkflowInfoForm formData={ formData } initialValue={ initialValue }
                 handleChange={ handleChange }
-                title={ `Make any changes to workflow ${workflow.name}` }/>) }
+                isValid={ isValid }
+                setIsValid={ setIsValid }
+                title={ `Make any changes to approval process ${workflow.name}` }/> :
+              <WorkflowSequenceForm formData={ formData }
+                initialValue={ initialValue }
+                handleChange={ handleChange }
+                isValid={ isValid }
+                setIsValid={ setIsValid }
+                title={ `Set the sequence for the approval process ${workflow.name}` }/>
+            ) }
           </FormGroup>
         </StackItem>
         <StackItem>
@@ -69,7 +89,6 @@ const EditWorkflowInfoModal = ({
                   id="save-edit-workflow-info"
                   variant="primary"
                   type="submit"
-                  isDisabled={ isFetching }
                   onClick={ onSave }>Save</Button>
               </SplitItem>
               <SplitItem>
@@ -89,7 +108,8 @@ const EditWorkflowInfoModal = ({
 };
 
 EditWorkflowInfoModal.defaultProps = {
-  isFetching: false
+  isFetching: false,
+  editType: 'info'
 };
 
 EditWorkflowInfoModal.propTypes = {

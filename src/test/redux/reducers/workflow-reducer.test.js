@@ -7,7 +7,7 @@ import {
   EXPAND_WORKFLOW
 } from '../../../redux/action-types';
 
-describe('Workflow reducer', () => {
+describe('Approval process reducer', () => {
   let initialState;
   const reducer = callReducer(workflowReducer);
 
@@ -20,7 +20,7 @@ describe('Workflow reducer', () => {
     expect(reducer(initialState, { type: `${FETCH_WORKFLOWS}_PENDING` })).toEqual(expectedState);
   });
 
-  it('should set workflows data and set loading state to false', () => {
+  it('should set approval processes data and set loading state to false', () => {
     const payload = { data: 'Foo' };
     const expectedState = { isLoading: false, workflows: payload };
     expect(reducer(initialState, { type: `${FETCH_WORKFLOWS}_FULFILLED`, payload })).toEqual(expectedState);
@@ -31,12 +31,12 @@ describe('Workflow reducer', () => {
     expect(reducer({ ...workflowsInitialState }, { type: `${FETCH_WORKFLOW}_PENDING` })).toEqual(expectedState);
   });
 
-  it('should select workflow and set record loading state to true', () => {
+  it('should select approval process and set record loading state to true', () => {
     const expectedState = { ... workflowsInitialState, isRecordLoading: false, workflow: 'my workflow' };
     expect(reducer({ ...workflowsInitialState }, { type: `${FETCH_WORKFLOW}_FULFILLED`, payload: 'my workflow' })).toEqual(expectedState);
   });
 
-  it('should set expanded workflow', () => {
+  it('should set expanded approval process', () => {
     const id = '54787';
     initialState = { expandedWorkflows: [ '123' ]};
     const expectedState = { expandedWorkflows: [ '123', id ]};

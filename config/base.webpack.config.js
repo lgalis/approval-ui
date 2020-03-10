@@ -1,5 +1,3 @@
-/* global require, module, __dirname */
-
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const config = require('./webpack.common.js');
 
@@ -9,25 +7,15 @@ const webpackConfig = {
   optimization: {
     usedExports: true,
     minimize: process.env.NODE_ENV === 'production',
-    splitChunks: {
-      cacheGroups: {
-        vendors: false,
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendor',
-          chunks: 'initial'
-        }
-      }
-    }
   },
   entry: {
     App: config.paths.entry
   },
   output: {
     filename: 'js/[name].js',
+    chunkFilename: 'js/[name].js',
     path: config.paths.public,
-    publicPath: config.paths.publicPath,
-    chunkFilename: 'js/[name].js'
+    publicPath: config.paths.publicPath
   },
   module: {
     rules: [{

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { Fragment, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
@@ -7,6 +8,7 @@ import FilterToolbar from '../../presentational-components/shared/filter-toolbar
 import { Section } from '@redhat-cloud-services/frontend-components';
 import { DataListLoader } from './loader-placeholders';
 import AsyncPagination from '../../smart-components/common/async-pagination';
+import BottomPaginationContainer from '../../presentational-components/shared/bottom-pagination-container';
 
 /**
  * Need to optimize this component
@@ -30,7 +32,8 @@ export const TableToolbarView = ({
   filterValue,
   onFilterChange,
   isLoading,
-  onCollapse
+  onCollapse,
+  renderEmptyState
 }) => {
   const [ rows, setRows ] = useState([]);
 
@@ -101,21 +104,36 @@ export const TableToolbarView = ({
     <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
       { routes() }
       { renderToolbar(isLoading) }
-      { isLoading ? <DataListLoader/> :
-        <Table
-          aria-label={ `${titlePlural} table` }
-          onCollapse={ onCollapseInternal }
-          rows={ rows }
-          cells={ columns }
-          onSelect={ isSelectable && selectRow }
-          actionResolver={ actionResolver }
-          className="table-fix"
-        >
-          <TableHeader />
-          <TableBody />
-        </Table> }
-    </Section>
-  );
+      { isLoading && <DataListLoader/> }
+      { !isLoading && rows.length === 0 ? (
+        renderEmptyState()
+      ) :
+        <Fragment>
+          { !isLoading &&
+          <Table
+            aria-label={ `${titlePlural} table` }
+            onCollapse={ onCollapseInternal }
+            rows={ rows }
+            cells={ columns }
+            onSelect={ isSelectable && selectRow }
+            actionResolver={ actionResolver }
+            className="table-fix"
+          >
+            <TableHeader />
+            <TableBody/>
+          </Table> }
+          { pagination.count > 0 &&
+            <BottomPaginationContainer>
+              <AsyncPagination
+                dropDirection="up"
+                meta={ pagination }
+                apiRequest={ fetchData }
+              />
+            </BottomPaginationContainer>
+          }
+        </Fragment>
+      }
+    </Section>);
 };
 
 TableToolbarView.propTypes = {
@@ -138,7 +156,8 @@ TableToolbarView.propTypes = {
   filterValue: propTypes.string,
   onFilterChange: propTypes.func,
   isLoading: propTypes.bool,
-  onCollapse: propTypes.func
+  onCollapse: propTypes.func,
+  renderEmptyState: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
@@ -147,5 +166,6 @@ TableToolbarView.defaultProps = {
   pagination: defaultSettings,
   toolbarButtons: () => null,
   isSelectable: null,
-  routes: () => null
+  routes: () => null,
+  renderEmptyState: () => null
 };

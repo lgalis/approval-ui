@@ -117,7 +117,7 @@ describe('<Workflows />', () => {
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('a.pf-c-dropdown__menu-item').first().simulate('click');
+      wrapper.find('div.pf-c-dropdown__menu-item').first().simulate('click');
     });
 
     wrapper.update();
@@ -126,7 +126,7 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should redirect to Edit workflow groups page', async done => {
+  it('should redirect to Edit approval process groups page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
 
@@ -156,7 +156,7 @@ describe('<Workflows />', () => {
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('a.pf-c-dropdown__menu-item').at(1).simulate('click');
+      wrapper.find('div.pf-c-dropdown__menu-item').at(1).simulate('click');
     });
 
     wrapper.update();
@@ -165,7 +165,46 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should redirect to Delete workflow page', async done => {
+  it('should redirect to Edit sequence page', async done => {
+    const store = mockStore(stateWithData);
+    let wrapper;
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
+      id: 'edit-id',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    }]}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ store }>
+          <Route path="/workflows" component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+    /**
+     * Open action drop down and click on edit info action
+     */
+    wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
+    await act(async() => {
+      wrapper.find('div.pf-c-dropdown__menu-item').at(2).simulate('click');
+    });
+
+    wrapper.update();
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-sequence/edit-id');
+    expect(wrapper.find(EditWorkflowInfoModal)).toHaveLength(1);
+    done();
+  });
+
+  it('should redirect to Delete approval process page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
 
@@ -195,7 +234,7 @@ describe('<Workflows />', () => {
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('a.pf-c-dropdown__menu-item').at(2).simulate('click');
+      wrapper.find('div.pf-c-dropdown__menu-item').at(3).simulate('click');
     });
 
     wrapper.update();
@@ -204,7 +243,7 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should redirect to add workflow page', async done => {
+  it('should redirect to add approval process page', async done => {
     const store = mockStore(stateWithData);
     let wrapper;
 
@@ -230,7 +269,7 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     /**
-     * Click on add workflow link
+     * Click on add approval process link
      */
     wrapper.find('Link#add-workflow-link').simulate('click', { button: 0 });
 
@@ -274,7 +313,7 @@ describe('<Workflows />', () => {
     done();
   });
 
-  it('should expand workflow', async () => {
+  it('should expand approval process', async () => {
     const id = 'edit-id';
 
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{

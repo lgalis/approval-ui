@@ -8,6 +8,7 @@ import thunk from 'redux-thunk';
 import requestReducer, { requestsInitialState } from '../redux/reducers/request-reducer';
 import workflowReducer, { workflowsInitialState } from '../redux/reducers/workflow-reducer';
 import groupReducer, { groupsInitialState } from '../redux/reducers/group-reducer';
+import rolesReducer, { rolesInitialState } from '../redux/reducers/roles-reducer';
 
 const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware(), notificationsMiddleware({
   errorTitleKey: [ 'message' ],
@@ -18,6 +19,7 @@ registry.register({
   requestReducer: applyReducerHash(requestReducer, requestsInitialState),
   workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState),
   groupReducer: applyReducerHash(groupReducer, groupsInitialState),
+  rolesReducer: applyReducerHash(rolesReducer, rolesInitialState),
   notifications
 });
 

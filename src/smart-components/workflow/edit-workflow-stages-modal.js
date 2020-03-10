@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
+import { addWorkflow, updateWorkflow, fetchWorkflowWithGroupNames } from '../../redux/actions/workflow-actions';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
-import { WorkflowStageLoader } from '../../presentational-components/shared/loader-placeholders';
+import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetStages from './add-stages/set-stages';
 import '../../App.scss';
 
@@ -15,7 +15,7 @@ const EditWorkflowStagesModal = ({
   history: { push },
   match: { params: { id }},
   addNotification,
-  fetchWorkflow,
+  fetchWorkflowWithGroupNames,
   updateWorkflow,
   postMethod,
   isFetching
@@ -35,7 +35,7 @@ const EditWorkflowStagesModal = ({
   };
 
   useEffect(() => {
-    fetchWorkflow(id).then((result) => setValues(initialValues(result.value)));
+    fetchWorkflowWithGroupNames(id).then((result) => setValues(initialValues(result.value)));
   }, []);
 
   const onSave = () => {
@@ -47,23 +47,23 @@ const EditWorkflowStagesModal = ({
   const onCancel = () => {
     addNotification({
       variant: 'warning',
-      title: `Edit workflow's groups`,
+      title: `Edit approval process's groups`,
       dismissable: true,
-      description: `Edit workflow's stages was cancelled by the user.`
+      description: `Edit approval process's groups was cancelled by the user.`
     });
     push('/workflows');
   };
 
   return (
     <Modal
-      title={ `Edit workflow's groups` }
+      title={ `Edit approval process's groups` }
       width={ '40%' }
       isOpen
       onClose={ onCancel }>
       <Stack gutter="md">
         <StackItem>
           <FormGroup fieldId="workflow-stages-formgroup">
-            { isFetching && <WorkflowStageLoader/> }
+            { isFetching && <WorkflowInfoFormLoader/> }
             { !isFetching && (
               <StackItem className="stages-modal">
                 <SetStages className="stages-modal" formData={ formData }
@@ -108,7 +108,7 @@ EditWorkflowStagesModal.propTypes = {
   addWorkflow: PropTypes.func.isRequired,
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
-  fetchWorkflow: PropTypes.func.isRequired,
+  fetchWorkflowWithGroupNames: PropTypes.func.isRequired,
   fetchRbacGroups: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
@@ -129,7 +129,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchWorkflow,
+  fetchWorkflowWithGroupNames,
   fetchRbacGroups
 }, dispatch);
 

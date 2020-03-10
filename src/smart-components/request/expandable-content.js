@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button, Bullseye } from '@patternfly/react-core';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 import { fetchRequestContent } from '../../helpers/request/request-helper';
-import { Spinner } from '@redhat-cloud-services/frontend-components';
+import { Spinner } from '@redhat-cloud-services/frontend-components/components/Spinner';
 
 export const ExpandedItem = ({ title = '', detail = '' }) => (
   <TextContent>
