@@ -1,7 +1,7 @@
 import React from 'react';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/components/DateFormat';
 
-const activeStates = [ 'notified' ];
+const activeStates = [ 'notified', 'started' ];
 const APPROVAL_ADMINISTRATOR_ROLE = 'Approval Administrator';
 
 export const scrollToTop = () => document.getElementById('root').scrollTo({
