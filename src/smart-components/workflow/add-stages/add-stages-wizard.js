@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Wizard } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { addWorkflow, fetchWorkflowWithGroupNames } from '../../../redux/actions/workflow-actions';
+import { addWorkflow } from '../../../redux/actions/workflow-actions';
 import SummaryContent from './summary-content';
 import WorkflowInfoForm from './stage-information';
 import SetStages from './set-stages';
 
-const AddWorkflow = ({
-  history: { push },
-  addWorkflow,
-  addNotification,
-  postMethod,
-  rbacGroups
-}) => {
+const AddWorkflow = () => {
   const [ formData, setValues ] = useState({});
+  const dispatch = useDispatch();
+  const { push } = useHistory();
+
+  const rbacGroups = useSelector(({ groupReducer: { groups }}) => groups);
   const [ isValid, setIsValid ] = useState(formData.name !== undefined && formData.name.length > 0);
 
   const handleChange = data => {
@@ -39,16 +36,17 @@ const AddWorkflow = ({
   const onSave = () => {
     const { name, description, wfGroups } = formData;
     const workflowData = { name, description, group_refs: wfGroups ? wfGroups.map(group => group.value) : []};
-    return addWorkflow(workflowData).then(() => postMethod()).then(() => (push('/workflows')));
+    push('/workflows');
+    dispatch(addWorkflow(workflowData));
   };
 
   const onCancel = () => {
-    addNotification({
+    dispatch(addNotification({
       variant: 'warning',
       title: 'Creating approval process',
       dismissable: true,
       description: 'Creating approval process was cancelled by the user.'
-    });
+    }));
     push('/workflows');
   };
 
@@ -83,16 +81,4 @@ AddWorkflow.propTypes = {
   })).isRequired
 };
 
-const mapStateToProps = (state) => {
-  return {
-    rbacGroups: state.groupReducer.groups
-  };
-};
-
-const mapDispatchToProps = (dispatch) => bindActionCreators({
-  addNotification,
-  addWorkflow,
-  fetchWorkflowWithGroupNames
-}, dispatch);
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddWorkflow));
+export default AddWorkflow;
