@@ -6,9 +6,9 @@ export const fetchRequests = (filter, pagination, persona) => ({
   payload: RequestHelper.fetchRequests(filter, pagination, persona)
 });
 
-export const fetchRequest = (apiProps) => ({
+export const fetchRequest = (apiProps, persona) => ({
   type: ActionTypes.FETCH_REQUEST,
-  payload: RequestHelper.fetchRequestWithSubrequests(apiProps)
+  payload: RequestHelper.fetchRequestWithSubrequests(apiProps, persona)
 });
 
 export const fetchRequestContent = (apiProps) => ({
