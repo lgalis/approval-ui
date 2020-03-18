@@ -5,7 +5,7 @@ import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-service
 import {
   FETCH_RBAC_GROUPS
 } from '../../../redux/action-types';
-import { fetchRbacGroups } from '../../../redux/actions/group-actions';
+import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
 import { RBAC_API_BASE } from '../../../utilities/constants';
 
 describe('group redux action creators', () => {
@@ -18,7 +18,7 @@ describe('group redux action creators', () => {
 
   it('fetchRbacGroups should dispatch correct ations on success', () => {
     const store = mockStore({});
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20administrator%2CApproval%20user%22`, mockOnce({
       body: { data: [{ uuid: 'foo', name: 'bar' }]}}));
 
     const expectedActions = [{
@@ -28,7 +28,7 @@ describe('group redux action creators', () => {
       payload: [{ label: 'bar', value: 'foo' }]
     }];
 
-    return store.dispatch(fetchRbacGroups()).then(() => {
+    return store.dispatch(fetchRbacApprovalGroups()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -48,7 +48,7 @@ describe('group redux action creators', () => {
       }
     }, expect.objectContaining({ type: `${FETCH_RBAC_GROUPS}_REJECTED` }) ];
 
-    return store.dispatch(fetchRbacGroups()).catch(() => {
+    return store.dispatch(fetchRbacApprovalGroups()).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
