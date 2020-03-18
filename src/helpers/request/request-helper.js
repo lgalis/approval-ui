@@ -36,9 +36,10 @@ const requestTranscriptQuery = (parent_id) => `query {
   }
 }`;
 
-export const fetchRequestTranscript = (requestId) => {
-  return graphqlInstance
-  .post(`${APPROVAL_API_BASE}/graphql`, { query: requestTranscriptQuery(requestId) })
+export const fetchRequestTranscript = (requestId, persona) => {
+  const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
+  return graphqlInstance()({ method: 'post', url: `${APPROVAL_API_BASE}/graphql`,
+    headers: fetchHeaders, data: { query: requestTranscriptQuery(requestId) }})
   .then(({ data: { requests }}) => requests);
 };
 
@@ -68,11 +69,11 @@ export async function fetchRequestWithActions(id) {
   return  { ...requestData, actions: requestActions };
 }
 
-export async function fetchRequestWithSubrequests(id) {
+export async function fetchRequestWithSubrequests(id, persona) {
   let requestData = await requestApi.showRequest(id);
 
   if (requestData.number_of_children > 0) {
-    const subRequests = await fetchRequestTranscript(id);
+    const subRequests = await fetchRequestTranscript(id, persona);
     requestData = { ...requestData, children: subRequests };
   } else {
     const requestActions = await fetchRequestActions(id);
