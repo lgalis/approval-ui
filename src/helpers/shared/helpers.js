@@ -26,7 +26,7 @@ export const timeAgo = (date) => (
 );
 
 export const isApprovalAdmin = (userRoles) => {
-  return userRoles.find(role => role.name === APPROVAL_ADMINISTRATOR_ROLE) !== undefined;
+  return userRoles && userRoles.find(role => role.name === APPROVAL_ADMINISTRATOR_ROLE) !== undefined;
 };
 
 export const approvalPersona = (userRoles) => {
