@@ -11,9 +11,9 @@ export const fetchRequest = (apiProps, persona) => ({
   payload: RequestHelper.fetchRequestWithSubrequests(apiProps, persona)
 });
 
-export const fetchRequestContent = (apiProps) => ({
+export const fetchRequestContent = (apiProps, persona) => ({
   type: ActionTypes.FETCH_REQUEST_CONTENT,
-  payload: RequestHelper.fetchRequestContent(apiProps)
+  payload: RequestHelper.fetchRequestContent(apiProps, persona)
 });
 
 export const createRequestAction = (actionName, requestId, actionIn) => ({
