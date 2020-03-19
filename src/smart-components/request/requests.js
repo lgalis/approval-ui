@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useReducer } from 'react';
+import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useHistory } from 'react-router-dom';
@@ -14,9 +14,10 @@ import { TopToolbar, TopToolbarTitle } from '../../presentational-components/sha
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
-import { scrollToTop } from '../../helpers/shared/helpers';
+import { scrollToTop, approvalPersona } from '../../helpers/shared/helpers';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
+import UserContext from '../../user-context';
 
 const columns = [{
   title: 'Name',
@@ -67,15 +68,14 @@ const Requests = () => {
     ({ requestReducer: { requests }}) => requests
   );
 
-  const approvalPersona = useSelector(
-    ({ rolesReducer: { approvalPersona }}) => approvalPersona);
+  const { roles: userRoles } = useContext(UserContext);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     dispatch(
-      fetchRequests(filterValue, defaultSettings, approvalPersona)
+      fetchRequests(filterValue, defaultSettings, approvalPersona(userRoles))
     ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
     scrollToTop();
   }, []);
@@ -91,7 +91,7 @@ const Requests = () => {
         ...meta,
         offset: 0
       },
-      approvalPersona
+      approvalPersona(userRoles)
     );
   };
 
