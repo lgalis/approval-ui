@@ -10,7 +10,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
 import Requests from '../../../smart-components/request/requests';
 import requestReducer, { requestsInitialState } from '../../../redux/reducers/request-reducer';
-import rolesReducer, { rolesInitialState } from '../../../redux/reducers/roles-reducer';
+import { rolesInitialState } from '../../../redux/reducers/roles-reducer';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import { act } from 'react-dom/test-utils';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
@@ -19,7 +19,7 @@ import { Table } from '@patternfly/react-table';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 
 const ComponentWrapper = ({ store, initialEntries = [ '/requests' ], children }) => (
-  <Provider store={ store }>
+  <Provider store={ store } value={ { roles: []} }>
     <MemoryRouter initialEntries={ initialEntries }>
       <IntlProvider locale="en">
         { children }
@@ -80,7 +80,6 @@ describe('<Requests />', () => {
 
     const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
     registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
-    registry.register({ rolesReducer: applyReducerHash(rolesReducer, rolesInitialState) });
     const store = registry.getStore();
 
     let wrapper;
