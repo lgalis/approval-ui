@@ -14,6 +14,7 @@ import { CheckCircleIcon,
   OnRunningIcon,
   ErrorCircleOIcon,
   ExclamationCircleIcon } from '@patternfly/react-icons';
+import { EmptyTable } from '@redhat-cloud-services/frontend-components';
 
 const operationInfo = {
   memo: { displayName: 'Comment from', icon: <CommentIcon/> },
@@ -31,7 +32,7 @@ const operationDisplayName = (operation) => operationInfo[operation] ? operation
 
 export const ActionTranscript = actionList => {
   const actions = actionList.actionList;
-  return (
+  return actions ? (
     <Stack>
       { actions.map(actionItem =>
         <div key={ `${actionItem.id}-action` }>
@@ -51,5 +52,6 @@ export const ActionTranscript = actionList => {
         </div>)
       }
     </Stack>
-  );
+  ) : <EmptyTable centered
+    aria-label="No records"/>;
 };
