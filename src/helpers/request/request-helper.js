@@ -43,12 +43,12 @@ export const fetchRequestTranscript = (requestId, persona) => {
   .then(({ data: { requests }}) => requests);
 };
 
-export async function fetchRequest(id, persona) {
-  return await requestApi.showRequest(id, { xRhPersona: persona });
+export async function fetchRequest(id) {
+  return await requestApi.showRequest(id);
 }
 
 export const fetchRequestActions = (id, persona) => {
-  return actionApi.listActionsByRequest(id, { xRhPersona: persona });
+  return actionApi.listActionsByRequest(id, persona);
 };
 
 export const fetchRequestContent = (id, persona) => {
@@ -62,8 +62,8 @@ export async function fetchRequestWithActions(id, persona = undefined) {
   const requestActions = await fetchRequestActions(id);
 
   if (requestData.number_of_children > 0) {
-    const subRequests = await requestApi.listRequestsByRequest(id, { xRhPersona: persona });
-    const promises = subRequests.data.map(request => fetchRequestWithActions(request.id, { xRhPersona: persona }));
+    const subRequests = await requestApi.listRequestsByRequest(id, persona);
+    const promises = subRequests.data.map(request => fetchRequestWithActions(request.id, persona));
     const subRequestsWithActions = await Promise.all(promises);
     requestData = { ...requestData, children: subRequestsWithActions };
   }
@@ -71,14 +71,14 @@ export async function fetchRequestWithActions(id, persona = undefined) {
   return  { ...requestData, actions: requestActions };
 }
 
-export async function fetchRequestWithSubrequests(id, persona = undefined) {
+export async function fetchRequestWithSubrequests(id, persona) {
   let requestData = await requestApi.showRequest(id, { xRhPersona: persona });
 
   if (requestData.number_of_children > 0) {
     const subRequests = await fetchRequestTranscript(id, persona);
     requestData = { ...requestData, children: subRequests };
   } else {
-    const requestActions = await fetchRequestActions(id, persona = undefined);
+    const requestActions = await fetchRequestActions(id, persona);
     requestData = { ...requestData, actions: requestActions ? requestActions.data : []};
   }
 

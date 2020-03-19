@@ -9,7 +9,7 @@ import ActionModal from './action-modal';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import RequestDetail from './request-detail/request-detail';
-import { isRequestStateActive } from '../../helpers/shared/helpers';
+import { isApprovalAdmin, isRequestStateActive } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
@@ -124,7 +124,7 @@ const Requests = () => {
 
   const handlePagination = (_apiProps, pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchRequests(filterValue, pagination, approvalPersona))
+    dispatch(fetchRequests(filterValue, pagination, approvalPersona(userRoles)))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -139,7 +139,7 @@ const Requests = () => {
       <Fragment>
         <TopToolbar>
           <TopToolbarTitle title="Approval"/>
-          { approvalPersona === 'approval/admin' && <AppTabs tabItems={ tabItems } /> }
+          { isApprovalAdmin(userRoles) && <AppTabs tabItems={ tabItems } /> }
         </TopToolbar>
         <TableToolbarView
           data={ data }
