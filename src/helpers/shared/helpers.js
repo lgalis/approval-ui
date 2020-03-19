@@ -3,6 +3,9 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/component
 
 const activeStates = [ 'notified' ];
 const APPROVAL_ADMINISTRATOR_ROLE = 'Approval Administrator';
+const APPROVAL_APPROVER_ROLE = 'Approval Approver';
+const APPROVAL_ADMIN_PERSONA = 'approval/admin';
+const APPROVAL_APPROVER_PERSONA = 'approval/approver';
 
 export const scrollToTop = () => document.getElementById('root').scrollTo({
   behavior: 'smooth',
@@ -24,4 +27,14 @@ export const timeAgo = (date) => (
 
 export const isApprovalAdmin = (userRoles) => {
   return userRoles.find(role => role.name === APPROVAL_ADMINISTRATOR_ROLE) !== undefined;
+};
+
+export const approvalPersona = (userRoles) => {
+  if (userRoles && userRoles.find(role => role.name === APPROVAL_ADMINISTRATOR_ROLE) !== undefined) {
+    return APPROVAL_ADMIN_PERSONA;
+  } else if (userRoles && userRoles.find(role => role.name === APPROVAL_APPROVER_ROLE) !== undefined) {
+    return APPROVAL_APPROVER_PERSONA;
+  }
+
+  return undefined;
 };
