@@ -12,6 +12,11 @@ exports[`<Requests /> should render correctly 1`] = `
       "subscribe": [Function],
     }
   }
+  value={
+    Object {
+      "roles": Array [],
+    }
+  }
 >
   <MemoryRouter
     initialEntries={
@@ -42,6 +47,11 @@ exports[`<Requests /> should render correctly in loading state 1`] = `
       "getState": [Function],
       "replaceReducer": [Function],
       "subscribe": [Function],
+    }
+  }
+  value={
+    Object {
+      "roles": Array [],
     }
   }
 >
