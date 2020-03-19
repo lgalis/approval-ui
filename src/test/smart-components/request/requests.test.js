@@ -10,7 +10,6 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
 import Requests from '../../../smart-components/request/requests';
 import requestReducer, { requestsInitialState } from '../../../redux/reducers/request-reducer';
-import { rolesInitialState } from '../../../redux/reducers/roles-reducer';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import { act } from 'react-dom/test-utils';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
@@ -38,8 +37,7 @@ describe('<Requests />', () => {
     initialProps = {};
     mockStore = configureStore(middlewares);
     initialState = {
-      requestReducer: { ...requestsInitialState, isLoading: false },
-      rolesReducer: rolesInitialState
+      requestReducer: { ...requestsInitialState, isLoading: false }
     };
   });
 
