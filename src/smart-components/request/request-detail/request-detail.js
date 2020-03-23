@@ -1,4 +1,4 @@
-import React, {Fragment, useContext, useEffect, useReducer} from 'react';
+import React, { Fragment, useContext, useEffect, useReducer } from 'react';
 import { Route, useParams, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@patternfly/react-core';
@@ -10,8 +10,8 @@ import RequestTranscript from './request-transcript';
 import { fetchRequest, fetchRequestContent } from '../../../redux/actions/request-actions';
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
-import UserContext from "../../../user-context";
-import {approvalPersona} from "../../../helpers/shared/helpers";
+import UserContext from '../../../user-context';
+import { approvalPersona } from '../../../helpers/shared/helpers';
 
 const initialState = {
   isFetching: true
