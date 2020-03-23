@@ -15,7 +15,7 @@ import RequestTranscript from '../../../../smart-components/request/request-deta
 import { mockGraphql } from '../../../__mocks__/user-login';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo/123' ]}) => (
-  <Provider store={ store }>
+  <Provider store={ store } userRoles={ { name: 'Approval Administrator' } }>
     <MemoryRouter initialEntries={ initialEntries }>
       { children }
     </MemoryRouter>
