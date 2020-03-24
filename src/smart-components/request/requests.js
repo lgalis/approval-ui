@@ -94,6 +94,19 @@ const Requests = () => {
       approvalPersona(userRoles)
     );
   };
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const fetchApprovalRequest = async (fetchRequest) => {
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const result = await fetchRequest();
+      if (result.data.state === 'Notified' || result.data.state === 'Failed' ) {
+        return 'Finished';
+      }
+
+      await delay(3000);
+    }
+  };
 
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
     { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
@@ -101,11 +114,11 @@ const Requests = () => {
   const routes = () => <Fragment>
     <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
       actionType={ 'Add Comment' }
-      postMethod={ fetchRequests } /> }/>
+      postMethod={ fetchApprovalRequest } /> }/>
     <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' }
-      postMethod={ fetchRequests }/> } />
+      postMethod={ fetchApprovalRequest }/> } />
     <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' }
-      postMethod={ fetchRequests }/> } />
+      postMethod={ fetchApprovalRequest }/> } />
   </Fragment>;
 
   const areActionsDisabled = (requestData) => requestData &&
