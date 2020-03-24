@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useReducer } from 'react';
+import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useHistory } from 'react-router-dom';
@@ -9,14 +9,15 @@ import ActionModal from './action-modal';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import RequestDetail from './request-detail/request-detail';
-import { isRequestStateActive } from '../../helpers/shared/helpers';
+import { isApprovalAdmin, isRequestStateActive } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
-import { scrollToTop } from '../../helpers/shared/helpers';
+import { scrollToTop, approvalPersona } from '../../helpers/shared/helpers';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
+import UserContext from '../../user-context';
 
 const columns = [{
   title: 'Name',
@@ -67,15 +68,14 @@ const Requests = () => {
     ({ requestReducer: { requests }}) => requests
   );
 
-  const approvalAdmin = useSelector(
-    ({ rolesReducer: { approvalAdmin }}) => approvalAdmin);
+  const { roles: userRoles } = useContext(UserContext);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     dispatch(
-      fetchRequests(filterValue, defaultSettings, approvalAdmin ? 'approval/admin' : undefined)
+      fetchRequests(filterValue, defaultSettings, approvalPersona(userRoles))
     ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
     scrollToTop();
   }, []);
@@ -91,7 +91,7 @@ const Requests = () => {
         ...meta,
         offset: 0
       },
-      approvalAdmin ? 'approval/admin' : undefined
+      approvalPersona(userRoles)
     );
   };
 
@@ -124,7 +124,7 @@ const Requests = () => {
 
   const handlePagination = (_apiProps, pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchRequests(filterValue, pagination, approvalAdmin ? 'approval/admin' : undefined))
+    dispatch(fetchRequests(filterValue, pagination, approvalPersona(userRoles)))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -139,7 +139,7 @@ const Requests = () => {
       <Fragment>
         <TopToolbar>
           <TopToolbarTitle title="Approval"/>
-          { approvalAdmin && <AppTabs tabItems={ tabItems } /> }
+          { isApprovalAdmin(userRoles) && <AppTabs tabItems={ tabItems } /> }
         </TopToolbar>
         <TableToolbarView
           data={ data }
