@@ -94,13 +94,14 @@ const Requests = () => {
       approvalPersona(userRoles)
     );
   };
+
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const fetchApprovalRequest = async (fetchRequest) => {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       const result = await fetchRequest();
-      if (result.data.state === 'Notified' || result.data.state === 'Failed' ) {
+      if (result.data.state === 'Notified' || result.data.state === 'Failed') {
         return 'Finished';
       }
 
