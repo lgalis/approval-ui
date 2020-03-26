@@ -56,7 +56,8 @@ describe('<AddWorkflow />', () => {
   it('should render correctly', () => {
     const store = mockStore(initialState);
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows`, mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     const wrapper = shallow(<ComponentWrapper store={ store }><AddWorkflow { ...initialProps } /></ComponentWrapper>).dive();
 
     setImmediate(() => {
@@ -77,10 +78,11 @@ describe('<AddWorkflow />', () => {
       return res.status(200).body({ data: []});
     }));
 
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce((req, res) => {
-      expect(req).toBeTruthy();
-      return res.status(200).body({ data: []});
-    }));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce((req, res) => {
+        expect(req).toBeTruthy();
+        return res.status(200).body({ data: []});
+      }));
 
     const wrapper = mount(
       <ComponentWrapper store={ store }>
@@ -106,12 +108,12 @@ describe('<AddWorkflow />', () => {
   });
 
   it('should travers over all wizard pages and call onSave function', async(done) => {
-    expect.assertions(2);
     const store = mockStore(initialState);
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=Test3&limit=50&offset=0`,
       mockOnce({ body: { data: [{ id: '123' }]}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/templates`, mockOnce({ body: { data: [{ id: '123' }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: [ 1 ]}}));
     apiClientMock.post(`${APPROVAL_API_BASE}/templates/123/workflows`, mockOnce((req, res) => {
       expect(JSON.parse(req.body())).toEqual({ name: 'Test3', group_refs: [ '1' ]});
       done();
@@ -120,7 +122,8 @@ describe('<AddWorkflow />', () => {
 
     const wrapper = mount(
       <ComponentWrapper store={ store }>
-        <Route path="/workflows/add-workflow/" render={ () => <AddWorkflow { ...initialProps } formData={ { name: 'Test1', wfGroups: [{}]} } /> } />
+        <Route path="/workflows/add-workflow/" render={ () => <AddWorkflow { ...initialProps }
+          formData={ { name: 'Test1', wfGroups: [{ value: '1', label: 'foo' }]} } /> } />
       </ComponentWrapper>
     );
 
@@ -130,26 +133,32 @@ describe('<AddWorkflow />', () => {
       input.instance().value = 'Test3';
       input.simulate('change');
     });
+
     wrapper.update();
-    wrapper.find('button').at(1).simulate('click');
-    wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
-    setImmediate(async() => {
-      wrapper.update();
-      wrapper.find('button#add-workflow-stage').first().simulate('click');
-
-      await act(async() => {
-        wrapper.find(AsyncSelect).props().onChange({ value: '1', label: 'foo' });
-      });
-      wrapper.update();
+    await act(async() => {
+      wrapper.find('button').at(1).simulate('click');
       wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
-      wrapper.update();
+    });
 
-      /**
-       * submit wizard
-       */
-      await act(async() => {
-        wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
-      });
+    wrapper.update();
+    await act(async() => {
+      wrapper.find('button#add-workflow-stage').first().simulate('click');
+    });
+
+    wrapper.update();
+    wrapper.find(AsyncSelect).props().onChange({ value: '1', label: 'foo' });
+
+    wrapper.update();
+    await act(async() => {
+      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
+    });
+
+    wrapper.update();
+    /**
+     * submit wizard
+     */
+    await act(async() => {
+      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
     });
   });
 });

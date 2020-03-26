@@ -101,7 +101,8 @@ describe('<Workflows />', () => {
       name: 'foo',
       group_refs: [ 'group-1' ]
     }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
     await act(async()=> {
@@ -140,7 +141,8 @@ describe('<Workflows />', () => {
       name: 'foo',
       group_refs: [ 'group-1' ]
     }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
     await act(async()=> {
@@ -179,7 +181,8 @@ describe('<Workflows />', () => {
       name: 'foo',
       group_refs: [ 'group-1' ]
     }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
     await act(async()=> {
@@ -218,7 +221,8 @@ describe('<Workflows />', () => {
       name: 'foo',
       group_refs: [ 'group-1' ]
     }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/edit-id`, mockOnce({ body: { group_refs: []}}));
     await act(async()=> {
@@ -258,7 +262,8 @@ describe('<Workflows />', () => {
       name: 'foo',
       group_refs: [ 'group-1' ]
     }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
     await act(async()=> {
       wrapper = mount(
@@ -283,7 +288,8 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
       id: 'edit-id',
