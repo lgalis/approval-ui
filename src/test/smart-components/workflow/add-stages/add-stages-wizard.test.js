@@ -56,7 +56,7 @@ describe('<AddWorkflow />', () => {
   it('should render correctly', () => {
     const store = mockStore(initialState);
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows`, mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     const wrapper = shallow(<ComponentWrapper store={ store }><AddWorkflow { ...initialProps } /></ComponentWrapper>).dive();
 
@@ -78,7 +78,7 @@ describe('<AddWorkflow />', () => {
       return res.status(200).body({ data: []});
     }));
 
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce((req, res) => {
         expect(req).toBeTruthy();
         return res.status(200).body({ data: []});
@@ -112,7 +112,7 @@ describe('<AddWorkflow />', () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=Test3&limit=50&offset=0`,
       mockOnce({ body: { data: [{ id: '123' }]}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/templates`, mockOnce({ body: { data: [{ id: '123' }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: [ 1 ]}}));
     apiClientMock.post(`${APPROVAL_API_BASE}/templates/123/workflows`, mockOnce((req, res) => {
       expect(JSON.parse(req.body())).toEqual({ name: 'Test3', group_refs: [ '1' ]});

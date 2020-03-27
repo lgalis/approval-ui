@@ -41,7 +41,7 @@ describe('<SetStages />', () => {
     const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
     const handleChange = jest.fn();
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     await act(async() => {
       wrapper = mount(
@@ -61,7 +61,7 @@ describe('<SetStages />', () => {
 
   it('should call add stage callback', async () => {
     const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     let wrapper;
     await act(async() => {
@@ -87,7 +87,7 @@ describe('<SetStages />', () => {
   it('should call onInputChange callback', async (done) => {
     const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     await act(async() => {
       wrapper = mount(
@@ -110,9 +110,9 @@ describe('<SetStages />', () => {
     expect.assertions(1);
     const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
 
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22&name=foo`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22%0A%20%20&name=foo`,
       mockOnce((req, res) => {
         expect(req).toBeTruthy();
         done();
@@ -143,7 +143,7 @@ describe('<SetStages />', () => {
 
     let wrapper;
     const handleChange = jest.fn();
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     await act(async() => {
       wrapper = mount(

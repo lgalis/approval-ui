@@ -18,7 +18,7 @@ describe('group redux action creators', () => {
 
   it('fetchRbacGroups should dispatch correct ations on success', () => {
     const store = mockStore({});
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({
         body: { data: [{ uuid: 'foo', name: 'bar' }]}}));
 
@@ -36,7 +36,7 @@ describe('group redux action creators', () => {
 
   it('fetchRbacGroups should dispatch correct ations when failed', () => {
     const store = mockStore({});
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22Approval%20Administrator%2CApproval%20Approver%2C%22`,
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ status: 500 }));
 
     const expectedActions = [{
