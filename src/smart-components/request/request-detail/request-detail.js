@@ -58,10 +58,10 @@ const RequestDetail = () => {
     else {
       return (
         <Fragment>
-          <GridItem md={ 2 } className="detail-pane">
+          <GridItem span={ 3 } rowSpan={2} className="detail-pane">
             <RequestInfoBar request={ selectedRequest } requestContent={ requestContent }/>
           </GridItem>
-          <GridItem md={ 10 } className="detail-pane">
+          <GridItem md={ 9 } className="detail-pane">
             <RequestTranscript request={ selectedRequest } url={ location.url }/>
           </GridItem>
         </Fragment>
