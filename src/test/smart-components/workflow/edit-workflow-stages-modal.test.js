@@ -61,7 +61,8 @@ describe('<EditWorkflowStagesModal />', () => {
       groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
 
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -85,7 +86,8 @@ describe('<EditWorkflowStagesModal />', () => {
       groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
 
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -112,7 +114,8 @@ describe('<EditWorkflowStagesModal />', () => {
       groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
 
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -141,7 +144,8 @@ describe('<EditWorkflowStagesModal />', () => {
     const postMethod = jest.fn().mockImplementation(() => new Promise(resolve => resolve(true)));
     let wrapper;
 
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));

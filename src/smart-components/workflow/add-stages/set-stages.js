@@ -3,7 +3,7 @@ import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 import asyncDebounce from '../../../utilities/async-debounce';
-import { fetchFilterGroups } from '../../../helpers/group/group-helper';
+import { fetchFilterApprovalGroups } from '../../../helpers/group/group-helper';
 import { WorkflowInfoFormLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button,
@@ -14,7 +14,7 @@ import { Button,
   StackItem,
   Title
 } from '@patternfly/react-core';
-import { fetchRbacGroups } from '../../../redux/actions/group-actions';
+import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
 
 const SetStages = ({ formData, handleChange, title }) => {
   const [ isExpanded, setExpanded ] = useState(false);
@@ -34,7 +34,7 @@ const SetStages = ({ formData, handleChange, title }) => {
   useEffect(() => {
     setIsFetching(true);
     dispatch(
-      fetchRbacGroups()).then(() => setIsFetching(false));
+      fetchRbacApprovalGroups()).then(() => setIsFetching(false));
   }, []);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const SetStages = ({ formData, handleChange, title }) => {
     handleChange({ wfGroups: values });
   };
 
-  const loadGroupOptions = (inputValue) => fetchFilterGroups(inputValue);
+  const loadGroupOptions = (inputValue) => fetchFilterApprovalGroups(inputValue);
 
   const createStageInput = (idx) => (
     <StackItem key={ `Stack_${idx + 1}` }>

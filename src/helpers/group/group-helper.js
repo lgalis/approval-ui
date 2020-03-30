@@ -3,10 +3,6 @@ import { RBAC_API_BASE } from '../../utilities/constants';
 
 const api = getRbacGroupApi();
 
-export async function getRbacGroups() {
-  return await api.listGroups();
-}
-
 export async function fetchGroupNames(groupRefs) {
   if (groupRefs) {
     return Promise.all(groupRefs.map(async id => {
@@ -35,9 +31,11 @@ export const fetchGroupName = (id) =>
     }
   });
 
-export const fetchFilterGroups = (filterValue) =>
-  getAxiosInstance().get(`${RBAC_API_BASE}/groups/${filterValue.length > 0
-    ? `?name=${filterValue}`
-    : ''}`)
+export const fetchFilterApprovalGroups = (filterValue) => {
+  const filterQuery = `&name=${filterValue}`;
+  return getAxiosInstance().get(`${RBAC_API_BASE}/groups/?role_names=",Approval Administrator,Approval Approver,"
+  ${filterValue && filterValue.length > 0
+    ? filterQuery : ''}`)
   .then(({ data }) => data.map(({ uuid, name }) => ({ label: name, value: uuid })));
+};
 
