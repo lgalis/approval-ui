@@ -30,6 +30,13 @@
   word-wrap: break-word
 }
 
+.info-bar {
+  min-height: 100%;
+  padding: 0;
+  overflow: ellipsis;
+  word-wrap: break-word
+}
+
 .destructive-color {
   &:not(:disabled) {
     color: #FF0000 !important;
