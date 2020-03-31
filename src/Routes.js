@@ -1,5 +1,5 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
-import React, { lazy, Suspense, useContext } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { RequestLoader } from './presentational-components/shared/loader-placeholders';
 import ProtectedRoute from './routing/protected-route';
 import CommonApiError from './smart-components/error-pages/common-api-error';
