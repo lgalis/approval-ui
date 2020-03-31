@@ -1,8 +1,8 @@
 import { Route, Switch, Redirect } from 'react-router-dom';
 import React, { lazy, Suspense, useContext } from 'react';
 import { RequestLoader } from './presentational-components/shared/loader-placeholders';
-import UserContext from './user-context';
-import { isApprovalAdmin } from './helpers/shared/helpers';
+import ProtectedRoute from './routing/protected-route';
+import CommonApiError from './smart-components/error-pages/common-api-error';
 
 const Requests = lazy(() => import(/* webpackChunkName: "requests" */ './smart-components/request/requests'));
 const Workflows = lazy(() => import(/* webpackChunkName: "workflows" */ './smart-components/workflow/workflows'));
@@ -11,13 +11,14 @@ const paths = {
   requests: '/requests',
   workflows: '/workflows'
 };
-export const Routes = () => {
-  const { roles: userRoles } = useContext(UserContext);
+const errorPaths = [ '/400', '/401', '/404' ];
 
+export const Routes = () => {
   return <Suspense fallback={ <RequestLoader /> }>
     <Switch>
-      { isApprovalAdmin(userRoles) && <Route path={ paths.workflows } component={ Workflows }/> }
+      <ProtectedRoute path={ paths.workflows } component={ Workflows }/>
       <Route path={ paths.requests } component={ Requests }/>
+      <Route path={ errorPaths } component={ CommonApiError } />
       <Route>
         <Redirect to={ paths.requests } />
       </Route>
