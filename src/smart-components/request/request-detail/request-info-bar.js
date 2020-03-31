@@ -1,33 +1,113 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Text, TextContent, TextVariants } from '@patternfly/react-core';
+import {
+  Card, CardBody, CardHeader,
+  Stack,
+  StackItem,
+  Text,
+  TextContent,
+  TextVariants,
+  Title
+} from '@patternfly/react-core';
 
 const RequestInfoBar = ({ request, requestContent }) => {
   return (
-    <TextContent>
-      <Text component={ TextVariants.small }>Product: <br/></Text>
-      <Text>{ requestContent ? requestContent.product : '' }</Text>
-      <Text component={ TextVariants.small }>Portfolio: <br/></Text>
-      <Text>{ requestContent ? requestContent.portfolio : '' }</Text>
-      <Text component={ TextVariants.small }>Platform: <br/></Text>
-      <Text>{ requestContent ? requestContent.platform : ' ' }</Text>
-      <Text component={ TextVariants.small }>Requester: </Text>
-      <Text component={ TextVariants.h6 }>{ request.requester_name }</Text>
-      <Text component={ TextVariants.h6 }>Order Parameters: <br/> </Text>
-      { requestContent.params && Object.keys(requestContent.params).map(param => {
-        return ((requestContent.params[param]) &&
-                  <Text key={ param } component={ TextVariants.small }>
-                    { `${param}: ${requestContent.params[param]}` }
-                  </Text>);
-      })
-      }
-    </TextContent>
+    <Fragment>
+      <Stack gutter="md">
+        <StackItem>
+          <Card>
+            <CardBody>
+              <Stack gutter="md">
+                <StackItem>
+                  <Title headingLevel="h5" size="lg">
+                    Summary
+                  </Title>
+                </StackItem>
+                <StackItem>
+                  <TextContent>
+                    <Text className={ 'font-14' }>
+                      Product
+                    </Text>
+                    <Text id='portfolio-item-name' component={ TextVariants.p }>
+                      { requestContent ? requestContent.product : '' }
+                    </Text>
+                  </TextContent>
+                </StackItem>
+                <StackItem>
+                  <TextContent>
+                    <Text className={ 'font-14' }>
+                      Portfolio
+                    </Text>
+                    <Text  id='portfolio-name' component={ TextVariants.p }>
+                      { requestContent ? requestContent.portfolio : '' }
+                    </Text>
+                  </TextContent>
+                </StackItem>
+                <StackItem>
+                  <TextContent>
+                    <Text className={ 'font-14' }>
+                      Platform
+                    </Text>
+                    <Text id='source-name' component={ TextVariants.p }>
+                      { requestContent ? requestContent.platform : ' ' }
+                    </Text>
+                  </TextContent>
+                </StackItem>
+                <StackItem>
+                  <TextContent>
+                    <Text className={ 'font-14' }>Requester </Text>
+                    <Text id='requester_name' component={ TextVariants.p }>
+                      { request.requester_name }
+                    </Text>
+                  </TextContent>
+                </StackItem>
+                <StackItem>
+                  <TextContent>
+                    <Text className={ 'font-14' }>Order# </Text>
+                    <Text id='requester_name' component={ TextVariants.p }>
+                      { requestContent ? requestContent.order_id : '' }
+                    </Text>
+                  </TextContent>
+                </StackItem>
+              </Stack>
+            </CardBody>
+          </Card>
+        </StackItem>
+        <StackItem>
+          <Card>
+            <CardHeader>
+              <Title headingLevel="h5" size="lg">Parameters</Title>
+            </CardHeader>
+            <CardBody>
+              <Stack gutter="md">
+                { requestContent.params && Object.keys(requestContent.params).map(param => {
+                  return ((requestContent.params[param]) &&
+                      <StackItem>
+                        <TextContent>
+                          <Text key={ param } className={ 'font-14' }>
+                            { `${param}` }
+                          </Text>
+                          <Text id={ param } component={ TextVariants.p }>
+                            { `${requestContent.params[param]}` }
+                          </Text>
+                        </TextContent>
+                      </StackItem>
+                  );
+                })
+                }
+              </Stack>
+            </CardBody>
+          </Card>
+        </StackItem>
+      </Stack>
+    </Fragment>
   );
 };
 
 RequestInfoBar.propTypes = {
   request: PropTypes.shape({
-    requester_name: PropTypes.string
+    requester_name: PropTypes.string,
+    order_id: PropTypes.string
   }).isRequired,
   requestContent: PropTypes.object
 };

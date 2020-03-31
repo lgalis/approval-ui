@@ -58,10 +58,10 @@ const RequestDetail = () => {
     else {
       return (
         <Fragment>
-          <GridItem md={ 2 } className="detail-pane">
+          <GridItem span={ 3 } className="info-bar">
             <RequestInfoBar request={ selectedRequest } requestContent={ requestContent }/>
           </GridItem>
-          <GridItem md={ 10 } className="detail-pane">
+          <GridItem md={ 9 } className="detail-pane">
             <RequestTranscript request={ selectedRequest } url={ location.url }/>
           </GridItem>
         </Fragment>
@@ -78,7 +78,7 @@ const RequestDetail = () => {
       <Route exact path="/requests/detail/:id/deny" render={ props =>
         <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ location.url } /> } />
       <TopToolbar
-        breadcrumbs={ [{ title: 'Request Queue', to: '/requests', id: 'requests' }] }
+        breadcrumbs={ [{ title: 'Request queue', to: '/requests', id: 'requests' }] }
         paddingBottom={ true }
       >
         <TopToolbarTitle title={ `Request ${id}` } />
