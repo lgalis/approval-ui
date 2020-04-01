@@ -35,7 +35,8 @@ const AddWorkflow = () => {
 
   const onSave = () => {
     const { name, description, wfGroups } = formData;
-    const workflowData = { name, description, group_refs: wfGroups ? wfGroups.map(group => group.value) : []};
+    const workflowData = { name, description,
+      group_refs: wfGroups ? wfGroups.map(group => ({ group_name: group.label, group_uuid: group.value })) : []};
     push('/workflows');
     dispatch(addWorkflow(workflowData));
   };
@@ -73,7 +74,7 @@ AddWorkflow.propTypes = {
   addWorkflow: PropTypes.func.isRequired,
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
-  fetchWorkflowWithGroupNames: PropTypes.func.isRequired,
+  fetchWorkflow: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,

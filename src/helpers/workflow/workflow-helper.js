@@ -14,12 +14,6 @@ export function fetchWorkflows(filter = '', pagination = defaultSettings) {
   );
 }
 
-export async function fetchWorkflowWithGroupNames(id) {
-  const wfData = await workflowApi.showWorkflow(id);
-  const  wfWithGroups = await fetchGroupNames(wfData.group_refs);
-  return { ...wfData, group_names: wfWithGroups };
-}
-
 export async function fetchWorkflow(id) {
   return await workflowApi.showWorkflow(id);
 }
