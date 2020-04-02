@@ -1,5 +1,4 @@
 import { getWorkflowApi, getTemplateApi, getAxiosInstance } from '../shared/user-login';
-import { fetchGroupNames } from '../group/group-helper';
 import { defaultSettings } from '../shared/pagination';
 import { APPROVAL_API_BASE } from '../../utilities/constants';
 
