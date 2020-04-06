@@ -36,8 +36,7 @@ const AddWorkflow = () => {
   const onSave = () => {
     const { name, description, wfGroups } = formData;
     const workflowData = { name, description,
-      group_refs: wfGroups ? wfGroups.map(group => { const group_ref = { name: group.label, uuid: group.value };
-        return group_ref; }) : []};
+      group_refs: wfGroups ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
     push('/workflows');
     dispatch(addWorkflow(workflowData));
   };

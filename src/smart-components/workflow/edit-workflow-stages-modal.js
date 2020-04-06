@@ -40,8 +40,7 @@ const EditWorkflowStagesModal = ({
 
   const onSave = () => {
     const { wfGroups } = formData;
-    const workflowData = { group_refs: wfGroups ? wfGroups.map(group => { const group_ref = group ? { name: group.label, uuid: group.value } : {};
-      return group_ref; }) : []};
+    const workflowData = { group_refs: wfGroups ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
     updateWorkflow({ id, ...workflowData }).then(() => postMethod()).then(()=>push('/workflows'));
   };
 
