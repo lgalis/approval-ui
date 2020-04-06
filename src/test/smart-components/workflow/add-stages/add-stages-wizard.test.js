@@ -115,7 +115,7 @@ describe('<AddWorkflow />', () => {
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: [ 1 ]}}));
     apiClientMock.post(`${APPROVAL_API_BASE}/templates/123/workflows`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual({ name: 'Test3', group_refs: [ '1' ]});
+      expect(JSON.parse(req.body())).toEqual({ name: 'Test3', group_refs: [{ name: 'foo', uuid: '1' }]});
       done();
       return res.status(200);
     }));

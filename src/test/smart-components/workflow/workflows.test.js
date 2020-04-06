@@ -344,15 +344,10 @@ describe('<Workflows />', () => {
 
     expect(wrapper.find(RowWrapper)).toHaveLength(2); // one item + expanded
 
-    const contentSpy = jest.fn().mockImplementation(mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, contentSpy);
-
     await act(async () => {
       wrapper.find(Table).props().onCollapse({}, {}, {}, { id });
     });
     wrapper.update();
-
-    expect(contentSpy).toHaveBeenCalled();
     expect(storeReal.getState().workflowReducer.expandedWorkflows).toEqual([ id ]);
   });
 });
