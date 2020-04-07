@@ -5,7 +5,7 @@ import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-service
 import {
   FETCH_RBAC_GROUPS
 } from '../../../redux/action-types';
-import { fetchRbacGroups } from '../../../redux/actions/group-actions';
+import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
 import { RBAC_API_BASE } from '../../../utilities/constants';
 
 describe('group redux action creators', () => {
@@ -18,8 +18,9 @@ describe('group redux action creators', () => {
 
   it('fetchRbacGroups should dispatch correct ations on success', () => {
     const store = mockStore({});
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({
-      body: { data: [{ uuid: 'foo', name: 'bar' }]}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({
+        body: { data: [{ uuid: 'foo', name: 'bar' }]}}));
 
     const expectedActions = [{
       type: `${FETCH_RBAC_GROUPS}_PENDING`
@@ -28,14 +29,15 @@ describe('group redux action creators', () => {
       payload: [{ label: 'bar', value: 'foo' }]
     }];
 
-    return store.dispatch(fetchRbacGroups()).then(() => {
+    return store.dispatch(fetchRbacApprovalGroups()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
 
   it('fetchRbacGroups should dispatch correct ations when failed', () => {
     const store = mockStore({});
-    apiClientMock.get(`${RBAC_API_BASE}/groups/`, mockOnce({ status: 500 }));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ status: 500 }));
 
     const expectedActions = [{
       type: `${FETCH_RBAC_GROUPS}_PENDING`
@@ -48,7 +50,7 @@ describe('group redux action creators', () => {
       }
     }, expect.objectContaining({ type: `${FETCH_RBAC_GROUPS}_REJECTED` }) ];
 
-    return store.dispatch(fetchRbacGroups()).catch(() => {
+    return store.dispatch(fetchRbacApprovalGroups()).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });

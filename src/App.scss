@@ -30,6 +30,13 @@
   word-wrap: break-word
 }
 
+.info-bar {
+  min-height: 100%;
+  padding: 0;
+  overflow: ellipsis;
+  word-wrap: break-word
+}
+
 .destructive-color {
   &:not(:disabled) {
     color: #FF0000 !important;
@@ -106,4 +113,10 @@
 
 .icon-success-fill {
   fill: var(--pf-global--success-color--100)
+}
+
+.font-14{
+  font-size: 14px;
+  color: var(--pf-global--Color--100);
+  font-weight: bold;
 }

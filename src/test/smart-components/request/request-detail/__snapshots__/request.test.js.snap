@@ -152,7 +152,7 @@ exports[`<Request /> should render correctly 1`] = `
                   <span
                     id="111-name"
                   >
-                    NaN. undefined
+                    undefined
                      
                   </span>
                 </DataListCell>,
@@ -197,7 +197,7 @@ exports[`<Request /> should render correctly 1`] = `
                   <span
                     id="111-name"
                   >
-                    NaN. undefined
+                    undefined
                      
                   </span>
                 </div>
