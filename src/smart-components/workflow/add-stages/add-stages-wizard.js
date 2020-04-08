@@ -16,20 +16,29 @@ const AddWorkflow = () => {
 
   const rbacGroups = useSelector(({ groupReducer: { groups }}) => groups);
   const [ isValid, setIsValid ] = useState(formData.name !== undefined && formData.name.length > 0);
+  const [ stepIdReached, setStepIdReached ] = useState(1);
 
   const handleChange = data => {
     setValues({ ...formData,  ...data });
   };
 
+  const onNext = ({ id }) => {
+    setStepIdReached(stepIdReached < id ? id : stepIdReached );
+  };
   const steps = [
-    { name: 'General information',
+    { id: 1,
+      name: 'General information',
       enableNext: isValid && formData.name && formData.name.length > 0,
       component: <WorkflowInfoForm formData={ formData }
         handleChange={ handleChange }
         isValid={ isValid } setIsValid={ setIsValid }/> },
-    { name: 'Set groups', component: <SetStages formData={ formData }
+    { id: 2,
+      name: 'Set groups',
+      canJumpTo: stepIdReached >= 2,
+      component: <SetStages formData={ formData }
       handleChange={ handleChange } options={ rbacGroups } /> },
-    { name: 'Review', component: <SummaryContent formData={ formData }
+    { id: 3,
+      name: 'Review', component: <SummaryContent formData={ formData }
       options={ rbacGroups } />, nextButtonText: 'Confirm' }
   ];
 
@@ -57,6 +66,7 @@ const AddWorkflow = () => {
       isOpen
       onClose={ onCancel }
       onSave={ onSave  }
+      onNext={  onNext }
       steps={ steps }
     />
   );
