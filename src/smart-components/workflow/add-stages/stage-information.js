@@ -42,6 +42,7 @@ const WorkflowInfoForm = ({ formData, initialValue, handleChange, isValid, setIs
       setError(undefined);
       setIsValid(true);
     }
+
     handleChange({ name });
   };
 

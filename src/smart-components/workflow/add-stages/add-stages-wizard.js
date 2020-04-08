@@ -23,8 +23,9 @@ const AddWorkflow = () => {
   };
 
   const onNext = ({ id }) => {
-    setStepIdReached(stepIdReached < id ? id : stepIdReached );
+    setStepIdReached(stepIdReached < id ? id : stepIdReached);
   };
+
   const steps = [
     { id: 1,
       name: 'General information',
@@ -36,10 +37,10 @@ const AddWorkflow = () => {
       name: 'Set groups',
       canJumpTo: stepIdReached >= 2,
       component: <SetStages formData={ formData }
-      handleChange={ handleChange } options={ rbacGroups } /> },
+        handleChange={ handleChange } options={ rbacGroups } /> },
     { id: 3,
       name: 'Review', component: <SummaryContent formData={ formData }
-      options={ rbacGroups } />, nextButtonText: 'Confirm' }
+        options={ rbacGroups } />, nextButtonText: 'Confirm' }
   ];
 
   const onSave = () => {
