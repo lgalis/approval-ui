@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import FormRenderer from '../../common/form-renderer';
+import AsyncSelect from 'react-select/async';
+import asyncDebounce from '../../../utilities/async-debounce';
 import { fetchFilterApprovalGroups } from '../../../helpers/group/group-helper';
 import { WorkflowInfoFormLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,13 +11,20 @@ import {
   Title
 } from '@patternfly/react-core';
 import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
-import setGroupsSchema from '../../../forms/set_groups_form.schema';
 
 const SetStages = ({ formData, handleChange, title }) => {
+  const [ isExpanded, setExpanded ] = useState(false);
   const [ stageValues, setStageValues ] = useState([]);
+  const [ inputValue, setInputValue ] = useState([]);
   const [ isFetching, setIsFetching ] = useState([]);
 
   const defaultOptions = useSelector(({ groupReducer: { groups }}) => groups || []);
+
+  const onInputChange = (newValue) => {
+    const value = newValue.replace(/\W/g, '');
+    setInputValue(value);
+  };
+
   const dispatch = useDispatch();
   useEffect(() => {
     setIsFetching(true);
@@ -28,12 +36,16 @@ const SetStages = ({ formData, handleChange, title }) => {
     setStageValues(formData.wfGroups ? formData.wfGroups : []);
   }, [ formData.wfGroups ]);
 
-  const onStageChange = (value, index) => {
-    const values = stageValues;
-    values[index] = value;
+  const onToggle = (isExpanded) => {
+    setExpanded(isExpanded);
+  };
+
+  const onStageChange = (values) => {
     setStageValues(values);
     handleChange({ wfGroups: values });
   };
+
+  const loadGroupOptions = (inputValue) => fetchFilterApprovalGroups(inputValue);
 
   return (
     <Fragment>
@@ -44,13 +56,22 @@ const SetStages = ({ formData, handleChange, title }) => {
         <StackItem>
           { isFetching && <WorkflowInfoFormLoader/> }
           { !isFetching &&
-            <FormRenderer
-              initialValues={ defaultOptions }
-              onSubmit={ onStageChange }
-              schema={ setGroupsSchema(fetchFilterApprovalGroups) }
-              formContainer="modal"
-              buttonsLabels={ { submitLabel: 'Save' } }
-            /> }
+              <AsyncSelect
+                cacheOptions
+                isClearable
+                isMulti
+                label={ 'Group' }
+                aria-label={ 'Group' }
+                onToggle={ onToggle }
+                key={ `groups` }
+                onChange={ (e) => onStageChange(e) }
+                value={ stageValues }
+                inpuValue={ inputValue }
+                isexpanded={ isExpanded }
+                loadOptions={ asyncDebounce(loadGroupOptions) }
+                defaultOptions={ defaultOptions }
+                onInputChange={ (e) => onInputChange(e) }
+              /> }
         </StackItem>
       </Stack>
     </Fragment>
