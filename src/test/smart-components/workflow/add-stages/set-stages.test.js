@@ -2,7 +2,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
-import SetStages from '../../../../smart-components/workflow/add-stages/set-stages';
+import SetStages from '../../../../smart-components/workflow/add-stages/set-groups';
 import { TrashIcon } from '@patternfly/react-icons';
 import AsyncSelect from 'react-select/async';
 import { RBAC_API_BASE } from '../../../../utilities/constants';

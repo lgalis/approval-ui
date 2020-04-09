@@ -10,7 +10,7 @@ import {
   Title
 } from '@patternfly/react-core';
 import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
-import { setGroupsSchema }  from '../../../forms/set_groups_form.schema';
+import setGroupsSchema from '../../../forms/set_groups_form.schema';
 
 const SetStages = ({ formData, handleChange, title }) => {
   const [ stageValues, setStageValues ] = useState([]);
@@ -35,8 +35,6 @@ const SetStages = ({ formData, handleChange, title }) => {
     handleChange({ wfGroups: values });
   };
 
-  const loadGroupOptions = (inputValue) => fetchFilterApprovalGroups(inputValue);
-
   return (
     <Fragment>
       <Stack gutter="md">
@@ -49,7 +47,7 @@ const SetStages = ({ formData, handleChange, title }) => {
             <FormRenderer
               initialValues={ defaultOptions }
               onSubmit={ onStageChange }
-              schema={ setGroupsSchema(loadGroupOptions) }
+              schema={ setGroupsSchema(fetchFilterApprovalGroups) }
               formContainer="modal"
               buttonsLabels={ { submitLabel: 'Save' } }
             /> }

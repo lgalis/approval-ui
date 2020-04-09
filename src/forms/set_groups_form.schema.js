@@ -7,7 +7,7 @@ const setGroupsSchema = (loadGroups) => ({
       component: componentTypes.SELECT,
       name: 'selectedGroups',
       label: 'Select groups',
-      loadOptions: asyncDebounce(loadGroups),
+      loadOptions: asyncDebounce(loadGroups()),
       multi: true,
       isSearchable: true,
       isClearable: true

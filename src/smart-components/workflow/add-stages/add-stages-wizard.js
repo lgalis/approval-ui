@@ -7,7 +7,7 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 import { addWorkflow } from '../../../redux/actions/workflow-actions';
 import SummaryContent from './summary-content';
 import WorkflowInfoForm from './stage-information';
-import SetStages from './set-stages';
+import SetStages from './set-groups';
 
 const AddWorkflow = () => {
   const [ formData, setValues ] = useState({});
