@@ -4,13 +4,13 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
 <WorkflowInfoForm
   formData={
     Object {
-      "description": "Stage info description test",
-      "name": "Stage info name test",
+      "description": "Group info description test",
+      "name": "Group info name test",
     }
   }
   handleChange={[MockFunction]}
   isValid={[MockFunction]}
-  title="Set stage info test"
+  title="Set group info test"
 >
   <Stack
     gutter="md"
@@ -29,7 +29,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
               className="pf-c-title pf-m-md"
             >
                
-              Set stage info test
+              Set group info test
                
             </h1>
           </Title>
@@ -78,7 +78,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                     name="workflow-name"
                     onChange={[Function]}
                     type="text"
-                    value="Stage info name test"
+                    value="Group info name test"
                   >
                     <TextInputBase
                       aria-describedby="workflow-name"
@@ -94,7 +94,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                       onChange={[Function]}
                       type="text"
                       validated="default"
-                      value="Stage info name test"
+                      value="Group info name test"
                     >
                       <input
                         aria-describedby="workflow-name"
@@ -108,7 +108,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                         readOnly={false}
                         required={true}
                         type="text"
-                        value="Stage info name test"
+                        value="Group info name test"
                       />
                     </TextInputBase>
                   </ForwardRef>
@@ -142,7 +142,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                     resizeOrientation="both"
                     type="text"
                     validated="default"
-                    value="Stage info description test"
+                    value="Group info description test"
                   >
                     <textarea
                       aria-invalid={false}
@@ -153,7 +153,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                       onChange={[Function]}
                       required={false}
                       type="text"
-                      value="Stage info description test"
+                      value="Group info description test"
                     />
                   </TextArea>
                 </div>

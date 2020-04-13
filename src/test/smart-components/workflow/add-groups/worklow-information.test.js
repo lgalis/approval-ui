@@ -9,12 +9,12 @@ describe('<WorkflowInfoForm />', () => {
   beforeEach(() => {
     initialProps = {
       formData: {
-        name: 'Stage info name test',
-        description: 'Stage info description test'
+        name: 'Group info name test',
+        description: 'Group info description test'
       },
       handleChange: jest.fn(),
       isValid: jest.fn(),
-      title: 'Set stage info test'
+      title: 'Set group info test'
     };
   });
 

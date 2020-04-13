@@ -41,6 +41,8 @@ describe('<SetGroups />', () => {
     let wrapper;
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22%0A%20%20&name=foo`,
+      mockOnce({ body: { data: []}}));
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store } >
@@ -96,6 +98,8 @@ describe('<SetGroups />', () => {
     let wrapper;
     const handleChange = jest.fn();
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22%0A%20%20&name=foo`,
       mockOnce({ body: { data: []}}));
     await act(async() => {
       wrapper = mount(

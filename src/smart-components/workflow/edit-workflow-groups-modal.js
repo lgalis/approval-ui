@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
-import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetGroups from './add-groups/set-groups';
 import '../../App.scss';
@@ -27,10 +26,10 @@ const EditWorkflowGroupsModal = ({
   };
 
   const initialValues = (wfData) => {
-    const stageOptions = wfData.group_refs.map((group) => {
+    const groupOptions = wfData.group_refs.map((group) => {
       return { label: group.name, value: group.uuid };
     });
-    const data = { ...wfData, wfGroups: stageOptions };
+    const data = { ...wfData, wfGroups: groupOptions };
     return data;
   };
 
@@ -62,11 +61,11 @@ const EditWorkflowGroupsModal = ({
       onClose={ onCancel }>
       <Stack gutter="md">
         <StackItem>
-          <FormGroup fieldId="workflow-stages-formgroup">
+          <FormGroup fieldId="workflow-groups-formgroup">
             { isFetching && <WorkflowInfoFormLoader/> }
             { !isFetching && (
-              <StackItem className="stages-modal">
-                <SetGroups className="stages-modal" formData={ formData }
+              <StackItem className="groups-modal">
+                <SetGroups className="groups-modal" formData={ formData }
                   handleChange={ handleChange }
                   title={ `Add or remove ${formData.name}'s groups` }/>
               </StackItem>) }
@@ -109,7 +108,6 @@ EditWorkflowGroupsModal.propTypes = {
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
   fetchWorkflow: PropTypes.func.isRequired,
-  fetchRbacGroups: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,
@@ -129,8 +127,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchWorkflow,
-  fetchRbacGroups
+  fetchWorkflow
 }, dispatch);
 
 const mapStateToProps = ({ workflowReducer: { isRecordLoading }}) => ({

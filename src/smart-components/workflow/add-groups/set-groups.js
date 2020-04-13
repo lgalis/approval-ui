@@ -12,9 +12,11 @@ import {
 } from '@patternfly/react-core';
 import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
 
+const loadGroupOptions = (inputValue) => asyncDebounce(fetchFilterApprovalGroups(inputValue), 1000);
+
 const SetGroups = ({ formData, handleChange, title }) => {
   const [ isExpanded, setExpanded ] = useState(false);
-  const [ stageValues, setStageValues ] = useState([]);
+  const [ groupValues, setGroupValues ] = useState([]);
   const [ inputValue, setInputValue ] = useState([]);
   const [ isFetching, setIsFetching ] = useState([]);
 
@@ -33,19 +35,18 @@ const SetGroups = ({ formData, handleChange, title }) => {
   }, []);
 
   useEffect(() => {
-    setStageValues(formData.wfGroups ? formData.wfGroups : []);
+    setGroupValues(formData.wfGroups ? formData.wfGroups : []);
   }, [ formData.wfGroups ]);
 
   const onToggle = (isExpanded) => {
     setExpanded(isExpanded);
   };
 
-  const onStageChange = (values) => {
-    setStageValues(values);
+  const onGroupChange = (values) => {
+    setGroupValues(values);
     handleChange({ wfGroups: values });
   };
 
-  const loadGroupOptions = (inputValue) => fetchFilterApprovalGroups(inputValue);
   return (
     <Fragment>
       <Stack gutter="md">
@@ -67,11 +68,11 @@ const SetGroups = ({ formData, handleChange, title }) => {
                 aria-label={ 'Group' }
                 onToggle={ onToggle }
                 key={ `groups` }
-                onChange={ (e) => onStageChange(e) }
-                value={ stageValues }
+                onChange={ (e) => onGroupChange(e) }
+                value={ groupValues }
                 inpuValue={ inputValue }
                 isexpanded={ isExpanded }
-                loadOptions={ asyncDebounce(loadGroupOptions) }
+                loadOptions={ loadGroupOptions }
                 defaultOptions={ defaultOptions }
                 onInputChange={ (e) => onInputChange(e) }
               /> }

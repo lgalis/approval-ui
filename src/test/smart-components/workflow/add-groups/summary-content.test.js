@@ -9,8 +9,8 @@ describe('<SummaryContent />', () => {
   beforeEach(() => {
     initialProps = {
       formData: {
-        name: 'Stage summary name',
-        description: 'Stage summary description',
+        name: 'Group summary name',
+        description: 'Group summary description',
         wfGroups: []
       }
     };
