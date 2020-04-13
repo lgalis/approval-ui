@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import SummaryContent from '../../../../smart-components/workflow/add-stages/summary-content';
+import SummaryContent from '../../../../smart-components/workflow/add-groups/summary-content';
 
 describe('<SummaryContent />', () => {
   let initialProps;

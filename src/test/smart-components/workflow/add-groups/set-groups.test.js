@@ -2,8 +2,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
-import SetStages from '../../../../smart-components/workflow/add-stages/set-groups';
-import { TrashIcon } from '@patternfly/react-icons';
+import SetGroups from '../../../../smart-components/workflow/add-groups/set-groups';
 import AsyncSelect from 'react-select/async';
 import { RBAC_API_BASE } from '../../../../utilities/constants';
 import { Provider } from 'react-redux';
@@ -12,7 +11,7 @@ import configureStore from 'redux-mock-store' ;
 import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 
-describe('<SetStages />', () => {
+describe('<SetGroups />', () => {
   let initialProps;
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
@@ -32,56 +31,9 @@ describe('<SetStages />', () => {
       },
       handleChange: jest.fn(),
       defaultOptions: [],
-      title: 'Set stages test'
+      title: 'Set groups test'
     };
     mockStore = configureStore(middlewares);
-  });
-
-  it('should call remove stage callback', async () => {
-    const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
-    let wrapper;
-    const handleChange = jest.fn();
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: []}}));
-    await act(async() => {
-      wrapper = mount(
-        <ComponentWrapper store={ store } >
-          <SetStages
-            { ...initialProps }
-            formData={ { wfGroups: [{ id: 'should be in callback' }, { id: 'should not be in callback' }]} }
-            handleChange={ handleChange }
-          />
-        </ComponentWrapper>);
-    });
-    wrapper.update();
-
-    wrapper.find('button.pf-c-button.pf-m-link').first().simulate('click');
-    expect(handleChange).toHaveBeenCalledWith({ wfGroups: [{ id: 'should be in callback' }]});
-  });
-
-  it('should call add stage callback', async () => {
-    const store = mockStore({ groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: []}}));
-    let wrapper;
-    await act(async() => {
-      wrapper = mount(
-        <ComponentWrapper store={ store } >
-          <SetStages
-            { ...initialProps }
-            formData={ { wfGroups: []} }
-          /></ComponentWrapper>);
-    });
-    wrapper.update();
-
-    expect(wrapper.find(TrashIcon)).toHaveLength(0);
-    /**
-     * Need to add two stages, first can not bet deleted
-     */
-    wrapper.find('button.pf-c-button.pf-m-link').first().simulate('click');
-    wrapper.find('button.pf-c-button.pf-m-link').first().simulate('click');
-    wrapper.update();
-    expect(wrapper.find(TrashIcon)).toHaveLength(1);
   });
 
   it('should call onInputChange callback', async (done) => {
@@ -92,7 +44,7 @@ describe('<SetStages />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store } >
-          <SetStages
+          <SetGroups
             { ...initialProps }
             formData={ { wfGroups: [{}]} }
           /></ComponentWrapper>);
@@ -122,7 +74,7 @@ describe('<SetStages />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store } >
-          <SetStages
+          <SetGroups
             { ...initialProps }
             formData={ { wfGroups: [{}]} }
           /></ComponentWrapper>);
@@ -148,7 +100,7 @@ describe('<SetStages />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store } >
-          <SetStages
+          <SetGroups
             { ...initialProps }
             formData={ { wfGroups: [{}]} }
             options={ [{ label: 'foo', value: '1' }] }
@@ -158,7 +110,7 @@ describe('<SetStages />', () => {
     wrapper.update();
 
     wrapper.find(AsyncSelect).props().onChange({ value: '1', label: 'foo' });
-    expect(handleChange).toHaveBeenCalledWith({ wfGroups: [{ label: 'foo', value: '1' }]});
+    expect(handleChange).toHaveBeenCalledWith({ wfGroups: { label: 'foo', value: '1' }});
     done();
   });
 });

@@ -12,7 +12,7 @@ import {
 } from '@patternfly/react-core';
 import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
 
-const SetStages = ({ formData, handleChange, title }) => {
+const SetGroups = ({ formData, handleChange, title }) => {
   const [ isExpanded, setExpanded ] = useState(false);
   const [ stageValues, setStageValues ] = useState([]);
   const [ inputValue, setInputValue ] = useState([]);
@@ -46,20 +46,23 @@ const SetStages = ({ formData, handleChange, title }) => {
   };
 
   const loadGroupOptions = (inputValue) => fetchFilterApprovalGroups(inputValue);
-
   return (
     <Fragment>
       <Stack gutter="md">
-        <StackItem>
+        <StackItem key={ 'title' }>
           <Title size="md">{ title || 'Set groups' }</Title>
         </StackItem>
-        <StackItem>
+        <StackItem key={ 'group' }>
           { isFetching && <WorkflowInfoFormLoader/> }
           { !isFetching &&
               <AsyncSelect
                 cacheOptions
                 isClearable
                 isMulti
+                styles={ { menuPortal: base => ({ ...base, zIndex: 9999 }) } }
+                menuPortalTarget={ document.body }
+                menuPosition={ 'fixed' }
+                menuPlacement={ 'bottom' }
                 label={ 'Group' }
                 aria-label={ 'Group' }
                 onToggle={ onToggle }
@@ -78,7 +81,7 @@ const SetStages = ({ formData, handleChange, title }) => {
   );
 };
 
-SetStages.propTypes = {
+SetGroups.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string,
   title: PropTypes.string,
@@ -86,4 +89,4 @@ SetStages.propTypes = {
   handleChange: PropTypes.func
 };
 
-export default SetStages;
+export default SetGroups;

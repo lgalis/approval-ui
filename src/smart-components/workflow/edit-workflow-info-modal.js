@@ -7,8 +7,8 @@ import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackIt
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
-import WorkflowInfoForm from './add-stages/stage-information';
-import WorkflowSequenceForm from './add-stages/workflow-sequence';
+import WorkflowInfoForm from './add-groups/workflow-information';
+import WorkflowSequenceForm from './add-groups/workflow-sequence';
 import '../../App.scss';
 
 const EditWorkflowInfoModal = ({

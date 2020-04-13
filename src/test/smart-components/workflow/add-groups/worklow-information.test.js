@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import WorkflowInfoForm from '../../../../smart-components/workflow/add-stages/stage-information';
+import WorkflowInfoForm from '../../../../smart-components/workflow/add-groups/workflow-information';
 
 describe('<WorkflowInfoForm />', () => {
   let initialProps;

@@ -44,7 +44,7 @@ const SummaryContent = ({ formData }) => {
                   <Text className="data-table-detail content" component={ TextVariants.p }>{ description }</Text>
                 </GridItem>
               </Grid>
-              { (wfGroups !== undefined) && wfGroups.map((stage, idx)  =>
+              { wfGroups && wfGroups.length > 0 && wfGroups.map((stage, idx)  =>
               { return (<Fragment key={ `Group-${idx}` }>
                 <Grid gutter="md">
                   <GridItem span={ 2 }>

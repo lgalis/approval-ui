@@ -6,11 +6,11 @@ import { Wizard } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow } from '../../../redux/actions/workflow-actions';
 import SummaryContent from './summary-content';
-import WorkflowInfoForm from './stage-information';
-import SetStages from './set-groups';
+import WorkflowInfoForm from './workflow-information';
+import SetGroups from './set-groups';
 
 const AddWorkflow = () => {
-  const [ formData, setValues ] = useState({});
+  const [ formData, setValues ] = useState({ wfGroups: []});
   const dispatch = useDispatch();
   const { push } = useHistory();
 
@@ -36,9 +36,10 @@ const AddWorkflow = () => {
     { id: 2,
       name: 'Set groups',
       canJumpTo: stepIdReached >= 2,
-      component: <SetStages formData={ formData }
+      component: <SetGroups formData={ formData }
         handleChange={ handleChange } options={ rbacGroups } /> },
     { id: 3,
+      canJumpTo: stepIdReached >= 3,
       name: 'Review', component: <SummaryContent formData={ formData }
         options={ rbacGroups } />, nextButtonText: 'Confirm' }
   ];
@@ -46,7 +47,7 @@ const AddWorkflow = () => {
   const onSave = () => {
     const { name, description, wfGroups } = formData;
     const workflowData = { name, description,
-      group_refs: wfGroups ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
+      group_refs: wfGroups && wfGroups.length > 0 ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
     push('/workflows');
     dispatch(addWorkflow(workflowData));
   };
@@ -79,14 +80,8 @@ AddWorkflow.defaultProps = {
 };
 
 AddWorkflow.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired,
   addWorkflow: PropTypes.func.isRequired,
   match: PropTypes.object,
-  addNotification: PropTypes.func.isRequired,
-  fetchWorkflow: PropTypes.func.isRequired,
-  postMethod: PropTypes.func.isRequired,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
     label: PropTypes.string.isRequired

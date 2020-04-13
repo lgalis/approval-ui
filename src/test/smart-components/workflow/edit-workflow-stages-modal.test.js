@@ -9,11 +9,11 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
-import EditWorkflowStagesModal from '../../../smart-components/workflow/edit-workflow-stages-modal';
+import EditWorkflowGroupsModal from '../../../smart-components/workflow/edit-workflow-groups-modal';
 import { WorkflowInfoFormLoader } from '../../../presentational-components/shared/loader-placeholders';
-import SetStages from '../../../smart-components/workflow/add-stages/set-groups';
+import SetGroups from '../../../smart-components/workflow/add-groups/set-groups';
 
-describe('<EditWorkflowStagesModal />', () => {
+describe('<EditWorkflowGroupsModal />', () => {
   let initialProps;
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
@@ -45,7 +45,7 @@ describe('<EditWorkflowStagesModal />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowStagesModal { ...props } { ...initialProps } /> }/>
+          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
 
@@ -70,7 +70,7 @@ describe('<EditWorkflowStagesModal />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowStagesModal { ...props } { ...initialProps } /> }/>
+          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
 
@@ -81,7 +81,7 @@ describe('<EditWorkflowStagesModal />', () => {
     done();
   });
 
-  it('should mount with SetStages child component', async done => {
+  it('should mount with SetGroups child component', async done => {
     const store = mockStore({ workflowReducer: { isRecordLoading: false },
       groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
@@ -95,7 +95,7 @@ describe('<EditWorkflowStagesModal />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowStagesModal
+          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal
             { ...props }
             { ...initialProps }
           /> }/>
@@ -105,7 +105,7 @@ describe('<EditWorkflowStagesModal />', () => {
     });
 
     wrapper.update();
-    expect(wrapper.find(SetStages)).toHaveLength(1);
+    expect(wrapper.find(SetGroups)).toHaveLength(1);
     done();
   });
 
@@ -123,7 +123,7 @@ describe('<EditWorkflowStagesModal />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowStagesModal { ...props } { ...initialProps } /> }/>
+          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
 
@@ -158,7 +158,7 @@ describe('<EditWorkflowStagesModal />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowStagesModal { ...props } { ...initialProps } postMethod={ postMethod } /> }/>
+          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } postMethod={ postMethod } /> }/>
         </ComponentWrapper>
       );
 

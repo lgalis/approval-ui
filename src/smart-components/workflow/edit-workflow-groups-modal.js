@@ -8,10 +8,10 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { fetchRbacGroups } from '../../redux/actions/group-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
-import SetStages from './add-stages/set-stages';
+import SetGroups from './add-groups/set-groups';
 import '../../App.scss';
 
-const EditWorkflowStagesModal = ({
+const EditWorkflowGroupsModal = ({
   history: { push },
   match: { params: { id }},
   addNotification,
@@ -66,7 +66,7 @@ const EditWorkflowStagesModal = ({
             { isFetching && <WorkflowInfoFormLoader/> }
             { !isFetching && (
               <StackItem className="stages-modal">
-                <SetStages className="stages-modal" formData={ formData }
+                <SetGroups className="stages-modal" formData={ formData }
                   handleChange={ handleChange }
                   title={ `Add or remove ${formData.name}'s groups` }/>
               </StackItem>) }
@@ -96,12 +96,12 @@ const EditWorkflowStagesModal = ({
   );
 };
 
-EditWorkflowStagesModal.defaultProps = {
+EditWorkflowGroupsModal.defaultProps = {
   rbacGroups: [],
   isFetching: false
 };
 
-EditWorkflowStagesModal.propTypes = {
+EditWorkflowGroupsModal.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }),
@@ -137,4 +137,4 @@ const mapStateToProps = ({ workflowReducer: { isRecordLoading }}) => ({
   isFetching: isRecordLoading
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowStagesModal));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowGroupsModal));
