@@ -23,7 +23,7 @@ const AddWorkflow = () => {
   };
 
   const onNext = ({ id }) => {
-    setStepIdReached(stepIdReached < id ? id : stepIdReached);
+    setStepIdReached(prevStepIdReached =>  prevStepIdReached < id ? id : prevStepIdReached);
   };
 
   const steps = [
