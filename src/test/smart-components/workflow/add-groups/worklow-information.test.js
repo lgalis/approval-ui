@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import WorkflowInfoForm from '../../../../smart-components/workflow/add-stages/stage-information';
+import WorkflowInfoForm from '../../../../smart-components/workflow/add-groups/workflow-information';
 
 describe('<WorkflowInfoForm />', () => {
   let initialProps;
@@ -9,12 +9,12 @@ describe('<WorkflowInfoForm />', () => {
   beforeEach(() => {
     initialProps = {
       formData: {
-        name: 'Stage info name test',
-        description: 'Stage info description test'
+        name: 'Group info name test',
+        description: 'Group info description test'
       },
       handleChange: jest.fn(),
       isValid: jest.fn(),
-      title: 'Set stage info test'
+      title: 'Set group info test'
     };
   });
 

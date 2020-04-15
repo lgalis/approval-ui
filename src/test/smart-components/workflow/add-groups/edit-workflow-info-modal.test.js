@@ -9,7 +9,7 @@ import thunk from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 
 import EditWorkflowInfoModal from '../../../../smart-components/workflow/edit-workflow-info-modal';
-import WorkflowInfoForm from '../../../../smart-components/workflow/add-stages/stage-information';
+import WorkflowInfoForm from '../../../../smart-components/workflow/add-groups/workflow-information';
 import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 import { WorkflowInfoFormLoader } from '../../../../presentational-components/shared/loader-placeholders';
 
