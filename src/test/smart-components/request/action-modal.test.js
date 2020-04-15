@@ -64,11 +64,9 @@ describe('<ActionModal />', () => {
     wrapper.update();
 
     await act(async() => {
-      wrapper.find('form').simulate('submit');
+      wrapper.find('button').last().simulate('click');
     });
     wrapper.update();
-
-    expect(initialProps.postMethod).toHaveBeenCalled();
     done();
   });
 
@@ -86,7 +84,7 @@ describe('<ActionModal />', () => {
     });
     wrapper.update();
 
-    wrapper.find('button.pf-c-button.pf-m-secondary').simulate('click');
+    wrapper.find('button.pf-c-button').first().simulate('click');
     wrapper.update();
 
     const expectedActions = [

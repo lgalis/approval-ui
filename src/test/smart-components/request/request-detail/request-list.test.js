@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 
 import RequestList from '../../../../smart-components/request/request-detail/request-list';
 import { DataListLoader } from '../../../../presentational-components/shared/loader-placeholders';
-import Stage from '../../../../smart-components/request/request-detail/request';
+import Group from '../../../../smart-components/request/request-detail/request';
 
 describe('<RequestList />', () => {
   let initialProps;
@@ -24,7 +24,7 @@ describe('<RequestList />', () => {
       id: 'foo',
       actions: []
     }] }/>);
-    expect(wrapper.find(Stage)).toHaveLength(1);
+    expect(wrapper.find(Group)).toHaveLength(1);
     const button = wrapper.find('button.pf-c-button.pf-m-plain');
     expect(button.props().className).toEqual('pf-c-button pf-m-plain');
     button.simulate('click');

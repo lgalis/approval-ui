@@ -47,10 +47,10 @@ exports[`<AddWorkflow /> should post a warning message on Cancel 1`] = `
   >
     <AddWorkflow
       handleChange={[MockFunction]}
+      id="123"
       initialValues={Object {}}
       postMethod={[MockFunction]}
       rbacGroups={Array []}
-      uuid="123"
     />
   </MemoryRouter>
 </ContextProvider>

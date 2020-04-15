@@ -4,8 +4,8 @@ exports[`<SummaryContent /> should render correctly 1`] = `
 <SummaryContent
   formData={
     Object {
-      "description": "Stage summary description",
-      "name": "Stage summary name",
+      "description": "Group summary description",
+      "name": "Group summary name",
       "wfGroups": Array [],
     }
   }
@@ -107,7 +107,7 @@ exports[`<SummaryContent /> should render correctly 1`] = `
                               className="data-table-detail content"
                               data-pf-content={true}
                             >
-                              Stage summary name
+                              Group summary name
                             </p>
                           </Text>
                         </div>
@@ -153,7 +153,7 @@ exports[`<SummaryContent /> should render correctly 1`] = `
                               className="data-table-detail content"
                               data-pf-content={true}
                             >
-                              Stage summary description
+                              Group summary description
                             </p>
                           </Text>
                         </div>

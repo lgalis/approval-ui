@@ -1,17 +1,15 @@
 import React from 'react';
 import thunk from 'redux-thunk';
-import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store' ;
 import { shallowToJson } from 'enzyme-to-json';
-import AsyncSelect from 'react-select/async';
 
 import { MemoryRouter, Route } from 'react-router-dom';
 import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications/';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../../utilities/constants';
-import AddWorkflow from '../../../../smart-components/workflow/add-stages/add-stages-wizard';
+import AddWorkflow from '../../../../smart-components/workflow/add-groups/add-workflow-wizard';
 import { ADD_NOTIFICATION } from '@redhat-cloud-services/frontend-components-notifications/index';
 import { mount } from 'enzyme/build/index';
 
@@ -31,7 +29,7 @@ describe('<AddWorkflow />', () => {
 
   beforeEach(() => {
     initialProps = {
-      uuid: '123',
+      id: '123',
       postMethod: jest.fn(),
       handleChange: jest.fn()
     };
@@ -44,11 +42,11 @@ describe('<AddWorkflow />', () => {
         }]
       },
       workflowReducer: {
-        workflows: { data: [{
+        workflows: { data: { id: 1, group_refs: [{
           uuid: '123',
           name: 'SampleWorkflow'
         }]}
-      }
+        }}
     };
     mockStore = configureStore(middlewares);
   });
@@ -104,61 +102,6 @@ describe('<AddWorkflow />', () => {
     setImmediate(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
-    });
-  });
-
-  it('should travers over all wizard pages and call onSave function', async(done) => {
-    const store = mockStore(initialState);
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=Test3&limit=50&offset=0`,
-      mockOnce({ body: { data: [{ id: '123' }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/templates`, mockOnce({ body: { data: [{ id: '123' }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: [ 1 ]}}));
-    apiClientMock.post(`${APPROVAL_API_BASE}/templates/123/workflows`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual({ name: 'Test3', group_refs: [{ name: 'foo', uuid: '1' }]});
-      done();
-      return res.status(200);
-    }));
-
-    const wrapper = mount(
-      <ComponentWrapper store={ store }>
-        <Route path="/workflows/add-workflow/" render={ () => <AddWorkflow { ...initialProps }
-          formData={ { name: 'Test1', wfGroups: [{ value: '1', label: 'foo' }]} } /> } />
-      </ComponentWrapper>
-    );
-
-    await act(async() => {
-      //wrapper.find('input').simulate('change', { target: { name: 'Test2' }});
-      const input = wrapper.find('input').at(0);
-      input.instance().value = 'Test3';
-      input.simulate('change');
-    });
-
-    wrapper.update();
-    await act(async() => {
-      wrapper.find('button').at(1).simulate('click');
-      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
-    });
-
-    wrapper.update();
-    await act(async() => {
-      wrapper.find('button#add-workflow-stage').first().simulate('click');
-    });
-
-    wrapper.update();
-    wrapper.find(AsyncSelect).props().onChange({ value: '1', label: 'foo' });
-
-    wrapper.update();
-    await act(async() => {
-      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
-    });
-
-    wrapper.update();
-    /**
-     * submit wizard
-     */
-    await act(async() => {
-      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
     });
   });
 });

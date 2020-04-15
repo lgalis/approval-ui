@@ -15,9 +15,9 @@ import { notificationsMiddleware } from '@redhat-cloud-services/frontend-compone
 import { groupsInitialState } from '../../../redux/reducers/group-reducer';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import EditWorkflowInfoModal from '../../../smart-components/workflow/edit-workflow-info-modal';
-import EditWorkflowStagesModal from '../../../smart-components/workflow/edit-workflow-stages-modal';
+import EditWorkflowGroupsModal from '../../../smart-components/workflow/edit-workflow-groups-modal';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
-import AddStagesWizard from '../../../smart-components/workflow/add-stages/add-stages-wizard';
+import AddWorkflowWizard from '../../../smart-components/workflow/add-groups/add-workflow-wizard';
 import { Table, RowWrapper } from '@patternfly/react-table';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 
@@ -162,8 +162,8 @@ describe('<Workflows />', () => {
     });
 
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-stages/edit-id');
-    expect(wrapper.find(EditWorkflowStagesModal)).toHaveLength(1);
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-groups/edit-id');
+    expect(wrapper.find(EditWorkflowGroupsModal)).toHaveLength(1);
     done();
   });
 
@@ -280,7 +280,7 @@ describe('<Workflows />', () => {
 
     wrapper.update();
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/add-workflow');
-    expect(wrapper.find(AddStagesWizard)).toHaveLength(1);
+    expect(wrapper.find(AddWorkflowWizard)).toHaveLength(1);
     done();
   });
 
