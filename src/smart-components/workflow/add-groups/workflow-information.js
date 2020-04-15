@@ -22,7 +22,8 @@ const validateName = (name) => fetchWorkflowByName(name)
 const debouncedValidator = (data, validateCallback) => asyncDebounce(validateName(data).then((result) => validateCallback(result)));
 
 const WorkflowInfoForm = ({ formData, initialValue, handleChange, setIsValid, title = undefined }) => {
-  const { name, description } = formData;
+  const name = formData.name || '';
+  const description = formData.description || '';
   const [ error, setError ] = useState(undefined);
 
   const setResult = (result) => {
@@ -59,7 +60,7 @@ const WorkflowInfoForm = ({ formData, initialValue, handleChange, setIsValid, ti
               label="Approval process name"
               isRequired
               fieldId="workflow-name"
-              isValid={ name !== undefined && name.length > 0 && !error }
+              isValid={ !error }
               helperTextInvalid={ error }
             >
               <TextInput
@@ -69,7 +70,7 @@ const WorkflowInfoForm = ({ formData, initialValue, handleChange, setIsValid, ti
                 name="workflow-name"
                 aria-describedby="workflow-name"
                 value={ name }
-                isValid={ name !== undefined && name.length > 0 && !error }
+                isValid={ !error }
                 onBlur={ () => handleNameChange(name) }
                 onChange={ (_, event) => onHandleChange(event.currentTarget.value) }
               />
