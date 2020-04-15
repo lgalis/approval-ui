@@ -46,9 +46,8 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
             >
               <FormGroup
                 fieldId="workflow-name"
-                helperTextInvalid="Enter a name for the approval process"
                 isRequired={true}
-                isValid={[MockFunction]}
+                isValid={true}
                 label="Approval process name"
               >
                 <div
@@ -74,8 +73,9 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                     aria-describedby="workflow-name"
                     id="workflow-name"
                     isRequired={true}
-                    isValid={[MockFunction]}
+                    isValid={true}
                     name="workflow-name"
+                    onBlur={[Function]}
                     onChange={[Function]}
                     type="text"
                     value="Group info name test"
@@ -89,8 +89,9 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                       isDisabled={false}
                       isReadOnly={false}
                       isRequired={true}
-                      isValid={[MockFunction]}
+                      isValid={true}
                       name="workflow-name"
+                      onBlur={[Function]}
                       onChange={[Function]}
                       type="text"
                       validated="default"
@@ -104,6 +105,7 @@ exports[`<WorkflowInfoForm /> should render correctly 1`] = `
                         disabled={false}
                         id="workflow-name"
                         name="workflow-name"
+                        onBlur={[Function]}
                         onChange={[Function]}
                         readOnly={false}
                         required={true}

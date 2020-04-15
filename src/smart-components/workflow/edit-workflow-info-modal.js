@@ -68,7 +68,6 @@ const EditWorkflowInfoModal = ({
             { !isFetching && (editType === 'info' ?
               <WorkflowInfoForm formData={ formData } initialValue={ initialValue }
                 handleChange={ handleChange }
-                isValid={ isValid }
                 setIsValid={ setIsValid }
                 title={ `Make any changes to approval process ${workflow.name}` }/> :
               <WorkflowSequenceForm formData={ formData }

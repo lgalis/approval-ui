@@ -32,14 +32,16 @@ const AddWorkflow = () => {
       enableNext: isValid && formData.name && formData.name.length > 0,
       component: <WorkflowInfoForm formData={ formData }
         handleChange={ handleChange }
-        isValid={ isValid } setIsValid={ setIsValid }/> },
+        setIsValid={ setIsValid }/> },
     { id: 2,
       name: 'Set groups',
       canJumpTo: stepIdReached >= 2,
+      enableNext: isValid && formData.name && formData.name.length > 0,
       component: <SetGroups formData={ formData }
         handleChange={ handleChange } options={ rbacGroups } /> },
     { id: 3,
       canJumpTo: stepIdReached >= 3,
+      enableNext: isValid && formData.name && formData.name.length > 0,
       name: 'Review', component: <SummaryContent formData={ formData }
         options={ rbacGroups } />, nextButtonText: 'Confirm' }
   ];
@@ -80,7 +82,6 @@ AddWorkflow.defaultProps = {
 };
 
 AddWorkflow.propTypes = {
-  addWorkflow: PropTypes.func.isRequired,
   match: PropTypes.object,
   rbacGroups: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,

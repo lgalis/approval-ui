@@ -1,11 +1,9 @@
 import React from 'react';
 import thunk from 'redux-thunk';
-import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store' ;
 import { shallowToJson } from 'enzyme-to-json';
-import AsyncSelect from 'react-select/async';
 
 import { MemoryRouter, Route } from 'react-router-dom';
 import promiseMiddleware from 'redux-promise-middleware';
@@ -104,55 +102,6 @@ describe('<AddWorkflow />', () => {
     setImmediate(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
-    });
-  });
-
-  it('should travers over all wizard pages and call onSave function', async(done) => {
-    const store = mockStore(initialState);
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=Test3&limit=50&offset=0`,
-      mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/templates`, mockOnce({ body: { data: [{ id: '123' }]}}));
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: [{ uuid: '3', name: 'Group3' }, { uuid: '1', name: 'Group1' }]}}));
-    apiClientMock.post(`${APPROVAL_API_BASE}/templates/123/workflows`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual({ name: 'Test3', group_refs: []});
-      done();
-      return res.status(200);
-    }));
-
-    const wrapper = mount(
-      <ComponentWrapper store={ store }>
-        <Route path="/workflows/add-workflow/" render={ () => <AddWorkflow { ...initialProps }
-          formData={ { name: 'Test1', wfGroups: []} } /> } />
-      </ComponentWrapper>
-    );
-
-    await act(async() => {
-      //wrapper.find('input').simulate('change', { target: { name: 'Test2' }});
-      const input = wrapper.find('input').at(0);
-      input.instance().value = 'Test3';
-      input.simulate('change');
-    });
-
-    wrapper.update();
-    await act(async() => {
-      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
-    });
-
-    wrapper.update();
-    wrapper.find(AsyncSelect).props().onChange({ value: '3', label: 'group1' });
-
-    wrapper.update();
-    await act(async() => {
-      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
-    });
-
-    wrapper.update();
-    /**
-     * submit wizard
-     */
-    await act(async() => {
-      wrapper.find('button.pf-c-button.pf-m-primary').first().simulate('click');
     });
   });
 });
