@@ -9,7 +9,6 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 
 import ExpandableContent from '../../../smart-components/workflow/expandable-content';
-import * as helpers from '../../../helpers/group/group-helper';
 
 describe('ExpandableContent', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
@@ -32,29 +31,10 @@ describe('ExpandableContent', () => {
     id = '656646842';
     mockStore = configureStore(middlewares);
     store = mockStore(() => ({ workflowReducer: { expandedWorkflows: [ id ]}}));
-    initialProps = { description: 'this is a description', groupRefs: [ '54654', '656564655' ], id  };
-
+    initialProps = { description: 'this is a description',
+      groupRefs: [{ name: 'GroupName1', uuid: '54654' }, { name: 'GroupName2', uuid: '656564655' }], id  };
     groupName1 = 'GroupName1';
-    groupName2 = 'GroupName12';
-
-    helpers.fetchGroupName = jest.fn()
-    .mockImplementationOnce(() => Promise.resolve(groupName1))
-    .mockImplementationOnce(() => Promise.resolve(groupName2));
-  });
-
-  it('renders correctly when loading', async () => {
-    let wrapper;
-
-    await act(async() => {
-      wrapper = mount(<ComponentWrapper store={ store }><ExpandableContent { ...initialProps }/></ComponentWrapper>);
-    });
-
-    expect(wrapper.find(Text)).toHaveLength(3);
-    expect(wrapper.find(Skeleton)).toHaveLength(1);
-
-    expect(wrapper.find(Text).at(0).text()).toEqual('Description');
-    expect(wrapper.find(Text).at(1).text()).toEqual(initialProps.description);
-    expect(wrapper.find(Text).at(2).text()).toEqual('Groups');
+    groupName2 = 'GroupName2';
   });
 
   it('calls API fetch when expandedRequests is changed only one time', async () => {
@@ -65,9 +45,6 @@ describe('ExpandableContent', () => {
     });
 
     wrapper.update();
-
-    expect(helpers.fetchGroupName.mock.calls).toHaveLength(initialProps.groupRefs.length);
-
     expect(wrapper.find(Skeleton)).toHaveLength(0);
 
     expect(wrapper.find(Text)).toHaveLength(4);
