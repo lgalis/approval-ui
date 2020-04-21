@@ -21,8 +21,9 @@ const validateName = (name) => fetchWorkflowByName(name)
 
 const debouncedValidator = (data, validateCallback) => asyncDebounce(validateName(data).then((result) => validateCallback(result)));
 
-const WorkflowInfoForm = ({ formData, initialValue, handleChange, isValid, setIsValid, title = undefined }) => {
-  const { name, description } = formData;
+const WorkflowInfoForm = ({ formData, initialValue, handleChange, setIsValid, title = undefined }) => {
+  const name = formData.name || '';
+  const description = formData.description || '';
   const [ error, setError ] = useState(undefined);
 
   const setResult = (result) => {
@@ -30,19 +31,21 @@ const WorkflowInfoForm = ({ formData, initialValue, handleChange, isValid, setIs
     setIsValid(!result);
   };
 
+  const onHandleChange = (name) => {
+    setError(!name || name.length < 1 ? 'Enter a name for the approval process' : undefined);
+    handleChange({ name });
+  };
+
   const handleNameChange = (name) => {
     if (!name || name.length < 1) {
-      setError('Enter a name for the approval process ');
-      setIsValid(false);
+      setError('Enter a name for the approval process');
     }
     else if (!initialValue || initialValue.name !== name) {
       debouncedValidator(name, setResult);
     }
     else {
       setError(undefined);
-      setIsValid(true);
     }
-    handleChange({ name });
   };
 
   return (
@@ -57,8 +60,8 @@ const WorkflowInfoForm = ({ formData, initialValue, handleChange, isValid, setIs
               label="Approval process name"
               isRequired
               fieldId="workflow-name"
-              isValid={ formData.name !== undefined && formData.name.length > 0 && isValid }
-              helperTextInvalid={ error || 'Enter a name for the approval process' }
+              isValid={ !error }
+              helperTextInvalid={ error }
             >
               <TextInput
                 isRequired
@@ -67,8 +70,9 @@ const WorkflowInfoForm = ({ formData, initialValue, handleChange, isValid, setIs
                 name="workflow-name"
                 aria-describedby="workflow-name"
                 value={ name }
-                isValid={ isValid }
-                onChange={ (_, event) => { setError(undefined); handleNameChange(event.currentTarget.value); } }
+                isValid={ !error }
+                onBlur={ () => handleNameChange(name) }
+                onChange={ (_, event) => onHandleChange(event.currentTarget.value) }
               />
             </FormGroup>
             <FormGroup label="Description" fieldId="workflow-description">

@@ -11,11 +11,6 @@ export const fetchWorkflow = apiProps => ({
   payload: WorkflowHelper.fetchWorkflow(apiProps)
 });
 
-export const fetchWorkflowWithGroupNames = apiProps => ({
-  type: ActionTypes.FETCH_WORKFLOW_WITH_GROUP_NAMES,
-  payload: WorkflowHelper.fetchWorkflowWithGroupNames(apiProps)
-});
-
 export const addWorkflow = (workflowData) => ({
   type: ActionTypes.ADD_WORKFLOW,
   payload: WorkflowHelper.addWorkflow(workflowData),

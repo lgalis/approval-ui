@@ -6,9 +6,9 @@ import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import { expandable } from '@patternfly/react-table';
 import { fetchWorkflows, expandWorkflow } from '../../redux/actions/workflow-actions';
-import AddWorkflow from './add-stages/add-stages-wizard';
+import AddWorkflow from './add-groups/add-workflow-wizard';
 import EditWorkflowInfo from './edit-workflow-info-modal';
-import EditWorkflowStages from './edit-workflow-stages-modal';
+import EditWorkflowGroups from './edit-workflow-groups-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
@@ -105,7 +105,7 @@ const Workflows = () => {
       postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType='info' { ...props }
       postMethod={ handlePagination } /> }/>
-    <Route exact path="/workflows/edit-stages/:id" render={ props => <EditWorkflowStages editType='stages' { ...props }
+    <Route exact path="/workflows/edit-groups/:id" render={ props => <EditWorkflowGroups editType='groups' { ...props }
       postMethod={ handlePagination } /> }/>
     <Route exact path="/workflows/edit-sequence/:id" render={ props => <EditWorkflowInfo editType='sequence' { ...props }
       postMethod={ handlePagination } /> }/>
@@ -132,7 +132,7 @@ const Workflows = () => {
       {
         title: 'Edit groups',
         onClick: (_event, _rowId, workflow) =>
-          history.push(`/workflows/edit-stages/${workflow.id}`)
+          history.push(`/workflows/edit-groups/${workflow.id}`)
       },
       {
         title: 'Edit sequence',

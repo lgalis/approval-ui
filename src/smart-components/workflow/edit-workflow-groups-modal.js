@@ -5,17 +5,16 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { addWorkflow, updateWorkflow, fetchWorkflowWithGroupNames } from '../../redux/actions/workflow-actions';
-import { fetchRbacGroups } from '../../redux/actions/group-actions';
+import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
-import SetStages from './add-stages/set-stages';
+import SetGroups from './add-groups/set-groups';
 import '../../App.scss';
 
-const EditWorkflowStagesModal = ({
+const EditWorkflowGroupsModal = ({
   history: { push },
   match: { params: { id }},
   addNotification,
-  fetchWorkflowWithGroupNames,
+  fetchWorkflow,
   updateWorkflow,
   postMethod,
   isFetching
@@ -27,20 +26,20 @@ const EditWorkflowStagesModal = ({
   };
 
   const initialValues = (wfData) => {
-    const stageOptions = wfData.group_refs.map((group, idx) => {
-      return { label: (wfData.group_names[idx] ? wfData.group_names[idx] : group), value: group };
+    const groupOptions = wfData.group_refs.map((group) => {
+      return { label: group.name, value: group.uuid };
     });
-    const data = { ...wfData, wfGroups: stageOptions };
+    const data = { ...wfData, wfGroups: groupOptions };
     return data;
   };
 
   useEffect(() => {
-    fetchWorkflowWithGroupNames(id).then((result) => setValues(initialValues(result.value)));
+    fetchWorkflow(id).then((result) => setValues(initialValues(result.value)));
   }, []);
 
   const onSave = () => {
     const { wfGroups } = formData;
-    const workflowData = { group_refs: wfGroups.map(group => group ? group.value : undefined)  };
+    const workflowData = { group_refs: wfGroups ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
     updateWorkflow({ id, ...workflowData }).then(() => postMethod()).then(()=>push('/workflows'));
   };
 
@@ -62,11 +61,11 @@ const EditWorkflowStagesModal = ({
       onClose={ onCancel }>
       <Stack gutter="md">
         <StackItem>
-          <FormGroup fieldId="workflow-stages-formgroup">
+          <FormGroup fieldId="workflow-groups-formgroup">
             { isFetching && <WorkflowInfoFormLoader/> }
             { !isFetching && (
-              <StackItem className="stages-modal">
-                <SetStages className="stages-modal" formData={ formData }
+              <StackItem className="groups-modal">
+                <SetGroups className="groups-modal" formData={ formData }
                   handleChange={ handleChange }
                   title={ `Add or remove ${formData.name}'s groups` }/>
               </StackItem>) }
@@ -96,20 +95,19 @@ const EditWorkflowStagesModal = ({
   );
 };
 
-EditWorkflowStagesModal.defaultProps = {
+EditWorkflowGroupsModal.defaultProps = {
   rbacGroups: [],
   isFetching: false
 };
 
-EditWorkflowStagesModal.propTypes = {
+EditWorkflowGroupsModal.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }),
   addWorkflow: PropTypes.func.isRequired,
   match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
-  fetchWorkflowWithGroupNames: PropTypes.func.isRequired,
-  fetchRbacGroups: PropTypes.func.isRequired,
+  fetchWorkflow: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
   id: PropTypes.string,
@@ -129,12 +127,11 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addNotification,
   addWorkflow,
   updateWorkflow,
-  fetchWorkflowWithGroupNames,
-  fetchRbacGroups
+  fetchWorkflow
 }, dispatch);
 
 const mapStateToProps = ({ workflowReducer: { isRecordLoading }}) => ({
   isFetching: isRecordLoading
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowStagesModal));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowGroupsModal));

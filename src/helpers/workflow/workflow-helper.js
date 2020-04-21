@@ -1,5 +1,4 @@
 import { getWorkflowApi, getTemplateApi, getAxiosInstance } from '../shared/user-login';
-import { fetchGroupNames } from '../group/group-helper';
 import { defaultSettings } from '../shared/pagination';
 import { APPROVAL_API_BASE } from '../../utilities/constants';
 
@@ -12,12 +11,6 @@ export function fetchWorkflows(filter = '', pagination = defaultSettings) {
   return getAxiosInstance().get(
     `${APPROVAL_API_BASE}/workflows/?${filterQuery}${paginationQuery}`
   );
-}
-
-export async function fetchWorkflowWithGroupNames(id) {
-  const wfData = await workflowApi.showWorkflow(id);
-  const  wfWithGroups = await fetchGroupNames(wfData.group_refs);
-  return { ...wfData, group_names: wfWithGroups };
 }
 
 export async function fetchWorkflow(id) {

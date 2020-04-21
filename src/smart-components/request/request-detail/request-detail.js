@@ -12,6 +12,7 @@ import { RequestLoader } from '../../../presentational-components/shared/loader-
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
 import UserContext from '../../../user-context';
 import { approvalPersona } from '../../../helpers/shared/helpers';
+import { REQUEST_DETAIL_ROUTE } from '../../../utilities/constants';
 
 const initialState = {
   isFetching: true
@@ -72,11 +73,11 @@ const RequestDetail = () => {
   return (
     <Fragment>
       <Route exact path="/requests/detail/:id/add_comment" render={ props =>
-        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ location.url } /> }/>
+        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` }/> }/>
       <Route exact path="/requests/detail/:id/approve" render={ props =>
-        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ location.url } /> } />
+        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` } /> } />
       <Route exact path="/requests/detail/:id/deny" render={ props =>
-        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ location.url } /> } />
+        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` }  /> } />
       <TopToolbar
         breadcrumbs={ [{ title: 'Request queue', to: '/requests', id: 'requests' }] }
         paddingBottom={ true }
