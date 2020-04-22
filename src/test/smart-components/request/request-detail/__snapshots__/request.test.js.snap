@@ -340,7 +340,7 @@ exports[`<Request /> should render correctly 1`] = `
                                           <DateFormat
                                             type="relative"
                                           >
-                                            Invalid Date
+                                            Invalid date
                                           </DateFormat>
                                         </span>
                                       </small>
@@ -428,7 +428,7 @@ exports[`<Request /> should render correctly 1`] = `
                                           <DateFormat
                                             type="relative"
                                           >
-                                            Invalid Date
+                                            Invalid date
                                           </DateFormat>
                                         </span>
                                       </small>
