@@ -12,8 +12,6 @@ import {
 } from '@patternfly/react-core';
 import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
 
-const loadGroupOptions = (inputValue) => asyncDebounce(fetchFilterApprovalGroups(inputValue), 1000);
-
 const SetGroups = ({ formData, handleChange, title }) => {
   const [ isExpanded, setExpanded ] = useState(false);
   const [ groupValues, setGroupValues ] = useState([]);
@@ -72,7 +70,7 @@ const SetGroups = ({ formData, handleChange, title }) => {
                 value={ groupValues }
                 inpuValue={ inputValue }
                 isexpanded={ isExpanded }
-                loadOptions={ loadGroupOptions }
+                loadOptions={ asyncDebounce(fetchFilterApprovalGroups) }
                 defaultOptions={ defaultOptions }
                 onInputChange={ (e) => onInputChange(e) }
               /> }
