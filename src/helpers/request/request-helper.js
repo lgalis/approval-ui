@@ -62,33 +62,13 @@ export const fetchRequestContent = (id, persona) => {
 };
 
 export async function fetchRequestWithActions(id, persona = undefined) {
-  let requestData = await requestApi.showRequest(id, { xRhPersona: persona });
-  const requestActions = await fetchRequestActions(id);
-
-  if (requestData.number_of_children > 0) {
-    const subRequests = await requestApi.listRequestsByRequest(id, persona);
-    const promises = subRequests.data.map(request => fetchRequestWithActions(request.id, persona));
-    const subRequestsWithActions = await Promise.all(promises);
-    requestData = { ...requestData, children: subRequestsWithActions };
-  }
-
-  return  { ...requestData, actions: requestActions };
+  const requestData = await fetchRequestTranscript(id, persona);
+  return  requestData;
 }
 
 export async function fetchRequestWithSubrequests(id, persona) {
-  let requestData = await requestApi.showRequest(id, { xRhPersona: persona });
-
-  if (requestData.number_of_children > 0) {
-    const request = await fetchRequestTranscript(id, persona);
-    console.log( 'DEBUG - requestTranscript:', request);
-    requestData = { ...requestData, children: request?.children };
-  } else {
-    const requestActions = await fetchRequestActions(id, persona);
-    console.log( 'DEBUG - requestActions:', requestActions);
-    requestData = { ...requestData, actions: requestActions ? requestActions.data : []};
-  }
-  console.log( 'DEBUG - requestData', requestData);
-  return  { ...requestData };
+  const requestData = await fetchRequestTranscript(id, persona);
+  return  requestData;
 }
 
 export async function createRequestAction (requestId, actionIn) {
