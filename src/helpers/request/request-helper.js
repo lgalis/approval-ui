@@ -19,10 +19,14 @@ const requestTranscriptQuery = (parent_id) => `query {
     id
     requests {
       id
+      name
       number_of_children
       decision
       description
+      group_name
       number_of_finished_children
+      state
+      workflow_id
       parent_id
       actions {
         id
@@ -32,11 +36,16 @@ const requestTranscriptQuery = (parent_id) => `query {
         processed_by
       }
     }
+    id
+    name
     number_of_children
     decision
     description
+    group_name
     number_of_finished_children
     parent_id
+    state
+    workflow_id
   }
 }`;
 
@@ -63,12 +72,12 @@ export const fetchRequestContent = (id, persona) => {
 
 export async function fetchRequestWithActions(id, persona = undefined) {
   const requestData = await fetchRequestTranscript(id, persona);
-  return  requestData;
+  return  requestData[0];
 }
 
 export async function fetchRequestWithSubrequests(id, persona) {
   const requestData = await fetchRequestTranscript(id, persona);
-  return  requestData;
+  return  requestData[0];
 }
 
 export async function createRequestAction (requestId, actionIn) {
