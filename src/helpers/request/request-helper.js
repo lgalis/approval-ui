@@ -15,24 +15,28 @@ export function fetchRequests(filter = '', pagination = defaultSettings, persona
 }
 
 const requestTranscriptQuery = (parent_id) => `query {
-  requests (filter: { parent_id: "${parent_id}" } ) {
-    actions {
-      id
-      operation 
-      comments 
-      created_at 
-      processed_by
-    }
+  requests(id: "${parent_id}") {
     id
-    name
+    requests {
+      id
+      number_of_children
+      decision
+      description
+      number_of_finished_children
+      parent_id
+      actions {
+        id
+        operation
+        comments
+        created_at
+        processed_by
+      }
+    }
     number_of_children
     decision
     description
-    group_name
     number_of_finished_children
     parent_id
-    state
-    workflow_id
   }
 }`;
 
@@ -75,13 +79,15 @@ export async function fetchRequestWithSubrequests(id, persona) {
   let requestData = await requestApi.showRequest(id, { xRhPersona: persona });
 
   if (requestData.number_of_children > 0) {
-    const subRequests = await fetchRequestTranscript(id, persona);
-    requestData = { ...requestData, children: subRequests };
+    const request = await fetchRequestTranscript(id, persona);
+    console.log( 'DEBUG - requestTranscript:', request);
+    requestData = { ...requestData, children: request?.children };
   } else {
     const requestActions = await fetchRequestActions(id, persona);
+    console.log( 'DEBUG - requestActions:', requestActions);
     requestData = { ...requestData, actions: requestActions ? requestActions.data : []};
   }
-
+  console.log( 'DEBUG - requestData', requestData);
   return  { ...requestData };
 }
 
