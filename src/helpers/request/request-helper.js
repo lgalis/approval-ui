@@ -43,14 +43,12 @@ const requestTranscriptQuery = (parent_id) => `query {
     description
     group_name
     number_of_finished_children
-    parent_id
     state
-    workflow_id
   }
 }`;
 
 export const fetchRequestTranscript = (requestId, persona) => {
-  const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
+  const fetchHeaders = { 'x-rh-persona': persona ? persona : 'approval/requester' };
   return graphqlInstance({ method: 'post', url: `${APPROVAL_API_BASE}/graphql`,
     headers: fetchHeaders, data: { query: requestTranscriptQuery(requestId) }})
   .then(({ data: { requests }}) => requests);
@@ -70,14 +68,9 @@ export const fetchRequestContent = (id, persona) => {
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 };
 
-export async function fetchRequestWithActions(id, persona = undefined) {
-  const requestData = await fetchRequestTranscript(id, persona);
-  return  requestData[0];
-}
-
 export async function fetchRequestWithSubrequests(id, persona) {
   const requestData = await fetchRequestTranscript(id, persona);
-  return  requestData[0];
+  return  requestData && requestData.length > 0 ? requestData[0] : {};
 }
 
 export async function createRequestAction (requestId, actionIn) {

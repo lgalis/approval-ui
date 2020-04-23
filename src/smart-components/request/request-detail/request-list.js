@@ -22,7 +22,6 @@ class RequestList extends Component {
   };
 
   render() {
-    console.log('DEBUG: items', this.props?.items);
     return (
       <Fragment>
         <div>
