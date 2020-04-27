@@ -100,38 +100,74 @@ describe('Request actions', () => {
       }
     }));
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/111/actions', mockOnce({
-      body: {
-        data: [{
-          id: '222',
-          name: 'action'
-        }]
-      }
-    }));
-
     const expectedData = [{
       type: `${FETCH_REQUEST}_PENDING`
     }, {
-      payload: {
-        data: {
-          id: '111',
-          state: 'notified',
-          decision: 'undecided',
-          created_at: '2020-01-29T16:55:03Z',
-          notified_at: '2020-01-29T17:09:15Z',
-          number_of_children: 3,
-          number_of_finished_children: 0,
-          owner: 'test',
-          requester_name: 'Test User',
-          name: 'Hello World',
-          group_name: 'GroupA'
-        },
-        actions: [{
-          id: '222',
-          name: 'action'
-        }]
+      payload:
+            {
+              id: '123',
+              name: 'Hello World',
+              number_of_children: '3',
+              decision: 'undecided',
+              requests: [
+                {
+                  actions: [],
+                  id: '124',
+                  name: 'Hello World',
+                  number_of_children: '0',
+                  decision: 'undecided',
+                  description: null,
+                  group_name: 'Catalog IQE approval',
+                  number_of_finished_children: '0',
+                  parent_id: '123',
+                  state: 'pending',
+                  workflow_id: '100'
+                },
 
-      },
+                {
+                  actions: [],
+                  id: '125',
+                  name: 'Hello World',
+                  number_of_children: '0',
+                  decision: 'undecided',
+                  description: null,
+                  group_name: 'Group1',
+                  number_of_finished_children: '0',
+                  parent_id: '123',
+                  state: 'pending',
+                  workflow_id: '200'
+                },
+
+                {
+                  actions: [
+                    {
+                      id: '1',
+                      operation: 'start',
+                      comments: null,
+                      created_at: '2020-01-29T17:08:56.850Z',
+                      processed_by: 'system'
+                    },
+                    {
+                      id: '2',
+                      operation: 'notify',
+                      comments: null,
+                      created_at: '2020-01-29T17:09:14.994Z',
+                      processed_by: 'system'
+                    }
+                  ],
+                  id: '126',
+                  name: 'Hello World',
+                  number_of_children: '0',
+                  decision: 'undecided',
+                  description: null,
+                  group_name: 'Group2',
+                  number_of_finished_children: '0',
+                  parent_id: '123',
+                  state: 'notified',
+                  workflow_id: '300'
+                }
+              ]
+            },
       type: `${FETCH_REQUEST}_FULFILLED`
     }];
 
@@ -157,60 +193,68 @@ describe('Request actions', () => {
       data: {
         requests: [
           {
-            actions: [],
-            id: '124',
+            id: '123',
             name: 'Hello World',
-            number_of_children: '0',
+            number_of_children: '3',
             decision: 'undecided',
-            description: null,
-            group_name: 'Catalog IQE approval',
-            number_of_finished_children: '0',
-            parent_id: '123',
-            state: 'pending',
-            workflow_id: '100'
-          },
-
-          {
-            actions: [],
-            id: '125',
-            name: 'Hello World',
-            number_of_children: '0',
-            decision: 'undecided',
-            description: null,
-            group_name: 'Group1',
-            number_of_finished_children: '0',
-            parent_id: '123',
-            state: 'pending',
-            workflow_id: '200'
-          },
-
-          {
-            actions: [
+            requests: [
               {
-                id: '1',
-                operation: 'start',
-                comments: null,
-                created_at: '2020-01-29T17:08:56.850Z',
-                processed_by: 'system'
+                actions: [],
+                id: '124',
+                name: 'Hello World',
+                number_of_children: '0',
+                decision: 'undecided',
+                description: null,
+                group_name: 'Catalog IQE approval',
+                number_of_finished_children: '0',
+                parent_id: '123',
+                state: 'pending',
+                workflow_id: '100'
               },
+
               {
-                id: '2',
-                operation: 'notify',
-                comments: null,
-                created_at: '2020-01-29T17:09:14.994Z',
-                processed_by: 'system'
+                actions: [],
+                id: '125',
+                name: 'Hello World',
+                number_of_children: '0',
+                decision: 'undecided',
+                description: null,
+                group_name: 'Group1',
+                number_of_finished_children: '0',
+                parent_id: '123',
+                state: 'pending',
+                workflow_id: '200'
+              },
+
+              {
+                actions: [
+                  {
+                    id: '1',
+                    operation: 'start',
+                    comments: null,
+                    created_at: '2020-01-29T17:08:56.850Z',
+                    processed_by: 'system'
+                  },
+                  {
+                    id: '2',
+                    operation: 'notify',
+                    comments: null,
+                    created_at: '2020-01-29T17:09:14.994Z',
+                    processed_by: 'system'
+                  }
+                ],
+                id: '126',
+                name: 'Hello World',
+                number_of_children: '0',
+                decision: 'undecided',
+                description: null,
+                group_name: 'Group2',
+                number_of_finished_children: '0',
+                parent_id: '123',
+                state: 'notified',
+                workflow_id: '300'
               }
-            ],
-            id: '126',
-            name: 'Hello World',
-            number_of_children: '0',
-            decision: 'undecided',
-            description: null,
-            group_name: 'Group2',
-            number_of_finished_children: '0',
-            parent_id: '123',
-            state: 'notified',
-            workflow_id: '300'
+            ]
           }
         ]
       }
