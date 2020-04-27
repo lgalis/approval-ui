@@ -17,6 +17,20 @@ export function fetchRequests(filter = '', pagination = defaultSettings, persona
 const requestTranscriptQuery = (parent_id) => `query {
   requests(id: "${parent_id}") {
     id
+    name
+    number_of_children
+    decision
+    description
+    group_name
+    number_of_finished_children
+    state
+    actions {
+      id
+      operation
+      comments
+      created_at
+      processed_by
+    }
     requests {
       id
       name
@@ -36,14 +50,6 @@ const requestTranscriptQuery = (parent_id) => `query {
         processed_by
       }
     }
-    id
-    name
-    number_of_children
-    decision
-    description
-    group_name
-    number_of_finished_children
-    state
   }
 }`;
 
