@@ -15,14 +15,7 @@ export function fetchRequests(filter = '', pagination = defaultSettings, persona
 }
 
 const requestTranscriptQuery = (parent_id) => `query {
-  requests (filter: { parent_id: "${parent_id}" } ) {
-    actions {
-      id
-      operation 
-      comments 
-      created_at 
-      processed_by
-    }
+  requests(id: "${parent_id}") {
     id
     name
     number_of_children
@@ -30,14 +23,38 @@ const requestTranscriptQuery = (parent_id) => `query {
     description
     group_name
     number_of_finished_children
-    parent_id
     state
-    workflow_id
+    actions {
+      id
+      operation
+      comments
+      created_at
+      processed_by
+    }
+    requests {
+      id
+      name
+      number_of_children
+      decision
+      description
+      group_name
+      number_of_finished_children
+      state
+      workflow_id
+      parent_id
+      actions {
+        id
+        operation
+        comments
+        created_at
+        processed_by
+      }
+    }
   }
 }`;
 
 export const fetchRequestTranscript = (requestId, persona) => {
-  const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
+  const fetchHeaders = { 'x-rh-persona': persona ? persona : 'approval/requester' };
   return graphqlInstance({ method: 'post', url: `${APPROVAL_API_BASE}/graphql`,
     headers: fetchHeaders, data: { query: requestTranscriptQuery(requestId) }})
   .then(({ data: { requests }}) => requests);
@@ -57,32 +74,9 @@ export const fetchRequestContent = (id, persona) => {
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 };
 
-export async function fetchRequestWithActions(id, persona = undefined) {
-  let requestData = await requestApi.showRequest(id, { xRhPersona: persona });
-  const requestActions = await fetchRequestActions(id);
-
-  if (requestData.number_of_children > 0) {
-    const subRequests = await requestApi.listRequestsByRequest(id, persona);
-    const promises = subRequests.data.map(request => fetchRequestWithActions(request.id, persona));
-    const subRequestsWithActions = await Promise.all(promises);
-    requestData = { ...requestData, children: subRequestsWithActions };
-  }
-
-  return  { ...requestData, actions: requestActions };
-}
-
 export async function fetchRequestWithSubrequests(id, persona) {
-  let requestData = await requestApi.showRequest(id, { xRhPersona: persona });
-
-  if (requestData.number_of_children > 0) {
-    const subRequests = await fetchRequestTranscript(id, persona);
-    requestData = { ...requestData, children: subRequests };
-  } else {
-    const requestActions = await fetchRequestActions(id, persona);
-    requestData = { ...requestData, actions: requestActions ? requestActions.data : []};
-  }
-
-  return  { ...requestData };
+  const requestData = await fetchRequestTranscript(id, persona);
+  return  requestData && requestData.length > 0 ? requestData[0] : {};
 }
 
 export async function createRequestAction (requestId, actionIn) {

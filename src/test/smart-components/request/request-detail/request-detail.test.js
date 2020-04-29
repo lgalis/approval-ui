@@ -15,7 +15,7 @@ import RequestTranscript from '../../../../smart-components/request/request-deta
 import { mockGraphql } from '../../../__mocks__/user-login';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo/123' ]}) => (
-  <Provider store={ store } userRoles={ { name: 'Approval Administrator' } }>
+  <Provider store={ store } >
     <MemoryRouter initialEntries={ initialEntries }>
       { children }
     </MemoryRouter>
@@ -42,28 +42,12 @@ describe('<RequestDetail />', () => {
     };
   });
 
-  it('should render request loader', async done => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
-      product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
-    const store = mockStore(initialState);
-    let wrapper;
-
-    await act(async() => {
-      wrapper = mount(
-        <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" render={ props => <RequestDetail { ...props } { ...initialProps } /> } />
-        </ComponentWrapper>
-      );
-    });
-    expect(wrapper.find(RequestLoader)).toHaveLength(1);
-    done();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render request details', async done => {
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce({ body: { data: []}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     const store = mockStore(
@@ -173,4 +157,29 @@ describe('<RequestDetail />', () => {
     expect(wrapper.find(RequestTranscript)).toHaveLength(1);
     done();
   });
+
+  it('should render request loader', async done => {
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
+      product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
+    mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, {
+      data: {
+        requests: []
+      }
+    });
+
+    const store = mockStore(initialState);
+    let wrapper;
+
+    await act(async() => {
+      wrapper = mount(
+        <ComponentWrapper store={ store }>
+          <Route path="/foo/:id" render={ props => <RequestDetail { ...props } { ...initialProps } /> } />
+        </ComponentWrapper>
+      );
+    });
+    expect(wrapper.find(RequestLoader)).toHaveLength(1);
+    done();
+  });
+
 });

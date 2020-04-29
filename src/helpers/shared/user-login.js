@@ -8,7 +8,10 @@ const axiosInstance = axios.create();
 
 const resolveInterceptor = response => response.data || response;
 const errorInterceptor = (error = {}) => {
-  throw { ...error.response };
+  const requestId = error.response?.headers['x-rh-insights-request-id'];
+  throw requestId
+    ? { ...error.response, sentryId: requestId }
+    : { ...error.response };
 };
 
 // check identity before each request. If the token is expired it will log out user
