@@ -40,7 +40,13 @@ describe('<RequestList />', () => {
       actions: []
     }] }/>);
     const title = wrapper.find('span');
-    expect(title.first().props()).toEqual({ children: [ 'Group Name', ' ' ], id: '1-name' });
+    expect(title.first().props()).toEqual({
+      children: [
+        'Group Name',
+        ' '
+      ],
+      id: '1-name'
+    });
   });
 
 });
