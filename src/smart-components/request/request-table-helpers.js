@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@patternfly/react-core';
-
 import ExpandableContent from './expandable-content';
 import { timeAgo }  from '../../helpers/shared/helpers';
 
@@ -23,7 +21,7 @@ export const createRows = (data) =>
       state,
       number_of_children,
       cells: [
-        <Fragment key={ id }><Link to={ `/requests/detail/${id}` }><Button variant="link"> { name } </Button></Link></Fragment>,
+        <Fragment key={ id }><Link to={ `/requests/detail/${id}` }>{ name }</Link></Fragment>,
         requester_name,
         timeAgo(created_at),
         finished_at ? timeAgo(finished_at) : (notified_at ? timeAgo(notified_at) : timeAgo(created_at)),
