@@ -4,7 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage } from 'react-intl';
-import { Modal, Button, Bullseye, Text, TextContent, TextVariants } from '@patternfly/react-core';
+import { Modal, Button, Split, SplitItem, Text, TextContent, TextVariants } from '@patternfly/react-core';
+import { WarningTriangleIcon } from '@patternfly/react-icons';
 import { removeWorkflow, removeWorkflows } from '../../redux/actions/workflow-actions';
 
 const RemoveWorkflowModal = ({
@@ -42,22 +43,27 @@ const RemoveWorkflowModal = ({
         </Button>
       ] }
     >
-      <Bullseye>
-        <TextContent>
-          <Text component={ TextVariants.h1 }>
-            <FormattedMessage
-              id="remove-workflow-modal"
-              defaultMessage={ `Removing {count, number} {count, plural,
+      <Split gutter="md">
+        <SplitItem>
+          <WarningTriangleIcon size="xl" fill="#f0ab00" />
+        </SplitItem>
+        <SplitItem>
+          <TextContent>
+            <Text component={ TextVariants.p }>
+              <FormattedMessage
+                id="remove-workflow-modal"
+                defaultMessage={ `Removing {count, number} {count, plural,
               one {approval process}
               other {approval processes}
             }` }
-              values={ {
-                count: workflowId !== undefined ? 1 : ids.length
-              } }
-            />
-          </Text>
-        </TextContent>
-      </Bullseye>
+                values={ {
+                  count: workflowId !== undefined ? 1 : ids.length
+                } }
+              />
+            </Text>
+          </TextContent>
+        </SplitItem>
+      </Split>
     </Modal>
   );
 };
