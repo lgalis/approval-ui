@@ -54,7 +54,7 @@ const requestTranscriptQuery = (parent_id) => `query {
 }`;
 
 export const fetchRequestTranscript = (requestId, persona) => {
-  const fetchHeaders = { 'x-rh-persona': persona ? persona : 'approval/requester' };
+  const fetchHeaders = { 'x-rh-persona': 'approval/requester' };
   return graphqlInstance({ method: 'post', url: `${APPROVAL_API_BASE}/graphql`,
     headers: fetchHeaders, data: { query: requestTranscriptQuery(requestId) }})
   .then(({ data: { requests }}) => requests);
@@ -70,7 +70,7 @@ export const fetchRequestActions = (id, persona) => {
 
 export const fetchRequestContent = (id, persona) => {
   const fetchUrl = `${APPROVAL_API_BASE}/requests/${id}/content`;
-  const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
+  const fetchHeaders = { 'x-rh-persona': 'approval/requester' };
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 };
 
