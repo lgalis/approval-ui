@@ -39,6 +39,10 @@ class Request extends Component {
     this.setState({ isKebabOpen: !this.state.isKebabOpen });
   };
 
+  checkCapability = (item, capability) => {
+    return item.user_capabilities && item.user_capabilities[capability];
+  };
+
   buildRequestActionKebab = (request) => {
     return (
       <Dropdown
@@ -69,6 +73,7 @@ class Request extends Component {
   render() {
     const { item, isExpanded } = this.props;
     const requestActive = isRequestStateActive(item.state);
+    console.log( 'DEBUG - item: ', item);
     return (
       <DataListItem key={ `request-${item.id}` }
         aria-labelledby={ `check-request-${item.id}` }
@@ -92,7 +97,7 @@ class Request extends Component {
               <DataListCell key={ `${item.id}-action` }>
                 <Level>
                   <LevelItem>
-                    { (requestActive) &&
+                    { (requestActive && this.checkCapability(item, 'approve')) &&
                     <div>
                       <Link id={ `approve-${item.id}` } to={ `/requests/detail/${item.id}/approve` }>
                         <Button variant="link" aria-label="Approve Request">

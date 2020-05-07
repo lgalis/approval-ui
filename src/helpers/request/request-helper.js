@@ -54,18 +54,10 @@ const requestTranscriptQuery = (parent_id) => `query {
 }`;
 
 export const fetchRequestTranscript = (requestId, persona) => {
-  const fetchHeaders = { 'x-rh-persona': 'approval/requester' };
+  const fetchHeaders = (persona && persona !== 'approval/approver') ? {'x-rh-persona': persona } : {'x-rh-persona': 'approval/requester' };
   return graphqlInstance({ method: 'post', url: `${APPROVAL_API_BASE}/graphql`,
     headers: fetchHeaders, data: { query: requestTranscriptQuery(requestId) }})
   .then(({ data: { requests }}) => requests);
-};
-
-export async function fetchRequest(id) {
-  return await requestApi.showRequest(id);
-}
-
-export const fetchRequestActions = (id, persona) => {
-  return actionApi.listActionsByRequest(id, persona);
 };
 
 export const fetchRequestContent = (id, persona) => {
@@ -74,9 +66,36 @@ export const fetchRequestContent = (id, persona) => {
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 };
 
+export const fetchRequestCapabilities = (id, isParent) => {
+  const fetchUrl = `${APPROVAL_API_BASE}/requests/${id}${isParent ? '/requests}' : ''}`;
+  const fetchHeaders = { 'x-rh-persona': 'approval/requester' };
+  return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
+};
+
 export async function fetchRequestWithSubrequests(id, persona) {
   const requestData = await fetchRequestTranscript(id, persona);
-  return  requestData && requestData.length > 0 ? requestData[0] : {};
+  console.log('DEBUG - persona, requestData', persona, requestData);
+
+  if( !persona || persona === 'approval/approver' ) {
+    if( requestData.number_of_children > 0 ) {
+      const result = await fetchRequestCapabilities(id,true);
+      if (result) {
+        requestData.map(request => ({
+              ...result.find((item) => (item.id === request.id) && item.metadata),
+              ...request
+            }));
+        console.log('DEBUG - requestData with user_capabilities', requestData);
+      }
+    }
+    else{
+      const request = await fetchRequestCapabilities(id,false);
+      if (request) {
+        requestData[0] = { ...requestData[0], ...request.metadata };
+        console.log('DEBUG - requestData with user_capabilities', requestData );
+      }
+    }
+  }
+  return  requestData && requestData.length > 0 ? { ...requestData[0] } : {};
 }
 
 export async function createRequestAction (requestId, actionIn) {
