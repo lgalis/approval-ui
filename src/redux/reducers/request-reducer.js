@@ -22,7 +22,7 @@ export const requestsInitialState = {
     metadata: {
       user_capabilities: {}
     },
-    requests:[]
+    requests: []
   }
 };
 

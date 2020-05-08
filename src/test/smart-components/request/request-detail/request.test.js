@@ -18,7 +18,11 @@ describe('<Request />', () => {
       toggleExpand: jest.fn(),
       item: {
         id: '111',
-        state: 'no-state',
+        group_name: 'Group',
+        state: 'notified',
+        metadata: {
+          user_capabilities: {approve: true, deny: true}
+        },
         actions: [
           {
             id: '1',
@@ -46,6 +50,9 @@ describe('<Request />', () => {
       item: {
         id: '111',
         state: 'no-state',
+        metadata: {
+          user_capabilities: {approve: true, deny: true}
+        },
         actions: [
           {
             id: '1',
@@ -74,6 +81,10 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
+            group_name: 'Group1',
+            metadata: {
+              user_capabilities: {approve: true, deny: true}
+            },
             actions: [
               {
                 id: '1',
@@ -136,6 +147,9 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
+            metadata: {
+              user_capabilities: {approve: true, deny: true, memo: true}
+            },
             actions: []
           } }
           isActive
