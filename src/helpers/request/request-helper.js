@@ -73,9 +73,8 @@ export const fetchRequestCapabilities = (id, isParent) => {
 
 export async function fetchRequestWithSubrequests(id, persona) {
   const requestData = await fetchRequestTranscript(id, persona);
-  console.log('DEBUG - persona, requestData', persona, requestData);
 
-  if( !requestData || requestData.length === 0 ) { return {}; }
+  if (!requestData || requestData.length === 0) { return {}; }
 
   if (!persona || persona === 'approval/admin' || persona === 'approval/approver') {
     if (requestData && requestData.length > 0 && requestData[0].number_of_children > 0) {
@@ -93,7 +92,6 @@ export async function fetchRequestWithSubrequests(id, persona) {
       const request = await fetchRequestCapabilities(id, false);
       if (request) {
         requestData[0] = { ...requestData[0], metadata: request.metadata };
-        console.log('DEBUG - requestData with user_capabilities', requestData);
       }
     }
   }

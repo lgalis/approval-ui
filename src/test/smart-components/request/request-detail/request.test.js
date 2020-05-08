@@ -21,7 +21,7 @@ describe('<Request />', () => {
         group_name: 'Group',
         state: 'notified',
         metadata: {
-          user_capabilities: {approve: true, deny: true}
+          user_capabilities: { approve: true, deny: true }
         },
         actions: [
           {
@@ -51,7 +51,7 @@ describe('<Request />', () => {
         id: '111',
         state: 'no-state',
         metadata: {
-          user_capabilities: {approve: true, deny: true}
+          user_capabilities: { approve: true, deny: true }
         },
         actions: [
           {
@@ -83,7 +83,7 @@ describe('<Request />', () => {
             state: 'notified',
             group_name: 'Group1',
             metadata: {
-              user_capabilities: {approve: true, deny: true}
+              user_capabilities: { approve: true, deny: true }
             },
             actions: [
               {
@@ -148,7 +148,7 @@ describe('<Request />', () => {
             id: '111',
             state: 'notified',
             metadata: {
-              user_capabilities: {approve: true, deny: true, memo: true}
+              user_capabilities: { approve: true, deny: true, memo: true }
             },
             actions: []
           } }

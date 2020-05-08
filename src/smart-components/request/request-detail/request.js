@@ -73,7 +73,6 @@ class Request extends Component {
   render() {
     const { item, isExpanded } = this.props;
     const requestActive = isRequestStateActive(item.state);
-    console.log('DEBUG - item: ', item);
     return (
       <DataListItem key={ `request-${item.id}` }
         aria-labelledby={ `check-request-${item.id}` }
