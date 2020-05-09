@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useContext} from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { isRequestStateActive } from '../../../helpers/shared/helpers';
@@ -23,6 +23,7 @@ import {
   Level,
   LevelItem
 } from '@patternfly/react-core';
+import UserContext from "../../../user-context";
 
 class Request extends Component {
   state = {
@@ -40,6 +41,7 @@ class Request extends Component {
   };
 
   checkCapability = (item, capability) => {
+    //console.log('DEBUG- item.metadata.user_capabilities, value for cap', item.metadata.user_capabilities, capability, item.metadata.user_capabilities[capability] )
     return item.metadata && item.metadata.user_capabilities && item.metadata.user_capabilities[capability];
   };
 

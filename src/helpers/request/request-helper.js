@@ -76,7 +76,7 @@ export async function fetchRequestWithSubrequests(id, persona) {
 
   if (!requestData || requestData.length === 0) { return {}; }
 
-  if (!persona || persona === 'approval/admin' || persona === 'approval/approver') {
+  if (persona === 'approval/approver') {
     if (requestData && requestData.length > 0 && requestData[0].number_of_children > 0) {
       const result = await fetchRequestCapabilities(id, true);
 
