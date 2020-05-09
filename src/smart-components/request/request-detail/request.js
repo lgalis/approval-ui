@@ -1,7 +1,7 @@
-import React, {Component, useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { isRequestStateActive } from '../../../helpers/shared/helpers';
+import {approvalPersona, isRequestStateActive} from '../../../helpers/shared/helpers';
 import { ActionTranscript } from './action-transcript';
 
 import {
@@ -25,33 +25,31 @@ import {
 } from '@patternfly/react-core';
 import UserContext from "../../../user-context";
 
-class Request extends Component {
-  state = {
-    isKebabOpen: false
+const Request = ( props ) => {
+  const [isKebabOpen, setIsKebabOpen] = useState(false);
+  const { roles: userRoles } = useContext(UserContext);
+
+  const onKebabToggle = isOpen => {
+    setIsKebabOpen(isOpen);
   };
 
-  onKebabToggle = isOpen => {
-    this.setState({
-      isKebabOpen: isOpen
-    });
+  const onKebabSelect = () => {
+    setIsKebabOpen(!isKebabOpen);
   };
 
-  onKebabSelect = () => {
-    this.setState({ isKebabOpen: !this.state.isKebabOpen });
-  };
-
-  checkCapability = (item, capability) => {
+  const checkCapability = (item, capability) => {
+    const persona = approvalPersona(userRoles);
     //console.log('DEBUG- item.metadata.user_capabilities, value for cap', item.metadata.user_capabilities, capability, item.metadata.user_capabilities[capability] )
     return item.metadata && item.metadata.user_capabilities && item.metadata.user_capabilities[capability];
   };
 
-  buildRequestActionKebab = (request) => {
+  const buildRequestActionKebab = (request) => {
     return (
       <Dropdown
         position={ DropdownPosition.right }
-        onSelect={ this.onKebabSelect }
-        toggle={ <KebabToggle id={ `request-request-dropdown-${request.id}` } onToggle={ this.onKebabToggle }/> }
-        isOpen={ this.state.isKebabOpen }
+        onSelect={ onKebabSelect }
+        toggle={ <KebabToggle id={ `request-request-dropdown-${request.id}` } onToggle={ onKebabToggle }/> }
+        isOpen={ isKebabOpen }
         dropdownItems={ [
           <DropdownItem aria-label="Add Comment" key={ `add_comment_${request.id}` }>
             <Link
@@ -68,12 +66,12 @@ class Request extends Component {
     );
   };
 
-  fetchRequestDetails = (request) => {
+  const fetchRequestDetails = (request) => {
     return <ActionTranscript actionList={ request.actions }/>;
   };
 
-  render() {
-    const { item, isExpanded } = this.props;
+  const renderRequest = () => {
+    const { item, isExpanded, toggleExpand } = props;
     const requestActive = isRequestStateActive(item.state);
     return (
       <DataListItem key={ `request-${item.id}` }
@@ -81,7 +79,7 @@ class Request extends Component {
         isExpanded={ isExpanded }>
         <DataListItemRow>
           <DataListToggle
-            onClick={ () => this.props.toggleExpand(`request-${item.id}`) }
+            onClick={ () => toggleExpand(`request-${item.id}`) }
             isExpanded={ isExpanded }
             id={ `request-${item.id}` }
             aria-labelledby={ `request-${item.id} request-${item.id}` }
@@ -98,7 +96,7 @@ class Request extends Component {
               <DataListCell key={ `${item.id}-action` }>
                 <Level>
                   <LevelItem>
-                    { (requestActive && this.checkCapability(item, 'approve')) &&
+                    { (requestActive && checkCapability(item, 'approve')) &&
                     <div>
                       <Link id={ `approve-${item.id}` } to={ `/requests/detail/${item.id}/approve` }>
                         <Button variant="link" aria-label="Approve Request">
@@ -120,7 +118,7 @@ class Request extends Component {
                 aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
                 id={ `workflow-${item.id}` }
                 aria-label="Actions">
-                { requestActive && this.buildRequestActionKebab(item) }
+                { requestActive && buildRequestActionKebab(item) }
               </DataListCell>
             ] }/>
         </DataListItemRow>
@@ -129,7 +127,7 @@ class Request extends Component {
           <Stack gutter="md">
             <StackItem>
               <TextContent component={ TextVariants.h6 }>
-                { this.fetchRequestDetails(item) }
+                { fetchRequestDetails(item) }
               </TextContent>
             </StackItem>
           </Stack>
@@ -138,6 +136,8 @@ class Request extends Component {
       </DataListItem>
     );
   };
+
+  return renderRequest();
 }
 
 Request.propTypes = {
