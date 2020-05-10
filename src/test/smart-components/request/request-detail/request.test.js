@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import { MemoryRouter } from 'react-router-dom';
-import Request from '../../../../smart-components/request/request-detail/request';
+import { Request } from '../../../../smart-components/request/request-detail/request';
 
 const ComponentWrapper = ({ children }) => (
   <MemoryRouter initialEntries={ [ '/foo' ] }>

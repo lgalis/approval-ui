@@ -1,7 +1,7 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import {approvalPersona, isRequestStateActive} from '../../../helpers/shared/helpers';
+import { isApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
 import { ActionTranscript } from './action-transcript';
 
 import {
@@ -23,10 +23,10 @@ import {
   Level,
   LevelItem
 } from '@patternfly/react-core';
-import UserContext from "../../../user-context";
+import UserContext from '../../../user-context';
 
-const Request = ( props ) => {
-  const [isKebabOpen, setIsKebabOpen] = useState(false);
+export const Request = ({ item, isExpanded, toggleExpand }) => {
+  const [ isKebabOpen, setIsKebabOpen ] = useState(false);
   const { roles: userRoles } = useContext(UserContext);
 
   const onKebabToggle = isOpen => {
@@ -38,12 +38,17 @@ const Request = ( props ) => {
   };
 
   const checkCapability = (item, capability) => {
-    const persona = approvalPersona(userRoles);
-    //console.log('DEBUG- item.metadata.user_capabilities, value for cap', item.metadata.user_capabilities, capability, item.metadata.user_capabilities[capability] )
+    if (isApprovalAdmin(userRoles)) {
+      return true;
+    }
+
+    //console.log('DEBUG- item.metadata.user_capabilities, value for cap',
+    // item.metadata.user_capabilities, capability, item.metadata.user_capabilities[capability] )
     return item.metadata && item.metadata.user_capabilities && item.metadata.user_capabilities[capability];
   };
 
   const buildRequestActionKebab = (request) => {
+    console.log('Debug1 - request', request);
     return (
       <Dropdown
         position={ DropdownPosition.right }
@@ -67,11 +72,12 @@ const Request = ( props ) => {
   };
 
   const fetchRequestDetails = (request) => {
+    console.log('Debug - detail for request: ', request);
     return <ActionTranscript actionList={ request.actions }/>;
   };
 
   const renderRequest = () => {
-    const { item, isExpanded, toggleExpand } = props;
+    console.log('Debug - renderRequest: item, isExpanded, toggleExpand - ', item, isExpanded, toggleExpand);
     const requestActive = isRequestStateActive(item.state);
     return (
       <DataListItem key={ `request-${item.id}` }
@@ -118,7 +124,7 @@ const Request = ( props ) => {
                 aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
                 id={ `workflow-${item.id}` }
                 aria-label="Actions">
-                { requestActive && buildRequestActionKebab(item) }
+                { requestActive && checkCapability(item, 'memo') && buildRequestActionKebab(item) }
               </DataListCell>
             ] }/>
         </DataListItemRow>
@@ -138,7 +144,7 @@ const Request = ( props ) => {
   };
 
   return renderRequest();
-}
+};
 
 Request.propTypes = {
   isLoading: PropTypes.bool,
@@ -156,5 +162,3 @@ Request.propTypes = {
   toggleExpand: PropTypes.func.isRequired,
   noItems: PropTypes.string
 };
-
-export default Request;

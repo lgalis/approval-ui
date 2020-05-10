@@ -4,6 +4,7 @@ import { Title } from '@patternfly/react-core';
 import RequestList from './request-list';
 
 const RequestTranscript = ({ request }) => {
+  console.log('Debug - transcript for request:', request);
   return (<Fragment>
     <Title size="sm" style={ { paddingLeft: '32px' } }> Request transcript </Title>
     <RequestList items={ request.requests && request.requests.length > 0 ? request.requests : [ request ] }/>
