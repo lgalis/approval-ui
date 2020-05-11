@@ -1,11 +1,12 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button, Bullseye } from '@patternfly/react-core';
-import { isRequestStateActive } from '../../helpers/shared/helpers';
+import { isApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
 import { fetchRequestContent } from '../../helpers/request/request-helper';
 import { Spinner } from '@redhat-cloud-services/frontend-components/components/Spinner';
+import UserContext from '../../user-context';
 
 export const ExpandedItem = ({ title = '', detail = '' }) => (
   <TextContent>
@@ -24,7 +25,7 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
   const [ requestContent, setRequestContent ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ fetchStarted, setIsFetching ] = useState(false);
-
+  const { userPersona: userPersona } = useContext(UserContext);
   const expandedRequests = useSelector(({ requestReducer: { expandedRequests }}) => expandedRequests);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
         <LevelItem>
           <ExpandedItem title="Product" detail={ requestContent ? requestContent.product : 'Unknown' } />
         </LevelItem>
-        { requestActive && <LevelItem>
+        { requestActive && isApprovalApprover(userPersona) && <LevelItem>
           <Link to={ `/requests/approve/${id}` }  className="pf-u-mr-md">
             <Button variant="primary" aria-label="Approve Request" isDisabled={ !requestActive }>
               Approve

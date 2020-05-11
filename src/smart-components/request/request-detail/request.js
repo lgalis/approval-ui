@@ -27,7 +27,7 @@ import UserContext from '../../../user-context';
 
 export const Request = ({ item, isExpanded, toggleExpand }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
-  const { roles: userRoles } = useContext(UserContext);
+  const { userPersona: userPersona } = useContext(UserContext);
 
   const onKebabToggle = isOpen => {
     setIsKebabOpen(isOpen);
@@ -38,17 +38,13 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
   };
 
   const checkCapability = (item, capability) => {
-    if (isApprovalAdmin(userRoles)) {
+    if (isApprovalAdmin(userPersona)) {
       return true;
     }
-
-    //console.log('DEBUG- item.metadata.user_capabilities, value for cap',
-    // item.metadata.user_capabilities, capability, item.metadata.user_capabilities[capability] )
     return item.metadata && item.metadata.user_capabilities && item.metadata.user_capabilities[capability];
   };
 
   const buildRequestActionKebab = (request) => {
-    console.log('Debug1 - request', request);
     return (
       <Dropdown
         position={ DropdownPosition.right }
@@ -77,7 +73,6 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
   };
 
   const renderRequest = () => {
-    console.log('Debug - renderRequest: item, isExpanded, toggleExpand - ', item, isExpanded, toggleExpand);
     const requestActive = isRequestStateActive(item.state);
     return (
       <DataListItem key={ `request-${item.id}` }

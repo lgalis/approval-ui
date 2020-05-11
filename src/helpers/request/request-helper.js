@@ -85,7 +85,6 @@ export async function fetchRequestWithSubrequests(id, persona) {
           return { ...result.data.find((item) => (item.id === request.id) && item.metadata),
             ...request };
         });
-        console.log('DEBUG - requestData with user_capabilities', requestData);
       }
     }
     else {

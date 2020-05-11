@@ -11,7 +11,6 @@ import { fetchRequest, fetchRequestContent } from '../../../redux/actions/reques
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
 import UserContext from '../../../user-context';
-import { approvalPersona } from '../../../helpers/shared/helpers';
 import { REQUEST_DETAIL_ROUTE } from '../../../utilities/constants';
 
 const initialState = {
@@ -40,11 +39,10 @@ const RequestDetail = () => {
   const { id }  = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { roles: userRoles } = useContext(UserContext);
+  const { userPersona: userPersona } = useContext(UserContext);
 
   useEffect(() => {
-    const persona = approvalPersona(userRoles);
-    Promise.all([ dispatch(fetchRequest(id, persona)), dispatch(fetchRequestContent(id, persona)) ])
+    Promise.all([ dispatch(fetchRequest(id, userPersona)), dispatch(fetchRequestContent(id, userPersona)) ])
     .then(() => stateDispatch({ type: 'setFetching', payload: false }));
   }, []);
 
