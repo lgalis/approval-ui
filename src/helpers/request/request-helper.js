@@ -54,7 +54,8 @@ const requestTranscriptQuery = (parent_id) => `query {
 }`;
 
 export const fetchRequestTranscript = (requestId, persona) => {
-  const fetchHeaders = (persona && persona !== 'approval/approver') ? { 'x-rh-persona': persona } : { 'x-rh-persona': 'approval/requester' };
+  const fetchHeaders = (persona && persona !== APPROVAL_APPROVER_PERSONA) ? { 'x-rh-persona': persona }
+    : { 'x-rh-persona': APPROVAL_REQUESTER_PERSONA };
   return graphqlInstance({ method: 'post', url: `${APPROVAL_API_BASE}/graphql`,
     headers: fetchHeaders, data: { query: requestTranscriptQuery(requestId) }})
   .then(({ data: { requests }}) => requests);
