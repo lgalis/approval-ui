@@ -34,13 +34,14 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
   };
 
   const onKebabSelect = () => {
-    setIsKebabOpen(!isKebabOpen);
+    setIsKebabOpen(isKebabOpen => !isKebabOpen);
   };
 
   const checkCapability = (item, capability) => {
     if (isApprovalAdmin(userPersona)) {
       return true;
     }
+
     return item.metadata && item.metadata.user_capabilities && item.metadata.user_capabilities[capability];
   };
 
@@ -67,37 +68,34 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
     );
   };
 
-  const fetchRequestDetails = (request) => {
-    console.log('Debug - detail for request: ', request);
+  const renderActionList = (request) => {
     return <ActionTranscript actionList={ request.actions }/>;
   };
 
-  const renderRequest = () => {
-    const requestActive = isRequestStateActive(item.state);
-    return (
-      <DataListItem key={ `request-${item.id}` }
-        aria-labelledby={ `check-request-${item.id}` }
-        isExpanded={ isExpanded }>
-        <DataListItemRow>
-          <DataListToggle
-            onClick={ () => toggleExpand(`request-${item.id}`) }
-            isExpanded={ isExpanded }
-            id={ `request-${item.id}` }
-            aria-labelledby={ `request-${item.id} request-${item.id}` }
-            aria-label="Toggle details for"
-          />
-          <DataListItemCells
-            dataListCells={ [
-              <DataListCell key={ item.id }>
-                <span id={ `${item.id}-name` }>{ `${item.group_name ? item.group_name : item.name}` } </span>
-              </DataListCell>,
-              <DataListCell key={ `${item.id}-state` }>
-                <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
-              </DataListCell>,
-              <DataListCell key={ `${item.id}-action` }>
-                <Level>
-                  <LevelItem>
-                    { (requestActive && checkCapability(item, 'approve')) &&
+  return (
+    <DataListItem key={ `request-${item.id}` }
+      aria-labelledby={ `check-request-${item.id}` }
+      isExpanded={ isExpanded }>
+      <DataListItemRow>
+        <DataListToggle
+          onClick={ () => toggleExpand(`request-${item.id}`) }
+          isExpanded={ isExpanded }
+          id={ `request-${item.id}` }
+          aria-labelledby={ `request-${item.id} request-${item.id}` }
+          aria-label="Toggle details for"
+        />
+        <DataListItemCells
+          dataListCells={ [
+            <DataListCell key={ item.id }>
+              <span id={ `${item.id}-name` }>{ `${item.group_name ? item.group_name : item.name}` } </span>
+            </DataListCell>,
+            <DataListCell key={ `${item.id}-state` }>
+              <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
+            </DataListCell>,
+            <DataListCell key={ `${item.id}-action` }>
+              <Level>
+                <LevelItem>
+                  { (isRequestStateActive(item.state) && checkCapability(item, 'approve')) &&
                     <div>
                       <Link id={ `approve-${item.id}` } to={ `/requests/detail/${item.id}/approve` }>
                         <Button variant="link" aria-label="Approve Request">
@@ -110,35 +108,31 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
                         </Button>
                       </Link>
                     </div> }
-                  </LevelItem>
-                </Level>
-              </DataListCell>,
-              <DataListCell
-                key={ `request-${item.id}` }
-                className="pf-c-data-list__action"
-                aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
-                id={ `workflow-${item.id}` }
-                aria-label="Actions">
-                { requestActive && checkCapability(item, 'memo') && buildRequestActionKebab(item) }
-              </DataListCell>
-            ] }/>
-        </DataListItemRow>
-        <DataListContent aria-label="Request Content Details"
-          isHidden={ !isExpanded }>
-          <Stack gutter="md">
-            <StackItem>
-              <TextContent component={ TextVariants.h6 }>
-                { fetchRequestDetails(item) }
-              </TextContent>
-            </StackItem>
-          </Stack>
-        </DataListContent>
-
-      </DataListItem>
-    );
-  };
-
-  return renderRequest();
+                </LevelItem>
+              </Level>
+            </DataListCell>,
+            <DataListCell
+              key={ `request-${item.id}` }
+              className="pf-c-data-list__action"
+              aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
+              id={ `workflow-${item.id}` }
+              aria-label="Actions">
+              { isRequestStateActive(item.state) && checkCapability(item, 'memo') && buildRequestActionKebab(item) }
+            </DataListCell>
+          ] }/>
+      </DataListItemRow>
+      <DataListContent aria-label="Request Content Details"
+        isHidden={ !isExpanded }>
+        <Stack gutter="md">
+          <StackItem>
+            <TextContent component={ TextVariants.h6 }>
+              { renderActionList(item) }
+            </TextContent>
+          </StackItem>
+        </Stack>
+      </DataListContent>
+    </DataListItem>
+  );
 };
 
 Request.propTypes = {
@@ -150,6 +144,9 @@ Request.propTypes = {
     group_name: PropTypes.string.isRequired,
     requestActions: PropTypes.shape({
       data: PropTypes.array
+    }),
+    metadata: PropTypes.shape({
+      user_capabilities: PropTypes.array
     })
   }).isRequired,
   idx: PropTypes.number,

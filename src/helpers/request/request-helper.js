@@ -1,6 +1,7 @@
 import { getActionApi, getAxiosInstance, getGraphqlInstance } from '../shared/user-login';
 import { APPROVAL_API_BASE } from '../../utilities/constants';
 import { defaultSettings } from '../shared/pagination';
+import { APPROVAL_REQUESTER_PERSONA, APPROVAL_APPROVER_PERSONA } from '../shared/helpers';
 
 const actionApi = getActionApi();
 const graphqlInstance = getGraphqlInstance();
@@ -61,13 +62,13 @@ export const fetchRequestTranscript = (requestId, persona) => {
 
 export const fetchRequestContent = (id) => {
   const fetchUrl = `${APPROVAL_API_BASE}/requests/${id}/content`;
-  const fetchHeaders = { 'x-rh-persona': 'approval/requester' };
+  const fetchHeaders = { 'x-rh-persona': APPROVAL_REQUESTER_PERSONA };
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 };
 
 export const fetchRequestCapabilities = (id, isParent) => {
   const fetchUrl = `${APPROVAL_API_BASE}/requests/${id}${isParent ? '/requests' : ''}`;
-  const fetchHeaders = { 'x-rh-persona': 'approval/requester' };
+  const fetchHeaders = { 'x-rh-persona': APPROVAL_REQUESTER_PERSONA };
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 };
 
@@ -76,7 +77,7 @@ export async function fetchRequestWithSubrequests(id, persona) {
 
   if (!requestData || requestData.length === 0) { return {}; }
 
-  if (persona === 'approval/approver') {
+  if (persona === APPROVAL_APPROVER_PERSONA) {
     if (requestData && requestData.length > 0 && requestData[0].number_of_children > 0) {
       const result = await fetchRequestCapabilities(id, true);
 

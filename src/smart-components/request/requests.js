@@ -9,7 +9,7 @@ import ActionModal from './action-modal';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import RequestDetail from './request-detail/request-detail';
-import { isApprovalAdmin, isRequestStateActive } from '../../helpers/shared/helpers';
+import { isApprovalAdmin, isApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
@@ -110,7 +110,7 @@ const Requests = () => {
 
   const areActionsDisabled = (requestData) => requestData &&
     requestData.state ?
-    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 : true;
+    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 || !isApprovalApprover(userPersona) : true;
 
   const actionResolver = (requestData) => {
     return (requestData && requestData.id && areActionsDisabled(requestData) ? null :

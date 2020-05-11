@@ -4,9 +4,9 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/component
 const activeStates = [ 'notified' ];
 const APPROVAL_ADMINISTRATOR_ROLE = 'Approval Administrator';
 const APPROVAL_APPROVER_ROLE = 'Approval Approver';
-const APPROVAL_ADMIN_PERSONA = 'approval/admin';
-const APPROVAL_APPROVER_PERSONA = 'approval/approver';
-const APPROVAL_REQUESTER_PERSONA = 'approval/requester';
+export const APPROVAL_ADMIN_PERSONA = 'approval/admin';
+export const APPROVAL_APPROVER_PERSONA = 'approval/approver';
+export const APPROVAL_REQUESTER_PERSONA = 'approval/requester';
 
 export const scrollToTop = () => document.getElementById('root').scrollTo({
   behavior: 'smooth',
