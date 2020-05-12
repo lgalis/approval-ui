@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactFormRender, { componentTypes } from '@data-driven-forms/react-form-renderer';
-import { layoutMapper, formFieldsMapper } from '@data-driven-forms/pf4-component-mapper';
-import Pf4SelectWrapper from '../../presentational-components/shared/pf4-select-wrapper';
+
+import ReactFormRender from '@data-driven-forms/react-form-renderer/dist/cjs/form-renderer';
+import componentMapper from '@data-driven-forms/pf4-component-mapper/dist/cjs/component-mapper';
+import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
+
+import SummaryContent from '../workflow/add-groups/summary-content';
 
 const buttonPositioning = {
   default: {},
@@ -12,28 +15,24 @@ const buttonPositioning = {
   }
 };
 
-const FormRenderer = ({ componentMapper, formContainer, ...rest }) => (
+const FormRenderer = ({ formContainer, ...rest }) => (
   <div className={ buttonPositioning[formContainer].buttonClassName }>
     <ReactFormRender
-      formFieldsMapper={ {
-        ...formFieldsMapper,
-        componentMapper,
-        [componentTypes.SELECT]: Pf4SelectWrapper
+      componentMapper={ {
+        ...componentMapper,
+        summary: SummaryContent
       } }
-      layoutMapper={ layoutMapper }
-      { ...buttonPositioning[formContainer] }
+      FormTemplate={ (props) => <FormTemplate { ...props } { ...buttonPositioning[formContainer] }/> }
       { ...rest }
     />
   </div>
 );
 
 FormRenderer.propTypes = {
-  componentMapper: PropTypes.object,
   formContainer: PropTypes.oneOf([ 'default', 'modal' ])
 };
 
 FormRenderer.defaultProps = {
-  componentMapper: {},
   formContainer: 'default'
 };
 

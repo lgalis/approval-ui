@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import {
   Grid,
   GridItem,
@@ -11,8 +10,12 @@ import {
   Title
 } from '@patternfly/react-core';
 
-const SummaryContent = ({ formData }) => {
-  const { name, description, wfGroups } = formData ? formData : { name: '', description: '', wfGroups: []};
+import useFormApi from '@data-driven-forms/react-form-renderer/dist/cjs/use-form-api';
+
+const SummaryContent = () => {
+  const { getState } = useFormApi();
+  const { name, description, wfGroups } = getState().values;
+
   return (
     <Fragment>
       <Stack gutter="md">
@@ -68,9 +71,4 @@ const SummaryContent = ({ formData }) => {
   );
 };
 
-SummaryContent.propTypes = {
-  formData: PropTypes.object
-};
-
 export default SummaryContent;
-
