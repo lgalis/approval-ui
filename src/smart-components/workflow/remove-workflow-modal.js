@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { FormattedMessage } from 'react-intl';
 import { Modal, Button, Split, SplitItem, Text, TextContent, TextVariants, Spinner } from '@patternfly/react-core';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { WarningTriangleIcon } from '@patternfly/react-icons';
 import { removeWorkflow, removeWorkflows } from '../../redux/actions/workflow-actions';
 import useQuery from '../../utilities/use-query';
@@ -20,6 +20,7 @@ const RemoveWorkflowModal = ({
   const [ submitting, setSubmitting ] = useState(false);
   const { push } = useHistory();
   const [{ workflow: workflowId }] = useQuery([ 'workflow' ]);
+  const intl = useIntl();
 
   if (!workflowId && (!ids || ids.length === 0)) {
     return null;
@@ -44,14 +45,23 @@ const RemoveWorkflowModal = ({
       isOpen
       variant="small"
       width={ '40%' }
-      title={ '' }
+      title={
+        intl.formatMessage(
+          { id: 'remove-workflow-modal-title', defaultMessage: `Delete {count, number} {count, plural,
+            one {Approval process}
+            other {Approval processes}
+          }?` },
+          { count: workflowId !== undefined ? 1 : ids.length }
+        )
+      }
+      isFooterLeftAligned
       onClose={ onCancel }
       actions={ [
-        <Button id="cancel-remove-workflow" key="cancel" variant="secondary" type="button" onClick={ onCancel }>
-          Cancel
-        </Button>,
-        <Button id="submit-remove-workflow" key="submit" variant="primary" type="button" isDisabled={ submitting } onClick={ onSubmit }>
+        <Button id="submit-remove-workflow" key="submit" variant="danger" type="button" isDisabled={ submitting } onClick={ onSubmit }>
           { submitting ? <React.Fragment><Spinner size="sm" /> Removing </React.Fragment> : 'Remove' }
+        </Button>,
+        <Button id="cancel-remove-workflow" key="cancel" variant="link" type="button" isDisabled={ submitting } onClick={ onCancel }>
+          Cancel
         </Button>
       ] }
     >
