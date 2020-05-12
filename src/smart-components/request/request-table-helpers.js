@@ -22,7 +22,7 @@ export const createRows = (data) =>
       state,
       number_of_children,
       cells: [
-        <Fragment key={ id }><Link to={ { pathname: routes.requests.detail, search: `?request=${id}` } }>{ name }</Link></Fragment>,
+        <Fragment key={ id }><Link to={ { pathname: routes.requests.index, search: `?request=${id}` } }>{ name }</Link></Fragment>,
         requester_name,
         timeAgo(created_at),
         finished_at ? timeAgo(finished_at) : (notified_at ? timeAgo(notified_at) : timeAgo(created_at)),

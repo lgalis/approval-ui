@@ -73,11 +73,11 @@ const RequestDetail = () => {
   return (
     <Fragment>
       <Route exact path={ routes.requests.addComment } render={ props =>
-        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ { pathname: routes.requests.detail, search } }/> }/>
+        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ { pathname: routes.requests.index, search } }/> }/>
       <Route exact path={ routes.requests.approve } render={ props =>
-        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ { pathname: routes.requests.detail, search } } /> } />
+        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ { pathname: routes.requests.index, search } } /> } />
       <Route exact path={ routes.requests.deny } render={ props =>
-        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.requests.detail, search } }  /> } />
+        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.requests.index, search } }  /> } />
       <TopToolbar
         breadcrumbs={ [{ title: 'Request queue', to: routes.requests.index, id: 'requests' }] }
         paddingBottom={ true }

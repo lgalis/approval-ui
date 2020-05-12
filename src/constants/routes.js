@@ -1,10 +1,9 @@
 const routes = {
   requests: {
     index: '/requests',
-    detail: '/requests/detail',
-    addComment: '/requests/detail/add-comment',
-    approve: '/requests/detail/approve',
-    deny: '/requests/detail/deny'
+    addComment: '/requests/add-comment',
+    approve: '/requests/approve',
+    deny: '/requests/deny'
   },
   workflows: {
     index: '/workflows',
