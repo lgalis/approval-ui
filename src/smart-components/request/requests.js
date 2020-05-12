@@ -18,6 +18,7 @@ import { scrollToTop } from '../../helpers/shared/helpers';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 import UserContext from '../../user-context';
+import routesLinks from '../../constants/routes';
 
 const columns = [{
   title: 'Name',
@@ -99,12 +100,12 @@ const Requests = () => {
     { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
 
   const routes = () => <Fragment>
-    <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
+    <Route exact path={ routesLinks.requests.addComment } render={ props => <ActionModal { ...props }
       actionType={ 'Add Comment' }
       postMethod={ fetchRequests } /> }/>
-    <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' }
+    <Route exact path={ routesLinks.requests.approve } render={ props => <ActionModal { ...props } actionType={ 'Approve' }
       postMethod={ fetchRequests }/> } />
-    <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' }
+    <Route exact path={ routesLinks.requests.deny } render={ props => <ActionModal { ...props } actionType={ 'Deny' }
       postMethod={ fetchRequests }/> } />
   </Fragment>;
 
@@ -117,7 +118,10 @@ const Requests = () => {
       [
         {
           title: 'Comment',
-          onClick: () => history.push(`/requests/add_comment/${requestData.id}`)
+          onClick: () => history.push({
+            pathname: routesLinks.requests.addComment,
+            search: `?request=${requestData.id}`
+          })
         }
       ]);
   };
@@ -180,16 +184,13 @@ const Requests = () => {
 
   return (
     <Switch>
-      <Route path={ '/requests/detail/:id' } render={ props => <RequestDetail { ...props }/> } />
-      <Route path={ '/requests' } render={ () => renderRequestsList() } />
+      <Route path={ routesLinks.requests.detail } component={ RequestDetail } />
+      <Route path={ routesLinks.requests.index } render={ () => renderRequestsList() } />
     </Switch>
   );
 };
 
 Requests.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }),
   requests: PropTypes.array,
   isLoading: PropTypes.bool
 };

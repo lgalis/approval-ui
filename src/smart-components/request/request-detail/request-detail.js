@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useReducer } from 'react';
-import { Route, useParams, useLocation } from 'react-router-dom';
+import { Route, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
@@ -11,7 +11,8 @@ import { fetchRequest, fetchRequestContent } from '../../../redux/actions/reques
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
 import UserContext from '../../../user-context';
-import { REQUEST_DETAIL_ROUTE } from '../../../utilities/constants';
+import useQuery from '../../../utilities/use-query';
+import routes from '../../../constants/routes';
 
 const initialState = {
   isFetching: true
@@ -36,7 +37,8 @@ const RequestDetail = () => {
       }
     }) => ({ selectedRequest, requestContent })
   );
-  const { id }  = useParams();
+
+  const [{ request: id }, search ] = useQuery([ 'request' ]);
   const location = useLocation();
   const dispatch = useDispatch();
   const { userPersona: userPersona } = useContext(UserContext);
@@ -70,12 +72,12 @@ const RequestDetail = () => {
 
   return (
     <Fragment>
-      <Route exact path="/requests/detail/:id/add_comment" render={ props =>
-        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` }/> }/>
-      <Route exact path="/requests/detail/:id/approve" render={ props =>
-        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` } /> } />
-      <Route exact path="/requests/detail/:id/deny" render={ props =>
-        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` }  /> } />
+      <Route exact path={ routes.requests.addComment } render={ props =>
+        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ { pathname: routes.requests.detail, search } }/> }/>
+      <Route exact path={ routes.requests.approve } render={ props =>
+        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ { pathname: routes.requests.detail, search } } /> } />
+      <Route exact path={ routes.requests.deny } render={ props =>
+        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.requests.detail, search } }  /> } />
       <TopToolbar
         breadcrumbs={ [{ title: 'Request queue', to: '/requests', id: 'requests' }] }
         paddingBottom={ true }

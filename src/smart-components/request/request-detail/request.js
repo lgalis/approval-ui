@@ -24,6 +24,7 @@ import {
   LevelItem
 } from '@patternfly/react-core';
 import UserContext from '../../../user-context';
+import routes from '../../../constants/routes';
 
 export const Request = ({ item, isExpanded, toggleExpand }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
@@ -56,7 +57,10 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
           <DropdownItem aria-label="Add Comment" key={ `add_comment_${request.id}` }>
             <Link
               id={ `request-${request.id}-request-comment` }
-              to={ `/requests/detail/${request.id}/add_comment` }
+              to={ {
+                pathname: routes.requests.addComment,
+                search: `?request=${request.id}`
+              } }
               className="pf-c-dropdown__menu-item"
             >
               Comment
@@ -97,12 +101,12 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
                 <LevelItem>
                   { (isRequestStateActive(item.state) && checkCapability(item, 'approve')) &&
                     <div>
-                      <Link id={ `approve-${item.id}` } to={ `/requests/detail/${item.id}/approve` }>
+                      <Link id={ `approve-${item.id}` } to={ { pathname: routes.requests.approve, search: `?request=${item.id}` } }>
                         <Button variant="link" aria-label="Approve Request">
                           Approve
                         </Button>
                       </Link>
-                      <Link id={ `deny-${item.id}` } to={ `/requests/detail/${item.id}/deny` }>
+                      <Link id={ `deny-${item.id}` } to={ { pathname: routes.requests.deny, search: `?request=${item.id}` } }>
                         <Button variant="link" className="destructive-color" aria-label="Deny Request">
                           Deny
                         </Button>
