@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetGroups from './add-groups/set-groups';
+import useQuery from '../../utilities/use-query';
+
 import '../../App.scss';
 
 const EditWorkflowGroupsModal = ({
-  history: { push },
-  match: { params: { id }},
   addNotification,
   fetchWorkflow,
   updateWorkflow,
@@ -20,6 +20,9 @@ const EditWorkflowGroupsModal = ({
   isFetching
 }) => {
   const [ formData, setValues ] = useState({});
+
+  const { push } = useHistory();
+  const [{ workflow: id }] = useQuery([ 'workflow' ]);
 
   const handleChange = data => {
     setValues({ ...formData, ...data });
@@ -96,31 +99,15 @@ const EditWorkflowGroupsModal = ({
 };
 
 EditWorkflowGroupsModal.defaultProps = {
-  rbacGroups: [],
   isFetching: false
 };
 
 EditWorkflowGroupsModal.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }),
-  addWorkflow: PropTypes.func.isRequired,
-  match: PropTypes.object,
   addNotification: PropTypes.func.isRequired,
   fetchWorkflow: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  editType: PropTypes.string,
-  rbacGroups: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
-    label: PropTypes.string.isRequired
-  })).isRequired,
-  isFetching: PropTypes.bool,
-  item: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
-  })
+  isFetching: PropTypes.bool
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
@@ -134,4 +121,4 @@ const mapStateToProps = ({ workflowReducer: { isRecordLoading }}) => ({
   isFetching: isRecordLoading
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditWorkflowGroupsModal));
+export default connect(mapStateToProps, mapDispatchToProps)(EditWorkflowGroupsModal);

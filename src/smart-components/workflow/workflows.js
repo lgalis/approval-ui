@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useReducer, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
@@ -18,6 +17,7 @@ import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
+import routesLinks from '../../constants/routes';
 
 const columns = [{
   title: 'Name',
@@ -101,48 +101,47 @@ const Workflows = () => {
   };
 
   const routes = () => <Fragment>
-    <Route exact path="/workflows/add-workflow" render={ props => <AddWorkflow { ...props }
+    <Route exact path={ routesLinks.workflows.add } render={ props => <AddWorkflow { ...props }
       postMethod={ handlePagination } /> }/>
-    <Route exact path="/workflows/edit-info/:id" render={ props => <EditWorkflowInfo editType='info' { ...props }
+    <Route exact path={ routesLinks.workflows.editInfo } render={ props => <EditWorkflowInfo editType='info' { ...props }
       postMethod={ handlePagination } /> }/>
-    <Route exact path="/workflows/edit-groups/:id" render={ props => <EditWorkflowGroups editType='groups' { ...props }
+    <Route exact path={ routesLinks.workflows.editGroups } render={ props => <EditWorkflowGroups editType='groups' { ...props }
       postMethod={ handlePagination } /> }/>
-    <Route exact path="/workflows/edit-sequence/:id" render={ props => <EditWorkflowInfo editType='sequence' { ...props }
+    <Route exact path={ routesLinks.workflows.editSequence } render={ props => <EditWorkflowInfo editType='sequence' { ...props }
       postMethod={ handlePagination } /> }/>
-    <Route exact path="/workflows/remove/:id"
-      render={ props => <RemoveWorkflow { ...props }
-        fetchData={ handlePagination }
-        setSelectedWorkflows={ setSelectedWorkflows } /> }/>
-    <Route exact path="/workflows/remove"
-      render={ props => <RemoveWorkflow { ...props }
+    <Route exact path={ routesLinks.workflows.remove }
+      render={ props => <RemoveWorkflow
+        { ...props }
         ids={ selectedWorkflows }
         fetchData={ handlePagination }
-        setSelectedWorkflows={ setSelectedWorkflows } /> }/>
+        setSelectedWorkflows={ setSelectedWorkflows }
+      /> }
+    />
   </Fragment>;
 
-  const actionResolver = (workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
+  const actionResolver = (_workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
     null
     : [
       {
         title: 'Edit info',
         onClick: (_event, _rowId, workflow) =>
-          history.push(`/workflows/edit-info/${workflow.id}`)
+          history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
       },
       {
         title: 'Edit groups',
         onClick: (_event, _rowId, workflow) =>
-          history.push(`/workflows/edit-groups/${workflow.id}`)
+          history.push({ pathname: routesLinks.workflows.editGroups, search: `?workflow=${workflow.id}` })
       },
       {
         title: 'Edit sequence',
         onClick: (_event, _rowId, workflow) =>
-          history.push(`/workflows/edit-sequence/${workflow.id}`)
+          history.push({ pathname: routesLinks.workflows.editSequence, search: `?workflow=${workflow.id}` })
       },
       {
         title: 'Delete',
         style: { color: 'var(--pf-global--danger-color--100)'	},
         onClick: (_event, _rowId, workflow) =>
-          history.push(`/workflows/remove/${workflow.id}`)
+          history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })
       }
     ];
 
@@ -153,7 +152,7 @@ const Workflows = () => {
 
   const toolbarButtons = () => <ToolbarGroup className={ `pf-u-pl-lg top-toolbar` }>
     <ToolbarItem>
-      <Link id="add-workflow-link" to="/workflows/add-workflow">
+      <Link id="add-workflow-link" to={ { pathname: routesLinks.workflows.add } }>
         <Button
           variant="primary"
           aria-label="Create approval process"
@@ -163,7 +162,11 @@ const Workflows = () => {
       </Link>
     </ToolbarItem>
     <ToolbarItem>
-      <Link id="remove-multiple-workflows" className={ anyWorkflowsSelected ? '' : 'disabled-link' } to={ { pathname: '/workflows/remove' } }>
+      <Link
+        id="remove-multiple-workflows"
+        className={ anyWorkflowsSelected ? '' : 'disabled-link' }
+        to={ { pathname: routesLinks.workflows.remove } }
+      >
         <Button
           variant="link"
           isDisabled={ !anyWorkflowsSelected }
@@ -225,21 +228,6 @@ const Workflows = () => {
       />
     </Fragment>
   );
-};
-
-Workflows.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired,
-  workflows: PropTypes.array,
-  isLoading: PropTypes.bool,
-  selectedWorkflows: PropTypes.array
-};
-
-Workflows.defaultProps = {
-  workflows: [],
-  rbacGroups: {},
-  isLoading: false
 };
 
 export default Workflows;
