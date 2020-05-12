@@ -8,6 +8,7 @@ import { addWorkflow } from '../../../redux/actions/workflow-actions';
 import SummaryContent from './summary-content';
 import WorkflowInfoForm from './workflow-information';
 import SetGroups from './set-groups';
+import routes from '../../../constants/routes';
 
 const AddWorkflow = () => {
   const [ formData, setValues ] = useState({ wfGroups: []});
@@ -50,7 +51,7 @@ const AddWorkflow = () => {
     const { name, description, wfGroups } = formData;
     const workflowData = { name, description,
       group_refs: wfGroups && wfGroups.length > 0 ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
-    push('/workflows');
+    push(routes.workflows.index);
     dispatch(addWorkflow(workflowData));
   };
 
@@ -61,7 +62,7 @@ const AddWorkflow = () => {
       dismissable: true,
       description: 'Creating approval process was cancelled by the user.'
     }));
-    push('/workflows');
+    push(routes.workflows.index);
   };
 
   return (

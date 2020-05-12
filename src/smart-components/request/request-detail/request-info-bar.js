@@ -14,16 +14,16 @@ const RequestInfoBar = ({ request, requestContent }) => {
   return (
     <Fragment>
       <Stack gutter="md">
-        <StackItem>
+        <StackItem key={ 'request-detail-panel' }>
           <Card>
             <CardBody>
               <Stack gutter="md">
-                <StackItem>
+                <StackItem key={ 'request-summary' }>
                   <Title headingLevel="h5" size="lg">
                     Summary
                   </Title>
                 </StackItem>
-                <StackItem>
+                <StackItem key={ 'request-product' }>
                   <TextContent>
                     <Text className={ 'font-14' }>
                       Product
@@ -33,17 +33,17 @@ const RequestInfoBar = ({ request, requestContent }) => {
                     </Text>
                   </TextContent>
                 </StackItem>
-                <StackItem>
+                <StackItem key={ 'request-portfolio' }>
                   <TextContent>
                     <Text className={ 'font-14' }>
                       Portfolio
                     </Text>
-                    <Text  id='portfolio-name' component={ TextVariants.p }>
+                    <Text id='portfolio-name' component={ TextVariants.p }>
                       { requestContent ? requestContent.portfolio : '' }
                     </Text>
                   </TextContent>
                 </StackItem>
-                <StackItem>
+                <StackItem key={ 'request-platform' }>
                   <TextContent>
                     <Text className={ 'font-14' }>
                       Platform
@@ -53,7 +53,7 @@ const RequestInfoBar = ({ request, requestContent }) => {
                     </Text>
                   </TextContent>
                 </StackItem>
-                <StackItem>
+                <StackItem key={ 'request-requester' }>
                   <TextContent>
                     <Text className={ 'font-14' }>Requester </Text>
                     <Text id='requester_name' component={ TextVariants.p }>
@@ -61,7 +61,7 @@ const RequestInfoBar = ({ request, requestContent }) => {
                     </Text>
                   </TextContent>
                 </StackItem>
-                <StackItem>
+                <StackItem key={ 'request-order' }>
                   <TextContent>
                     <Text className={ 'font-14' }>Order# </Text>
                     <Text id='requester_name' component={ TextVariants.p }>
@@ -73,7 +73,7 @@ const RequestInfoBar = ({ request, requestContent }) => {
             </CardBody>
           </Card>
         </StackItem>
-        <StackItem>
+        <StackItem key={ 'request-parameters' }>
           <Card>
             <CardHeader>
               <Title headingLevel="h5" size="lg">Parameters</Title>
@@ -82,7 +82,7 @@ const RequestInfoBar = ({ request, requestContent }) => {
               <Stack gutter="md">
                 { requestContent.params && Object.keys(requestContent.params).map(param => {
                   return ((requestContent.params[param]) &&
-                      <StackItem>
+                      <StackItem key={ `request-${requestContent.params[param]}` }>
                         <TextContent>
                           <Text key={ param } className={ 'font-14' }>
                             { `${param}` }
