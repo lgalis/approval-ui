@@ -1,8 +1,8 @@
-import { getActionApi, getRequestApi, getAxiosInstance, getGraphqlInstance } from '../shared/user-login';
+import { getActionApi, getAxiosInstance, getGraphqlInstance } from '../shared/user-login';
 import { APPROVAL_API_BASE } from '../../utilities/constants';
 import { defaultSettings } from '../shared/pagination';
+import { APPROVAL_REQUESTER_PERSONA, APPROVAL_APPROVER_PERSONA } from '../shared/helpers';
 
-const requestApi = getRequestApi();
 const actionApi = getActionApi();
 const graphqlInstance = getGraphqlInstance();
 
@@ -54,29 +54,50 @@ const requestTranscriptQuery = (parent_id) => `query {
 }`;
 
 export const fetchRequestTranscript = (requestId, persona) => {
-  const fetchHeaders = { 'x-rh-persona': persona ? persona : 'approval/requester' };
+  const fetchHeaders = (persona && persona !== APPROVAL_APPROVER_PERSONA) ? { 'x-rh-persona': persona }
+    : { 'x-rh-persona': APPROVAL_REQUESTER_PERSONA };
   return graphqlInstance({ method: 'post', url: `${APPROVAL_API_BASE}/graphql`,
     headers: fetchHeaders, data: { query: requestTranscriptQuery(requestId) }})
   .then(({ data: { requests }}) => requests);
 };
 
-export async function fetchRequest(id) {
-  return await requestApi.showRequest(id);
-}
-
-export const fetchRequestActions = (id, persona) => {
-  return actionApi.listActionsByRequest(id, persona);
+export const fetchRequestContent = (id) => {
+  const fetchUrl = `${APPROVAL_API_BASE}/requests/${id}/content`;
+  const fetchHeaders = { 'x-rh-persona': APPROVAL_REQUESTER_PERSONA };
+  return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 };
 
-export const fetchRequestContent = (id, persona) => {
-  const fetchUrl = `${APPROVAL_API_BASE}/requests/${id}/content`;
-  const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
+export const fetchRequestCapabilities = (id, isParent) => {
+  const fetchUrl = `${APPROVAL_API_BASE}/requests/${id}${isParent ? '/requests' : ''}`;
+  const fetchHeaders = { 'x-rh-persona': APPROVAL_REQUESTER_PERSONA };
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 };
 
 export async function fetchRequestWithSubrequests(id, persona) {
   const requestData = await fetchRequestTranscript(id, persona);
-  return  requestData && requestData.length > 0 ? requestData[0] : {};
+
+  if (!requestData || requestData.length === 0) { return {}; }
+
+  if (persona === APPROVAL_APPROVER_PERSONA) {
+    if (requestData && requestData.length > 0 && requestData[0].number_of_children > 0) {
+      const result = await fetchRequestCapabilities(id, true);
+
+      if (result && result.data) {
+        requestData[0].requests = requestData[0].requests.map(request => {
+          return { ...result.data.find((item) => (item.id === request.id) && item.metadata),
+            ...request };
+        });
+      }
+    }
+    else {
+      const request = await fetchRequestCapabilities(id, false);
+      if (request) {
+        requestData[0] = { ...requestData[0], metadata: request.metadata };
+      }
+    }
+  }
+
+  return  { ...requestData[0] };
 }
 
 export async function createRequestAction (requestId, actionIn) {

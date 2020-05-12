@@ -8,7 +8,7 @@ const ApprovalBreadcrumbs = ({ breadcrumbs }) => breadcrumbs
     <Breadcrumb>
       { Object.values(breadcrumbs).map(item => (
         <BreadcrumbItem key={ item.title } isActive={ item.isActive }>
-          { (item.to && <NavLink exact to={ item.to }>{ item.title }</NavLink>) || item.title }
+          { (item.to && <NavLink isActive={ () => false } exact to={ item.to }>{ item.title }</NavLink>) || item.title }
         </BreadcrumbItem>
       )) }
     </Breadcrumb>

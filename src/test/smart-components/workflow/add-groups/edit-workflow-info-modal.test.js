@@ -13,9 +13,11 @@ import WorkflowInfoForm from '../../../../smart-components/workflow/add-groups/w
 import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 import { WorkflowInfoFormLoader } from '../../../../presentational-components/shared/loader-placeholders';
 
+import routes from '../../../../constants/routes';
+
 const ComponentWrapper = ({ store, children }) => (
   <Provider store={ store }>
-    <MemoryRouter initialEntries={ [ '/foo/123' ] }>
+    <MemoryRouter initialEntries={ [ '/foo/?workflow=123' ] }>
       { children }
     </MemoryRouter>
   </Provider>
@@ -51,7 +53,7 @@ describe('<EditWorkflowInfoModal />', () => {
     await act(async () => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
+          <Route path="/foo" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
     });
@@ -71,7 +73,7 @@ describe('<EditWorkflowInfoModal />', () => {
     await act(async () => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
+          <Route path="/foo" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
     });
@@ -89,7 +91,7 @@ describe('<EditWorkflowInfoModal />', () => {
     await act(async () => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
+          <Route path="/foo" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
     });
@@ -97,7 +99,7 @@ describe('<EditWorkflowInfoModal />', () => {
 
     wrapper.find('button#cancel-edit-workflow-info').simulate('click');
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.index);
     done();
   });
 
@@ -121,7 +123,7 @@ describe('<EditWorkflowInfoModal />', () => {
     await act(async () => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
+          <Route path="/foo" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
     });
@@ -136,7 +138,7 @@ describe('<EditWorkflowInfoModal />', () => {
       wrapper.find('button#save-edit-workflow-info').simulate('click');
     });
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.index);
     done();
   });
 });

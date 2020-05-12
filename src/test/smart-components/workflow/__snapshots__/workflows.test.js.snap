@@ -29,9 +29,6 @@ exports[`<Workflows /> should render correctly 1`] = `
             "push": [MockFunction],
           }
         }
-        isLoading={false}
-        rbacGroups={Object {}}
-        workflows={Array []}
       />
     </IntlProvider>
   </MemoryRouter>
@@ -68,8 +65,6 @@ exports[`<Workflows /> should render correctly in loading state 1`] = `
           }
         }
         isLoading={true}
-        rbacGroups={Object {}}
-        workflows={Array []}
       />
     </IntlProvider>
   </MemoryRouter>

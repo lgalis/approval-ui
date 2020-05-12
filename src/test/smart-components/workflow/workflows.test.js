@@ -20,8 +20,9 @@ import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workf
 import AddWorkflowWizard from '../../../smart-components/workflow/add-groups/add-workflow-wizard';
 import { Table, RowWrapper } from '@patternfly/react-table';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
+import routes from '../../../constants/routes';
 
-const ComponentWrapper = ({ store, initialEntries = [ '/workflows' ], children }) => (
+const ComponentWrapper = ({ store, initialEntries = [ routes.workflows.index ], children }) => (
   <Provider store={ store }>
     <MemoryRouter initialEntries={ initialEntries }>
       <IntlProvider locale="en">
@@ -108,7 +109,7 @@ describe('<Workflows />', () => {
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/workflows" component={ Workflows } />
+          <Route path={ routes.workflows.index } component={ Workflows } />
         </ComponentWrapper>
       );
     });
@@ -122,7 +123,8 @@ describe('<Workflows />', () => {
     });
 
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-info/edit-id');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.editInfo);
+    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?workflow=edit-id');
     expect(wrapper.find(EditWorkflowInfoModal)).toHaveLength(1);
     done();
   });
@@ -148,7 +150,7 @@ describe('<Workflows />', () => {
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/workflows" component={ Workflows } />
+          <Route path={ routes.workflows.index } component={ Workflows } />
         </ComponentWrapper>
       );
     });
@@ -162,7 +164,8 @@ describe('<Workflows />', () => {
     });
 
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-groups/edit-id');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.editGroups);
+    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?workflow=edit-id');
     expect(wrapper.find(EditWorkflowGroupsModal)).toHaveLength(1);
     done();
   });
@@ -188,7 +191,7 @@ describe('<Workflows />', () => {
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/workflows" component={ Workflows } />
+          <Route path={ routes.workflows.index } component={ Workflows } />
         </ComponentWrapper>
       );
     });
@@ -202,7 +205,8 @@ describe('<Workflows />', () => {
     });
 
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/edit-sequence/edit-id');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.editSequence);
+    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?workflow=edit-id');
     expect(wrapper.find(EditWorkflowInfoModal)).toHaveLength(1);
     done();
   });
@@ -228,7 +232,7 @@ describe('<Workflows />', () => {
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/workflows" component={ Workflows } />
+          <Route path={ routes.workflows.index } component={ Workflows } />
         </ComponentWrapper>
       );
     });
@@ -242,7 +246,8 @@ describe('<Workflows />', () => {
     });
 
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/remove/edit-id');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.remove);
+    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?workflow=edit-id');
     expect(wrapper.find(RemoveWorkflowModal)).toHaveLength(1);
     done();
   });
@@ -268,7 +273,7 @@ describe('<Workflows />', () => {
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/workflows" component={ Workflows } />
+          <Route path={ routes.workflows.index } component={ Workflows } />
         </ComponentWrapper>
       );
     });
@@ -279,7 +284,7 @@ describe('<Workflows />', () => {
     wrapper.find('Link#add-workflow-link').simulate('click', { button: 0 });
 
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/add-workflow');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.add);
     expect(wrapper.find(AddWorkflowWizard)).toHaveLength(1);
     done();
   });
@@ -306,7 +311,7 @@ describe('<Workflows />', () => {
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/workflows" component={ Workflows } />
+          <Route path={ routes.workflows.index } component={ Workflows } />
         </ComponentWrapper>
       );
     });
@@ -314,7 +319,8 @@ describe('<Workflows />', () => {
     wrapper.find('input[type="checkbox"]').last().simulate('change', { target: { checked: true }});
     wrapper.find('Link#remove-multiple-workflows').simulate('click', { button: 0 });
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/workflows/remove');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.remove);
+    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('');
     expect(wrapper.find(RemoveWorkflowModal)).toHaveLength(1);
     done();
   });
@@ -336,7 +342,7 @@ describe('<Workflows />', () => {
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ storeReal }>
-          <Route path="/workflows" component={ Workflows } />
+          <Route path={ routes.workflows.index } component={ Workflows } />
         </ComponentWrapper>
       );
     });
