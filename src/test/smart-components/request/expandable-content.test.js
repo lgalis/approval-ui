@@ -1,10 +1,9 @@
-import { TextContent, Text, Bullseye, Button } from '@patternfly/react-core';
+import { TextContent, Text, Bullseye, Button, Spinner } from '@patternfly/react-core';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
-import { Spinner } from '@redhat-cloud-services/frontend-components/components/Spinner';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import ExpandableContent, { ExpandedItem } from '../../../smart-components/request/expandable-content';
