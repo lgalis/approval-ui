@@ -2,10 +2,9 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { TextContent, Text, TextVariants, Level, LevelItem, Button, Bullseye } from '@patternfly/react-core';
+import { TextContent, Text, TextVariants, Level, LevelItem, Button, Bullseye, Spinner } from '@patternfly/react-core';
 import { isApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
 import { fetchRequestContent } from '../../helpers/request/request-helper';
-import { Spinner } from '@redhat-cloud-services/frontend-components/components/Spinner';
 import UserContext from '../../user-context';
 
 export const ExpandedItem = ({ title = '', detail = '' }) => (
