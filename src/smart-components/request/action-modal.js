@@ -1,23 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormRenderer from '../common/form-renderer';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { createRequestAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
+import useQuery from '../../utilities/use-query';
+import routes from '../../constants/routes';
 
 const ActionModal = ({
-  history: { push },
-  match: { params: { id }},
   actionType,
   addNotification,
   createRequestAction,
   closeUrl,
   postMethod
 }) => {
+  const { push } = useHistory();
+  const [{ request: id }] = useQuery([ 'request' ]);
+
   const onSubmit = (data) => {
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
     const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
@@ -64,13 +67,10 @@ const ActionModal = ({
 };
 
 ActionModal.defaultProps = {
-  closeUrl: '/requests'
+  closeUrl: routes.requests.index
 };
 
 ActionModal.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired,
   addNotification: PropTypes.func.isRequired,
   createRequestAction: PropTypes.func.isRequired,
   postMethod: PropTypes.func,
@@ -86,4 +86,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   createRequestAction
 }, dispatch);
 
-export default withRouter(connect(null, mapDispatchToProps)(ActionModal));
+export default connect(null, mapDispatchToProps)(ActionModal);

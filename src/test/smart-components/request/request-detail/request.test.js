@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import { MemoryRouter } from 'react-router-dom';
 import { Request } from '../../../../smart-components/request/request-detail/request';
+import routes from '../../../../constants/routes';
 
 const ComponentWrapper = ({ children }) => (
   <MemoryRouter initialEntries={ [ '/foo' ] }>
@@ -111,9 +112,11 @@ describe('<Request />', () => {
     wrapper.find('Link#approve-111').simulate('click', { button: 0 });
     wrapper.update();
     const history = wrapper.find(MemoryRouter).instance().history;
-    expect(history.location.pathname).toEqual('/requests/detail/111/approve');
+    expect(history.location.pathname).toEqual(routes.requests.approve);
+    expect(history.location.search).toEqual('?request=111');
     wrapper.find('Link#deny-111').simulate('click', { button: 0 });
-    expect(history.location.pathname).toEqual('/requests/detail/111/deny');
+    expect(history.location.pathname).toEqual(routes.requests.deny);
+    expect(history.location.search).toEqual('?request=111');
   });
 
   it('should expand item', () => {

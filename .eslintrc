@@ -48,7 +48,7 @@
 			}
 		],
 		"comma-style": 2,
-		"camelcase": 1,
+		"camelcase": 0,
 		"curly": [
 			"error",
 			"all"
