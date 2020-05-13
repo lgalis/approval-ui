@@ -86,7 +86,7 @@ const EditWorkflowGroupsModal = ({
           buttonClassName="pf-u-mt-0"
         /> }
         onCancel={ onCancel }
-        onSubmt={ onSave }
+        onSubmit={ onSave }
         initialValues={ state.initialValues }
         schema={ {
           fields: [{

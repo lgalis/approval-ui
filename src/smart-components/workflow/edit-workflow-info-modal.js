@@ -18,7 +18,7 @@ import FormRenderer from '../common/form-renderer';
 import routes from '../../constants/routes';
 import workflowInfoSchema from '../../forms/workflow-info.schema';
 
-const createSchema = (editType, name, intl) => editType === 'info' ? ({
+const createSchema = (editType, name, intl, id) => editType === 'info' ? ({
   fields: [{
     component: componentTypes.SUB_FORM,
     title: <span className="pf-c-title pf-m-md">
@@ -28,7 +28,7 @@ const createSchema = (editType, name, intl) => editType === 'info' ? ({
         values={ { name } } />
     </span>,
     name: 'info-sub',
-    fields: workflowInfoSchema(intl)
+    fields: workflowInfoSchema(intl, id)
   }]
 }) : ({
   fields: [{
@@ -81,9 +81,9 @@ const EditWorkflowInfoModal = ({
   useEffect(() => {
     if (!loadedWorkflow) {
       fetchWorkflow(id)
-      .then((data) => dispatch({ type: 'loaded', initialValues: data.value, schema: createSchema(editType, data.value.name, intl) }));
+      .then((data) => dispatch({ type: 'loaded', initialValues: data.value, schema: createSchema(editType, data.value.name, intl, data.value.id) }));
     } else {
-      dispatch({ type: 'loaded', initialValues: loadedWorkflow, schema: createSchema(editType, loadedWorkflow.name, intl) });
+      dispatch({ type: 'loaded', initialValues: loadedWorkflow, schema: createSchema(editType, loadedWorkflow.name, intl, loadedWorkflow.id) });
     }
   }, []);
 
@@ -123,7 +123,7 @@ const EditWorkflowInfoModal = ({
             buttonClassName="pf-u-mt-0"
           /> }
           onCancel={ onCancel }
-          onSubmt={ onSave }
+          onSubmit={ onSave }
           initialValues={ state.initialValues }
           schema={ state.schema }
         />

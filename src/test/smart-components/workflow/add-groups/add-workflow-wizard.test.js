@@ -12,6 +12,7 @@ import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../../utilities/constant
 import AddWorkflow from '../../../../smart-components/workflow/add-groups/add-workflow-wizard';
 import { ADD_NOTIFICATION } from '@redhat-cloud-services/frontend-components-notifications/index';
 import { mount } from 'enzyme/build/index';
+import { IntlProvider } from 'react-intl';
 
 describe('<AddWorkflow />', () => {
   let initialProps;
@@ -20,11 +21,13 @@ describe('<AddWorkflow />', () => {
   let mockStore;
 
   const ComponentWrapper = ({ store, children }) => (
-    <Provider store={ store }>
-      <MemoryRouter initialEntries={ [ '/workflows/', '/workflows/add-workflow/', '/workflows/' ] } initialIndex={ 1 }>
-        { children }
-      </MemoryRouter>
-    </Provider>
+    <IntlProvider locale="en">
+      <Provider store={ store }>
+        <MemoryRouter initialEntries={ [ '/workflows/', '/workflows/add-workflow/', '/workflows/' ] } initialIndex={ 1 }>
+          { children }
+        </MemoryRouter>
+      </Provider>
+    </IntlProvider>
   );
 
   beforeEach(() => {
