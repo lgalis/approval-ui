@@ -1,38 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
+import { Title } from '@patternfly/react-core';
+import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
+
 import { addWorkflow, refreshWorkflows } from '../../../redux/actions/workflow-actions';
 import routes from '../../../constants/routes';
 import FormRenderer from '../../common/form-renderer';
-import validatorTypes from '@data-driven-forms/react-form-renderer/dist/cjs/validator-types';
-import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
-import { fetchWorkflowByName } from '../../../helpers/workflow/workflow-helper';
-import asyncDebounce from '../../../utilities/async-debounce';
-import { fetchFilterApprovalGroups } from '../../../helpers/group/group-helper';
-import { Title } from '@patternfly/react-core';
-
-const validateName = (name) => fetchWorkflowByName(name)
-.then(({ data }) => {
-  return data.find(wf => name === wf.name)
-    ? 'Name has already been taken'
-    : undefined;
-});
-
-const debouncedValidator = asyncDebounce(validateName);
+import workflowInfoSchema from '../../../forms/workflow-info.schema';
+import setGroupSelectSchema from '../../../forms/set-group-select.schema';
 
 const AddWorkflow = () => {
   const dispatch = useDispatch();
   const { push } = useHistory();
   const intl = useIntl();
 
-  const onSave = ({ name, description, wfGroups }) => {
-    const workflowData = { name, description,
-      group_refs: wfGroups && wfGroups.length > 0 ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
+  const onSave = ({ wfGroups = [], ...values }) => {
     push(routes.workflows.index);
-    return dispatch(addWorkflow(workflowData)).then(() => dispatch(refreshWorkflows()));
+    return dispatch(addWorkflow({
+      ...values,
+      group_refs: wfGroups.length > 0 ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []
+    })).then(() => dispatch(refreshWorkflows()));
   };
 
   const onCancel = () => {
@@ -55,7 +45,7 @@ const AddWorkflow = () => {
           name: 'wizard',
           title: intl.formatMessage({
             id: 'create-approval-process-title',
-            defaultMessage: 'Create approval procces'
+            defaultMessage: 'Create approval process'
           }),
           component: componentTypes.WIZARD,
           inModal: true,
@@ -65,34 +55,10 @@ const AddWorkflow = () => {
             customTitle: <Title size="md"> { <FormattedMessage id="enter-info" defaultMessage="Enter your information" /> } </Title>,
             title: intl.formatMessage({
               id: 'create-approval-process-gen-info',
-              defaultMessage: 'General info'
+              defaultMessage: 'General information'
             }),
             nextStep: 'set-groups',
-            fields: [{
-              component: componentTypes.TEXT_FIELD,
-              name: 'name',
-              isRequired: true,
-              label: intl.formatMessage({
-                id: 'create-approval-process-name-label',
-                defaultMessage: 'Approval process name'
-              }),
-              validate: [
-                (value) => debouncedValidator(value),
-                {
-                  type: validatorTypes.REQUIRED,
-                  message: intl.formatMessage({
-                    id: 'approval-procces-name-warning',
-                    defaultMessage: 'Enter a name for the approval process'
-                  })
-                }]
-            }, {
-              component: componentTypes.TEXTAREA,
-              name: 'description',
-              label: intl.formatMessage({
-                id: 'create-approval-process-description-label',
-                defaultMessage: 'Description'
-              })
-            }]
+            fields: workflowInfoSchema(intl)
           }, {
             name: 'set-groups',
             nextStep: 'review',
@@ -100,18 +66,7 @@ const AddWorkflow = () => {
               id: 'create-approval-process-set-groups',
               defaultMessage: 'Set groups'
             }),
-            fields: [{
-              component: componentTypes.SELECT,
-              name: 'wfGroups',
-              label: intl.formatMessage({
-                id: 'create-approval-process-set-groups',
-                defaultMessage: 'Set groups'
-              }),
-              loadOptions: asyncDebounce(fetchFilterApprovalGroups),
-              isMulti: true,
-              isSearchable: true,
-              simpleValue: false
-            }]
+            fields: [ setGroupSelectSchema(intl) ]
           }, {
             name: 'review',
             title: intl.formatMessage({
@@ -127,19 +82,6 @@ const AddWorkflow = () => {
       } }
     />
   );
-};
-
-AddWorkflow.defaultProps = {
-  rbacGroups: [],
-  initialValues: {}
-};
-
-AddWorkflow.propTypes = {
-  match: PropTypes.object,
-  rbacGroups: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
-    label: PropTypes.string.isRequired
-  })).isRequired
 };
 
 export default AddWorkflow;
