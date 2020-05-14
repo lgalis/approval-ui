@@ -6,9 +6,9 @@ import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 const ApprovalBreadcrumbs = ({ breadcrumbs }) => breadcrumbs
   ? (
     <Breadcrumb>
-      { Object.values(breadcrumbs).map(item => (
-        <BreadcrumbItem key={ item.title } isActive={ item.isActive }>
-          { (item.to && <NavLink isActive={ () => false } exact to={ item.to }>{ item.title }</NavLink>) || item.title }
+      { breadcrumbs.map(({ to, id, title }, idx) => (
+        <BreadcrumbItem key={ title } isActive={ idx === (breadcrumbs.length - 1) } id={ id }>
+          { (to && <NavLink isActive={ () => false } exact to={ to }>{ title }</NavLink>) || title }
         </BreadcrumbItem>
       )) }
     </Breadcrumb>
@@ -17,7 +17,6 @@ const ApprovalBreadcrumbs = ({ breadcrumbs }) => breadcrumbs
 ApprovalBreadcrumbs.propTypes = {
   breadcrumbs: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
-    isActive: PropTypes.bool,
     to: PropTypes.string
   }))
 };
