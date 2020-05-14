@@ -60,7 +60,7 @@ const EditWorkflowGroupsModal = ({
 
   const onSave = ({ wfGroups }) => {
     const workflowData = { group_refs: wfGroups ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
-    updateWorkflow({ id, ...workflowData }).then(() => postMethod()).then(()=>push('/workflows'));
+    return updateWorkflow({ id, ...workflowData }).then(() => postMethod()).then(()=>push('/workflows'));
   };
 
   const onCancel = () => {
@@ -84,6 +84,7 @@ const EditWorkflowGroupsModal = ({
           { ...props }
           submitLabel={ <FormattedMessage id="save" defaultMessage="Save" /> }
           buttonClassName="pf-u-mt-0"
+          disableSubmit={ [ 'submitting' ] }
         /> }
         onCancel={ onCancel }
         onSubmit={ onSave }

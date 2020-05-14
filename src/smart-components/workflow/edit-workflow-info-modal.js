@@ -89,7 +89,7 @@ const EditWorkflowInfoModal = ({
 
   const onSave = ({ name, description, sequence }) => {
     const workflowData = { id, name, description, sequence };
-    updateWorkflow(workflowData).then(() => postMethod()).then(() => push(routes.workflows.index));
+    return updateWorkflow(workflowData).then(() => postMethod()).then(() => push(routes.workflows.index));
   };
 
   const onCancel = () => {
@@ -121,6 +121,7 @@ const EditWorkflowInfoModal = ({
             { ...props }
             submitLabel={ <FormattedMessage id="save" defaultMessage="Save" /> }
             buttonClassName="pf-u-mt-0"
+            disableSubmit={ [ 'submitting' ] }
           /> }
           onCancel={ onCancel }
           onSubmit={ onSave }
