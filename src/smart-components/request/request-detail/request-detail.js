@@ -79,7 +79,10 @@ const RequestDetail = () => {
       <Route exact path={ routes.requests.deny } render={ props =>
         <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.requests.index, search } }  /> } />
       <TopToolbar
-        breadcrumbs={ [{ title: 'Request queue', to: routes.requests.index, id: 'requests' }] }
+        breadcrumbs={ [
+          { title: 'Request queue', to: routes.requests.index, id: 'requests' },
+          { title: `Request ${id}`, id }
+        ] }
         paddingBottom={ true }
       >
         <TopToolbarTitle title={ `Request ${id}` } />

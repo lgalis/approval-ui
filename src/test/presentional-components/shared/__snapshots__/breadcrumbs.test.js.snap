@@ -23,7 +23,9 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
       componentProps={
         Object {
           "children": Array [
-            <BreadcrumbItem>
+            <BreadcrumbItem
+              isActive={false}
+            >
               <ForwardRef
                 exact={true}
                 isActive={[Function]}
@@ -58,6 +60,7 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
             className="pf-c-breadcrumb__list"
           >
             <BreadcrumbItem
+              isActive={false}
               key="First level"
             >
               <li
