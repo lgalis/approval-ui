@@ -8,7 +8,7 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/dist/cjs/validator-types';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
@@ -18,7 +18,7 @@ import FormRenderer from '../common/form-renderer';
 import routes from '../../constants/routes';
 import workflowInfoSchema from '../../forms/workflow-info.schema';
 
-const createSchema = (editType, name, intl, id) => editType === 'info' ? ({
+const createSchema = (editType, name, id) => editType === 'info' ? ({
   fields: [{
     component: componentTypes.SUB_FORM,
     title: <span className="pf-c-title pf-m-md">
@@ -28,7 +28,7 @@ const createSchema = (editType, name, intl, id) => editType === 'info' ? ({
         values={ { name } } />
     </span>,
     name: 'info-sub',
-    fields: workflowInfoSchema(intl, id)
+    fields: workflowInfoSchema(id)
   }]
 }) : ({
   fields: [{
@@ -43,7 +43,10 @@ const createSchema = (editType, name, intl, id) => editType === 'info' ? ({
     fields: [{
       component: componentTypes.TEXT_FIELD,
       name: 'sequence',
-      label: intl.formatMessage({ id: 'sequence-label', defaultMessage: 'Enter sequence' }),
+      label: <FormattedMessage
+        id="sequence-label"
+        defaultMessage="Enter sequence"
+      />,
       isRequired: true,
       validate: [{ type: validatorTypes.REQUIRED }]
     }]
@@ -72,7 +75,6 @@ const EditWorkflowInfoModal = ({
   editType
 }) => {
   const [ state, dispatch ] = useReducer(reducer, { isLoading: true });
-  const intl = useIntl();
 
   const { push } = useHistory();
   const [{ workflow: id }] = useQuery([ 'workflow' ]);

@@ -47,22 +47,22 @@ const SummaryContent = () => {
                   <Text className="data-table-detail content" component={ TextVariants.p }>{ description }</Text>
                 </GridItem>
               </Grid>
-              { wfGroups && wfGroups.length > 0 && wfGroups.map((group, idx)  =>
-              { return (<Fragment key={ `Groups` }>
-                <Grid gutter="md">
-                  <GridItem span={ 2 }>
-                    <Text key={ group.value } className="data-table-detail heading" component={ TextVariants.h5 }>
-                      { idx === 0 ? 'Groups' : '' }
-                    </Text>
-                  </GridItem>
-                  <GridItem span={ 10 }>
-                    <Text key={ group.label } className="data-table-detail content" component={ TextVariants.p }>
-                      { `${wfGroups[idx].label}` }
-                    </Text>
-                  </GridItem>
-                </Grid>
-              </Fragment>); })
-              }
+              { wfGroups && wfGroups.length > 0 && wfGroups.map((group, idx) => (
+                <Fragment key={ group.value }>
+                  <Grid gutter="md">
+                    <GridItem span={ 2 }>
+                      <Text className="data-table-detail heading" component={ TextVariants.h5 }>
+                        { idx === 0 ? 'Groups' : '' }
+                      </Text>
+                    </GridItem>
+                    <GridItem span={ 10 }>
+                      <Text className="data-table-detail content" component={ TextVariants.p }>
+                        { group.label }
+                      </Text>
+                    </GridItem>
+                  </Grid>
+                </Fragment>)
+              ) }
             </StackItem>
           </Stack>
         </StackItem>

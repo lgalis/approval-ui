@@ -15,12 +15,32 @@ import useQuery from '../../utilities/use-query';
 import useWorkflow from '../../utilities/use-workflows';
 import setGroupSelectSchema from '../../forms/set-group-select.schema';
 
-const reducer = (state, { type, initialValues }) => {
+const createSchema = (name, intl) => ({
+  fields: [{
+    ...setGroupSelectSchema(intl),
+    label: <FormattedMessage
+      id="edit-groups-select-label"
+      defaultMessage="Add or remove {name}'s groups"
+      values={ {  name } }
+    />
+  }]
+});
+
+const prepareInitialValues = (wfData) => {
+  const groupOptions = wfData.group_refs.map((group) => {
+    return { label: group.name, value: group.uuid };
+  });
+  const data = { ...wfData, wfGroups: groupOptions };
+  return data;
+};
+
+const reducer = (state, { type, initialValues, intl }) => {
   switch (type) {
     case 'loaded':
       return {
         ...state,
-        initialValues,
+        schema: createSchema(initialValues.name, intl),
+        initialValues: prepareInitialValues(initialValues),
         isLoading: false
       };
     default:
@@ -42,17 +62,9 @@ const EditWorkflowGroupsModal = ({
   const [{ workflow: id }] = useQuery([ 'workflow' ]);
   const loadedWorkflow = useWorkflow(id);
 
-  const prepareInitialValues = (wfData) => {
-    const groupOptions = wfData.group_refs.map((group) => {
-      return { label: group.name, value: group.uuid };
-    });
-    const data = { ...wfData, wfGroups: groupOptions };
-    return data;
-  };
-
   useEffect(() => {
     if (!loadedWorkflow) {
-      fetchWorkflow(id).then((result) => dispatch({ type: 'loaded', initialValues: prepareInitialValues(result.value) }));
+      fetchWorkflow(id).then((result) => dispatch({ type: 'loaded', initialValues: prepareInitialValues(result.value), intl }));
     } else {
       dispatch({ type: 'loaded', initialValues: prepareInitialValues(loadedWorkflow) });
     }
@@ -89,15 +101,7 @@ const EditWorkflowGroupsModal = ({
         onCancel={ onCancel }
         onSubmit={ onSave }
         initialValues={ state.initialValues }
-        schema={ {
-          fields: [{
-            ...setGroupSelectSchema(intl),
-            label: intl.formatMessage({
-              id: 'edit-groups-select-label',
-              defaultMessage: `Add or remove {name}'s groups`
-            }, { name: state.initialValues.name })
-          }]
-        } }
+        schema={ state.schema }
       /> }
     </Modal>
   );
