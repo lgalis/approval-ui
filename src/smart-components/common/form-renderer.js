@@ -15,13 +15,15 @@ const buttonPositioning = {
   }
 };
 
+const componentMapperExtended = {
+  ...componentMapper,
+  summary: SummaryContent
+};
+
 const FormRenderer = ({ formContainer, ...rest }) => (
   <div className={ buttonPositioning[formContainer].buttonClassName }>
     <ReactFormRender
-      componentMapper={ {
-        ...componentMapper,
-        summary: SummaryContent
-      } }
+      componentMapper={ componentMapperExtended }
       FormTemplate={ (props) => <FormTemplate { ...props } { ...buttonPositioning[formContainer] }/> }
       { ...rest }
     />
