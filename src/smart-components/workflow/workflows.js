@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
@@ -64,7 +64,7 @@ const Workflows = () => {
   );
   const { data, meta } = useSelector(
     ({ workflowReducer: { workflows }}) => workflows
-  );
+    , shallowEqual);
 
   const dispatch = useDispatch();
   const history = useHistory();
