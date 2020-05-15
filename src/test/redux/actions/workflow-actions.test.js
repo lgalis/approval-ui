@@ -18,7 +18,8 @@ import {
   removeWorkflow,
   removeWorkflows,
   updateWorkflow,
-  expandWorkflow
+  expandWorkflow,
+  refreshWorkflows
 } from '../../../redux/actions/workflow-actions';
 import {
   APPROVAL_API_BASE
@@ -368,5 +369,18 @@ describe('Approval process actions', () => {
       type: EXPAND_WORKFLOW,
       payload: id
     });
+  });
+
+  it('refreshWorkflows should fetch the workflows', async () => {
+    const expectedActions = [{ type: 'FETCH_WORKFLOWS_PENDING' }];
+
+    const store = mockStore({
+      workflowReducer: { filterValue: 'filterValue', workflows: { meta: { offset: 0, limit: 15 }}}
+    });
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=filterValue&limit=15&offset=0`, mockOnce({ status: 200 }));
+
+    await store.dispatch(refreshWorkflows());
+
+    expect(store.getActions()).toEqual(expectedActions);
   });
 });

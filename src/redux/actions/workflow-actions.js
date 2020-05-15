@@ -71,3 +71,9 @@ export const expandWorkflow = (id) => ({
   type: ActionTypes.EXPAND_WORKFLOW,
   payload: id
 });
+
+export const refreshWorkflows = () => (dispatch, getState) => {
+  const { workflowReducer: { filterValue, workflows: { meta: { limit, offset }}}} = getState();
+
+  dispatch(fetchWorkflows(filterValue, { limit, offset }));
+};

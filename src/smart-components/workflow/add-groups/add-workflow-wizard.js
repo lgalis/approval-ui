@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Wizard } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
-import { addWorkflow } from '../../../redux/actions/workflow-actions';
+import { addWorkflow, refreshWorkflows } from '../../../redux/actions/workflow-actions';
 import SummaryContent from './summary-content';
 import WorkflowInfoForm from './workflow-information';
 import SetGroups from './set-groups';
@@ -52,7 +52,7 @@ const AddWorkflow = () => {
     const workflowData = { name, description,
       group_refs: wfGroups && wfGroups.length > 0 ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []};
     push(routes.workflows.index);
-    dispatch(addWorkflow(workflowData));
+    dispatch(addWorkflow(workflowData)).then(() => dispatch(refreshWorkflows()));
   };
 
   const onCancel = () => {
