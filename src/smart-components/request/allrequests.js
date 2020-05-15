@@ -1,42 +1,36 @@
 import React, { Fragment, useEffect, useReducer, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@patternfly/react-core';
+import { Route, useHistory } from 'react-router-dom';
 import { expandable } from '@patternfly/react-table';
 import { fetchRequests, expandRequest } from '../../redux/actions/request-actions';
-import { createRows } from './request-table-helpers';
-import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
-import RequestDetail from './request-detail/request-detail';
-import { isApprovalApprover } from '../../helpers/shared/helpers';
-import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
-import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
+import ActionModal from './action-modal';
+import {APPROVAL_APPROVER_PERSONA, isApprovalApprover, isRequestStateActive} from '../../helpers/shared/helpers';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
-import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
-import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 import UserContext from '../../user-context';
+import routesLinks from '../../constants/routes';
 import useQuery from '../../utilities/use-query';
 
 const columns = [{
   title: 'Name',
   cellFormatters: [ expandable ]
 },
-'Requester',
-'Opened',
-'Updated',
-'Status',
-'Decision'
+  'Requester',
+  'Opened',
+  'Updated',
+  'Status',
+  'Decision'
 ];
 
 const debouncedFilter = asyncDebounce(
-  (filter, dispatch, filteringCallback, persona, meta = defaultSettings) => {
-    filteringCallback(true);
-    dispatch(fetchRequests(filter, persona, meta)).then(() =>
-      filteringCallback(false)
-    );
-  },
-  1000
+    (filter, dispatch, filteringCallback, persona, meta = defaultSettings) => {
+      filteringCallback(true);
+      dispatch(fetchRequests(filter, persona, meta)).then(() =>
+          filteringCallback(false)
+      );
+    },
+    1000
 );
 const initialState = {
   filterValue: '',
@@ -58,105 +52,37 @@ const requestsListState = (state, action) => {
   }
 };
 
-const AllRequests = () => {
-  const [{ filterValue, isFetching, isFiltering }, stateDispatch ] = useReducer(
-    requestsListState,
-    initialState
-  );
-  const { data, meta } = useSelector(
-    ({ requestReducer: { requests }}) => requests
-  );
-  const { userPersona: userPersona } = useContext(UserContext);
-  const dispatch = useDispatch();
-  const [{ request }] = useQuery([ 'request' ]);
+const RequestQueue = () => {
+  const history = useHistory();
 
-  useEffect(() => {
-    dispatch(
-      fetchRequests(filterValue, defaultSettings, userPersona)
-    ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
-    scrollToTop();
-  }, []);
+  const routes = () => <Fragment>
+    <Route exact path={ routesLinks.requests.addComment } render={ props => <ActionModal { ...props }
+                                                                                         actionType={ 'Add Comment' }
+                                                                                         postMethod={ fetchRequests } /> }/>
+    <Route exact path={ routesLinks.requests.approve } render={ props => <ActionModal { ...props } actionType={ 'Approve' }
+                                                                                      postMethod={ fetchRequests }/> } />
+    <Route exact path={ routesLinks.requests.deny } render={ props => <ActionModal { ...props } actionType={ 'Deny' }
+                                                                                   postMethod={ fetchRequests }/> } />
+  </Fragment>;
 
-  const handleFilterChange = (value) => {
-    stateDispatch({ type: 'setFilterValue', payload: value });
-    debouncedFilter(
-      value,
-      dispatch,
-      (isFiltering) =>
-        stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
-      {
-        ...meta,
-        offset: 0
-      },
-      userPersona
-    );
+  const actionsDisabled = (requestData) => requestData &&
+  requestData.state ?
+      !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 : true;
+
+  const actionResolver = (requestData) => {
+    return (requestData && requestData.id && actionsDisabled(requestData) ? null :
+        [
+          {
+            title: 'Comment',
+            onClick: () => history.push({
+              pathname: routesLinks.requests.addComment,
+              search: `?request=${requestData.id}`
+            })
+          }
+        ]);
   };
 
-  const handlePagination = (_apiProps, pagination) => {
-    stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchRequests(filterValue, pagination, userPersona))
-    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
-    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
-  };
-
-  const onCollapse = (id, setRows, setOpen) => {
-    dispatch(expandRequest(id));
-    setRows((rows) => setOpen(rows, id));
-  };
-
-  const renderRequestsList = () => {
-    return (
-      <Fragment>
-        <TopToolbar>
-          <TopToolbarTitle title="Approval"/>
-          { isApprovalApprover(userPersona) && <AppTabs/> }
-        </TopToolbar>
-        <TableToolbarView
-          data={ data }
-          createRows={ createRows }
-          columns={ columns }
-          fetchData={ handlePagination }
-          titlePlural="requests"
-          titleSingular="request"
-          pagination={ meta }
-          handlePagination={ handlePagination }
-          filterValue={ filterValue }
-          onFilterChange={ handleFilterChange }
-          isLoading={ isFetching || isFiltering }
-          onCollapse={ onCollapse }
-          renderEmptyState={ () => (
-            <TableEmptyState
-              title={ filterValue === '' ? 'No requests' : 'No results found' }
-              Icon={ SearchIcon }
-              PrimaryAction={ () =>
-                filterValue !== '' ? (
-                  <Button onClick={ () => handleFilterChange('') } variant="link">
-                            Clear all filters
-                  </Button>
-                ) : null
-              }
-              description={
-                filterValue === ''
-                  ? ''
-                  : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
-              }
-            />
-          ) }
-        />
-      </Fragment>);
-  };
-
-  return request ? <RequestDetail /> : renderRequestsList();
+  return <Requests routes = {routes} persona={APPROVAL_APPROVER_PERSONA} actionsDisabled={actionsDisabled} actionResolver={actionResolver}/>
 };
 
-AllRequests.propTypes = {
-  requests: PropTypes.array,
-  isLoading: PropTypes.bool
-};
-
-AllRequests.defaultProps = {
-  requests: [],
-  isLoading: false
-};
-
-export default AllRequests;
+export default RequestQueue;
