@@ -12,6 +12,7 @@ const setGroupSelectSchema = (intl) => ({
     defaultMessage="Set groups"
   />,
   loadOptions: asyncDebounce(fetchFilterApprovalGroups),
+  noValueUpdates: true,
   isMulti: true,
   isSearchable: true,
   simpleValue: false,

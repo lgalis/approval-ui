@@ -27,11 +27,10 @@ const createSchema = (name, intl) => ({
 });
 
 const prepareInitialValues = (wfData) => {
-  const groupOptions = wfData.group_refs.map((group) => {
-    return { label: group.name, value: group.uuid };
-  });
-  const data = { ...wfData, wfGroups: groupOptions };
-  return data;
+  const groupOptions = wfData.group_refs.map((group) =>
+    ({ label: group.name, value: group.uuid })
+  );
+  return { ...wfData, wfGroups: groupOptions };
 };
 
 const reducer = (state, { type, initialValues, intl }) => {
