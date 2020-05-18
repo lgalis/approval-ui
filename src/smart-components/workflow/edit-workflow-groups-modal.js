@@ -9,6 +9,7 @@ import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
 import SetGroups from './add-groups/set-groups';
 import useQuery from '../../utilities/use-query';
+import useWorkflow from '../../utilities/use-workflows';
 
 import '../../App.scss';
 
@@ -23,6 +24,7 @@ const EditWorkflowGroupsModal = ({
 
   const { push } = useHistory();
   const [{ workflow: id }] = useQuery([ 'workflow' ]);
+  const loadedWorkflow = useWorkflow(id);
 
   const handleChange = data => {
     setValues({ ...formData, ...data });
@@ -37,7 +39,11 @@ const EditWorkflowGroupsModal = ({
   };
 
   useEffect(() => {
-    fetchWorkflow(id).then((result) => setValues(initialValues(result.value)));
+    if (!loadedWorkflow) {
+      fetchWorkflow(id).then((result) => setValues(initialValues(result.value)));
+    } else {
+      setValues(initialValues(loadedWorkflow));
+    }
   }, []);
 
   const onSave = () => {

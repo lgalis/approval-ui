@@ -14,6 +14,7 @@ import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 import { WorkflowInfoFormLoader } from '../../../../presentational-components/shared/loader-placeholders';
 
 import routes from '../../../../constants/routes';
+import { Title } from '@patternfly/react-core';
 
 const ComponentWrapper = ({ store, children }) => (
   <Provider store={ store }>
@@ -60,6 +61,31 @@ describe('<EditWorkflowInfoModal />', () => {
     wrapper.update();
 
     expect(wrapper.find(WorkflowInfoForm)).toHaveLength(1);
+    done();
+  });
+
+  it('should render WorkflowInfoForm when workflow is in table', async done => {
+    const store = mockStore({
+      workflowReducer: {
+        workflows: {
+          data: [
+            { id: '123', name: 'pokus' }
+          ]
+        }
+      }
+    });
+    let wrapper;
+
+    await act(async () => {
+      wrapper = mount(
+        <ComponentWrapper store={ store }>
+          <Route path="/foo" render={ props => <EditWorkflowInfoModal { ...props } { ...initialProps } /> }/>
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    expect(wrapper.find(Title).last().text().includes('pokus')).toEqual(true);
     done();
   });
 

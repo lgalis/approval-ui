@@ -10,6 +10,7 @@ import { WorkflowInfoFormLoader } from '../../presentational-components/shared/l
 import WorkflowInfoForm from './add-groups/workflow-information';
 import WorkflowSequenceForm from './add-groups/workflow-sequence';
 import useQuery from '../../utilities/use-query';
+import useWorkflow from '../../utilities/use-workflows';
 
 import '../../App.scss';
 
@@ -28,11 +29,16 @@ const EditWorkflowInfoModal = ({
 
   const { push } = useHistory();
   const [{ workflow: id }] = useQuery([ 'workflow' ]);
+  const loadedWorkflow = useWorkflow(id);
 
   const handleChange = data => setFormData({ ...formData, ...data });
 
   useEffect(() => {
-    fetchWorkflow(id).then((data) => { setFormData({ ...formData, ...data.value }); setInitialValue({ ...data.value });});
+    if (!loadedWorkflow) {
+      fetchWorkflow(id).then((data) => { setFormData({ ...formData, ...data.value }); setInitialValue({ ...data.value });});
+    } else {
+      setFormData({ ...formData, ...loadedWorkflow });
+    }
   }, []);
 
   const onSave = () => {
@@ -58,6 +64,8 @@ const EditWorkflowInfoModal = ({
     push('/workflows');
   };
 
+  const name = loadedWorkflow ? loadedWorkflow.name : workflow && workflow.name;
+
   return (
     <Modal
       title={ editType === 'sequence' ? 'Edit sequence' : 'Edit information' }
@@ -72,13 +80,13 @@ const EditWorkflowInfoModal = ({
               <WorkflowInfoForm formData={ formData } initialValue={ initialValue }
                 handleChange={ handleChange }
                 setIsValid={ setIsValid }
-                title={ `Make any changes to approval process ${workflow.name}` }/> :
+                title={ `Make any changes to approval process ${name}` }/> :
               <WorkflowSequenceForm formData={ formData }
                 initialValue={ initialValue }
                 handleChange={ handleChange }
                 isValid={ isValid }
                 setIsValid={ setIsValid }
-                title={ `Set the sequence for the approval process ${workflow.name}` }/>
+                title={ `Set the sequence for the approval process ${name}` }/>
             ) }
           </FormGroup>
         </StackItem>
