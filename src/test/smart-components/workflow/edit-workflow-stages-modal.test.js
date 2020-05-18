@@ -12,6 +12,7 @@ import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import EditWorkflowGroupsModal from '../../../smart-components/workflow/edit-workflow-groups-modal';
 import { WorkflowInfoFormLoader } from '../../../presentational-components/shared/loader-placeholders';
 import SetGroups from '../../../smart-components/workflow/add-groups/set-groups';
+import { Title } from '@patternfly/react-core';
 
 describe('<EditWorkflowGroupsModal />', () => {
   let initialProps;
@@ -105,6 +106,38 @@ describe('<EditWorkflowGroupsModal />', () => {
     });
 
     wrapper.update();
+    expect(wrapper.find(SetGroups)).toHaveLength(1);
+    done();
+  });
+
+  it('should mount with workflow in the table', async done => {
+    const store = mockStore({ workflowReducer: {
+      workflows: {
+        data: [
+          { id: '123', name: 'pokus', group_refs: []}
+        ]
+      }
+    },
+    groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
+    let wrapper;
+
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: []}}));
+
+    await act(async() => {
+      wrapper = mount(
+        <ComponentWrapper initialEntries={ [ '/foo?workflow=123' ] } store={ store } >
+          <Route path="/foo" render={ props => <EditWorkflowGroupsModal
+            { ...props }
+            { ...initialProps }
+          /> }/>
+        </ComponentWrapper>
+      );
+
+    });
+
+    wrapper.update();
+    expect(wrapper.find(Title).last().text().includes('pokus')).toEqual(true);
     expect(wrapper.find(SetGroups)).toHaveLength(1);
     done();
   });
