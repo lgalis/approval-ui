@@ -93,7 +93,7 @@ const Workflows = () => {
   const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
     { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
 
-  const handlePagination = (_apiProps, pagination) => {
+  const handlePagination = (pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
     dispatch(fetchWorkflows(filterValue, pagination))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
