@@ -33,7 +33,9 @@ export const TableToolbarView = ({
   onFilterChange,
   isLoading,
   onCollapse,
-  renderEmptyState
+  renderEmptyState,
+  sortBy,
+  onSort
 }) => {
   const [ rows, setRows ] = useState([]);
 
@@ -118,6 +120,8 @@ export const TableToolbarView = ({
             onSelect={ isSelectable && selectRow }
             actionResolver={ actionResolver }
             className="table-fix"
+            sortBy={ sortBy }
+            onSort={ onSort }
           >
             <TableHeader />
             <TableBody/>
@@ -157,7 +161,9 @@ TableToolbarView.propTypes = {
   onFilterChange: propTypes.func,
   isLoading: propTypes.bool,
   onCollapse: propTypes.func,
-  renderEmptyState: propTypes.func
+  renderEmptyState: propTypes.func,
+  sortBy: propTypes.object,
+  onSort: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
@@ -167,5 +173,6 @@ TableToolbarView.defaultProps = {
   toolbarButtons: () => null,
   isSelectable: null,
   routes: () => null,
-  renderEmptyState: () => null
+  renderEmptyState: () => null,
+  onSort: () => null
 };

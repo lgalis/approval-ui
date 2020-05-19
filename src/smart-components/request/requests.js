@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, useHistory } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
-import { expandable } from '@patternfly/react-table';
-import { fetchRequests, expandRequest } from '../../redux/actions/request-actions';
+import { expandable, sortable } from '@patternfly/react-table';
+import { fetchRequests, expandRequest, sortRequests } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
@@ -12,7 +12,6 @@ import RequestDetail from './request-detail/request-detail';
 import { isApprovalAdmin, isApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
-import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
@@ -23,19 +22,20 @@ import useQuery from '../../utilities/use-query';
 
 const columns = [{
   title: 'Name',
-  cellFormatters: [ expandable ]
+  cellFormatters: [ expandable ],
+  transforms: [ sortable ]
 },
-'Requester',
-'Opened',
-'Updated',
-'Status',
-'Decision'
+{ title: 'Requester', transforms: [ sortable ]},
+{ title: 'Opened', transforms: [ sortable ]},
+{ title: 'Updated' },
+{ title: 'Status', transforms: [ sortable ]},
+{ title: 'Decision', transforms: [ sortable ]}
 ];
 
 const debouncedFilter = asyncDebounce(
-  (filter, dispatch, filteringCallback, persona, meta = defaultSettings) => {
+  (filter, dispatch, filteringCallback, persona) => {
     filteringCallback(true);
-    dispatch(fetchRequests(filter, persona, meta)).then(() =>
+    dispatch(fetchRequests(filter, persona)).then(() =>
       filteringCallback(false)
     );
   },
@@ -66,8 +66,9 @@ const Requests = () => {
     requestsListState,
     initialState
   );
-  const { data, meta } = useSelector(
-    ({ requestReducer: { requests }}) => requests
+  const { requests: { data, meta }, sortBy } = useSelector(
+    ({ requestReducer: { requests, sortBy }}) => ({ requests, sortBy }),
+    shallowEqual
   );
 
   const { userPersona: userPersona } = useContext(UserContext);
@@ -78,7 +79,7 @@ const Requests = () => {
 
   useEffect(() => {
     dispatch(
-      fetchRequests(filterValue, defaultSettings, userPersona)
+      fetchRequests(filterValue, userPersona)
     ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
     scrollToTop();
   }, []);
@@ -90,10 +91,6 @@ const Requests = () => {
       dispatch,
       (isFiltering) =>
         stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
-      {
-        ...meta,
-        offset: 0
-      },
       userPersona
     );
   };
@@ -130,7 +127,7 @@ const Requests = () => {
 
   const handlePagination = (_apiProps, pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchRequests(filterValue, pagination, userPersona))
+    dispatch(fetchRequests(filterValue, userPersona, pagination))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -138,6 +135,14 @@ const Requests = () => {
   const onCollapse = (id, setRows, setOpen) => {
     dispatch(expandRequest(id));
     setRows((rows) => setOpen(rows, id));
+  };
+
+  const onSort = (_e, index, direction, { property }) => {
+    stateDispatch({ type: 'setFetching', payload: true });
+    dispatch(sortRequests({ index, direction, property }));
+    return dispatch(fetchRequests(filterValue, userPersona))
+    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
+    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
 
   const renderRequestsList = () => {
@@ -148,6 +153,8 @@ const Requests = () => {
           { isApprovalAdmin(userPersona) && <AppTabs tabItems={ tabItems } /> }
         </TopToolbar>
         <TableToolbarView
+          sortBy={ sortBy }
+          onSort={ onSort }
           data={ data }
           createRows={ createRows }
           columns={ columns }

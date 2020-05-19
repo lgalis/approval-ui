@@ -6,10 +6,17 @@ import { APPROVAL_REQUESTER_PERSONA, APPROVAL_APPROVER_PERSONA } from '../shared
 const actionApi = getActionApi();
 const graphqlInstance = getGraphqlInstance();
 
-export function fetchRequests(filter = '', pagination = defaultSettings, persona = undefined) {
-  const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
+const sortPropertiesMapper = (property) => ({
+  opened: 'created_at',
+  requester: 'requester_name',
+  status: 'state'
+}[property] || property);
+
+export function fetchRequests(filter = '', pagination = defaultSettings, persona = undefined, sortBy) {
   const filterQuery = `filter[name][contains_i]=${filter}`;
-  const fetchUrl = `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}`;
+  const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
+  const sortQuery = `&sort_by=${sortPropertiesMapper(sortBy.property)}:${sortBy.direction}`;
+  const fetchUrl = `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}${sortQuery}`;
   const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 }
