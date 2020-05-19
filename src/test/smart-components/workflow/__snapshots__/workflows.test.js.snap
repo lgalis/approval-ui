@@ -21,7 +21,13 @@ exports[`<Workflows /> should render correctly 1`] = `
     }
   >
     <IntlProvider
+      defaultFormats={Object {}}
+      defaultLocale="en"
+      formats={Object {}}
       locale="en"
+      messages={Object {}}
+      onError={[Function]}
+      textComponent={Symbol(react.fragment)}
     >
       <Workflows
         history={
@@ -56,7 +62,13 @@ exports[`<Workflows /> should render correctly in loading state 1`] = `
     }
   >
     <IntlProvider
+      defaultFormats={Object {}}
+      defaultLocale="en"
+      formats={Object {}}
       locale="en"
+      messages={Object {}}
+      onError={[Function]}
+      textComponent={Symbol(react.fragment)}
     >
       <Workflows
         history={
