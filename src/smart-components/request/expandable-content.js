@@ -6,6 +6,7 @@ import { TextContent, Text, TextVariants, Level, LevelItem, Button, Bullseye, Sp
 import { isApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
 import { fetchRequestContent } from '../../helpers/request/request-helper';
 import UserContext from '../../user-context';
+import routes from '../../constants/routes';
 
 export const ExpandedItem = ({ title = '', detail = '' }) => (
   <TextContent>
@@ -47,12 +48,12 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
           <ExpandedItem title="Product" detail={ requestContent ? requestContent.product : 'Unknown' } />
         </LevelItem>
         { requestActive && isApprovalApprover(userPersona) && <LevelItem>
-          <Link to={ `/requests/approve/${id}` }  className="pf-u-mr-md">
+          <Link to={ { pathname: routes.requests.approve, search: `request=${id}` } }  className="pf-u-mr-md">
             <Button variant="primary" aria-label="Approve Request" isDisabled={ !requestActive }>
               Approve
             </Button>
           </Link>
-          <Link to={ `/requests/deny/${id}` }>
+          <Link to={ { pathname: routes.requests.deny, search: `request=${id}` } }>
             <Button variant="danger" aria-label="Deny Request">
               Deny
             </Button>
