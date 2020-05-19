@@ -8,7 +8,6 @@ import { fetchRequests, expandRequest, sortRequests } from '../../redux/actions/
 import ActionModal from './action-modal';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
-import RequestDetail from './request-detail/request-detail';
 import { isApprovalAdmin, isApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
@@ -18,7 +17,6 @@ import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 import UserContext from '../../user-context';
 import routesLinks from '../../constants/routes';
-import useQuery from '../../utilities/use-query';
 
 const columns = [{
   title: 'Name',
@@ -75,7 +73,6 @@ const Requests = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const [{ request }] = useQuery([ 'request' ]);
 
   useEffect(() => {
     dispatch(
@@ -145,53 +142,49 @@ const Requests = () => {
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
 
-  const renderRequestsList = () => {
-    return (
-      <Fragment>
-        <TopToolbar>
-          <TopToolbarTitle title="Approval"/>
-          { isApprovalAdmin(userPersona) && <AppTabs tabItems={ tabItems } /> }
-        </TopToolbar>
-        <TableToolbarView
-          sortBy={ sortBy }
-          onSort={ onSort }
-          data={ data }
-          createRows={ createRows }
-          columns={ columns }
-          fetchData={ handlePagination }
-          routes={ routes }
-          actionResolver={ actionResolver }
-          titlePlural="requests"
-          titleSingular="request"
-          pagination={ meta }
-          handlePagination={ handlePagination }
-          filterValue={ filterValue }
-          onFilterChange={ handleFilterChange }
-          isLoading={ isFetching || isFiltering }
-          onCollapse={ onCollapse }
-          renderEmptyState={ () => (
-            <TableEmptyState
-              title={ filterValue === '' ? 'No requests' : 'No results found' }
-              Icon={ SearchIcon }
-              PrimaryAction={ () =>
-                filterValue !== '' ? (
-                  <Button onClick={ () => handleFilterChange('') } variant="link">
+  return (
+    <Fragment>
+      <TopToolbar>
+        <TopToolbarTitle title="Approval"/>
+        { isApprovalAdmin(userPersona) && <AppTabs tabItems={ tabItems } /> }
+      </TopToolbar>
+      <TableToolbarView
+        sortBy={ sortBy }
+        onSort={ onSort }
+        data={ data }
+        createRows={ createRows }
+        columns={ columns }
+        fetchData={ handlePagination }
+        routes={ routes }
+        actionResolver={ actionResolver }
+        titlePlural="requests"
+        titleSingular="request"
+        pagination={ meta }
+        handlePagination={ handlePagination }
+        filterValue={ filterValue }
+        onFilterChange={ handleFilterChange }
+        isLoading={ isFetching || isFiltering }
+        onCollapse={ onCollapse }
+        renderEmptyState={ () => (
+          <TableEmptyState
+            title={ filterValue === '' ? 'No requests' : 'No results found' }
+            Icon={ SearchIcon }
+            PrimaryAction={ () =>
+              filterValue !== '' ? (
+                <Button onClick={ () => handleFilterChange('') } variant="link">
                             Clear all filters
-                  </Button>
-                ) : null
-              }
-              description={
-                filterValue === ''
-                  ? ''
-                  : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
-              }
-            />
-          ) }
-        />
-      </Fragment>);
-  };
-
-  return request ? <RequestDetail /> : renderRequestsList();
+                </Button>
+              ) : null
+            }
+            description={
+              filterValue === ''
+                ? ''
+                : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
+            }
+          />
+        ) }
+      />
+    </Fragment>);
 };
 
 Requests.propTypes = {
