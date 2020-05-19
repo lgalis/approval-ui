@@ -36,7 +36,12 @@ describe('Approval process actions', () => {
   it('should dispatch correct actions after fetching approval processes', () => {
     const store = mockStore({
       workflowReducer: {
-        isLoading: false
+        isLoading: false,
+        sortBy: {
+          index: 1,
+          property: 'sequence',
+          direction: 'asc'
+        }
       }
     });
 
@@ -50,7 +55,7 @@ describe('Approval process actions', () => {
       type: `${FETCH_WORKFLOWS}_FULFILLED`
     }];
 
-    apiClientMock.get(APPROVAL_API_BASE + '/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc', mockOnce({
       body: {
         data: [{
           label: 'workflow',
@@ -67,7 +72,12 @@ describe('Approval process actions', () => {
   it('should dispatch error notification if fetch approval processes fails', () => {
     const store = mockStore({
       workflowReducer: {
-        isLoading: false
+        isLoading: false,
+        sortBy: {
+          index: 1,
+          property: 'sequence',
+          direction: 'asc'
+        }
       }
     });
 
@@ -83,7 +93,7 @@ describe('Approval process actions', () => {
 
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + 'workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + 'workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc', mockOnce({
       status: 500
     }));
 
@@ -375,9 +385,20 @@ describe('Approval process actions', () => {
     const expectedActions = [{ type: 'FETCH_WORKFLOWS_PENDING' }];
 
     const store = mockStore({
-      workflowReducer: { filterValue: 'filterValue', workflows: { meta: { offset: 0, limit: 15 }}}
+      workflowReducer: {
+        filterValue: 'filterValue',
+        workflows: { meta: { offset: 0, limit: 15 }},
+        sortBy: {
+          index: 1,
+          property: 'sequence',
+          direction: 'asc'
+        }
+      }
     });
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=filterValue&limit=15&offset=0`, mockOnce({ status: 200 }));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=filterValue&limit=15&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({ status: 200 })
+    );
 
     await store.dispatch(refreshWorkflows());
 

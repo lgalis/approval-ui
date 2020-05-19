@@ -3,8 +3,8 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
-import { expandable } from '@patternfly/react-table';
-import { fetchWorkflows, expandWorkflow } from '../../redux/actions/workflow-actions';
+import { expandable, sortable } from '@patternfly/react-table';
+import { fetchWorkflows, expandWorkflow, sortWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-groups/add-workflow-wizard';
 import EditWorkflowInfo from './edit-workflow-info-modal';
 import EditWorkflowGroups from './edit-workflow-groups-modal';
@@ -21,10 +21,11 @@ import routesLinks from '../../constants/routes';
 
 const columns = [{
   title: 'Name',
-  cellFormatters: [ expandable ]
+  cellFormatters: [ expandable ],
+  transforms: [ sortable ]
 },
-'Description',
-'Sequence'
+{ title: 'Description', transforms: [ sortable ]},
+{ title: 'Sequence', transforms: [ sortable ]}
 ];
 
 const debouncedFilter = asyncDebounce(
@@ -62,8 +63,8 @@ const Workflows = () => {
     workflowsListState,
     initialState
   );
-  const { data, meta } = useSelector(
-    ({ workflowReducer: { workflows }}) => workflows
+  const { workflows: { data, meta }, sortBy } = useSelector(
+    ({ workflowReducer: { workflows, sortBy }}) => ({ workflows, sortBy })
     , shallowEqual);
 
   const dispatch = useDispatch();
@@ -96,6 +97,14 @@ const Workflows = () => {
   const handlePagination = (_apiProps, pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
     dispatch(fetchWorkflows(filterValue, pagination))
+    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
+    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
+  };
+
+  const onSort = (_e, index, direction, { property }) => {
+    stateDispatch({ type: 'setFetching', payload: true });
+    dispatch(sortWorkflows({ index, direction, property }));
+    return dispatch(fetchWorkflows(filterValue))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -191,6 +200,8 @@ const Workflows = () => {
         <AppTabs tabItems={ tabItems }/>
       </TopToolbar>
       <TableToolbarView
+        sortBy={ sortBy }
+        onSort={ onSort }
         data={ data }
         isSelectable={ true }
         createRows={ createRows }

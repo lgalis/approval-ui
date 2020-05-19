@@ -5,11 +5,13 @@ import { APPROVAL_API_BASE } from '../../utilities/constants';
 const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
-export function fetchWorkflows(filter = '', pagination = defaultSettings) {
+export function fetchWorkflows(filter = '', pagination = defaultSettings, sortBy) {
   const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
   const filterQuery = `&filter[name][contains_i]=${filter}`;
+  const sortQuery = `&sort_by=${sortBy.property}:${sortBy.direction}`;
+
   return getAxiosInstance().get(
-    `${APPROVAL_API_BASE}/workflows/?${filterQuery}${paginationQuery}`
+    `${APPROVAL_API_BASE}/workflows/?${filterQuery}${paginationQuery}${sortQuery}`
   );
 }
 
