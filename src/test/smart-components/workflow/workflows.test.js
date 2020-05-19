@@ -67,7 +67,12 @@ describe('<Workflows />', () => {
         workflow: {},
         filterValue: '',
         isLoading: false,
-        isRecordLoading: false
+        isRecordLoading: false,
+        sortBy: {
+          index: 1,
+          property: 'sequence',
+          direction: 'asc'
+        }
       }
     };
   });
@@ -92,16 +97,18 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -133,16 +140,18 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -174,16 +183,18 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -215,16 +226,18 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -256,17 +269,19 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ],
+        group_names: [ 'group-name-1' ]
+      }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
@@ -296,17 +311,23 @@ describe('<Workflows />', () => {
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
       mockOnce({ body: { data: []}}));
     apiClientMock.get(`${RBAC_API_BASE}/groups/group-1/`, mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ],
-      group_names: [ 'group-name-1' ]
-    }]}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`, mockOnce({ body: { data: [{
-      id: 'edit-id',
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ],
+        group_names: [ 'group-name-1' ]
+      }]}})
+    );
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({ body: { data: [{
+        id: 'edit-id',
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}})
+    );
 
     await act(async()=> {
       wrapper = mount(
@@ -328,11 +349,14 @@ describe('<Workflows />', () => {
   it('should expand approval process', async () => {
     const id = 'edit-id';
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
-      id,
-      name: 'foo',
-      group_refs: [ 'group-1' ]
-    }]}}));
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({ body: { data: [{
+        id,
+        name: 'foo',
+        group_refs: [ 'group-1' ]
+      }]}})
+    );
 
     const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
     registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
@@ -355,5 +379,93 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
     expect(storeReal.getState().workflowReducer.expandedWorkflows).toEqual([ id ]);
+  });
+
+  it('should sort', async () => {
+    expect.assertions(3);
+
+    const wf = {
+      id: 'so',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    };
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path={ routes.workflows.index } component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Aasc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'name:asc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('button').at(9).simulate('click'); // name column
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Adesc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'name:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('button').at(9).simulate('click'); // name column
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=description%3Aasc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'description:asc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('button').at(10).simulate('click'); // description column
+    });
+    wrapper.update();
   });
 });
