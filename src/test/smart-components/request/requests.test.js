@@ -33,6 +33,20 @@ describe('<Requests />', () => {
   let mockStore;
   let initialState;
 
+  const request = {
+    id: '299',
+    state: 'notified',
+    decision: 'undecided',
+    workflow_id: '1',
+    created_at: '2020-01-08T19:37:59Z',
+    notified_at: '2020-01-08T19:37:59Z',
+    number_of_children: 0,
+    number_of_finished_children: 0,
+    owner: 'jsmith@redhat.com',
+    requester_name: 'John Smith',
+    name: 'QA Password survey field'
+  };
+
   beforeEach(() => {
     initialProps = {};
     mockStore = configureStore(middlewares);
@@ -54,21 +68,7 @@ describe('<Requests />', () => {
   });
 
   it('should open row in the table and load its data', async () => {
-    const request = {
-      id: '299',
-      state: 'notified',
-      decision: 'undecided',
-      workflow_id: '1',
-      created_at: '2020-01-08T19:37:59Z',
-      notified_at: '2020-01-08T19:37:59Z',
-      number_of_children: 0,
-      number_of_finished_children: 0,
-      owner: 'jsmith@redhat.com',
-      requester_name: 'John Smith',
-      name: 'QA Password survey field'
-    };
-
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
       status: 200,
       body: {
         meta: { count: 1, limit: 50, offset: 0 },
@@ -106,5 +106,80 @@ describe('<Requests />', () => {
 
     expect(contentSpy).toHaveBeenCalled();
     expect(store.getState().requestReducer.expandedRequests).toEqual([ request.id ]);
+  });
+
+  it('should sort requests when click on sort', async () => {
+    expect.assertions(3);
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
+      status: 200,
+      body: {
+        meta: { count: 1, limit: 50, offset: 0 },
+        data: [ request ]
+      }
+    }));
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+    const store = registry.getStore();
+
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(<ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>);
+    });
+    wrapper.update();
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Aasc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'name:asc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('button').at(3).simulate('click'); // name column
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Adesc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'name:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('button').at(3).simulate('click'); // name column
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=requester_name%3Aasc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'requester_name:asc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('button').at(4).simulate('click'); // requester column
+    });
+    wrapper.update();
   });
 });
