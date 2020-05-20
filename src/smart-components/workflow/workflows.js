@@ -82,7 +82,7 @@ const Workflows = () => {
 
   useEffect(() => {
     dispatch(
-      fetchWorkflows(filterValue, defaultSettings)
+      fetchWorkflows(defaultSettings)
     ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
     scrollToTop();
   }, []);
@@ -102,7 +102,7 @@ const Workflows = () => {
 
   const handlePagination = (pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchWorkflows(filterValue, pagination))
+    dispatch(fetchWorkflows(pagination))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -110,7 +110,7 @@ const Workflows = () => {
   const onSort = (_e, index, direction, { property }) => {
     stateDispatch({ type: 'setFetching', payload: true });
     dispatch(sortWorkflows({ index, direction, property }));
-    return dispatch(fetchWorkflows(filterValue))
+    return dispatch(fetchWorkflows())
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
