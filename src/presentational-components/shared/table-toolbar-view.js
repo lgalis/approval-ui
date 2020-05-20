@@ -34,7 +34,8 @@ export const TableToolbarView = ({
   renderEmptyState,
   sortBy,
   onSort,
-  activeFiltersConfig
+  activeFiltersConfig,
+  filterConfig
 }) => {
   const intl = useIntl();
   const [ rows, setRows ] = useState([]);
@@ -106,7 +107,9 @@ export const TableToolbarView = ({
             onChange: (_event, value) => onFilterChange(value),
             value: filterValue
           }
-        }]
+        },
+        ...filterConfig
+        ]
       } }
       activeFiltersConfig={ activeFiltersConfig }
     />
@@ -176,7 +179,8 @@ TableToolbarView.propTypes = {
   renderEmptyState: propTypes.func,
   sortBy: propTypes.object,
   onSort: propTypes.func,
-  activeFiltersConfig: propTypes.object
+  activeFiltersConfig: propTypes.object,
+  filterConfig: propTypes.array
 };
 
 TableToolbarView.defaultProps = {
@@ -186,5 +190,6 @@ TableToolbarView.defaultProps = {
   isSelectable: null,
   routes: () => null,
   renderEmptyState: () => null,
-  onSort: () => null
+  onSort: () => null,
+  filterConfig: []
 };

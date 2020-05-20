@@ -12,11 +12,35 @@ const sortPropertiesMapper = (property) => ({
   status: 'state'
 }[property] || property);
 
-export function fetchRequests(filter = '', pagination = defaultSettings, persona = undefined, sortBy) {
-  const filterQuery = `filter[name][contains_i]=${filter}`;
+const filterQuery = (filterValue) => {
+  const query = [];
+  if (filterValue.name) {
+    query.push(`filter[name][contains_i]=${filterValue.name}`);
+  }
+
+  if (filterValue.requester) {
+    query.push(`filter[requester_name][contains_i]=${filterValue.requester}`);
+  }
+
+  if (filterValue.status) {
+    filterValue.status.forEach(state => {
+      query.push(`filter[state][eq][]=${state}`);
+    });
+  }
+
+  if (filterValue.decision) {
+    filterValue.decision.forEach(dec => {
+      query.push(`filter[decision][eq][]=${dec}`);
+    });
+  }
+
+  return query.join('&');
+};
+
+export function fetchRequests(filter = {}, pagination = defaultSettings, persona = undefined, sortBy) {
   const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
   const sortQuery = `&sort_by=${sortPropertiesMapper(sortBy.property)}:${sortBy.direction}`;
-  const fetchUrl = `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}${sortQuery}`;
+  const fetchUrl = `${APPROVAL_API_BASE}/requests/?${filterQuery(filter)}${paginationQuery}${sortQuery}`;
   const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 }
