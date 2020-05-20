@@ -428,7 +428,7 @@ describe('<Workflows />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(9).simulate('click'); // name column
+      wrapper.find('button').at(10).simulate('click'); // name column
     });
     wrapper.update();
 
@@ -446,7 +446,7 @@ describe('<Workflows />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(9).simulate('click'); // name column
+      wrapper.find('button').at(10).simulate('click'); // name column
     });
     wrapper.update();
 
@@ -464,7 +464,7 @@ describe('<Workflows />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(10).simulate('click'); // description column
+      wrapper.find('button').at(11).simulate('click'); // description column
     });
     wrapper.update();
   });
