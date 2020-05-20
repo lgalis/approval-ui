@@ -1,8 +1,8 @@
 import * as ActionTypes from '../action-types';
 import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
 
-export const fetchWorkflows = (filter, pagination) => (dispatch, getState) => {
-  const { sortBy, workflows } = getState().workflowReducer;
+export const fetchWorkflows = (pagination) => (dispatch, getState) => {
+  const { sortBy, workflows, filterValue } = getState().workflowReducer;
 
   let finalPagination = pagination;
 
@@ -13,7 +13,7 @@ export const fetchWorkflows = (filter, pagination) => (dispatch, getState) => {
 
   return dispatch ({
     type: ActionTypes.FETCH_WORKFLOWS,
-    payload: WorkflowHelper.fetchWorkflows(filter, finalPagination, sortBy)
+    payload: WorkflowHelper.fetchWorkflows(filterValue, finalPagination, sortBy)
   });
 };
 
@@ -83,13 +83,12 @@ export const expandWorkflow = (id) => ({
   payload: id
 });
 
-export const refreshWorkflows = () => (dispatch, getState) => {
-  const { workflowReducer: { filterValue, workflows: { meta: { limit, offset }}}} = getState();
-
-  dispatch(fetchWorkflows(filterValue, { limit, offset }));
-};
-
 export const sortWorkflows = (sortBy) => ({
   type: ActionTypes.SORT_WORKFLOWS,
   payload: sortBy
+});
+
+export const setFilterValueWorkflows = (filterValue) => ({
+  type: ActionTypes.SET_FILTER_WORKFLOWS,
+  payload: filterValue
 });

@@ -4,7 +4,8 @@ import { callReducer } from '../redux-helpers';
 import {
   FETCH_WORKFLOW,
   FETCH_WORKFLOWS,
-  EXPAND_WORKFLOW
+  EXPAND_WORKFLOW,
+  SET_FILTER_WORKFLOWS
 } from '../../../redux/action-types';
 
 describe('Approval process reducer', () => {
@@ -41,5 +42,12 @@ describe('Approval process reducer', () => {
     initialState = { expandedWorkflows: [ '123' ]};
     const expectedState = { expandedWorkflows: [ '123', id ]};
     expect(reducer(initialState, { type: EXPAND_WORKFLOW, payload: id })).toEqual(expectedState);
+  });
+
+  it('should set filter value', () => {
+    const filterValue = 'some-name';
+    initialState = { workflows: { meta: { offset: 100, limit: 50 }}};
+    const expectedState = { filterValue, workflows: { meta: { offset: 0, limit: 50 }}};
+    expect(reducer(initialState, { type: SET_FILTER_WORKFLOWS, payload: filterValue })).toEqual(expectedState);
   });
 });

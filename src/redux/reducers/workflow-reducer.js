@@ -2,7 +2,8 @@ import {
   FETCH_WORKFLOW,
   FETCH_WORKFLOWS,
   EXPAND_WORKFLOW,
-  SORT_WORKFLOWS
+  SORT_WORKFLOWS,
+  SET_FILTER_WORKFLOWS
 } from '../../redux/action-types';
 
 // Initial State
@@ -43,6 +44,17 @@ const setSortWorkflows = (state, { payload }) => ({
     }
   }
 });
+const setFilterValue = (state, { payload }) => ({
+  ...state,
+  filterValue: payload,
+  workflows: {
+    ...state.workflows,
+    meta: {
+      ...state.workflows.meta,
+      offset: 0
+    }
+  }
+});
 
 export default {
   [`${FETCH_WORKFLOWS}_PENDING`]: setLoadingState,
@@ -50,5 +62,6 @@ export default {
   [`${FETCH_WORKFLOW}_PENDING`]: setRecordLoadingState,
   [`${FETCH_WORKFLOW}_FULFILLED`]: selectWorkflow,
   [EXPAND_WORKFLOW]: expandWorkflow,
-  [SORT_WORKFLOWS]: setSortWorkflows
+  [SORT_WORKFLOWS]: setSortWorkflows,
+  [SET_FILTER_WORKFLOWS]: setFilterValue
 };

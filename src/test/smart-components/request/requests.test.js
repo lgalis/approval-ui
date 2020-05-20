@@ -3,14 +3,10 @@ import React from 'react';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { shallow } from 'enzyme';
-import configureStore from 'redux-mock-store' ;
-import { shallowToJson } from 'enzyme-to-json';
 import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
 import Requests from '../../../smart-components/request/requests';
 import requestReducer, { requestsInitialState } from '../../../redux/reducers/request-reducer';
-import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import { act } from 'react-dom/test-utils';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 import { RowWrapper } from '@patternfly/react-table';
@@ -29,9 +25,6 @@ const ComponentWrapper = ({ store, initialEntries = [ '/requests' ], children })
 
 describe('<Requests />', () => {
   let initialProps;
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
-  let mockStore;
-  let initialState;
 
   const request = {
     id: '299',
@@ -49,26 +42,10 @@ describe('<Requests />', () => {
 
   beforeEach(() => {
     initialProps = {};
-    mockStore = configureStore(middlewares);
-    initialState = {
-      requestReducer: { ...requestsInitialState, isLoading: false }
-    };
-  });
-
-  it('should render correctly', () => {
-    const store = mockStore(initialState);
-    const wrapper = shallow(<ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>);
-    expect(shallowToJson(wrapper)).toMatchSnapshot();
-  });
-
-  it('should render correctly in loading state', () => {
-    const store = mockStore(initialState);
-    const wrapper = shallow(<ComponentWrapper store={ store }><Requests { ...initialProps } isLoading /></ComponentWrapper>);
-    expect(shallowToJson(wrapper)).toMatchSnapshot();
   });
 
   it('should open row in the table and load its data', async () => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
       status: 200,
       body: {
         meta: { count: 1, limit: 50, offset: 0 },
@@ -111,7 +88,7 @@ describe('<Requests />', () => {
   it('should sort requests when click on sort', async () => {
     expect.assertions(3);
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
       status: 200,
       body: {
         meta: { count: 1, limit: 50, offset: 0 },
@@ -129,10 +106,10 @@ describe('<Requests />', () => {
     });
     wrapper.update();
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Aasc`,
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=name%3Aasc`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'name:asc'
+          limit: '50', offset: '0', sort_by: 'name:asc'
         });
         return res.status(200).body({
           meta: { count: 1, limit: 50, offset: 0 },
@@ -142,15 +119,15 @@ describe('<Requests />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(3).simulate('click'); // name column
+      wrapper.find('button').at(4).simulate('click'); // name column
     });
     wrapper.update();
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Adesc`,
+      `${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=name%3Adesc`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'name:desc'
+          limit: '50', offset: '0', sort_by: 'name:desc'
         });
         return res.status(200).body({
           meta: { count: 1, limit: 50, offset: 0 },
@@ -160,15 +137,15 @@ describe('<Requests />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(3).simulate('click'); // name column
+      wrapper.find('button').at(4).simulate('click'); // name column
     });
     wrapper.update();
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=requester_name%3Aasc`,
+      `${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=requester_name%3Aasc`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'requester_name:asc'
+          limit: '50', offset: '0', sort_by: 'requester_name:asc'
         });
         return res.status(200).body({
           meta: { count: 1, limit: 50, offset: 0 },
@@ -178,8 +155,187 @@ describe('<Requests />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(4).simulate('click'); // requester column
+      wrapper.find('button').at(5).simulate('click'); // requester column
     });
     wrapper.update();
+  });
+
+  it('should filter requests - and clear filters', async () => {
+    jest.useFakeTimers();
+    expect.assertions(5);
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
+      status: 200,
+      body: {
+        meta: { count: 1, limit: 50, offset: 0 },
+        data: [ request ]
+      }
+    }));
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+    const store = registry.getStore();
+
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(<ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>);
+    });
+    wrapper.update();
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&limit=50&offset=0&sort_by=created_at%3Adesc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': 'some-name', limit: '50', offset: '0', sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('input').first().instance().value = 'some-name';
+      wrapper.find('input').first().simulate('change');
+    });
+    wrapper.update();
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    // Switch to requester name filter
+    await act(async () => {
+      wrapper.find('ConditionalFilter').setState({ stateValue: 1 });
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
+       + `&limit=50&offset=0&sort_by=created_at%3Adesc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': 'some-name',
+          'filter[requester_name][contains_i]': 'some-requester',
+          limit: '50',
+          offset: '0',
+          sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('input').first().instance().value = 'some-requester';
+      wrapper.find('input').first().simulate('change');
+    });
+    wrapper.update();
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    // Switch to status filter
+    await act(async () => {
+      wrapper.find('ConditionalFilter').setState({ stateValue: 2 });
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
+       + '&filter%5Bstate%5D%5Beq%5D%5B%5D=canceled&filter%5Bstate%5D%5Beq%5D%5B%5D=started'
+      + '&limit=50&offset=0&sort_by=created_at%3Adesc',
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': 'some-name',
+          'filter[requester_name][contains_i]': 'some-requester',
+          'filter[state][eq][]': [ 'canceled', 'started' ],
+          limit: '50',
+          offset: '0',
+          sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    const checkboxDropdownProps = wrapper.find('Select').last().props();
+
+    const EVENT = {};
+    await act(async () => {
+      checkboxDropdownProps.onSelect(EVENT, 'canceled');
+    });
+    wrapper.update();
+    await act(async () => {
+      checkboxDropdownProps.onSelect(EVENT, 'started');
+    });
+    wrapper.update();
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
+       + '&filter%5Bstate%5D%5Beq%5D%5B%5D=started'
+      + '&limit=50&offset=0&sort_by=created_at%3Adesc',
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': 'some-name',
+          'filter[requester_name][contains_i]': 'some-requester',
+          'filter[state][eq][]': 'started',
+          limit: '50',
+          offset: '0',
+          sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      checkboxDropdownProps.onSelect(EVENT, 'canceled');
+    });
+    wrapper.update();
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          limit: '50',
+          offset: '0',
+          sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('.ins-c-chip-filters').find('button').last().simulate('click');
+    });
+    wrapper.update();
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    jest.useRealTimers();
   });
 });

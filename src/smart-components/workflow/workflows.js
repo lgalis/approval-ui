@@ -4,7 +4,7 @@ import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import { expandable, sortable } from '@patternfly/react-table';
-import { fetchWorkflows, expandWorkflow, sortWorkflows } from '../../redux/actions/workflow-actions';
+import { fetchWorkflows, expandWorkflow, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-groups/add-workflow-wizard';
 import EditWorkflowInfo from './edit-workflow-info-modal';
 import EditWorkflowGroups from './edit-workflow-groups-modal';
@@ -31,18 +31,27 @@ const columns = [{
 const debouncedFilter = asyncDebounce(
   (filter, dispatch, filteringCallback, meta = defaultSettings) => {
     filteringCallback(true);
-    dispatch(fetchWorkflows(filter, meta)).then(() =>
+    dispatch(setFilterValueWorkflows(filter, meta));
+    return dispatch(fetchWorkflows(meta))
+    .then(() =>
       filteringCallback(false)
     );
   },
   1000
 );
-const initialState = {
-  filterValue: '',
+
+const prepareChips = (filterValue) => filterValue ? [{
+  category: 'Name',
+  key: 'name',
+  chips: [{ name: filterValue, value: filterValue }]
+}] : [];
+
+const initialState = (filterValue = '') => ({
+  filterValue,
   isOpen: false,
   isFetching: true,
   isFiltering: false
-};
+});
 
 const workflowsListState = (state, action) => {
   switch (action.type) {
@@ -59,20 +68,21 @@ const workflowsListState = (state, action) => {
 
 const Workflows = () => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
+  const { workflows: { data, meta }, sortBy, filterValueRedux } = useSelector(
+    ({ workflowReducer: { workflows, sortBy, filterValue: filterValueRedux }}) => ({ workflows, sortBy, filterValueRedux })
+    , shallowEqual
+  );
   const [{ filterValue, isFetching, isFiltering }, stateDispatch ] = useReducer(
     workflowsListState,
-    initialState
+    initialState(filterValueRedux)
   );
-  const { workflows: { data, meta }, sortBy } = useSelector(
-    ({ workflowReducer: { workflows, sortBy }}) => ({ workflows, sortBy })
-    , shallowEqual);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     dispatch(
-      fetchWorkflows(filterValue, defaultSettings)
+      fetchWorkflows(defaultSettings)
     ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
     scrollToTop();
   }, []);
@@ -82,12 +92,8 @@ const Workflows = () => {
     debouncedFilter(
       value,
       dispatch,
-      (isFiltering) =>
-        stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
-      {
-        ...meta,
-        offset: 0
-      }
+      (isFiltering) => stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
+      { ...meta, offset: 0 }
     );
   };
 
@@ -96,7 +102,7 @@ const Workflows = () => {
 
   const handlePagination = (pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchWorkflows(filterValue, pagination))
+    dispatch(fetchWorkflows(pagination))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -104,7 +110,7 @@ const Workflows = () => {
   const onSort = (_e, index, direction, { property }) => {
     stateDispatch({ type: 'setFetching', payload: true });
     dispatch(sortWorkflows({ index, direction, property }));
-    return dispatch(fetchWorkflows(filterValue))
+    return dispatch(fetchWorkflows())
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -236,6 +242,10 @@ const Workflows = () => {
             }
           />
         ) }
+        activeFiltersConfig={ {
+          filters: prepareChips(filterValue),
+          onDelete: () => handleFilterChange('')
+        } }
       />
     </Fragment>
   );

@@ -33,6 +33,9 @@ describe('Request actions', () => {
           index: 1,
           property: 'name',
           direction: 'desc'
+        },
+        filterValue: {
+          name: 'some-name'
         }
       }
     });
@@ -47,7 +50,7 @@ describe('Request actions', () => {
       type: `${FETCH_REQUESTS}_FULFILLED`
     }];
     apiClientMock.get(
-      APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=name%3Adesc',
+      APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&limit=10&offset=0&sort_by=name%3Adesc',
       mockOnce({
         body: {
           data: [{
@@ -58,7 +61,7 @@ describe('Request actions', () => {
       })
     );
 
-    return store.dispatch(fetchRequests('', undefined, { limit: 10, offset: 0 })).then(() => {
+    return store.dispatch(fetchRequests(undefined, { limit: 10, offset: 0 })).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });

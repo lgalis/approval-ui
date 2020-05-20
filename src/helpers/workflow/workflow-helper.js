@@ -6,7 +6,7 @@ const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
 export function fetchWorkflows(filter = '', pagination = defaultSettings, sortBy) {
-  const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
+  const paginationQuery = `&limit=${Math.max(pagination.limit, 10)}&offset=${pagination.offset}`;
   const filterQuery = `&filter[name][contains_i]=${filter}`;
   const sortQuery = sortBy ? `&sort_by=${sortBy.property}:${sortBy.direction}` : '';
 

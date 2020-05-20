@@ -9,7 +9,8 @@ import {
   UPDATE_WORKFLOW,
   REMOVE_WORKFLOW,
   REMOVE_WORKFLOWS,
-  EXPAND_WORKFLOW
+  EXPAND_WORKFLOW,
+  SET_FILTER_WORKFLOWS
 } from '../../../redux/action-types';
 import {
   addWorkflow,
@@ -19,7 +20,7 @@ import {
   removeWorkflows,
   updateWorkflow,
   expandWorkflow,
-  refreshWorkflows
+  setFilterValueWorkflows
 } from '../../../redux/actions/workflow-actions';
 import {
   APPROVAL_API_BASE
@@ -33,7 +34,7 @@ describe('Approval process actions', () => {
     mockStore = configureStore(middlewares);
   });
 
-  it('should dispatch correct actions after fetching approval processes', () => {
+  it('should dispatch correct actions after fetching approval processes', async () => {
     const store = mockStore({
       workflowReducer: {
         isLoading: false,
@@ -64,12 +65,12 @@ describe('Approval process actions', () => {
       }
     }));
 
-    return store.dispatch(fetchWorkflows()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    await store.dispatch(fetchWorkflows());
+
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('should dispatch error notification if fetch approval processes fails', () => {
+  it('should dispatch error notification if fetch approval processes fails', async () => {
     const store = mockStore({
       workflowReducer: {
         isLoading: false,
@@ -97,10 +98,11 @@ describe('Approval process actions', () => {
       status: 500
     }));
 
-    return store.dispatch(fetchWorkflows())
-    .catch(() => {
+    try {
+      await store.dispatch(fetchWorkflows());
+    } catch {
       expect(store.getActions()).toEqual(expectedActions);
-    });
+    }
   });
 
   it('should dispatch correct actions after fetching one approval process', () => {
@@ -381,27 +383,11 @@ describe('Approval process actions', () => {
     });
   });
 
-  it('refreshWorkflows should fetch the workflows', async () => {
-    const expectedActions = [{ type: 'FETCH_WORKFLOWS_PENDING' }];
-
-    const store = mockStore({
-      workflowReducer: {
-        filterValue: 'filterValue',
-        workflows: { meta: { offset: 0, limit: 15 }},
-        sortBy: {
-          index: 1,
-          property: 'sequence',
-          direction: 'asc'
-        }
-      }
+  it('creates object for setting filter value for worklows', () => {
+    const filterValue = 'some-name';
+    expect(setFilterValueWorkflows(filterValue)).toEqual({
+      type: SET_FILTER_WORKFLOWS,
+      payload: filterValue
     });
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=filterValue&limit=15&offset=0&sort_by=sequence%3Aasc`,
-      mockOnce({ status: 200 })
-    );
-
-    await store.dispatch(refreshWorkflows());
-
-    expect(store.getActions()).toEqual(expectedActions);
   });
 });

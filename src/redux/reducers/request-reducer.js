@@ -3,7 +3,9 @@ import {
   FETCH_REQUEST_CONTENT,
   FETCH_REQUESTS,
   EXPAND_REQUEST,
-  SORT_REQUESTS
+  SORT_REQUESTS,
+  SET_FILTER_REQUESTS,
+  CLEAR_FILTER_REQUESTS
 } from '../../redux/action-types';
 
 // Initial State
@@ -16,7 +18,7 @@ export const requestsInitialState = {
       offset: 0
     }
   },
-  filterValue: '',
+  filterValue: {},
   isRequestDataLoading: false,
   expandedRequests: [],
   selectedRequest: {
@@ -48,6 +50,24 @@ const setSortRequests = (state, { payload }) => ({
     }
   }
 });
+const setFilterValueRequests = (state, { payload }) => ({
+  ...state,
+  filterValue: {
+    ...state.filterValue,
+    [payload.type]: payload.filterValue
+  },
+  requests: {
+    ...state.requests,
+    meta: {
+      ...state.requests.meta,
+      offset: 0
+    }
+  }
+});
+const clearFilterValueRequests = (state) => ({
+  ...state,
+  filterValue: {}
+});
 
 export default {
   [`${FETCH_REQUESTS}_PENDING`]: setLoadingState,
@@ -57,5 +77,7 @@ export default {
   [`${FETCH_REQUEST_CONTENT}_PENDING`]: setLoadingState,
   [`${FETCH_REQUEST_CONTENT}_FULFILLED`]: setRequestContent,
   [EXPAND_REQUEST]: setexpandRequest,
-  [SORT_REQUESTS]: setSortRequests
+  [SORT_REQUESTS]: setSortRequests,
+  [SET_FILTER_REQUESTS]: setFilterValueRequests,
+  [CLEAR_FILTER_REQUESTS]: clearFilterValueRequests
 };

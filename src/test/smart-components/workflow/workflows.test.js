@@ -468,4 +468,87 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
   });
+
+  it('should filter and clear the filter', async () => {
+    jest.useFakeTimers();
+    expect.assertions(2);
+
+    const wf = {
+      id: 'so',
+      name: 'foo',
+      group_refs: [ 'group-1' ]
+    };
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path={ routes.workflows.index } component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=some-name&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': 'some-name', limit: '50', offset: '0', sort_by: 'sequence:asc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('input').first().instance().value = 'some-name';
+      wrapper.find('input').first().simulate('change');
+    });
+    wrapper.update();
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'sequence:asc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('.ins-c-chip-filters').find('button').last().simulate('click');
+    });
+    wrapper.update();
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    jest.useRealTimers();
+  });
 });
