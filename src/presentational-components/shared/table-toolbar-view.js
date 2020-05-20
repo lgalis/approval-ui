@@ -33,7 +33,8 @@ export const TableToolbarView = ({
   onCollapse,
   renderEmptyState,
   sortBy,
-  onSort
+  onSort,
+  activeFiltersConfig
 }) => {
   const intl = useIntl();
   const [ rows, setRows ] = useState([]);
@@ -93,6 +94,7 @@ export const TableToolbarView = ({
             defaultMessage: 'Name'
           }),
           filterValues: {
+            id: 'filter-by-name',
             placeholder: intl.formatMessage({
               id: 'filter-by-name',
               defaultMessage: 'Filter by {title}'
@@ -106,6 +108,7 @@ export const TableToolbarView = ({
           }
         }]
       } }
+      activeFiltersConfig={ activeFiltersConfig }
     />
   );
 
@@ -172,7 +175,8 @@ TableToolbarView.propTypes = {
   onCollapse: propTypes.func,
   renderEmptyState: propTypes.func,
   sortBy: propTypes.object,
-  onSort: propTypes.func
+  onSort: propTypes.func,
+  activeFiltersConfig: propTypes.object
 };
 
 TableToolbarView.defaultProps = {

@@ -4,7 +4,7 @@ import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import { expandable, sortable } from '@patternfly/react-table';
-import { fetchWorkflows, expandWorkflow, sortWorkflows } from '../../redux/actions/workflow-actions';
+import { fetchWorkflows, expandWorkflow, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-groups/add-workflow-wizard';
 import EditWorkflowInfo from './edit-workflow-info-modal';
 import EditWorkflowGroups from './edit-workflow-groups-modal';
@@ -31,12 +31,21 @@ const columns = [{
 const debouncedFilter = asyncDebounce(
   (filter, dispatch, filteringCallback, meta = defaultSettings) => {
     filteringCallback(true);
-    dispatch(fetchWorkflows(filter, meta)).then(() =>
+    dispatch(setFilterValueWorkflows(filter, meta));
+    return dispatch(fetchWorkflows(meta))
+    .then(() =>
       filteringCallback(false)
     );
   },
   1000
 );
+
+const prepareChips = (filterValue) => filterValue ? [{
+  category: 'Name',
+  key: 'name',
+  chips: [{ name: filterValue, value: filterValue }]
+}] : [];
+
 const initialState = {
   filterValue: '',
   isOpen: false,
@@ -82,12 +91,8 @@ const Workflows = () => {
     debouncedFilter(
       value,
       dispatch,
-      (isFiltering) =>
-        stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
-      {
-        ...meta,
-        offset: 0
-      }
+      (isFiltering) => stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
+      { ...meta, offset: 0 }
     );
   };
 
@@ -236,6 +241,10 @@ const Workflows = () => {
             }
           />
         ) }
+        activeFiltersConfig={ {
+          filters: prepareChips(filterValue),
+          onDelete: () => handleFilterChange('')
+        } }
       />
     </Fragment>
   );
