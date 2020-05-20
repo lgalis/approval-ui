@@ -38,7 +38,7 @@ const filterQuery = (filterValue) => {
 };
 
 export function fetchRequests(filter = {}, pagination = defaultSettings, persona = undefined, sortBy) {
-  const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
+  const paginationQuery = `&limit=${Math.max(pagination.limit, 10)}&offset=${pagination.offset}`;
   const sortQuery = `&sort_by=${sortPropertiesMapper(sortBy.property)}:${sortBy.direction}`;
   const fetchUrl = `${APPROVAL_API_BASE}/requests/?${filterQuery(filter)}${paginationQuery}${sortQuery}`;
   const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;

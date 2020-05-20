@@ -45,13 +45,13 @@ const debouncedFilter = asyncDebounce(
   1000
 );
 
-const initialState = {
-  nameValue: '',
-  requesterValue: '',
+const initialState = (nameValue = '', requesterValue = '') => ({
+  nameValue,
+  requesterValue,
   isOpen: false,
   isFetching: true,
   isFiltering: false
-};
+});
 
 const requestsListState = (state, action) => {
   switch (action.type) {
@@ -71,13 +71,13 @@ const requestsListState = (state, action) => {
 };
 
 const Requests = () => {
-  const [{ nameValue, isFetching, isFiltering, requesterValue }, stateDispatch ] = useReducer(
-    requestsListState,
-    initialState
-  );
   const { requests: { data, meta }, sortBy, filterValue } = useSelector(
     ({ requestReducer: { requests, sortBy, filterValue }}) => ({ requests, sortBy, filterValue }),
     shallowEqual
+  );
+  const [{ nameValue, isFetching, isFiltering, requesterValue }, stateDispatch ] = useReducer(
+    requestsListState,
+    initialState(filterValue.name, filterValue.requester)
   );
 
   const { userPersona: userPersona } = useContext(UserContext);

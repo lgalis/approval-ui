@@ -46,12 +46,12 @@ const prepareChips = (filterValue) => filterValue ? [{
   chips: [{ name: filterValue, value: filterValue }]
 }] : [];
 
-const initialState = {
-  filterValue: '',
+const initialState = (filterValue = '') => ({
+  filterValue,
   isOpen: false,
   isFetching: true,
   isFiltering: false
-};
+});
 
 const workflowsListState = (state, action) => {
   switch (action.type) {
@@ -68,13 +68,14 @@ const workflowsListState = (state, action) => {
 
 const Workflows = () => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
+  const { workflows: { data, meta }, sortBy, filterValueRedux } = useSelector(
+    ({ workflowReducer: { workflows, sortBy, filterValue: filterValueRedux }}) => ({ workflows, sortBy, filterValueRedux })
+    , shallowEqual
+  );
   const [{ filterValue, isFetching, isFiltering }, stateDispatch ] = useReducer(
     workflowsListState,
-    initialState
+    initialState(filterValueRedux)
   );
-  const { workflows: { data, meta }, sortBy } = useSelector(
-    ({ workflowReducer: { workflows, sortBy }}) => ({ workflows, sortBy })
-    , shallowEqual);
 
   const dispatch = useDispatch();
   const history = useHistory();
