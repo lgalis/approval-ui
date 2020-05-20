@@ -46,8 +46,8 @@ describe('Approval process reducer', () => {
 
   it('should set filter value', () => {
     const filterValue = 'some-name';
-    initialState = { };
-    const expectedState = { filterValue };
+    initialState = { workflows: { meta: { offset: 100, limit: 50 }}};
+    const expectedState = { filterValue, workflows: { meta: { offset: 0, limit: 50 }}};
     expect(reducer(initialState, { type: SET_FILTER_WORKFLOWS, payload: filterValue })).toEqual(expectedState);
   });
 });

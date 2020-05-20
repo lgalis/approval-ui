@@ -46,7 +46,14 @@ const setSortWorkflows = (state, { payload }) => ({
 });
 const setFilterValue = (state, { payload }) => ({
   ...state,
-  filterValue: payload
+  filterValue: payload,
+  workflows: {
+    ...state.workflows,
+    meta: {
+      ...state.workflows.meta,
+      offset: 0
+    }
+  }
 });
 
 export default {

@@ -55,6 +55,13 @@ const setFilterValueRequests = (state, { payload }) => ({
   filterValue: {
     ...state.filterValue,
     [payload.type]: payload.filterValue
+  },
+  requests: {
+    ...state.requests,
+    meta: {
+      ...state.requests.meta,
+      offset: 0
+    }
   }
 });
 const clearFilterValueRequests = (state) => ({
