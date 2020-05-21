@@ -11,8 +11,6 @@ import WorkflowInfoForm from './add-groups/workflow-information';
 import WorkflowSequenceForm from './add-groups/workflow-sequence';
 import useQuery from '../../utilities/use-query';
 
-import '../../App.scss';
-
 const EditWorkflowInfoModal = ({
   addNotification,
   fetchWorkflow,
