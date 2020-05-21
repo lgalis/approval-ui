@@ -1,9 +1,8 @@
 import React, { Fragment, useContext, useEffect, useReducer } from 'react';
-import { Route, useLocation } from 'react-router-dom';
+import { Route, useLocation, Switch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
-import '../../../App.scss';
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
 import RequestTranscript from './request-transcript';
@@ -72,12 +71,15 @@ const RequestDetail = () => {
 
   return (
     <Fragment>
-      <Route exact path={ routes.requests.addComment } render={ props =>
-        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ { pathname: routes.requests.index, search } }/> }/>
-      <Route exact path={ routes.requests.approve } render={ props =>
-        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ { pathname: routes.requests.index, search } } /> } />
-      <Route exact path={ routes.requests.deny } render={ props =>
-        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.requests.index, search } }  /> } />
+      <Switch>
+        <Route exact path={ routes.request.addComment }>
+          <ActionModal actionType={ 'Add Comment' } closeUrl={ { pathname: routes.request.index, search } }/>
+        </Route>
+        <Route exact path={ routes.request.approve } render={ props =>
+          <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ { pathname: routes.request.index, search } } /> } />
+        <Route exact path={ routes.request.deny } render={ props =>
+          <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.request.index, search } }  /> } />
+      </Switch>
       <TopToolbar
         breadcrumbs={ [{ title: 'Request queue', to: routes.requests.index, id: 'requests' }] }
         paddingBottom={ true }

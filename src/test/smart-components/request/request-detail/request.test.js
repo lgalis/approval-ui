@@ -112,10 +112,10 @@ describe('<Request />', () => {
     wrapper.find('Link#approve-111').simulate('click', { button: 0 });
     wrapper.update();
     const history = wrapper.find(MemoryRouter).instance().history;
-    expect(history.location.pathname).toEqual(routes.requests.approve);
+    expect(history.location.pathname).toEqual(routes.request.approve);
     expect(history.location.search).toEqual('?request=111');
     wrapper.find('Link#deny-111').simulate('click', { button: 0 });
-    expect(history.location.pathname).toEqual(routes.requests.deny);
+    expect(history.location.pathname).toEqual(routes.request.deny);
     expect(history.location.search).toEqual('?request=111');
   });
 
