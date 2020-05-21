@@ -10,8 +10,6 @@ import { WorkflowInfoFormLoader } from '../../presentational-components/shared/l
 import SetGroups from './add-groups/set-groups';
 import useQuery from '../../utilities/use-query';
 
-import '../../App.scss';
-
 const EditWorkflowGroupsModal = ({
   addNotification,
   fetchWorkflow,

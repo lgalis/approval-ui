@@ -3,7 +3,6 @@ import { Route, useLocation, Switch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
-import '../../../App.scss';
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
 import RequestTranscript from './request-transcript';
