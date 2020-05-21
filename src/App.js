@@ -24,6 +24,8 @@ if (pathName[0] === 'beta') {
   release = `/${pathName.shift()}/`;
 }
 
+import './App.scss';
+
 const App = () => {
   const [ auth, setAuth ] = useState(false);
   const [ userRoles, setUserRoles ] = useState({});
