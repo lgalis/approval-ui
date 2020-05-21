@@ -158,7 +158,6 @@ const Workflows = () => {
       {
         title: 'Delete',
         component: 'button',
-        style: { color: 'var(--pf-global--danger-color--100)'	},
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })
       }
