@@ -14,6 +14,8 @@ import { getRbacRoleApi } from './helpers/shared/user-login';
 import UserContext from './user-context';
 import { approvalPersona } from './helpers/shared/helpers';
 
+import './App.scss';
+
 const App = () => {
   const [ auth, setAuth ] = useState(false);
   const [ userPersona, setUserPersona ] = useState([]);

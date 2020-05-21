@@ -11,8 +11,6 @@ import SetGroups from './add-groups/set-groups';
 import useQuery from '../../utilities/use-query';
 import useWorkflow from '../../utilities/use-workflows';
 
-import '../../App.scss';
-
 const EditWorkflowGroupsModal = ({
   addNotification,
   fetchWorkflow,
