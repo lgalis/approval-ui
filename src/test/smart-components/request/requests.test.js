@@ -119,7 +119,7 @@ describe('<Requests />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(4).simulate('click'); // name column
+      wrapper.find('button').at(5).simulate('click'); // name column
     });
     wrapper.update();
 
@@ -137,7 +137,7 @@ describe('<Requests />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(4).simulate('click'); // name column
+      wrapper.find('button').at(5).simulate('click'); // name column
     });
     wrapper.update();
 
@@ -155,7 +155,7 @@ describe('<Requests />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(5).simulate('click'); // requester column
+      wrapper.find('button').at(6).simulate('click'); // requester column
     });
     wrapper.update();
   });

@@ -22,5 +22,5 @@ export const AppTabs = ({ tabItems = approvalTabItems }) => {
 };
 
 AppTabs.propTypes = {
-  tabItems: PropTypes.array.isRequired
+  tabItems: PropTypes.array
 };
