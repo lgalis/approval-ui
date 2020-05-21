@@ -12,8 +12,6 @@ import { delay } from 'xhr-mock';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import EditWorkflowGroupsModal from '../../../smart-components/workflow/edit-workflow-groups-modal';
 import { WorkflowInfoFormLoader } from '../../../presentational-components/shared/loader-placeholders';
-import SetGroups from '../../../smart-components/workflow/add-groups/set-groups';
-import { Title } from '@patternfly/react-core';
 import { IntlProvider } from 'react-intl';
 import FormRenderer from '../../../smart-components/common/form-renderer';
 import routes from '../../../constants/routes';
@@ -40,7 +38,11 @@ describe('<EditWorkflowGroupsModal />', () => {
       postMethod: jest.fn()
     };
     mockStore = configureStore(middlewares);
-    store = mockStore({});
+    store = mockStore({
+      workflowReducer: {
+        workflows: { data: []}
+      }
+    });
   });
 
   afterEach(() => {
@@ -112,7 +114,7 @@ describe('<EditWorkflowGroupsModal />', () => {
     expect(wrapper.find(FormRenderer)).toHaveLength(1);
   });
 
-  it('should mount with workflow in the table', async done => {
+  it('should mount with workflow in the table', async () => {
     const store = mockStore({ workflowReducer: {
       workflows: {
         data: [
@@ -135,13 +137,10 @@ describe('<EditWorkflowGroupsModal />', () => {
           /> }/>
         </ComponentWrapper>
       );
-
     });
 
     wrapper.update();
-    expect(wrapper.find(Title).last().text().includes('pokus')).toEqual(true);
-    expect(wrapper.find(SetGroups)).toHaveLength(1);
-    done();
+    expect(wrapper.find('.pf-c-form__label').last().text().includes('pokus')).toEqual(true);
   });
 
   it('should call onCancel and push to history', async () => {

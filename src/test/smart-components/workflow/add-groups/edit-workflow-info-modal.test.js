@@ -48,7 +48,11 @@ describe('<EditWorkflowInfoModal />', () => {
       description: 'description'
     };
 
-    store = mockStore({});
+    store = mockStore({
+      workflowReducer: {
+        workflows: { data: []}
+      }
+    });
   });
 
   afterEach(() => {

@@ -8,7 +8,7 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/dist/cjs/validator-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
@@ -79,6 +79,7 @@ const EditWorkflowInfoModal = ({
   const { push } = useHistory();
   const [{ workflow: id }] = useQuery([ 'workflow' ]);
   const loadedWorkflow = useWorkflow(id);
+  const intl = useIntl();
 
   useEffect(() => {
     if (!loadedWorkflow) {

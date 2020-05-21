@@ -65,7 +65,7 @@ const EditWorkflowGroupsModal = ({
     if (!loadedWorkflow) {
       fetchWorkflow(id).then((result) => dispatch({ type: 'loaded', initialValues: prepareInitialValues(result.value), intl }));
     } else {
-      dispatch({ type: 'loaded', initialValues: prepareInitialValues(loadedWorkflow) });
+      dispatch({ type: 'loaded', initialValues: prepareInitialValues(loadedWorkflow), intl });
     }
   }, []);
 

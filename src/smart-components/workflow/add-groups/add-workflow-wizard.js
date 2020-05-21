@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
-import { addWorkflow, refreshWorkflows } from '../../../redux/actions/workflow-actions';
+import { addWorkflow, fetchWorkflows } from '../../../redux/actions/workflow-actions';
 import routes from '../../../constants/routes';
 import FormRenderer from '../../common/form-renderer';
 import addWorkflowSchema from '../../../forms/add-workflow.schema';
@@ -19,7 +19,7 @@ const AddWorkflow = () => {
     return dispatch(addWorkflow({
       ...values,
       group_refs: wfGroups.length > 0 ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []
-    })).then(() => dispatch(refreshWorkflows()));
+    })).then(() => dispatch(fetchWorkflows()));
   };
 
   const onCancel = () => {
