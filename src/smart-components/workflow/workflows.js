@@ -139,21 +139,25 @@ const Workflows = () => {
     : [
       {
         title: 'Edit info',
+        component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
       },
       {
         title: 'Edit groups',
+        component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editGroups, search: `?workflow=${workflow.id}` })
       },
       {
         title: 'Edit sequence',
+        component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editSequence, search: `?workflow=${workflow.id}` })
       },
       {
         title: 'Delete',
+        component: 'button',
         style: { color: 'var(--pf-global--danger-color--100)'	},
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })

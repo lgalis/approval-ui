@@ -146,6 +146,7 @@ const Requests = () => {
       [
         {
           title: 'Comment',
+          component: 'button',
           onClick: () => history.push({
             pathname: routesLinks.requests.addComment,
             search: `?request=${requestData.id}`
