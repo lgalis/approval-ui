@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button } from '@patternfly/react-core';
-import { expandable, sortable } from '@patternfly/react-table';
+import { expandable, sortable, wrappable } from '@patternfly/react-table';
 import { useIntl } from 'react-intl';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import isEmpty from 'lodash/isEmpty';
@@ -20,15 +20,16 @@ import UserContext from '../../user-context';
 import { prepareChips } from './chips-helpers';
 
 const columns = [{
-  title: 'Name',
+  title: 'Request Id',
   cellFormatters: [ expandable ],
   transforms: [ sortable ]
 },
-{ title: 'Requester', transforms: [ sortable ]},
-{ title: 'Opened', transforms: [ sortable ]},
-{ title: 'Updated' },
-{ title: 'Status', transforms: [ sortable ]},
-{ title: 'Decision', transforms: [ sortable ]}
+{ title: 'Name', transforms: [ sortable, wrappable ]},
+{ title: 'Requester', transforms: [ sortable, wrappable ]},
+{ title: 'Opened   ', transforms: [ sortable, wrappable ]},
+{ title: 'Updated  ' },
+{ title: 'Status   ', transforms: [ sortable, wrappable ]},
+{ title: 'Decision ', transforms: [ sortable, wrappable ]}
 ];
 
 const debouncedFilter = asyncDebounce(

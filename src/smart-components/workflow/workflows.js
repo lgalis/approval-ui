@@ -97,9 +97,6 @@ const Workflows = () => {
     );
   };
 
-  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
-    { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
-
   const handlePagination = (pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
     dispatch(fetchWorkflows(pagination))
@@ -206,7 +203,7 @@ const Workflows = () => {
     <Fragment>
       <TopToolbar>
         <TopToolbarTitle title="Approval"/>
-        <AppTabs tabItems={ tabItems }/>
+        <AppTabs/>
       </TopToolbar>
       <TableToolbarView
         sortBy={ sortBy }
