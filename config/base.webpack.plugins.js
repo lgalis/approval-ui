@@ -67,15 +67,6 @@ plugins.push(LodashWebpackPlugin);
 // plugins.push(AggressiveSplittingPlugin);
 
 /**
- * Writes final css to file
- */
-const ExtractCssWebpackPlugin = new (require('mini-css-extract-plugin'))({
-  chunkFilename: 'css/[name].css',
-  filename: 'css/[name].css'
-});
-plugins.push(ExtractCssWebpackPlugin);
-
-/**
  * Copies files from the specified locations to the corresponding destinations.
  */
 const CopyFilesWebpackPlugin = new (require('copy-webpack-plugin'))([
