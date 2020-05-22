@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { isApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
 import { ActionTranscript } from './action-transcript';
 
@@ -59,7 +59,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
               id={ `request-${request.id}-request-comment` }
               to={ {
                 pathname: routes.request.addComment,
-                search: `?request=${request.id}`
+                search: useLocation().search
               } }
               className="pf-c-dropdown__menu-item"
             >
