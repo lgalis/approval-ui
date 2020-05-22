@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button } from '@patternfly/react-core';
-import { expandable, sortable, wrappable } from '@patternfly/react-table';
+import { expandable, sortable, wrappable, cellWidth } from '@patternfly/react-table';
 import { useIntl } from 'react-intl';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import isEmpty from 'lodash/isEmpty';
@@ -22,14 +22,14 @@ import { prepareChips } from './chips-helpers';
 const columns = [{
   title: 'Request ID',
   cellFormatters: [ expandable ],
-  transforms: [ sortable ]
+  transforms: [ sortable, cellWidth(5) ]
 },
-{ title: 'Name', transforms: [ sortable, wrappable ]},
-{ title: 'Requester', transforms: [ sortable, wrappable ]},
-{ title: 'Opened   ', transforms: [ sortable, wrappable ]},
-{ title: 'Updated  ' },
-{ title: 'Status   ', transforms: [ sortable, wrappable ]},
-{ title: 'Decision ', transforms: [ sortable, wrappable ]}
+{ title: 'Name', transforms: [ sortable, wrappable, cellWidth(25) ]},
+{ title: 'Requester', transforms: [ sortable, wrappable, cellWidth(20) ]},
+{ title: 'Opened   ', transforms: [ sortable, cellWidth(10) ]},
+{ title: 'Updated  ', transforms: [ cellWidth(10) ]},
+{ title: 'Status   ', transforms: [ sortable, cellWidth(15) ]},
+{ title: 'Decision ', transforms: [ sortable, cellWidth(15) ]}
 ];
 
 const debouncedFilter = asyncDebounce(
