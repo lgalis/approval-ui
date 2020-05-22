@@ -74,7 +74,7 @@ describe('Request actions', () => {
 
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
       status: 500
     }));
 
@@ -100,6 +100,14 @@ describe('Request actions', () => {
       }
     }));
 
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/111/requests', mockOnce({
+      body: {
+        data: [{
+          id: '123',
+          name: ''
+        }]
+      }
+    }));
     const expectedData = [{
       type: `${FETCH_REQUEST}_PENDING`
     }, {

@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/components/PageHeader';
 import { DataList } from '@patternfly/react-core';
-import Request from './request';
+import { Request }  from './request';
 import { DataListLoader } from '../../../presentational-components/shared/loader-placeholders';
 
 class RequestList extends Component {
@@ -53,10 +53,10 @@ class RequestList extends Component {
 }
 
 RequestList.propTypes = {
-  isLoading: propTypes.bool,
-  items: propTypes.array,
-  noItems: propTypes.string,
-  active_request: propTypes.number
+  isLoading: PropTypes.bool,
+  items: PropTypes.array,
+  noItems: PropTypes.string,
+  active_request: PropTypes.number
 };
 
 RequestList.defaultProps = {

@@ -12,10 +12,13 @@ import '@redhat-cloud-services/frontend-components-notifications/index.css';
 import '@redhat-cloud-services/frontend-components/index.css';
 import { getRbacRoleApi } from './helpers/shared/user-login';
 import UserContext from './user-context';
+import { approvalPersona } from './helpers/shared/helpers';
+
+import './App.scss';
 
 const App = () => {
   const [ auth, setAuth ] = useState(false);
-  const [ userRoles, setUserRoles ] = useState([]);
+  const [ userPersona, setUserPersona ] = useState([]);
 
   useEffect(() => {
     insights.chrome.init();
@@ -25,7 +28,7 @@ const App = () => {
       .then(() =>
         getRbacRoleApi()
         .listRoles(defaultSettings.limit, 0, 'Approval ', 'principal')
-        .then((result) => setUserRoles(result.data))
+        .then((result) => setUserPersona(approvalPersona(result?.data)))
       )
     ]).then(() => setAuth(true));
 
@@ -38,7 +41,7 @@ const App = () => {
 
   return (
     <IntlProvider locale="en">
-      <UserContext.Provider value={ { roles: userRoles } }>
+      <UserContext.Provider value={ { userPersona } }>
         <React.Fragment>
           <NotificationsPortal />
           <Main className="pf-u-p-0 pf-u-ml-0">

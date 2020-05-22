@@ -20,6 +20,12 @@ exports[`<Request /> should render correctly 1`] = `
         },
       ],
       "id": "111",
+      "metadata": Object {
+        "user_capabilities": Object {
+          "approve": true,
+          "deny": true,
+        },
+      },
       "state": "no-state",
     }
   }

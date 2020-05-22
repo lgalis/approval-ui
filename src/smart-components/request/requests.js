@@ -1,23 +1,23 @@
 import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 import { Button } from '@patternfly/react-core';
 import { expandable } from '@patternfly/react-table';
 import { fetchRequests, expandRequest } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
-import RequestDetail from './request-detail/request-detail';
-import { isApprovalAdmin, isRequestStateActive } from '../../helpers/shared/helpers';
+import { isApprovalAdmin, isApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import AppTabs from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
-import { scrollToTop, approvalPersona } from '../../helpers/shared/helpers';
+import { scrollToTop } from '../../helpers/shared/helpers';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 import UserContext from '../../user-context';
+import routesLinks from '../../constants/routes';
 
 const columns = [{
   title: 'Name',
@@ -68,14 +68,14 @@ const Requests = () => {
     ({ requestReducer: { requests }}) => requests
   );
 
-  const { roles: userRoles } = useContext(UserContext);
+  const { userPersona: userPersona } = useContext(UserContext);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     dispatch(
-      fetchRequests(filterValue, defaultSettings, approvalPersona(userRoles))
+      fetchRequests(filterValue, defaultSettings, userPersona)
     ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
     scrollToTop();
   }, []);
@@ -91,7 +91,7 @@ const Requests = () => {
         ...meta,
         offset: 0
       },
-      approvalPersona(userRoles)
+      userPersona
     );
   };
 
@@ -99,32 +99,35 @@ const Requests = () => {
     { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
 
   const routes = () => <Fragment>
-    <Route exact path="/requests/add_comment/:id" render={ props => <ActionModal { ...props }
+    <Route exact path={ routesLinks.requests.addComment } render={ props => <ActionModal { ...props }
       actionType={ 'Add Comment' }
       postMethod={ fetchRequests } /> }/>
-    <Route exact path="/requests/approve/:id" render={ props => <ActionModal { ...props } actionType={ 'Approve' }
+    <Route exact path={ routesLinks.requests.approve } render={ props => <ActionModal { ...props } actionType={ 'Approve' }
       postMethod={ fetchRequests }/> } />
-    <Route exact path="/requests/deny/:id" render={ props => <ActionModal { ...props } actionType={ 'Deny' }
+    <Route exact path={ routesLinks.requests.deny } render={ props => <ActionModal { ...props } actionType={ 'Deny' }
       postMethod={ fetchRequests }/> } />
   </Fragment>;
 
   const areActionsDisabled = (requestData) => requestData &&
     requestData.state ?
-    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 : true;
+    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 || !isApprovalApprover(userPersona) : true;
 
   const actionResolver = (requestData) => {
     return (requestData && requestData.id && areActionsDisabled(requestData) ? null :
       [
         {
           title: 'Comment',
-          onClick: () => history.push(`/requests/add_comment/${requestData.id}`)
+          onClick: () => history.push({
+            pathname: routesLinks.requests.addComment,
+            search: `?request=${requestData.id}`
+          })
         }
       ]);
   };
 
   const handlePagination = (_apiProps, pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchRequests(filterValue, pagination, approvalPersona(userRoles)))
+    dispatch(fetchRequests(filterValue, pagination, userPersona))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -134,62 +137,50 @@ const Requests = () => {
     setRows((rows) => setOpen(rows, id));
   };
 
-  const renderRequestsList = () => {
-    return (
-      <Fragment>
-        <TopToolbar>
-          <TopToolbarTitle title="Approval"/>
-          { isApprovalAdmin(userRoles) && <AppTabs tabItems={ tabItems } /> }
-        </TopToolbar>
-        <TableToolbarView
-          data={ data }
-          createRows={ createRows }
-          columns={ columns }
-          fetchData={ handlePagination }
-          routes={ routes }
-          actionResolver={ actionResolver }
-          titlePlural="requests"
-          titleSingular="request"
-          pagination={ meta }
-          handlePagination={ handlePagination }
-          filterValue={ filterValue }
-          onFilterChange={ handleFilterChange }
-          isLoading={ isFetching || isFiltering }
-          onCollapse={ onCollapse }
-          renderEmptyState={ () => (
-            <TableEmptyState
-              title={ filterValue === '' ? 'No requests' : 'No results found' }
-              Icon={ SearchIcon }
-              PrimaryAction={ () =>
-                filterValue !== '' ? (
-                  <Button onClick={ () => handleFilterChange('') } variant="link">
-                            Clear all filters
-                  </Button>
-                ) : null
-              }
-              description={
-                filterValue === ''
-                  ? ''
-                  : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
-              }
-            />
-          ) }
-        />
-      </Fragment>);
-  };
-
   return (
-    <Switch>
-      <Route path={ '/requests/detail/:id' } render={ props => <RequestDetail { ...props }/> } />
-      <Route path={ '/requests' } render={ () => renderRequestsList() } />
-    </Switch>
-  );
+    <Fragment>
+      <TopToolbar>
+        <TopToolbarTitle title="Approval"/>
+        { isApprovalAdmin(userPersona) && <AppTabs tabItems={ tabItems } /> }
+      </TopToolbar>
+      <TableToolbarView
+        data={ data }
+        createRows={ createRows }
+        columns={ columns }
+        fetchData={ handlePagination }
+        routes={ routes }
+        actionResolver={ actionResolver }
+        titlePlural="requests"
+        titleSingular="request"
+        pagination={ meta }
+        handlePagination={ handlePagination }
+        filterValue={ filterValue }
+        onFilterChange={ handleFilterChange }
+        isLoading={ isFetching || isFiltering }
+        onCollapse={ onCollapse }
+        renderEmptyState={ () => (
+          <TableEmptyState
+            title={ filterValue === '' ? 'No requests' : 'No results found' }
+            Icon={ SearchIcon }
+            PrimaryAction={ () =>
+              filterValue !== '' ? (
+                <Button onClick={ () => handleFilterChange('') } variant="link">
+                            Clear all filters
+                </Button>
+              ) : null
+            }
+            description={
+              filterValue === ''
+                ? ''
+                : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
+            }
+          />
+        ) }
+      />
+    </Fragment>);
 };
 
 Requests.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }),
   requests: PropTypes.array,
   isLoading: PropTypes.bool
 };

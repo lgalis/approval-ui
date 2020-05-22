@@ -17,7 +17,13 @@ export const requestsInitialState = {
   },
   filterValue: '',
   isRequestDataLoading: false,
-  expandedRequests: []
+  expandedRequests: [],
+  selectedRequest: {
+    metadata: {
+      user_capabilities: {}
+    },
+    requests: []
+  }
 };
 
 const setLoadingState = state => ({ ...state, isRequestDataLoading: true, expandedRequests: []});

@@ -44,8 +44,8 @@ describe('<EditWorkflowGroupsModal />', () => {
 
     await act(async() => {
       wrapper = mount(
-        <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
+        <ComponentWrapper initialEntries={ [ '/foo?workflow=123' ] } store={ store } >
+          <Route path="/foo" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
 
@@ -69,8 +69,8 @@ describe('<EditWorkflowGroupsModal />', () => {
 
     await act(async() => {
       wrapper = mount(
-        <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
+        <ComponentWrapper initialEntries={ [ '/foo?workflow=123' ] } store={ store } >
+          <Route path="/foo" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
 
@@ -94,8 +94,8 @@ describe('<EditWorkflowGroupsModal />', () => {
 
     await act(async() => {
       wrapper = mount(
-        <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal
+        <ComponentWrapper initialEntries={ [ '/foo?workflow=123' ] } store={ store } >
+          <Route path="/foo" render={ props => <EditWorkflowGroupsModal
             { ...props }
             { ...initialProps }
           /> }/>
@@ -122,8 +122,8 @@ describe('<EditWorkflowGroupsModal />', () => {
 
     await act(async() => {
       wrapper = mount(
-        <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
+        <ComponentWrapper initialEntries={ [ '/foo?workflow=123' ] } store={ store } >
+          <Route path="/foo" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
 
@@ -157,8 +157,8 @@ describe('<EditWorkflowGroupsModal />', () => {
 
     await act(async() => {
       wrapper = mount(
-        <ComponentWrapper initialEntries={ [ '/foo/123' ] } store={ store } >
-          <Route path="/foo/:id" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } postMethod={ postMethod } /> }/>
+        <ComponentWrapper initialEntries={ [ '/foo?workflow=123' ] } store={ store } >
+          <Route path="/foo" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } postMethod={ postMethod } /> }/>
         </ComponentWrapper>
       );
 

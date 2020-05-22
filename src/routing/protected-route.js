@@ -4,10 +4,10 @@ import UserContext from '../user-context';
 import { isApprovalAdmin } from '../helpers/shared/helpers';
 
 const ProtectedRoute = (props) => {
-  const { roles: userRoles } = useContext(UserContext);
+  const { userPersona: userPersona } = useContext(UserContext);
   const location = useLocation();
 
-  return  isApprovalAdmin(userRoles) ? (
+  return  isApprovalAdmin(userPersona) ? (
     <Route { ...props } />
   ) : (
     <Redirect

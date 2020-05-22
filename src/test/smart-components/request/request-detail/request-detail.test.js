@@ -14,7 +14,7 @@ import RequestInfoBar from '../../../../smart-components/request/request-detail/
 import RequestTranscript from '../../../../smart-components/request/request-detail/request-transcript';
 import { mockGraphql } from '../../../__mocks__/user-login';
 
-const ComponentWrapper = ({ store, children, initialEntries = [ '/foo/123' ]}) => (
+const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=123' ]}) => (
   <Provider store={ store } >
     <MemoryRouter initialEntries={ initialEntries }>
       { children }
@@ -148,7 +148,7 @@ describe('<RequestDetail />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" render={ props => <RequestDetail { ...props } { ...initialProps } isFetching={ false }/> } />
+          <Route path="/foo" render={ props => <RequestDetail { ...props } { ...initialProps } isFetching={ false }/> } />
         </ComponentWrapper>
       );
     });
@@ -174,7 +174,7 @@ describe('<RequestDetail />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" render={ props => <RequestDetail { ...props } { ...initialProps } /> } />
+          <Route path="/foo" render={ props => <RequestDetail { ...props } { ...initialProps } /> } />
         </ComponentWrapper>
       );
     });

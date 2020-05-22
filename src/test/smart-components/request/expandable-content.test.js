@@ -1,15 +1,14 @@
-import { TextContent, Text, Bullseye, Button } from '@patternfly/react-core';
+import { TextContent, Text, Bullseye, Button, Spinner } from '@patternfly/react-core';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
-import { Spinner } from '@redhat-cloud-services/frontend-components/components/Spinner';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
-
 import ExpandableContent, { ExpandedItem } from '../../../smart-components/request/expandable-content';
 import * as helpers from '../../../helpers/request/request-helper';
+import UserContext from '../../../user-context';
 
 describe('requests - expendableContent', () => {
   describe('ExpandedItem', () => {
@@ -56,9 +55,11 @@ describe('requests - expendableContent', () => {
 
     const ComponentWrapper = ({ store, children }) => (
       <Provider store={ store }>
-        <MemoryRouter initialEntries={ [ '' ] }>
-          { children }
-        </MemoryRouter>
+        <UserContext.Provider value={ { userPersona: 'approval/requester' } }>
+          <MemoryRouter initialEntries={ [ '' ] }>
+            { children }
+          </MemoryRouter>
+        </UserContext.Provider>
       </Provider>
     );
 
@@ -70,9 +71,9 @@ describe('requests - expendableContent', () => {
       store = mockStore(mockStoreFn);
       initialProps = { id, number_of_children: 0, state: 'approved', reason: 'reason' };
       requestDetail = {
-        product: 'CostManagement',
+        product: 'TestProduct',
         platform: 'Linux',
-        portfolio: 'Very'
+        portfolio: 'Test'
       };
       helpers.fetchRequestContent = jest.fn().mockImplementation(() => Promise.resolve(requestDetail));
     });
@@ -105,7 +106,6 @@ describe('requests - expendableContent', () => {
 
     it('renders with buttons', async () => {
       mockStoreFn.mockImplementation(() => ({ requestReducer: { expandedRequests: [ id ]}}));
-
       let wrapper;
 
       await act(async() => {
@@ -115,7 +115,7 @@ describe('requests - expendableContent', () => {
       wrapper.update();
 
       expect(wrapper.find(ExpandedItem)).toHaveLength(4);
-      expect(wrapper.find(Button)).toHaveLength(2);
+      expect(wrapper.find(Button)).toHaveLength(0);
     });
   });
 });

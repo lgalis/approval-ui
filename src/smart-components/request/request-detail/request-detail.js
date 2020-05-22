@@ -1,9 +1,8 @@
 import React, { Fragment, useContext, useEffect, useReducer } from 'react';
-import { Route, useParams, useLocation } from 'react-router-dom';
+import { Route, useLocation, Switch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
-import '../../../App.scss';
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
 import RequestTranscript from './request-transcript';
@@ -11,8 +10,8 @@ import { fetchRequest, fetchRequestContent } from '../../../redux/actions/reques
 import { RequestLoader } from '../../../presentational-components/shared/loader-placeholders';
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
 import UserContext from '../../../user-context';
-import { approvalPersona } from '../../../helpers/shared/helpers';
-import { REQUEST_DETAIL_ROUTE } from '../../../utilities/constants';
+import useQuery from '../../../utilities/use-query';
+import routes from '../../../constants/routes';
 
 const initialState = {
   isFetching: true
@@ -37,14 +36,14 @@ const RequestDetail = () => {
       }
     }) => ({ selectedRequest, requestContent })
   );
-  const { id }  = useParams();
+
+  const [{ request: id }, search ] = useQuery([ 'request' ]);
   const location = useLocation();
   const dispatch = useDispatch();
-  const { roles: userRoles } = useContext(UserContext);
+  const { userPersona: userPersona } = useContext(UserContext);
 
   useEffect(() => {
-    const persona = approvalPersona(userRoles);
-    Promise.all([ dispatch(fetchRequest(id, persona)), dispatch(fetchRequestContent(id, persona)) ])
+    Promise.all([ dispatch(fetchRequest(id, userPersona)), dispatch(fetchRequestContent(id, userPersona)) ])
     .then(() => stateDispatch({ type: 'setFetching', payload: false }));
   }, []);
 
@@ -72,14 +71,17 @@ const RequestDetail = () => {
 
   return (
     <Fragment>
-      <Route exact path="/requests/detail/:id/add_comment" render={ props =>
-        <ActionModal { ...props } actionType={ 'Add Comment' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` }/> }/>
-      <Route exact path="/requests/detail/:id/approve" render={ props =>
-        <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` } /> } />
-      <Route exact path="/requests/detail/:id/deny" render={ props =>
-        <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ `${REQUEST_DETAIL_ROUTE}${id}` }  /> } />
+      <Switch>
+        <Route exact path={ routes.request.addComment }>
+          <ActionModal actionType={ 'Add Comment' } closeUrl={ { pathname: routes.request.index, search } }/>
+        </Route>
+        <Route exact path={ routes.request.approve } render={ props =>
+          <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ { pathname: routes.request.index, search } } /> } />
+        <Route exact path={ routes.request.deny } render={ props =>
+          <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.request.index, search } }  /> } />
+      </Switch>
       <TopToolbar
-        breadcrumbs={ [{ title: 'Request queue', to: '/requests', id: 'requests' }] }
+        breadcrumbs={ [{ title: 'Request queue', to: routes.requests.index, id: 'requests' }] }
         paddingBottom={ true }
       >
         <TopToolbarTitle title={ `Request ${id}` } />

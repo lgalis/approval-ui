@@ -2,7 +2,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import { MemoryRouter } from 'react-router-dom';
-import Request from '../../../../smart-components/request/request-detail/request';
+import { Request } from '../../../../smart-components/request/request-detail/request';
+import routes from '../../../../constants/routes';
 
 const ComponentWrapper = ({ children }) => (
   <MemoryRouter initialEntries={ [ '/foo' ] }>
@@ -18,7 +19,11 @@ describe('<Request />', () => {
       toggleExpand: jest.fn(),
       item: {
         id: '111',
-        state: 'no-state',
+        group_name: 'Group',
+        state: 'notified',
+        metadata: {
+          user_capabilities: { approve: true, deny: true }
+        },
         actions: [
           {
             id: '1',
@@ -46,6 +51,9 @@ describe('<Request />', () => {
       item: {
         id: '111',
         state: 'no-state',
+        metadata: {
+          user_capabilities: { approve: true, deny: true }
+        },
         actions: [
           {
             id: '1',
@@ -74,6 +82,10 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
+            group_name: 'Group1',
+            metadata: {
+              user_capabilities: { approve: true, deny: true }
+            },
             actions: [
               {
                 id: '1',
@@ -100,9 +112,11 @@ describe('<Request />', () => {
     wrapper.find('Link#approve-111').simulate('click', { button: 0 });
     wrapper.update();
     const history = wrapper.find(MemoryRouter).instance().history;
-    expect(history.location.pathname).toEqual('/requests/detail/111/approve');
+    expect(history.location.pathname).toEqual(routes.request.approve);
+    expect(history.location.search).toEqual('?request=111');
     wrapper.find('Link#deny-111').simulate('click', { button: 0 });
-    expect(history.location.pathname).toEqual('/requests/detail/111/deny');
+    expect(history.location.pathname).toEqual(routes.request.deny);
+    expect(history.location.search).toEqual('?request=111');
   });
 
   it('should expand item', () => {
@@ -136,6 +150,9 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
+            metadata: {
+              user_capabilities: { approve: true, deny: true, memo: true }
+            },
             actions: []
           } }
           isActive
