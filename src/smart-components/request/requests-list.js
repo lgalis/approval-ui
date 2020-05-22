@@ -20,7 +20,7 @@ import UserContext from '../../user-context';
 import { prepareChips } from './chips-helpers';
 
 const columns = [{
-  title: 'Request Id',
+  title: 'Request ID',
   cellFormatters: [ expandable ],
   transforms: [ sortable ]
 },

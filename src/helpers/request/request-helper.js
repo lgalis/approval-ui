@@ -7,10 +7,12 @@ const actionApi = getActionApi();
 const graphqlInstance = getGraphqlInstance();
 
 const sortPropertiesMapper = (property) => ({
+  'request-id': 'id',
   opened: 'created_at',
   requester: 'requester_name',
   status: 'state'
-}[property] || property);
+}[property] || property
+);
 
 const filterQuery = (filterValue) => {
   const query = [];
