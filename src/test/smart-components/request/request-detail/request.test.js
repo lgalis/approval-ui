@@ -51,6 +51,7 @@ describe('<Request />', () => {
       item: {
         id: '111',
         state: 'no-state',
+        group_name: 'Group1',
         metadata: {
           user_capabilities: { approve: true, deny: true }
         },
@@ -128,6 +129,7 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
+            group_name: 'Group1',
             actions: []
           } }
           isActive
@@ -141,8 +143,7 @@ describe('<Request />', () => {
     expect(toggleExpand).toHaveBeenCalledWith('request-111');
   });
 
-  it('should expand kebab menu', () => {
-    const toggleExpand = jest.fn();
+  it.only('should expand kebab menu', () => {
     const wrapper = mount(
       <ComponentWrapper>
         <Request
@@ -150,13 +151,13 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
+            group_name: 'Group1',
             metadata: {
               user_capabilities: { approve: true, deny: true, memo: true }
             },
             actions: []
           } }
           isActive
-          toggleExpand={ toggleExpand }
         />
       </ComponentWrapper>
     );

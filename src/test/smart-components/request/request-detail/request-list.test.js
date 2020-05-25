@@ -22,6 +22,7 @@ describe('<RequestList />', () => {
   it('should expect a request list item', () => {
     const wrapper = mount(<RequestList { ...initialProps } items={ [{
       id: 'foo',
+      group_name: 'Group',
       actions: []
     }] }/>);
     const button = wrapper.find('button.pf-c-button.pf-m-plain');
