@@ -12,7 +12,7 @@ import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
-import AppTabs from '../../smart-components/app-tabs/app-tabs';
+import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
@@ -96,9 +96,6 @@ const Workflows = () => {
       { ...meta, offset: 0 }
     );
   };
-
-  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
-    { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
 
   const handlePagination = (pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
@@ -206,7 +203,7 @@ const Workflows = () => {
     <Fragment>
       <TopToolbar>
         <TopToolbarTitle title="Approval"/>
-        <AppTabs tabItems={ tabItems }/>
+        <AppTabs/>
       </TopToolbar>
       <TableToolbarView
         sortBy={ sortBy }
