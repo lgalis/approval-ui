@@ -257,18 +257,9 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
 };
 
 RequestsList.propTypes = {
-  requests: PropTypes.array,
   routes: PropTypes.func,
   actionResolver: PropTypes.func,
-  persona: PropTypes.string,
-  isLoading: PropTypes.bool
-};
-
-RequestsList.defaultProps = {
-  requests: [],
-  routes: () => null,
-  actionResolver: () => null,
-  isLoading: false
+  persona: PropTypes.string
 };
 
 export default RequestsList;

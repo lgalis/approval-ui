@@ -2,7 +2,7 @@ import store from '../../utilities/store';
 
 describe('Redux store', () => {
   it('should create redux store', () => {
-    const approvalStore = store;
+    const approvalStore = store();
     const expectedState = {
       groupReducer: expect.any(Object),
       requestReducer: expect.any(Object),

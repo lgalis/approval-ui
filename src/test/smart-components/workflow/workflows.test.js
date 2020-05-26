@@ -19,6 +19,7 @@ import AddWorkflowWizard from '../../../smart-components/workflow/add-groups/add
 import { Table, RowWrapper } from '@patternfly/react-table';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 import routes from '../../../constants/routes';
+import TableEmptyState from '../../../presentational-components/shared/table-empty-state';
 
 const ComponentWrapper = ({ store, initialEntries = [ routes.workflows.index ], children }) => (
   <Provider store={ store }>
@@ -525,6 +526,115 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
 
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    jest.useRealTimers();
+  });
+
+  it('should render table empty state', async () => {
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 0, limit: 50, offset: 0 },
+          data: [ ]
+        }
+      })
+    );
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path={ routes.workflows.index } component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    expect(wrapper.find(TableEmptyState)).toHaveLength(1);
+  });
+
+  it('should paginate requests', async () => {
+    jest.useFakeTimers();
+    expect.assertions(2);
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 40, limit: 50, offset: 0 },
+          data: [ ]
+        }
+      })
+    );
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path={ routes.workflows.index } component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '10', offset: '0', sort_by: 'sequence:asc'
+        });
+        return res.status(200).body({
+          meta: { count: 40, limit: 10, offset: 0 },
+          data: [ ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('.pf-c-options-menu__toggle-button').first().simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      wrapper.find('.pf-c-options-menu__menu-item').first().simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=10&sort_by=sequence%3Aasc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': '', limit: '10', offset: '10', sort_by: 'sequence:asc'
+        });
+        return res.status(200).body({
+          meta: { count: 40, limit: 10, offset: 10 },
+          data: [ ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('.pf-c-pagination__nav').first().find('button').last().simulate('click');
+    });
+    wrapper.update();
     await act(async () => {
       jest.runAllTimers();
     });

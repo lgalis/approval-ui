@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button,
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
@@ -11,7 +10,6 @@ import {
   TextVariants
 } from '@patternfly/react-core';
 import { EmptyTable } from '@redhat-cloud-services/frontend-components';
-import { Link }  from 'react-router-dom';
 
 const TableEmptyState = ({
   title,
@@ -20,9 +18,7 @@ const TableEmptyState = ({
   PrimaryAction,
   renderDescription
 }) => (
-  <EmptyTable centered
-    aria-label="No records"
-  >
+  <EmptyTable centered aria-label="No records">
     <EmptyState className="pf-u-ml-auto pf-u-mr-auto">
       <EmptyStateIcon icon={ Icon } />
       <TextContent>
@@ -30,7 +26,7 @@ const TableEmptyState = ({
       </TextContent>
       <EmptyStateBody>
         { description }
-        { renderDescription() }
+        { renderDescription && renderDescription() }
       </EmptyStateBody>
       <EmptyStateSecondaryActions>
         { PrimaryAction && <PrimaryAction /> }
@@ -38,10 +34,6 @@ const TableEmptyState = ({
     </EmptyState>
   </EmptyTable>
 );
-
-TableEmptyState.defaultProps = {
-  renderDescription: () => null
-};
 
 TableEmptyState.propTypes = {
   title: PropTypes.string.isRequired,
@@ -52,14 +44,3 @@ TableEmptyState.propTypes = {
 };
 
 export default TableEmptyState;
-
-export const EmptyStatePrimaryAction = ({ url, label }) => (
-  <Link to={ url }>
-    <Button variant="secondary">{ label }</Button>
-  </Link>
-);
-
-EmptyStatePrimaryAction.propTypes = {
-  url: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired
-};
