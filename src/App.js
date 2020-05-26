@@ -7,6 +7,7 @@ import { defaultSettings } from './helpers/shared/pagination';
 import 'whatwg-fetch';
 // react-int eng locale data
 import { IntlProvider } from 'react-intl';
+import { BrowserRouter } from 'react-router-dom';
 
 import '@redhat-cloud-services/frontend-components-notifications/index.css';
 import '@redhat-cloud-services/frontend-components/index.css';
@@ -15,6 +16,16 @@ import UserContext from './user-context';
 import { approvalPersona } from './helpers/shared/helpers';
 
 import './App.scss';
+
+const pathName = window.location.pathname.split('/');
+
+pathName.shift();
+
+let release = '/';
+
+if (pathName[0] === 'beta') {
+  release = `/${pathName.shift()}/`;
+}
 
 const App = () => {
   const [ auth, setAuth ] = useState(false);
@@ -40,18 +51,20 @@ const App = () => {
   }
 
   return (
-    <Suspense fallback={ <AppPlaceholder /> }>
-      <IntlProvider locale="en">
-        <UserContext.Provider value={ { userPersona } }>
-          <React.Fragment>
-            <NotificationsPortal />
-            <Main className="pf-u-p-0 pf-u-ml-0">
-              <Routes/>
-            </Main>
-          </React.Fragment>
-        </UserContext.Provider>
-      </IntlProvider>
-    </Suspense>
+    <BrowserRouter basename={ `${release}${pathName[0]}/${pathName[1]}/${pathName[2]}` }>
+      <Suspense fallback={ <AppPlaceholder /> }>
+        <IntlProvider locale="en">
+          <UserContext.Provider value={ { userPersona } }>
+            <React.Fragment>
+              <NotificationsPortal />
+              <Main className="pf-u-p-0 pf-u-ml-0">
+                <Routes/>
+              </Main>
+            </React.Fragment>
+          </UserContext.Provider>
+        </IntlProvider>
+      </Suspense>
+    </BrowserRouter>
   );
 };
 

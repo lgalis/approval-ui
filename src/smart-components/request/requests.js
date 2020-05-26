@@ -43,8 +43,12 @@ const Requests = () => {
       ]);
   };
 
-  return <RequestsList routes={ routes } persona={ APPROVAL_APPROVER_PERSONA } actionsDisabled={ actionsDisabled }
-    actionResolver={ actionResolver }/>;
+  return <RequestsList
+    routes={ routes }
+    persona={ APPROVAL_APPROVER_PERSONA }
+    actionsDisabled={ actionsDisabled }
+    actionResolver={ actionResolver }
+  />;
 };
 
 export default Requests;

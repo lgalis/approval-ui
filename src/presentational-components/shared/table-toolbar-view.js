@@ -190,6 +190,5 @@ TableToolbarView.defaultProps = {
   isSelectable: null,
   routes: () => null,
   renderEmptyState: () => null,
-  onSort: () => null,
   filterConfig: []
 };

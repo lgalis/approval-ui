@@ -117,8 +117,10 @@ export async function fetchRequestWithSubrequests(id, persona) {
 
       if (result && result.data) {
         requestData[0].requests = requestData[0].requests.map(request => {
-          return { ...result.data.find((item) => (item.id === request.id) && item.metadata),
-            ...request };
+          return {
+            ...result.data.find((item) => (item.id === request.id) && item.metadata),
+            ...request
+          };
         });
       }
     }
@@ -130,9 +132,7 @@ export async function fetchRequestWithSubrequests(id, persona) {
     }
   }
 
-  return  { ...requestData[0] };
+  return requestData[0];
 }
 
-export async function createRequestAction (requestId, actionIn) {
-  return await actionApi.createAction(requestId, actionIn);
-}
+export const createRequestAction = (requestId, actionIn) => actionApi.createAction(requestId, actionIn);

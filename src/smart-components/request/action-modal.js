@@ -24,6 +24,7 @@ const ActionModal = ({
   const onSubmit = (data) => {
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
     const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
+
     return postMethod ?
       createRequestAction(
         actionName,
@@ -73,11 +74,8 @@ ActionModal.propTypes = {
   addNotification: PropTypes.func.isRequired,
   createRequestAction: PropTypes.func.isRequired,
   postMethod: PropTypes.func,
-  id: PropTypes.string,
   actionType: PropTypes.string,
-  closeUrl: PropTypes.string,
-  match: PropTypes.object,
-  location: PropTypes.object
+  closeUrl: PropTypes.oneOfType([ PropTypes.string, PropTypes.shape({ patname: PropTypes.string, search: PropTypes.string }) ])
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
