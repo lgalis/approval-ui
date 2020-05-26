@@ -34,6 +34,7 @@ describe('<EditWorkflowGroupsModal />', () => {
   );
 
   beforeEach(() => {
+    apiClientMock.reset();
     initialProps = {
       postMethod: jest.fn()
     };
@@ -43,11 +44,6 @@ describe('<EditWorkflowGroupsModal />', () => {
         workflows: { data: []}
       }
     });
-  });
-
-  afterEach(() => {
-    apiClientMock.teardown();
-    apiClientMock.setup();
   });
 
   it('should mount with loader placeholder', async () => {
