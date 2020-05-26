@@ -143,7 +143,7 @@ describe('<Request />', () => {
     expect(toggleExpand).toHaveBeenCalledWith('request-111');
   });
 
-  it.only('should expand kebab menu', () => {
+  it('should expand kebab menu', () => {
     const wrapper = mount(
       <ComponentWrapper>
         <Request
