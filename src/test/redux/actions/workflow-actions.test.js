@@ -91,10 +91,9 @@ describe('Approval process actions', () => {
     }),
     expect.objectContaining({
       type: `${FETCH_WORKFLOWS}_REJECTED`
-
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + 'workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc', mockOnce({
       status: 500
     }));
 

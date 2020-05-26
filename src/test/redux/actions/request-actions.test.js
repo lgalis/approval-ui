@@ -90,7 +90,7 @@ describe('Request actions', () => {
 
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Adesc', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?limit=50&offset=0&sort_by=name%3Adesc', mockOnce({
       status: 500
     }));
 
@@ -107,7 +107,7 @@ describe('Request actions', () => {
       }
     });
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?limit=50&offset=0', mockOnce({
       body: {
         data: [{
           id: '111',
