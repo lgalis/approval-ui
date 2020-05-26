@@ -54,7 +54,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
         toggle={ <KebabToggle id={ `request-request-dropdown-${request.id}` } onToggle={ onKebabToggle }/> }
         isOpen={ isKebabOpen }
         dropdownItems={ [
-          <DropdownItem aria-label="Add Comment" key={ `add_comment_${request.id}` }>
+          <DropdownItem aria-label="Add Comment" key={ `add_comment_${request.id}` } component="button">
             <Link
               id={ `request-${request.id}-request-comment` }
               to={ {
@@ -150,7 +150,7 @@ Request.propTypes = {
       data: PropTypes.array
     }),
     metadata: PropTypes.shape({
-      user_capabilities: PropTypes.array
+      user_capabilities: PropTypes.object
     })
   }).isRequired,
   idx: PropTypes.number,

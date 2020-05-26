@@ -81,7 +81,10 @@ const RequestDetail = () => {
           <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.request.index, search } }  /> } />
       </Switch>
       <TopToolbar
-        breadcrumbs={ [{ title: 'Request queue', to: routes.requests.index, id: 'requests' }] }
+        breadcrumbs={ [
+          { title: 'Request queue', to: routes.requests.index, id: 'requests' },
+          { title: `Request ${id}`, id }
+        ] }
         paddingBottom={ true }
       >
         <TopToolbarTitle title={ `Request ${id}` } />

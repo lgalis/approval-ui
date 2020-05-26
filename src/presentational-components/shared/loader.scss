@@ -1,0 +1,49 @@
+
+@keyframes loader {
+    0% {
+        transform: translateX(-100%);
+    }
+    60% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.ins__approval__loader {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 3px;
+    background-color: #f3f3f3;
+}
+
+.ins__approval__loader::after {
+    animation: 2s loader linear 0.5s infinite;
+    background: linear-gradient(90deg, transparent, #ecebeb, transparent);
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    transform: translateX(-100%);
+    z-index: 1;
+}
+
+.ins__approval__placeholder_toolbar {
+    min-height: 120px;
+}
+
+.ins__approval__request_loader {
+    background: var(--pf-c-page__main-section--BackgroundColor);
+    width: 100%;
+    height: 100%;
+}
+
+.ins__approval__request_loader-card {
+    min-height: 500px;
+}

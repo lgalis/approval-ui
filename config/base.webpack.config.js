@@ -1,4 +1,3 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const config = require('./webpack.common.js');
 
 const webpackConfig = {
@@ -6,7 +5,7 @@ const webpackConfig = {
   devtool: false,
   optimization: {
     usedExports: true,
-    minimize: process.env.NODE_ENV === 'production',
+    minimize: process.env.NODE_ENV === 'production'
   },
   entry: {
     App: config.paths.entry
@@ -24,15 +23,7 @@ const webpackConfig = {
       use: [{ loader: 'source-map-loader' }, { loader: 'babel-loader' }]
     }, {
       test: /\.s?[ac]ss$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        {
-          loader: 'css-loader'
-        },
-        {
-          loader: 'sass-loader'
-        }
-      ]
+      use: [ 'style-loader', 'css-loader', 'sass-loader' ]
     }, {
       test: /\.(woff(2)?|ttf|jpg|png|eot|gif|svg)(\?v=\d+\.\d+\.\d+)?$/,
       use: [{

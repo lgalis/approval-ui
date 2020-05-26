@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage } from 'react-intl';
-import { Modal, Button, Split, SplitItem, Text, TextContent, TextVariants } from '@patternfly/react-core';
+import { Modal, Button, Split, SplitItem, Text, TextContent, TextVariants, Spinner } from '@patternfly/react-core';
 import { WarningTriangleIcon } from '@patternfly/react-icons';
 import { removeWorkflow, removeWorkflows } from '../../redux/actions/workflow-actions';
 import useQuery from '../../utilities/use-query';
@@ -17,18 +17,26 @@ const RemoveWorkflowModal = ({
   fetchData,
   setSelectedWorkflows
 }) => {
-  const { push, goBack } = useHistory();
+  const [ submitting, setSubmitting ] = useState(false);
+  const { push } = useHistory();
   const [{ workflow: workflowId }] = useQuery([ 'workflow' ]);
 
   if (!workflowId && (!ids || ids.length === 0)) {
     return null;
   }
 
-  const onSubmit = () => { return ((workflowId ? removeWorkflow(workflowId) : removeWorkflows(ids))
-  .then(setSelectedWorkflows([])).then(fetchData()).then(push(routes.workflows.index)));
-  };
+  const removeWf = () =>(workflowId ? removeWorkflow(workflowId) : removeWorkflows(ids))
+  .catch(() => setSubmitting(false))
+  .then(() => push(routes.workflows.index))
+  .then(() => setSelectedWorkflows([]))
+  .then(() => fetchData());
 
-  const onCancel = () => goBack();
+  const onCancel = () => push(routes.workflows.index);
+
+  const onSubmit = () => {
+    setSubmitting(true);
+    return removeWf();
+  };
 
   return (
     <Modal
@@ -41,8 +49,8 @@ const RemoveWorkflowModal = ({
         <Button id="cancel-remove-workflow" key="cancel" variant="secondary" type="button" onClick={ onCancel }>
           Cancel
         </Button>,
-        <Button id="submit-remove-workflow" key="submit" variant="primary" type="button" onClick={ onSubmit }>
-          Confirm
+        <Button id="submit-remove-workflow" key="submit" variant="primary" type="button" isDisabled={ submitting } onClick={ onSubmit }>
+          { submitting ? <React.Fragment><Spinner size="sm" /> Removing </React.Fragment> : 'Remove' }
         </Button>
       ] }
     >

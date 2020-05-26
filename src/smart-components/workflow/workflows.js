@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
-import { expandable } from '@patternfly/react-table';
-import { fetchWorkflows, expandWorkflow } from '../../redux/actions/workflow-actions';
+import { expandable, sortable } from '@patternfly/react-table';
+import { fetchWorkflows, expandWorkflow, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-groups/add-workflow-wizard';
 import EditWorkflowInfo from './edit-workflow-info-modal';
 import EditWorkflowGroups from './edit-workflow-groups-modal';
@@ -12,7 +12,7 @@ import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
-import AppTabs from '../../smart-components/app-tabs/app-tabs';
+import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
 import { defaultSettings } from '../../helpers/shared/pagination';
 import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
@@ -21,27 +21,37 @@ import routesLinks from '../../constants/routes';
 
 const columns = [{
   title: 'Name',
-  cellFormatters: [ expandable ]
+  cellFormatters: [ expandable ],
+  transforms: [ sortable ]
 },
-'Description',
-'Sequence'
+{ title: 'Description', transforms: [ sortable ]},
+{ title: 'Sequence', transforms: [ sortable ]}
 ];
 
 const debouncedFilter = asyncDebounce(
   (filter, dispatch, filteringCallback, meta = defaultSettings) => {
     filteringCallback(true);
-    dispatch(fetchWorkflows(filter, meta)).then(() =>
+    dispatch(setFilterValueWorkflows(filter, meta));
+    return dispatch(fetchWorkflows(meta))
+    .then(() =>
       filteringCallback(false)
     );
   },
   1000
 );
-const initialState = {
-  filterValue: '',
+
+const prepareChips = (filterValue) => filterValue ? [{
+  category: 'Name',
+  key: 'name',
+  chips: [{ name: filterValue, value: filterValue }]
+}] : [];
+
+const initialState = (filterValue = '') => ({
+  filterValue,
   isOpen: false,
   isFetching: true,
   isFiltering: false
-};
+});
 
 const workflowsListState = (state, action) => {
   switch (action.type) {
@@ -58,12 +68,13 @@ const workflowsListState = (state, action) => {
 
 const Workflows = () => {
   const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
+  const { workflows: { data, meta }, sortBy, filterValueRedux } = useSelector(
+    ({ workflowReducer: { workflows, sortBy, filterValue: filterValueRedux }}) => ({ workflows, sortBy, filterValueRedux })
+    , shallowEqual
+  );
   const [{ filterValue, isFetching, isFiltering }, stateDispatch ] = useReducer(
     workflowsListState,
-    initialState
-  );
-  const { data, meta } = useSelector(
-    ({ workflowReducer: { workflows }}) => workflows
+    initialState(filterValueRedux)
   );
 
   const dispatch = useDispatch();
@@ -71,7 +82,7 @@ const Workflows = () => {
 
   useEffect(() => {
     dispatch(
-      fetchWorkflows(filterValue, defaultSettings)
+      fetchWorkflows(defaultSettings)
     ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
     scrollToTop();
   }, []);
@@ -81,21 +92,22 @@ const Workflows = () => {
     debouncedFilter(
       value,
       dispatch,
-      (isFiltering) =>
-        stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
-      {
-        ...meta,
-        offset: 0
-      }
+      (isFiltering) => stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
+      { ...meta, offset: 0 }
     );
   };
 
-  const tabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
-    { eventKey: 1, title: 'Approval processes', name: '/workflows' }];
-
-  const handlePagination = (_apiProps, pagination) => {
+  const handlePagination = (pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchWorkflows(filterValue, pagination))
+    dispatch(fetchWorkflows(pagination))
+    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
+    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
+  };
+
+  const onSort = (_e, index, direction, { property }) => {
+    stateDispatch({ type: 'setFetching', payload: true });
+    dispatch(sortWorkflows({ index, direction, property }));
+    return dispatch(fetchWorkflows())
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
@@ -124,23 +136,26 @@ const Workflows = () => {
     : [
       {
         title: 'Edit info',
+        component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
       },
 
       {
         title: 'Edit groups',
+        component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editGroups, search: `?workflow=${workflow.id}` })
       },
       {
         title: 'Edit sequence',
+        component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editSequence, search: `?workflow=${workflow.id}` })
       },
       {
         title: 'Delete',
-        style: { color: 'var(--pf-global--danger-color--100)'	},
+        component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })
       }
@@ -189,9 +204,11 @@ const Workflows = () => {
     <Fragment>
       <TopToolbar>
         <TopToolbarTitle title="Approval"/>
-        <AppTabs tabItems={ tabItems }/>
+        <AppTabs/>
       </TopToolbar>
       <TableToolbarView
+        sortBy={ sortBy }
+        onSort={ onSort }
         data={ data }
         isSelectable={ true }
         createRows={ createRows }
@@ -226,6 +243,10 @@ const Workflows = () => {
             }
           />
         ) }
+        activeFiltersConfig={ {
+          filters: prepareChips(filterValue),
+          onDelete: () => handleFilterChange('')
+        } }
       />
     </Fragment>
   );

@@ -1,11 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { Tabs, Tab } from '@patternfly/react-core';
 
-const AppTabs = ({ history: { push }, location: { pathname }, tabItems }) => {
+const approvalTabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
+  { eventKey: 1, title: 'All requests', name: '/allrequests' },
+  { eventKey: 2, title: 'Approval processes', name: '/workflows' }];
+
+export const AppTabs = ({ tabItems = approvalTabItems }) => {
+  const history = useHistory();
+  const { pathname, search } = useLocation();
   const activeTab = tabItems.find(({ name }) => pathname.includes(name));
-  const handleTabClick = (_event, tabIndex) => push(tabItems[tabIndex].name);
+  const handleTabClick = (_event, tabIndex) =>
+    history.push({ pathname: tabItems[tabIndex].name, search });
 
   return (
     <Tabs className="pf-u-mt-sm" activeKey={ activeTab ? activeTab.eventKey : 0 } onSelect={ handleTabClick }>
@@ -15,13 +22,5 @@ const AppTabs = ({ history: { push }, location: { pathname }, tabItems }) => {
 };
 
 AppTabs.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired
-  }),
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }),
-  tabItems: PropTypes.array.isRequired
+  tabItems: PropTypes.array
 };
-
-export default withRouter(AppTabs);

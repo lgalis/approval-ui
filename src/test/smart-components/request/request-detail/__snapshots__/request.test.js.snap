@@ -19,6 +19,7 @@ exports[`<Request /> should render correctly 1`] = `
           "processed_by": "system",
         },
       ],
+      "group_name": "Group1",
       "id": "111",
       "metadata": Object {
         "user_capabilities": Object {
@@ -158,7 +159,7 @@ exports[`<Request /> should render correctly 1`] = `
                   <span
                     id="111-name"
                   >
-                    undefined
+                    Group1
                      
                   </span>
                 </DataListCell>,
@@ -203,7 +204,7 @@ exports[`<Request /> should render correctly 1`] = `
                   <span
                     id="111-name"
                   >
-                    undefined
+                    Group1
                      
                   </span>
                 </div>

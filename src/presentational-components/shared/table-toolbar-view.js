@@ -1,14 +1,12 @@
 
 import React, { Fragment, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
-import { Toolbar, ToolbarGroup, ToolbarItem, Level, LevelItem } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
-import { defaultSettings  } from '../../helpers/shared/pagination';
-import FilterToolbar from '../../presentational-components/shared/filter-toolbar-item';
-import { Section } from '@redhat-cloud-services/frontend-components';
+import { defaultSettings, getCurrentPage, getNewPage  } from '../../helpers/shared/pagination';
 import { DataListLoader } from './loader-placeholders';
-import AsyncPagination from '../../smart-components/common/async-pagination';
-import BottomPaginationContainer from '../../presentational-components/shared/bottom-pagination-container';
+import { useIntl } from 'react-intl';
+import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
+import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/components/PrimaryToolbar';
 
 /**
  * Need to optimize this component
@@ -33,8 +31,13 @@ export const TableToolbarView = ({
   onFilterChange,
   isLoading,
   onCollapse,
-  renderEmptyState
+  renderEmptyState,
+  sortBy,
+  onSort,
+  activeFiltersConfig,
+  filterConfig
 }) => {
+  const intl = useIntl();
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
@@ -71,34 +74,46 @@ export const TableToolbarView = ({
     ? setRows(rows.map(row => ({ ...row, selected })))
     : setRows((rows) => setSelected(rows, id));
 
-  const renderToolbar = (isLoading) => {
-    return (<Toolbar className={ `pf-u-pt-lg pf-u-pr-lg pf-u-pl-lg pf-u-pb-lg top-toolbar` }>
-      <Level style={ { flex: 1 } }>
-        <LevelItem>
-          <Toolbar>
-            <FilterToolbar onFilterChange={ onFilterChange } searchValue={ filterValue } isClearable={ true }
-              placeholder={ `Filter by ${titleSingular}` }/>
-            { toolbarButtons() }
-          </Toolbar>
-        </LevelItem>
-
-        <LevelItem>
-          <Toolbar>
-            <ToolbarGroup>
-              <ToolbarItem>
-                <AsyncPagination
-                  apiRequest={ fetchData }
-                  isDisabled={ isLoading }
-                  meta={ pagination }
-                  isCompact
-                />
-              </ToolbarItem>
-            </ToolbarGroup>
-          </Toolbar>
-        </LevelItem>
-      </Level>
-    </Toolbar>);
+  const paginationConfig = {
+    itemCount: pagination.count,
+    page: getCurrentPage(pagination.limit, pagination.offset),
+    perPage: pagination.limit,
+    onSetPage: (_e, page) => fetchData({ ...pagination, offset: getNewPage(page, pagination.limit) }),
+    onPerPageSelect: (_e, size) => fetchData({ ...pagination, limit: size }),
+    isDisabled: isLoading
   };
+
+  const renderToolbar = () => (
+    <PrimaryToolbar
+      className="pf-u-p-lg ins__approval__primary_toolbar"
+      pagination={ paginationConfig }
+      { ...(toolbarButtons && { actionsConfig: {  actions: [ toolbarButtons() ]}}) }
+      filterConfig={ {
+        items: [{
+          label: intl.formatMessage({
+            id: 'name',
+            defaultMessage: 'Name'
+          }),
+          filterValues: {
+            id: 'filter-by-name',
+            placeholder: intl.formatMessage({
+              id: 'filter-by-name',
+              defaultMessage: 'Filter by {title}'
+            }, { title: titleSingular }),
+            'aria-label': intl.formatMessage({
+              id: 'filter-by-name',
+              defaultMessage: 'Filter by {title}'
+            }, { title: titleSingular }),
+            onChange: (_event, value) => onFilterChange(value),
+            value: filterValue
+          }
+        },
+        ...filterConfig
+        ]
+      } }
+      activeFiltersConfig={ activeFiltersConfig }
+    />
+  );
 
   return (
     <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
@@ -118,19 +133,23 @@ export const TableToolbarView = ({
             onSelect={ isSelectable && selectRow }
             actionResolver={ actionResolver }
             className="table-fix"
+            sortBy={ sortBy }
+            onSort={ onSort }
           >
             <TableHeader />
             <TableBody/>
           </Table> }
-          { pagination.count > 0 &&
-            <BottomPaginationContainer>
-              <AsyncPagination
-                dropDirection="up"
-                meta={ pagination }
-                apiRequest={ fetchData }
-              />
-            </BottomPaginationContainer>
-          }
+          { pagination.count > 0 && (
+            <PrimaryToolbar
+              className="pf-u-pl-lg pf-u-pr-lg ins__approval__primary_toolbar"
+              pagination={ {
+                ...paginationConfig,
+                dropDirection: 'up',
+                variant: 'bottom',
+                isCompact: false
+              } }
+            />
+          ) }
         </Fragment>
       }
     </Section>);
@@ -157,15 +176,20 @@ TableToolbarView.propTypes = {
   onFilterChange: propTypes.func,
   isLoading: propTypes.bool,
   onCollapse: propTypes.func,
-  renderEmptyState: propTypes.func
+  renderEmptyState: propTypes.func,
+  sortBy: propTypes.object,
+  onSort: propTypes.func,
+  activeFiltersConfig: propTypes.object,
+  filterConfig: propTypes.array
 };
 
 TableToolbarView.defaultProps = {
   requests: [],
   isLoading: false,
   pagination: defaultSettings,
-  toolbarButtons: () => null,
   isSelectable: null,
   routes: () => null,
-  renderEmptyState: () => null
+  renderEmptyState: () => null,
+  onSort: () => null,
+  filterConfig: []
 };

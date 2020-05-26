@@ -56,8 +56,7 @@ const ActionModal = ({
       onClose={ onCancel }
     >
       <FormRenderer
-        schema={ createRequestCommentSchema (actionType === 'Deny') }
-        schemaType="default"
+        schema={ createRequestCommentSchema(actionType === 'Deny') }
         onSubmit={ onSubmit }
         onCancel={ onCancel }
         formContainer="modal"

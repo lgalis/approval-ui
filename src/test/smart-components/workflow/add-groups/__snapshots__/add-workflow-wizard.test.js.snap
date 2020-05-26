@@ -4,54 +4,66 @@ exports[`<AddWorkflow /> should post a warning message on Cancel 1`] = `
 <ContextProvider
   value={
     Object {
-      "store": Object {
+      "defaultFormats": Object {},
+      "defaultLocale": "en",
+      "formatDate": [Function],
+      "formatDateToParts": [Function],
+      "formatDisplayName": [Function],
+      "formatList": [Function],
+      "formatMessage": [Function],
+      "formatNumber": [Function],
+      "formatNumberToParts": [Function],
+      "formatPlural": [Function],
+      "formatRelativeTime": [Function],
+      "formatTime": [Function],
+      "formatTimeToParts": [Function],
+      "formats": Object {},
+      "formatters": Object {
+        "getDateTimeFormat": [Function],
+        "getDisplayNames": [Function],
+        "getListFormat": [Function],
+        "getMessageFormat": [Function],
+        "getNumberFormat": [Function],
+        "getPluralRules": [Function],
+        "getRelativeTimeFormat": [Function],
+      },
+      "locale": "en",
+      "messages": Object {},
+      "onError": [Function],
+      "textComponent": Symbol(react.fragment),
+      "timeZone": undefined,
+      "wrapRichTextChunksInFragment": undefined,
+    }
+  }
+>
+  <Provider
+    store={
+      Object {
         "clearActions": [Function],
         "dispatch": [Function],
         "getActions": [Function],
         "getState": [Function],
         "replaceReducer": [Function],
         "subscribe": [Function],
-      },
-      "subscription": Subscription {
-        "handleChangeWrapper": [Function],
-        "listeners": Object {
-          "clear": [Function],
-          "get": [Function],
-          "notify": [Function],
-          "subscribe": [Function],
-        },
-        "onStateChange": [Function],
-        "parentSub": undefined,
-        "store": Object {
-          "clearActions": [Function],
-          "dispatch": [Function],
-          "getActions": [Function],
-          "getState": [Function],
-          "replaceReducer": [Function],
-          "subscribe": [Function],
-        },
-        "unsubscribe": [Function],
-      },
+      }
     }
-  }
->
-  <MemoryRouter
-    initialEntries={
-      Array [
-        "/workflows/",
-        "/workflows/add-workflow/",
-        "/workflows/",
-      ]
-    }
-    initialIndex={1}
   >
-    <AddWorkflow
-      handleChange={[MockFunction]}
-      id="123"
-      initialValues={Object {}}
-      postMethod={[MockFunction]}
-      rbacGroups={Array []}
-    />
-  </MemoryRouter>
+    <MemoryRouter
+      initialEntries={
+        Array [
+          "/workflows/",
+          "/workflows/add-workflow/",
+          "/workflows/",
+        ]
+      }
+      initialIndex={1}
+    >
+      <AddWorkflow
+        handleChange={[MockFunction]}
+        id="123"
+        postMethod={[MockFunction]}
+      />
+    </MemoryRouter>
+  </Provider>
 </ContextProvider>
 `;

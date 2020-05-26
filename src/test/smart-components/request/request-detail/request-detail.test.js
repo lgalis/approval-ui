@@ -13,6 +13,7 @@ import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 import RequestInfoBar from '../../../../smart-components/request/request-detail/request-info-bar';
 import RequestTranscript from '../../../../smart-components/request/request-detail/request-transcript';
 import { mockGraphql } from '../../../__mocks__/user-login';
+import { BreadcrumbItem } from '@patternfly/react-core';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=123' ]}) => (
   <Provider store={ store } >
@@ -155,6 +156,13 @@ describe('<RequestDetail />', () => {
     wrapper.update();
     expect(wrapper.find(RequestInfoBar)).toHaveLength(1);
     expect(wrapper.find(RequestTranscript)).toHaveLength(1);
+
+    expect(wrapper.find(BreadcrumbItem)).toHaveLength(2);
+    expect(wrapper.find(BreadcrumbItem).first().text()).toEqual('Request queue');
+    expect(wrapper.find(BreadcrumbItem).first().props().isActive).toEqual(false);
+
+    expect(wrapper.find(BreadcrumbItem).last().text()).toEqual('Request 123');
+    expect(wrapper.find(BreadcrumbItem).last().props().isActive).toEqual(true);
     done();
   });
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Main } from '@redhat-cloud-services/frontend-components/components/Main';
 import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications/';
 import { Routes } from './Routes';
@@ -40,16 +40,18 @@ const App = () => {
   }
 
   return (
-    <IntlProvider locale="en">
-      <UserContext.Provider value={ { userPersona } }>
-        <React.Fragment>
-          <NotificationsPortal />
-          <Main className="pf-u-p-0 pf-u-ml-0">
-            <Routes/>
-          </Main>
-        </React.Fragment>
-      </UserContext.Provider>
-    </IntlProvider>
+    <Suspense fallback={ <AppPlaceholder /> }>
+      <IntlProvider locale="en">
+        <UserContext.Provider value={ { userPersona } }>
+          <React.Fragment>
+            <NotificationsPortal />
+            <Main className="pf-u-p-0 pf-u-ml-0">
+              <Routes/>
+            </Main>
+          </React.Fragment>
+        </UserContext.Provider>
+      </IntlProvider>
+    </Suspense>
   );
 };
 

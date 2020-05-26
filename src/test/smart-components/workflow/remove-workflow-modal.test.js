@@ -12,10 +12,11 @@ import { IntlProvider } from 'react-intl';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
 import { Modal } from '@patternfly/react-core';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
+import routes from '../../../constants/routes';
 
 const ComponentWrapper = ({ store, children }) => (
   <Provider store={ store }>
-    <MemoryRouter initialEntries={ [ '/back-route', '/foo/123' ] } initialIndex={ 1 }>
+    <MemoryRouter initialEntries={ [ '/foo/123' ] } initialIndex={ 1 }>
       <IntlProvider locale="en">
         { children }
       </IntlProvider>
@@ -60,7 +61,7 @@ describe('<RemoveWorkflowModal />', () => {
 
     wrapper.find('button#cancel-remove-workflow').simulate('click');
     wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/back-route');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.index);
   });
 
   it('should remove single approval processworkflow and redirect', async done => {
