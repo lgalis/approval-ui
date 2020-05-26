@@ -1,15 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<SummaryContent /> should render correctly 1`] = `
-<SummaryContent
-  formData={
-    Object {
-      "description": "Group summary description",
-      "name": "Group summary name",
-      "wfGroups": Array [],
-    }
-  }
->
+<SummaryContent>
   <Stack
     gutter="md"
   >

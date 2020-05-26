@@ -111,6 +111,10 @@
   fill: var(--pf-global--danger-color--100)
 }
 
+.icon-info-fill {
+  fill: var(--pf-global--info-color--100)
+}
+
 .icon-success-fill {
   fill: var(--pf-global--success-color--100)
 }
@@ -119,4 +123,10 @@
   font-size: 14px;
   color: var(--pf-global--Color--100);
   font-weight: bold;
+}
+
+.ins__approval__primary_toolbar {
+  .pf-c-data-toolbar__content {
+    padding: 0;
+  }
 }

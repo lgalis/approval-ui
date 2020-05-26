@@ -13,6 +13,7 @@ describe('group redux action creators', () => {
   let mockStore;
 
   beforeEach(() => {
+    apiClientMock.setup();
     mockStore = configureStore(middlewares);
   });
 

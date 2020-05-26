@@ -1,44 +1,98 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useHistory } from 'react-router-dom';
-import { ActionGroup, Button, FormGroup, Modal, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
+import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
+import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
+import validatorTypes from '@data-driven-forms/react-form-renderer/dist/cjs/validator-types';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
-import WorkflowInfoForm from './add-groups/workflow-information';
-import WorkflowSequenceForm from './add-groups/workflow-sequence';
 import useQuery from '../../utilities/use-query';
+import useWorkflow from '../../utilities/use-workflows';
+import FormRenderer from '../common/form-renderer';
+import routes from '../../constants/routes';
+import workflowInfoSchema from '../../forms/workflow-info.schema';
+
+const createSchema = (editType, name, id) => editType === 'info' ? ({
+  fields: [{
+    component: componentTypes.SUB_FORM,
+    title: <span className="pf-c-title pf-m-md">
+      <FormattedMessage
+        id="edit-info-title-subform"
+        defaultMessage="Make any changes to approval process {name}"
+        values={ { name } } />
+    </span>,
+    name: 'info-sub',
+    fields: workflowInfoSchema(id)
+  }]
+}) : ({
+  fields: [{
+    component: componentTypes.SUB_FORM,
+    title: <span className="pf-c-title pf-m-md">
+      <FormattedMessage
+        id="edit-sequence-title-subform"
+        defaultMessage="Set the sequence for the approval process {name}"
+        values={ { name } } />
+    </span>,
+    name: 'info-sub',
+    fields: [{
+      component: componentTypes.TEXT_FIELD,
+      name: 'sequence',
+      label: <FormattedMessage
+        id="sequence-label"
+        defaultMessage="Enter sequence"
+      />,
+      isRequired: true,
+      validate: [{ type: validatorTypes.REQUIRED }]
+    }]
+  }]
+});
+
+const reducer = (state, { type, initialValues, schema }) => {
+  switch (type) {
+    case 'loaded':
+      return {
+        ...state,
+        initialValues,
+        schema,
+        isLoading: false
+      };
+    default:
+      return state;
+  }
+};
 
 const EditWorkflowInfoModal = ({
   addNotification,
   fetchWorkflow,
   updateWorkflow,
   postMethod,
-  workflow,
-  isFetching,
   editType
 }) => {
-  const [ formData, setFormData ] = useState({});
-  const [ initialValue, setInitialValue ] = useState({});
-  const [ isValid, setIsValid ] = useState(true);
+  const [ state, dispatch ] = useReducer(reducer, { isLoading: true });
 
   const { push } = useHistory();
   const [{ workflow: id }] = useQuery([ 'workflow' ]);
-
-  const handleChange = data => setFormData({ ...formData, ...data });
+  const loadedWorkflow = useWorkflow(id);
+  const intl = useIntl();
 
   useEffect(() => {
-    fetchWorkflow(id).then((data) => { setFormData({ ...formData, ...data.value }); setInitialValue({ ...data.value });});
+    if (!loadedWorkflow) {
+      fetchWorkflow(id)
+      .then((data) => dispatch({ type: 'loaded', initialValues: data.value, schema: createSchema(editType, data.value.name, intl, data.value.id) }));
+    } else {
+      dispatch({ type: 'loaded', initialValues: loadedWorkflow, schema: createSchema(editType, loadedWorkflow.name, intl, loadedWorkflow.id) });
+    }
   }, []);
 
-  const onSave = () => {
-    if (!isValid) {return;}
-
-    const { name, description, sequence } = formData;
+  const onSave = ({ name, description, sequence }) => {
     const workflowData = { id, name, description, sequence };
-    updateWorkflow(workflowData).then(() => postMethod()).then(() => push('/workflows'));
+    return updateWorkflow(workflowData).then(() => postMethod()).then(() => push(routes.workflows.index));
   };
 
   const onCancel = () => {
@@ -53,7 +107,7 @@ const EditWorkflowInfoModal = ({
       dismissable: true,
       description
     });
-    push('/workflows');
+    push(routes.workflows.index);
   };
 
   return (
@@ -61,54 +115,28 @@ const EditWorkflowInfoModal = ({
       title={ editType === 'sequence' ? 'Edit sequence' : 'Edit information' }
       width={ '40%' }
       isOpen
-      onClose={ onCancel }>
-      <Stack gutter="md">
-        <StackItem>
-          <FormGroup fieldId="edit-workflow-info-modal-info">
-            { isFetching && <WorkflowInfoFormLoader/> }
-            { !isFetching && (editType === 'info' ?
-              <WorkflowInfoForm formData={ formData } initialValue={ initialValue }
-                handleChange={ handleChange }
-                setIsValid={ setIsValid }
-                title={ `Make any changes to approval process ${workflow.name}` }/> :
-              <WorkflowSequenceForm formData={ formData }
-                initialValue={ initialValue }
-                handleChange={ handleChange }
-                isValid={ isValid }
-                setIsValid={ setIsValid }
-                title={ `Set the sequence for the approval process ${workflow.name}` }/>
-            ) }
-          </FormGroup>
-        </StackItem>
-        <StackItem>
-          <ActionGroup>
-            <Split gutter="md">
-              <SplitItem>
-                <Button
-                  aria-label={ 'Save' }
-                  id="save-edit-workflow-info"
-                  variant="primary"
-                  type="submit"
-                  onClick={ onSave }>Save</Button>
-              </SplitItem>
-              <SplitItem>
-                <Button
-                  id="cancel-edit-workflow-info"
-                  aria-label='Cancel'
-                  variant='secondary'
-                  type='button'
-                  onClick={ onCancel }>Cancel</Button>
-              </SplitItem>
-            </Split>
-          </ActionGroup>
-        </StackItem>
-      </Stack>
+      onClose={ onCancel }
+    >
+      { state.isLoading && <WorkflowInfoFormLoader/> }
+      {
+        !state.isLoading && <FormRenderer
+          FormTemplate={ (props) => <FormTemplate
+            { ...props }
+            submitLabel={ <FormattedMessage id="save" defaultMessage="Save" /> }
+            buttonClassName="pf-u-mt-0"
+            disableSubmit={ [ 'submitting' ] }
+          /> }
+          onCancel={ onCancel }
+          onSubmit={ onSave }
+          initialValues={ state.initialValues }
+          schema={ state.schema }
+        />
+      }
     </Modal>
   );
 };
 
 EditWorkflowInfoModal.defaultProps = {
-  isFetching: false,
   editType: 'info'
 };
 
@@ -117,10 +145,7 @@ EditWorkflowInfoModal.propTypes = {
   fetchWorkflow: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
-  workflow: PropTypes.object,
-  id: PropTypes.string,
-  editType: PropTypes.string,
-  isFetching: PropTypes.bool
+  editType: PropTypes.string
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
@@ -130,9 +155,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   fetchWorkflow
 }, dispatch);
 
-const mapStateToProps = ({ workflowReducer: { workflow, isRecordLoading }}) => ({
-  workflow,
-  isFetching: isRecordLoading
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditWorkflowInfoModal);
+export default connect(null, mapDispatchToProps)(EditWorkflowInfoModal);

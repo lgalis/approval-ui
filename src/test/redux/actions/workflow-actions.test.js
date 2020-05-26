@@ -9,7 +9,8 @@ import {
   UPDATE_WORKFLOW,
   REMOVE_WORKFLOW,
   REMOVE_WORKFLOWS,
-  EXPAND_WORKFLOW
+  EXPAND_WORKFLOW,
+  SET_FILTER_WORKFLOWS
 } from '../../../redux/action-types';
 import {
   addWorkflow,
@@ -18,7 +19,8 @@ import {
   removeWorkflow,
   removeWorkflows,
   updateWorkflow,
-  expandWorkflow
+  expandWorkflow,
+  setFilterValueWorkflows
 } from '../../../redux/actions/workflow-actions';
 import {
   APPROVAL_API_BASE
@@ -32,10 +34,15 @@ describe('Approval process actions', () => {
     mockStore = configureStore(middlewares);
   });
 
-  it('should dispatch correct actions after fetching approval processes', () => {
+  it('should dispatch correct actions after fetching approval processes', async () => {
     const store = mockStore({
       workflowReducer: {
-        isLoading: false
+        isLoading: false,
+        sortBy: {
+          index: 1,
+          property: 'sequence',
+          direction: 'asc'
+        }
       }
     });
 
@@ -49,7 +56,7 @@ describe('Approval process actions', () => {
       type: `${FETCH_WORKFLOWS}_FULFILLED`
     }];
 
-    apiClientMock.get(APPROVAL_API_BASE + '/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc', mockOnce({
       body: {
         data: [{
           label: 'workflow',
@@ -58,15 +65,20 @@ describe('Approval process actions', () => {
       }
     }));
 
-    return store.dispatch(fetchWorkflows()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    await store.dispatch(fetchWorkflows());
+
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('should dispatch error notification if fetch approval processes fails', () => {
+  it('should dispatch error notification if fetch approval processes fails', async () => {
     const store = mockStore({
       workflowReducer: {
-        isLoading: false
+        isLoading: false,
+        sortBy: {
+          index: 1,
+          property: 'sequence',
+          direction: 'asc'
+        }
       }
     });
 
@@ -79,17 +91,17 @@ describe('Approval process actions', () => {
     }),
     expect.objectContaining({
       type: `${FETCH_WORKFLOWS}_REJECTED`
-
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + 'workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc', mockOnce({
       status: 500
     }));
 
-    return store.dispatch(fetchWorkflows())
-    .catch(() => {
+    try {
+      await store.dispatch(fetchWorkflows());
+    } catch {
       expect(store.getActions()).toEqual(expectedActions);
-    });
+    }
   });
 
   it('should dispatch correct actions after fetching one approval process', () => {
@@ -367,6 +379,14 @@ describe('Approval process actions', () => {
     expect(expandWorkflow(id)).toEqual({
       type: EXPAND_WORKFLOW,
       payload: id
+    });
+  });
+
+  it('creates object for setting filter value for worklows', () => {
+    const filterValue = 'some-name';
+    expect(setFilterValueWorkflows(filterValue)).toEqual({
+      type: SET_FILTER_WORKFLOWS,
+      payload: filterValue
     });
   });
 });

@@ -2,12 +2,17 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import { Table, TableHeader, TableBody, expandable } from '@patternfly/react-table';
+import { IntlProvider } from 'react-intl';
 
-import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
+import { TableToolbarView as TableToolbarViewOriginal } from '../../presentational-components/shared/table-toolbar-view';
 import { DataListLoader } from '../../presentational-components/shared/loader-placeholders';
 
 describe('<TableToolbarView />', () => {
   let initialProps;
+
+  const TableToolbarView = (props) => (<IntlProvider locale="en">
+    <TableToolbarViewOriginal { ...props } />
+  </IntlProvider>);
 
   beforeEach(() => {
     initialProps = {
@@ -89,7 +94,7 @@ describe('<TableToolbarView />', () => {
     const input = wrapper.find('input').first();
     input.getDOMNode().value = 'foo';
     input.simulate('change');
-    expect(onFilterChange).toHaveBeenCalledWith('foo', expect.any(Object));
+    expect(onFilterChange).toHaveBeenCalledWith('foo');
     done();
   });
 
@@ -240,12 +245,13 @@ describe('<TableToolbarView />', () => {
     });
 
     const paginationInput = wrapper.find('button').last();
+
     await act(async() => {
       paginationInput.simulate('click');
     });
 
     setTimeout(() => {
-      expect(request).toHaveBeenCalledWith(undefined, { limit: 50, offset: 50 });
+      expect(request).toHaveBeenCalledWith({ count: 51, limit: 50, offset: 50 });
       done();
     }, 251);
   });
