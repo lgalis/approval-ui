@@ -140,6 +140,7 @@ const Workflows = () => {
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
       },
+
       {
         title: 'Edit groups',
         component: 'button',
