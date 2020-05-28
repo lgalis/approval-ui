@@ -19,6 +19,7 @@ axiosInstance.interceptors.request.use(async config => {
   await window.insights.chrome.auth.getUser();
   return config;
 });
+
 axiosInstance.interceptors.response.use(resolveInterceptor);
 axiosInstance.interceptors.response.use(null, errorInterceptor);
 

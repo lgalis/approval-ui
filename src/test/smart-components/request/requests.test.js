@@ -13,10 +13,10 @@ import { RowWrapper } from '@patternfly/react-table';
 import { Table } from '@patternfly/react-table';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 import TableEmptyState from '../../../presentational-components/shared/table-empty-state';
-import { APPROVAL_ADMIN_PERSONA } from '../../../helpers/shared/helpers';
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
 import ActionModal from '../../../smart-components/request/action-modal';
+import { APPROVAL_ADMINISTRATOR_ROLE, APPROVAL_APPROVER_ROLE } from '../../../helpers/shared/helpers';
 
 const ComponentWrapper = ({ store, initialEntries = [ '/requests' ], children }) => (
   <Provider store={ store } value={ { roles: []} }>
@@ -540,7 +540,10 @@ describe('<Requests />', () => {
       portfolio: 'LGTestNoTags'
     };
 
+    let roles = {};
+
     beforeEach(() => {
+      roles = {};
       apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
         status: 200,
         body: {
@@ -556,9 +559,10 @@ describe('<Requests />', () => {
       const store = registry.getStore();
 
       let wrapper;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+          <UserContext.Provider value={ { userRoles: roles } } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );
@@ -592,11 +596,12 @@ describe('<Requests />', () => {
       const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
+      roles[APPROVAL_APPROVER_ROLE] = true;
 
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+          <UserContext.Provider value={ { userRoles: roles } } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );
@@ -632,9 +637,10 @@ describe('<Requests />', () => {
       const store = registry.getStore();
 
       let wrapper;
+      roles[APPROVAL_APPROVER_ROLE] = true;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+          <UserContext.Provider value={ { userRoles: roles } } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );

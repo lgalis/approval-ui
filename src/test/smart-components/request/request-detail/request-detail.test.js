@@ -17,9 +17,9 @@ import { BreadcrumbItem } from '@patternfly/react-core';
 import routes from '../../../../constants/routes';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 import requestReducer, { requestsInitialState } from '../../../../redux/reducers/request-reducer';
-import { APPROVAL_ADMIN_PERSONA } from '../../../../helpers/shared/helpers';
 import UserContext from '../../../../user-context';
 import ActionModal from '../../../../smart-components/request/action-modal';
+import { APPROVAL_ADMINISTRATOR_ROLE } from '../../../../helpers/shared/helpers';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=123' ]}) => (
   <Provider store={ store } >
@@ -34,6 +34,7 @@ describe('<RequestDetail />', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
   let initialState;
+  let roles;
 
   beforeEach(() => {
     initialProps = {
@@ -41,6 +42,7 @@ describe('<RequestDetail />', () => {
         title: 'Foo'
       }]
     };
+    roles = {};
     mockStore = configureStore(middlewares);
     initialState = {
       requestReducer: {
@@ -237,10 +239,11 @@ describe('<RequestDetail />', () => {
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
 
       await act(async() => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } }>
+          <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
               <RequestDetail { ...initialProps } />
             </ComponentWrapper>
@@ -272,10 +275,11 @@ describe('<RequestDetail />', () => {
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
 
       await act(async() => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } }>
+          <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
               <RequestDetail { ...initialProps } />
             </ComponentWrapper>
@@ -303,10 +307,11 @@ describe('<RequestDetail />', () => {
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
 
       await act(async() => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } }>
+          <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
               <RequestDetail { ...initialProps } />
             </ComponentWrapper>
