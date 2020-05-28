@@ -13,7 +13,6 @@ import { RowWrapper } from '@patternfly/react-table';
 import { Table } from '@patternfly/react-table';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 import TableEmptyState from '../../../presentational-components/shared/table-empty-state';
-import { APPROVAL_ADMIN_PERSONA } from '../../../helpers/shared/helpers';
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
 import ActionModal from '../../../smart-components/request/action-modal';
@@ -558,7 +557,7 @@ describe('<Requests />', () => {
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );
@@ -596,7 +595,7 @@ describe('<Requests />', () => {
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );
@@ -634,7 +633,7 @@ describe('<Requests />', () => {
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );

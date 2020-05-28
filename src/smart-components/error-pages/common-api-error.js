@@ -11,11 +11,13 @@ import {
 import Exclamation from '@patternfly/react-icons/dist/js/icons/exclamation-icon';
 
 const TITLES = {
-  '/401': 'Unauthorized'
+  '/401': 'Unauthorized',
+  '/403': 'Unauthorized'
 };
 
 const MESSAGES = {
-  '/401': 'You are not authorized to access this section: '
+  '/401': 'You are not authorized to access this section: ',
+  '/403': 'You are not authorized to access this section: '
 };
 
 const CommonApiError = () => {

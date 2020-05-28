@@ -19,8 +19,25 @@ axiosInstance.interceptors.request.use(async config => {
   await window.insights.chrome.auth.getUser();
   return config;
 });
+
+const unauthorizedInterceptor = (error = {}) => {
+  if (error.status === 403) {
+    throw {
+      ...error,
+      redirect: {
+        pathname: '/403',
+        message: error.config?.url
+      }
+    };
+  }
+  else {
+    throw error;
+  }
+};
+
 axiosInstance.interceptors.response.use(resolveInterceptor);
 axiosInstance.interceptors.response.use(null, errorInterceptor);
+axiosInstance.interceptors.response.use(null, unauthorizedInterceptor);
 
 // Approval Apis
 

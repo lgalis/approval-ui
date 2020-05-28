@@ -1,7 +1,6 @@
 import { MemoryRouter, Route, Redirect } from 'react-router-dom';
 import UserContext from '../../user-context';
 import ProtectedRoute from '../../routing/protected-route';
-import { APPROVAL_ADMIN_PERSONA, APPROVAL_REQUESTER_PERSONA } from '../../helpers/shared/helpers';
 
 describe('<ProtectedRoute />', () => {
   const ComponentWrapper = ({ children, value }) => <MemoryRouter initialEntries={ [ '/initial' ] } initialIndex={ 0 }>
@@ -14,7 +13,7 @@ describe('<ProtectedRoute />', () => {
 
   it('is admin', () => {
     const wrapper = mount(
-      <ComponentWrapper value={ { userPersona: APPROVAL_ADMIN_PERSONA } }>
+      <ComponentWrapper value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} }>
         <ProtectedRoute />
       </ComponentWrapper>
     );
@@ -26,7 +25,7 @@ describe('<ProtectedRoute />', () => {
 
   it('is not admin', () => {
     const wrapper = mount(
-      <ComponentWrapper value={ { userPersona: APPROVAL_REQUESTER_PERSONA } }>
+      <ComponentWrapper value={ { userRoles: {}} }>
         <ProtectedRoute />
       </ComponentWrapper>
     );

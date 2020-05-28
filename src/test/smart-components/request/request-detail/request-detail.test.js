@@ -17,7 +17,6 @@ import { BreadcrumbItem } from '@patternfly/react-core';
 import routes from '../../../../constants/routes';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 import requestReducer, { requestsInitialState } from '../../../../redux/reducers/request-reducer';
-import { APPROVAL_ADMIN_PERSONA } from '../../../../helpers/shared/helpers';
 import UserContext from '../../../../user-context';
 import ActionModal from '../../../../smart-components/request/action-modal';
 
@@ -240,7 +239,7 @@ describe('<RequestDetail />', () => {
 
       await act(async() => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } }>
+          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} }>
             <ComponentWrapper store={ store }>
               <RequestDetail { ...initialProps } />
             </ComponentWrapper>
@@ -275,7 +274,7 @@ describe('<RequestDetail />', () => {
 
       await act(async() => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } }>
+          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} }>
             <ComponentWrapper store={ store }>
               <RequestDetail { ...initialProps } />
             </ComponentWrapper>
@@ -306,7 +305,7 @@ describe('<RequestDetail />', () => {
 
       await act(async() => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } }>
+          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} }>
             <ComponentWrapper store={ store }>
               <RequestDetail { ...initialProps } />
             </ComponentWrapper>

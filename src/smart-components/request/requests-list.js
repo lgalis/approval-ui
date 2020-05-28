@@ -78,7 +78,7 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
     initialState(filterValue.name, filterValue.requester)
   );
 
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
 
   const dispatch = useDispatch();
   const intl = useIntl();
@@ -147,7 +147,7 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
     <Fragment>
       <TopToolbar>
         <TopToolbarTitle title="Approval"/>
-        { isApprovalAdmin(userPersona) && <AppTabs/> }
+        { isApprovalAdmin(userRoles) && <AppTabs/> }
       </TopToolbar>
       <TableToolbarView
         sortBy={ sortBy }
