@@ -16,6 +16,7 @@ import TableEmptyState from '../../../presentational-components/shared/table-emp
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
 import ActionModal from '../../../smart-components/request/action-modal';
+import { APPROVAL_ADMINISTRATOR_ROLE } from '../../../helpers/shared/helpers';
 
 const ComponentWrapper = ({ store, initialEntries = [ '/requests' ], children }) => (
   <Provider store={ store } value={ { roles: []} }>
@@ -555,9 +556,11 @@ describe('<Requests />', () => {
       const store = registry.getStore();
 
       let wrapper;
+      const roles = {};
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} } >
+          <UserContext.Provider value={ { userRoles: roles } } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );
@@ -595,7 +598,7 @@ describe('<Requests />', () => {
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} } >
+          <UserContext.Provider value={ { userRoles: { APPROVAL_APPROVER_ROLE: true }} } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );
@@ -633,7 +636,7 @@ describe('<Requests />', () => {
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} } >
+          <UserContext.Provider value={ { userRoles: { APPROVAL_APPROVER_ROLE: true }} } >
             <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
           </UserContext.Provider>
         );

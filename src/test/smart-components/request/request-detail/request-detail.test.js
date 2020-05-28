@@ -19,6 +19,7 @@ import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/fronte
 import requestReducer, { requestsInitialState } from '../../../../redux/reducers/request-reducer';
 import UserContext from '../../../../user-context';
 import ActionModal from '../../../../smart-components/request/action-modal';
+import { APPROVAL_ADMINISTRATOR_ROLE } from '../../../../helpers/shared/helpers';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=123' ]}) => (
   <Provider store={ store } >
@@ -33,6 +34,7 @@ describe('<RequestDetail />', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
   let initialState;
+  let roles;
 
   beforeEach(() => {
     initialProps = {
@@ -40,6 +42,7 @@ describe('<RequestDetail />', () => {
         title: 'Foo'
       }]
     };
+    roles = {};
     mockStore = configureStore(middlewares);
     initialState = {
       requestReducer: {
@@ -236,10 +239,11 @@ describe('<RequestDetail />', () => {
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
 
       await act(async() => {
         wrapper = mount(
-          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} }>
+          <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
               <RequestDetail { ...initialProps } />
             </ComponentWrapper>
@@ -302,10 +306,10 @@ describe('<RequestDetail />', () => {
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
-
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
       await act(async() => {
         wrapper = mount(
-          <UserContext.Provider value={ { userRoles: { APPROVAL_ADMIN_ROLE: true }} }>
+          <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
               <RequestDetail { ...initialProps } />
             </ComponentWrapper>

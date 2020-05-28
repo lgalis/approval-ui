@@ -22,7 +22,6 @@ export const AppTabs = () => {
   const handleTabClick = (_event, tabIndex) =>
     history.push({ pathname: tabItems[tabIndex].name, search });
 
-  console.log('Debug - tabItems', tabItems);
   return (
     <Tabs className="pf-u-mt-sm" activeKey={ activeTab ? activeTab.eventKey : 0 } onSelect={ handleTabClick }>
       { tabItems.map((item) => <Tab title={ item.title } key={ item.eventKey } eventKey={ item.eventKey } name={ item.name }/>) }

@@ -10,20 +10,26 @@ import {
 describe('Shared helpers', () => {
   describe('#approvalPersona', () => {
     let roles;
+
+    beforeEach(() => {
+      roles = {};
+    });
+
     it('is admin', () => {
-      roles = [{ name: APPROVAL_APPROVER_ROLE }, { name: APPROVAL_ADMINISTRATOR_ROLE }];
+      roles[APPROVAL_APPROVER_ROLE] = true;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
 
       expect(approvalPersona(roles)).toEqual(APPROVAL_ADMIN_PERSONA);
     });
 
     it('is approver', () => {
-      roles = [{ name: APPROVAL_APPROVER_ROLE }];
+      roles[APPROVAL_APPROVER_ROLE] = true;
 
       expect(approvalPersona(roles)).toEqual(APPROVAL_APPROVER_PERSONA);
     });
 
     it('is requester', () => {
-      roles = [{ name: 'non-sense' }];
+      roles = [{}];
 
       expect(approvalPersona(roles)).toEqual(APPROVAL_REQUESTER_PERSONA);
     });

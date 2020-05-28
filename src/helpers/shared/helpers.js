@@ -44,5 +44,6 @@ export const approvalRoles = (roles) => {
   if (roles && roles.find(role => role.name === APPROVAL_APPROVER_ROLE) !== undefined) {
     userRoles[APPROVAL_APPROVER_ROLE] = true;
   }
+
   return userRoles;
 };

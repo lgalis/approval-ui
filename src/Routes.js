@@ -1,7 +1,6 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import React, { lazy, useContext } from 'react';
 import ProtectedRoute from './routing/protected-route';
-import CommonApiError from './smart-components/error-pages/common-api-error';
 import paths from './constants/routes';
 import UserContext from './user-context';
 import { isApprovalAdmin, isApprovalApprover } from './helpers/shared/helpers';
@@ -11,10 +10,13 @@ const Requests = lazy(() => import(/* webpackChunkName: "requests" */ './smart-c
 const RequestDetail = lazy(() => import(/* webpackChunkName: "request-detail" */ './smart-components/request/request-detail/request-detail'));
 const Workflows = lazy(() => import(/* webpackChunkName: "workflows" */ './smart-components/workflow/workflows'));
 const AllRequests = lazy(() => import(/* webpackChunkName: "requests" */ './smart-components/request/allrequests'));
+const CommonApiError = lazy(() => import(/* webpackChunkName: "error-page" */ './smart-components/error-pages/common-api-error'));
+
 const errorPaths = [ '/400', '/401', '/403', '/404' ];
 
 export const Routes = () => {
   const { userRoles: userRoles } = useContext(UserContext);
+  const location = useLocation();
 
   const defaultRequestPath = () => {
     if (isApprovalApprover(userRoles)) {
@@ -22,8 +24,14 @@ export const Routes = () => {
 
     if (isApprovalAdmin(userRoles)) {
       return paths.allrequests.index;
-    } else {
-      return errorPaths;
+    }
+    else {
+      return {
+        pathname: '/403',
+        state: {
+          from: location
+        }
+      };
     }
   };
 
