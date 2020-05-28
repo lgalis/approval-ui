@@ -12,6 +12,7 @@ import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/
 import UserContext from '../../../user-context';
 import useQuery from '../../../utilities/use-query';
 import routes from '../../../constants/routes';
+import { approvalPersona } from '../../../helpers/shared/helpers';
 
 const initialState = {
   isFetching: true
@@ -40,10 +41,10 @@ const RequestDetail = () => {
   const [{ request: id }] = useQuery([ 'request' ]);
   const location = useLocation();
   const dispatch = useDispatch();
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
 
   useEffect(() => {
-    Promise.all([ dispatch(fetchRequest(id, userPersona)), dispatch(fetchRequestContent(id, userPersona)) ])
+    Promise.all([ dispatch(fetchRequest(id, approvalPersona(userRoles))), dispatch(fetchRequestContent(id, approvalPersona(userRoles))) ])
     .then(() => stateDispatch({ type: 'setFetching', payload: false }));
   }, []);
 

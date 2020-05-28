@@ -14,10 +14,6 @@ export const scrollToTop = () => document.getElementById('root').scrollTo({
   left: 0
 });
 
-export const getCurrentPage = (limit = 1, offset = 0) => Math.floor(offset / limit) + 1;
-
-export const getNewPage = (page = 1, offset) => (page - 1) * offset;
-
 export const isRequestStateActive = (state) => activeStates.includes(state);
 
 export const timeAgo = (date) => (
@@ -26,15 +22,28 @@ export const timeAgo = (date) => (
   </span>
 );
 
-export const isApprovalAdmin = (persona) => (persona === APPROVAL_ADMIN_PERSONA);
-export const isApprovalApprover = (persona) => (persona === APPROVAL_ADMIN_PERSONA || persona === APPROVAL_APPROVER_PERSONA);
+export const isApprovalAdmin = (roles) => roles && roles[APPROVAL_ADMINISTRATOR_ROLE];
+export const isApprovalApprover = (roles) => roles && roles[APPROVAL_APPROVER_ROLE];
 
 export const approvalPersona = (userRoles) => {
-  if (userRoles && userRoles.find(role => role.name === APPROVAL_ADMINISTRATOR_ROLE) !== undefined) {
+  if (isApprovalAdmin(userRoles)) {
     return APPROVAL_ADMIN_PERSONA;
-  } else if (userRoles && userRoles.find(role => role.name === APPROVAL_APPROVER_ROLE) !== undefined) {
+  } else if (isApprovalApprover(userRoles)) {
     return APPROVAL_APPROVER_PERSONA;
   }
 
   return APPROVAL_REQUESTER_PERSONA;
+};
+
+export const approvalRoles = (roles) => {
+  const userRoles  = {};
+  if (roles && roles.find(role => role.name === APPROVAL_ADMINISTRATOR_ROLE) !== undefined) {
+    userRoles[APPROVAL_ADMINISTRATOR_ROLE] = true;
+  }
+
+  if (roles && roles.find(role => role.name === APPROVAL_APPROVER_ROLE) !== undefined) {
+    userRoles[APPROVAL_APPROVER_ROLE] = true;
+  }
+
+  return userRoles;
 };

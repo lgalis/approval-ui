@@ -13,7 +13,7 @@ import '@redhat-cloud-services/frontend-components-notifications/index.css';
 import '@redhat-cloud-services/frontend-components/index.css';
 import { getRbacRoleApi } from './helpers/shared/user-login';
 import UserContext from './user-context';
-import { approvalPersona } from './helpers/shared/helpers';
+import { approvalRoles } from './helpers/shared/helpers';
 
 import './App.scss';
 
@@ -29,7 +29,7 @@ if (pathName[0] === 'beta') {
 
 const App = () => {
   const [ auth, setAuth ] = useState(false);
-  const [ userPersona, setUserPersona ] = useState([]);
+  const [ userRoles, setUserRoles ] = useState({});
 
   useEffect(() => {
     insights.chrome.init();
@@ -39,7 +39,7 @@ const App = () => {
       .then(() =>
         getRbacRoleApi()
         .listRoles(defaultSettings.limit, 0, 'Approval ', 'principal')
-        .then((result) => setUserPersona(approvalPersona(result?.data)))
+        .then((result) => setUserRoles(approvalRoles(result?.data)))
       )
     ]).then(() => setAuth(true));
 
@@ -54,7 +54,7 @@ const App = () => {
     <BrowserRouter basename={ `${release}${pathName[0]}/${pathName[1]}/${pathName[2]}` }>
       <Suspense fallback={ <AppPlaceholder /> }>
         <IntlProvider locale="en">
-          <UserContext.Provider value={ { userPersona } }>
+          <UserContext.Provider value={ { userRoles } }>
             <React.Fragment>
               <NotificationsPortal />
               <Main className="pf-u-p-0 pf-u-ml-0">

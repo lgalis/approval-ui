@@ -28,7 +28,7 @@ import routes from '../../../constants/routes';
 
 export const Request = ({ item, isExpanded, toggleExpand }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
 
   const onKebabToggle = isOpen => {
     setIsKebabOpen(isOpen);
@@ -39,7 +39,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
   };
 
   const checkCapability = (item, capability) => {
-    if (isApprovalAdmin(userPersona)) {
+    if (isApprovalAdmin(userRoles)) {
       return true;
     }
 

@@ -3,7 +3,7 @@ import { Route, useHistory } from 'react-router-dom';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import {
-  APPROVAL_APPROVER_PERSONA,
+  APPROVAL_APPROVER_PERSONA, isApprovalAdmin,
   isApprovalApprover,
   isRequestStateActive
 } from '../../helpers/shared/helpers';
@@ -12,7 +12,7 @@ import routesLinks from '../../constants/routes';
 import RequestsList from './requests-list';
 
 const Requests = () => {
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
   const history = useHistory();
 
   const routes = () => <Fragment>
@@ -27,7 +27,8 @@ const Requests = () => {
 
   const actionsDisabled = (requestData) => requestData &&
     requestData.state ?
-    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 || !isApprovalApprover(userPersona) : true;
+    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 ||
+      (!isApprovalApprover(userRoles) && !isApprovalAdmin(userRoles)) : true;
 
   const actionResolver = (requestData) => {
     return (requestData && requestData.id && actionsDisabled(requestData) ? null :
