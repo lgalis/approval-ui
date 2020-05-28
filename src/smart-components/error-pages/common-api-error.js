@@ -12,7 +12,7 @@ import Exclamation from '@patternfly/react-icons/dist/js/icons/exclamation-icon'
 
 const TITLES = {
   '/401': 'Unauthorized',
-  '/403': 'Unauthorized'
+  '/403': 'Forbidden'
 };
 
 const MESSAGES = {
@@ -21,10 +21,7 @@ const MESSAGES = {
 };
 
 const CommonApiError = () => {
-  const {
-    state: { from },
-    pathname
-  } = useLocation();
+  const { state, pathname } = useLocation();
 
   return (
     <Bullseye className="global-primary-background">
@@ -36,8 +33,13 @@ const CommonApiError = () => {
           <Title size="lg">{ TITLES[pathname] }</Title>
         </div>
         <EmptyStateBody>
-          { MESSAGES[pathname] } { from.pathname }. If you believe this is a
-          mistake, please contact support.
+          { MESSAGES[pathname] }
+          <span>
+            { state?.from?.pathname }
+            { state?.from?.search }
+          </span>
+          <br />
+          If you believe this is a mistake, please contact support.
         </EmptyStateBody>
         <EmptyStatePrimary>
           <Link to="/" >Return to approval</Link>
