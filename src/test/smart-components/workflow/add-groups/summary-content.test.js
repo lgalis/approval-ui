@@ -7,19 +7,33 @@ import rendererContext from '@data-driven-forms/react-form-renderer/dist/cjs/ren
 describe('<SummaryContent />', () => {
   let formData;
 
-  beforeEach(() => {
+  it('should render correctly without groups', () => {
     formData = {
       name: 'Group summary name',
       description: 'Group summary description',
       wfGroups: []
     };
+
+    const wrapper = mount(<rendererContext.Provider value={ { formOptions: {
+      getState: () => ({ values: formData })
+    }} }>
+      <SummaryContent />
+    </rendererContext.Provider>);
+    expect(toJson(wrapper)).toMatchSnapshot();
   });
 
-  it('should render correctly', () => {
+  it('should render correctly with groups', () => {
+    formData = {
+      name: 'Group summary name',
+      description: 'Group summary description',
+      wfGroups: [
+        { value: '1', label: 'Group 1' },
+        { value: 'G2', label: 'Group 2' }
+      ]
+    };
+
     const wrapper = mount(<rendererContext.Provider value={ { formOptions: {
-      getState: () => ({
-        values: formData
-      })
+      getState: () => ({ values: formData })
     }} }>
       <SummaryContent />
     </rendererContext.Provider>);

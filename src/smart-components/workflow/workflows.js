@@ -80,10 +80,15 @@ const Workflows = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const updateWorkflows = (pagination) => {
+    stateDispatch({ type: 'setFetching', payload: true });
+    return dispatch(fetchWorkflows(pagination))
+    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
+    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
+  };
+
   useEffect(() => {
-    dispatch(
-      fetchWorkflows(defaultSettings)
-    ).then(() => stateDispatch({ type: 'setFetching', payload: false }));
+    updateWorkflows(defaultSettings);
     scrollToTop();
   }, []);
 
@@ -97,35 +102,25 @@ const Workflows = () => {
     );
   };
 
-  const handlePagination = (pagination) => {
-    stateDispatch({ type: 'setFetching', payload: true });
-    dispatch(fetchWorkflows(pagination))
-    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
-    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
-  };
-
   const onSort = (_e, index, direction, { property }) => {
-    stateDispatch({ type: 'setFetching', payload: true });
     dispatch(sortWorkflows({ index, direction, property }));
-    return dispatch(fetchWorkflows())
-    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
-    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
+    return updateWorkflows();
   };
 
   const routes = () => <Fragment>
     <Route exact path={ routesLinks.workflows.add } render={ props => <AddWorkflow { ...props }
-      postMethod={ handlePagination } /> }/>
+      postMethod={ updateWorkflows } /> }/>
     <Route exact path={ routesLinks.workflows.editInfo } render={ props => <EditWorkflowInfo editType='info' { ...props }
-      postMethod={ handlePagination } /> }/>
+      postMethod={ updateWorkflows } /> }/>
     <Route exact path={ routesLinks.workflows.editGroups } render={ props => <EditWorkflowGroups editType='groups' { ...props }
-      postMethod={ handlePagination } /> }/>
+      postMethod={ updateWorkflows } /> }/>
     <Route exact path={ routesLinks.workflows.editSequence } render={ props => <EditWorkflowInfo editType='sequence' { ...props }
-      postMethod={ handlePagination } /> }/>
+      postMethod={ updateWorkflows } /> }/>
     <Route exact path={ routesLinks.workflows.remove }
       render={ props => <RemoveWorkflow
         { ...props }
         ids={ selectedWorkflows }
-        fetchData={ handlePagination }
+        fetchData={ updateWorkflows }
         setSelectedWorkflows={ setSelectedWorkflows }
       /> }
     />
@@ -212,7 +207,7 @@ const Workflows = () => {
         isSelectable={ true }
         createRows={ createRows }
         columns={ columns }
-        fetchData={ handlePagination }
+        fetchData={ updateWorkflows }
         routes={ routes }
         actionResolver={ actionResolver }
         titlePlural="approval processes"
