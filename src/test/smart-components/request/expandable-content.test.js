@@ -55,7 +55,7 @@ describe('requests - expendableContent', () => {
 
     const ComponentWrapper = ({ store, children }) => (
       <Provider store={ store }>
-        <UserContext.Provider value={ { userPersona: 'approval/requester' } }>
+        <UserContext.Provider value={ { userRoles: {}} }>
           <MemoryRouter initialEntries={ [ '' ] }>
             { children }
           </MemoryRouter>
