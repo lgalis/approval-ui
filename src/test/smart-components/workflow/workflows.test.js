@@ -642,4 +642,194 @@ describe('<Workflows />', () => {
 
     jest.useRealTimers();
   });
+
+  describe('table removal actions', () => {
+    const wf1 = {
+      id: '123',
+      name: 'wf1',
+      group_refs: []
+    };
+    const wf2 = {
+      id: '456',
+      name: 'wf2',
+      group_refs: [ '' ]
+    };
+    const wf3 = {
+      id: '789',
+      name: 'wf',
+      group_refs: [ '' ]
+    };
+    let storeReal;
+
+    beforeEach(() => {
+      apiClientMock.reset();
+      apiClientMock.get(
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+        mockOnce({
+          status: 200,
+          body: {
+            meta: { count: 3, limit: 50, offset: 0 },
+            data: [ wf1, wf2, wf3 ]
+          }
+        })
+      );
+
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+      storeReal = registry.getStore();
+    });
+
+    it('should select all workflows and delete them', async () => {
+      expect.assertions(7);
+
+      let wrapper;
+      await act(async()=> {
+        wrapper = mount(
+          <ComponentWrapper store={ storeReal }>
+            <Route path={ routes.workflows.index } component={ Workflows } />
+          </ComponentWrapper>
+        );
+      });
+      wrapper.update();
+
+      await act(async () => {
+        wrapper.find('input[type="checkbox"]').first().simulate('change', { target: { checked: true }});
+      });
+      wrapper.update();
+      await act(async () => {
+        wrapper.find('Link#remove-multiple-workflows').simulate('click', { button: 0 });
+      });
+      wrapper.update();
+
+      expect(wrapper.find('ModalBoxBody').find('p').text()).toEqual('Removing 3 approval processes');
+
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.remove);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('');
+
+      // Delete endpoints
+      apiClientMock.delete(
+        `${APPROVAL_API_BASE}/workflows/123`,
+        mockOnce((_req, res) => {
+          expect(true).toEqual(true); // just check that it was called
+          return res.status(200);
+        })
+      );
+
+      apiClientMock.delete(
+        `${APPROVAL_API_BASE}/workflows/456`,
+        mockOnce((_req, res) => {
+          expect(true).toEqual(true); // just check that it was called
+          return res.status(200);
+        })
+      );
+
+      apiClientMock.delete(
+        `${APPROVAL_API_BASE}/workflows/789`,
+        mockOnce((_req, res) => {
+          expect(true).toEqual(true); // just check that it was called
+          return res.status(200);
+        })
+      );
+
+      // wf refresh
+      apiClientMock.get(
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+        mockOnce((req, res) => {
+          expect(req.url().query).toEqual({
+            'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'sequence:asc'
+          });
+          return res.status(200).body({
+            meta: { count: 0, limit: 50, offset: 0 },
+            data: [ ]
+          });
+        })
+      );
+
+      await act(async () => {
+        wrapper.find('button#submit-remove-workflow').simulate('click');
+      });
+    });
+
+    it('should select and deselect all workflows', async () => {
+      let wrapper;
+      await act(async()=> {
+        wrapper = mount(
+          <ComponentWrapper store={ storeReal }>
+            <Route path={ routes.workflows.index } component={ Workflows } />
+          </ComponentWrapper>
+        );
+      });
+      wrapper.update();
+
+      expect(wrapper.find('Link#remove-multiple-workflows').find('button').props().disabled).toEqual(true);
+
+      await act(async () => {
+        wrapper.find('input[type="checkbox"]').first().simulate('change', { target: { checked: true }});
+      });
+      wrapper.update();
+
+      expect(wrapper.find('Link#remove-multiple-workflows').find('button').props().disabled).toEqual(false);
+
+      await act(async () => {
+        wrapper.find('input[type="checkbox"]').first().simulate('change', { target: { checked: false }});
+      });
+      wrapper.update();
+
+      expect(wrapper.find('Link#remove-multiple-workflows').find('button').props().disabled).toEqual(true);
+    });
+
+    it('should select only one workflow and delete it', async () => {
+      expect.assertions(5);
+
+      let wrapper;
+      await act(async()=> {
+        wrapper = mount(
+          <ComponentWrapper store={ storeReal }>
+            <Route path={ routes.workflows.index } component={ Workflows } />
+          </ComponentWrapper>
+        );
+      });
+      wrapper.update();
+
+      await act(async () => {
+        wrapper.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true }});
+      });
+      wrapper.update();
+      await act(async () => {
+        wrapper.find('Link#remove-multiple-workflows').simulate('click', { button: 0 });
+      });
+      wrapper.update();
+
+      expect(wrapper.find('ModalBoxBody').find('p').text()).toEqual('Removing 1 approval process');
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.remove);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('');
+
+      // Delete endpoints
+      apiClientMock.delete(
+        `${APPROVAL_API_BASE}/workflows/123`,
+        mockOnce((_req, res) => {
+          expect(true).toEqual(true); // just check that it was called
+          return res.status(200);
+        })
+      );
+
+      // wf refresh
+      apiClientMock.get(
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+        mockOnce((req, res) => {
+          expect(req.url().query).toEqual({
+            'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'sequence:asc'
+          });
+          return res.status(200).body({
+            meta: { count: 0, limit: 50, offset: 0 },
+            data: [ ]
+          });
+        })
+      );
+
+      await act(async () => {
+        wrapper.find('button#submit-remove-workflow').simulate('click');
+      });
+    });
+  });
 });
