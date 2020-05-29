@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import requestReducer, { requestsInitialState } from '../redux/reducers/request-reducer';
 import workflowReducer, { workflowsInitialState } from '../redux/reducers/workflow-reducer';
 import groupReducer, { groupsInitialState } from '../redux/reducers/group-reducer';
+import unAuthorizedMiddleware from './unauthorized-middleware';
 
 const getStore = (middlewares = []) => {
   const registry = new ReducerRegistry(
@@ -14,6 +15,7 @@ const getStore = (middlewares = []) => {
     [
       thunk,
       promiseMiddleware(),
+      unAuthorizedMiddleware,
       notificationsMiddleware({
         errorTitleKey: [ 'errors', 'message', 'statusText' ],
         errorDescriptionKey: [
