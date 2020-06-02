@@ -154,7 +154,6 @@ describe('<EditWorkflowGroupsModal />', () => {
       mockOnce({ body: { data: [{ uuid: 'id', name: 'name' }]}})
     );
 
-      { body: { data: [{ uuid: 'uuid', name: 'name' }]}});
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));

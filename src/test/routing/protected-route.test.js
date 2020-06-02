@@ -32,6 +32,6 @@ describe('<ProtectedRoute />', () => {
     );
 
     expect(wrapper.find(Route)).toHaveLength(1);
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/401');
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/403');
   });
 });
