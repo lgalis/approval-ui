@@ -45,7 +45,8 @@ describe('<RequestDetail />', () => {
     initialState = {
       requestReducer: {
         isRequestDataLoading: true,
-        selectedRequest: { id: 123 }
+        selectedRequest: { id: 123 },
+        requestContent: {}
       }
     };
   });
