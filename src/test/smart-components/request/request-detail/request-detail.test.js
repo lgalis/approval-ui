@@ -44,7 +44,9 @@ describe('<RequestDetail />', () => {
     mockStore = configureStore(middlewares);
     initialState = {
       requestReducer: {
-        isRequestDataLoading: true
+        isRequestDataLoading: true,
+        selectedRequest: { id: 123 },
+        requestContent: {}
       }
     };
   });
