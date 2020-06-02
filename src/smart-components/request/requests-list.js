@@ -7,7 +7,12 @@ import { useIntl } from 'react-intl';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import isEmpty from 'lodash/isEmpty';
 
-import { fetchRequests, expandRequest, sortRequests, setFilterValueRequests, clearFilterValueRequests } from '../../redux/actions/request-actions';
+import { fetchRequests,
+  expandRequest,
+  sortRequests,
+  setFilterValueRequests,
+  clearFilterValueRequests,
+  resetRequestList } from '../../redux/actions/request-actions';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
 import { isApprovalAdmin } from '../../helpers/shared/helpers';
@@ -90,10 +95,16 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
 
+  const resetList = () => {
+    dispatch(resetRequestList());
+  };
+
   useEffect(() => {
+    console.log('debug - persona', persona);
+    resetList();
     updateRequests();
     scrollToTop();
-  }, []);
+  }, [ persona ]);
 
   const handleFilterChange = (value, type) => {
     const updateFilter = () => dispatch(setFilterValueRequests(value, type));
