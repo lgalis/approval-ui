@@ -15,7 +15,7 @@ import { fetchRequests,
   resetRequestList } from '../../redux/actions/request-actions';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
-import { isApprovalAdmin } from '../../helpers/shared/helpers';
+import {APPROVAL_APPROVER_PERSONA, isApprovalAdmin, isApprovalApprover} from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
 import asyncDebounce from '../../utilities/async-debounce';
@@ -89,6 +89,11 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
   const intl = useIntl();
 
   const updateRequests = (pagination) => {
+    console.log('Debug - userRoles', userRoles,  isApprovalApprover(userRoles),  persona === APPROVAL_APPROVER_PERSONA);
+    if ( !isApprovalApprover(userRoles) && persona === APPROVAL_APPROVER_PERSONA ) {
+      stateDispatch({ type: 'setFetching', payload: false });
+      return;
+    }
     stateDispatch({ type: 'setFetching', payload: true });
     return dispatch(fetchRequests(persona, pagination))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
