@@ -16,16 +16,21 @@ import TableEmptyState from '../../../presentational-components/shared/table-emp
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
 import ActionModal from '../../../smart-components/request/action-modal';
-import { APPROVAL_ADMINISTRATOR_ROLE, APPROVAL_APPROVER_ROLE } from '../../../helpers/shared/helpers';
+import { APPROVAL_APPROVER_ROLE } from '../../../helpers/shared/helpers';
+
+const roles = {};
+roles[APPROVAL_APPROVER_ROLE] = true;
 
 const ComponentWrapper = ({ store, initialEntries = [ '/requests' ], children }) => (
-  <Provider store={ store } value={ { roles: []} }>
-    <MemoryRouter initialEntries={ initialEntries }>
-      <IntlProvider locale="en">
-        { children }
-      </IntlProvider>
-    </MemoryRouter>
-  </Provider>
+  <UserContext.Provider value={ { userRoles: roles } } >
+    <Provider store={ store } >
+      <MemoryRouter initialEntries={ initialEntries }>
+        <IntlProvider locale="en">
+          { children }
+        </IntlProvider>
+      </MemoryRouter>
+    </Provider>
+  </UserContext.Provider>
 );
 
 describe('<Requests />', () => {
@@ -540,10 +545,7 @@ describe('<Requests />', () => {
       portfolio: 'LGTestNoTags'
     };
 
-    let roles = {};
-
     beforeEach(() => {
-      roles = {};
       apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
         status: 200,
         body: {
@@ -559,12 +561,9 @@ describe('<Requests />', () => {
       const store = registry.getStore();
 
       let wrapper;
-      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userRoles: roles } } >
-            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
-          </UserContext.Provider>
+          <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
         );
       });
       wrapper.update();
@@ -596,14 +595,11 @@ describe('<Requests />', () => {
       const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
-      roles[APPROVAL_APPROVER_ROLE] = true;
 
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userRoles: roles } } >
-            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
-          </UserContext.Provider>
+          <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
         );
       });
       wrapper.update();
@@ -637,12 +633,9 @@ describe('<Requests />', () => {
       const store = registry.getStore();
 
       let wrapper;
-      roles[APPROVAL_APPROVER_ROLE] = true;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userRoles: roles } } >
-            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
-          </UserContext.Provider>
+          <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
         );
       });
       wrapper.update();
