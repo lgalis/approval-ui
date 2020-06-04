@@ -14,7 +14,7 @@ import { CheckCircleIcon,
   OnRunningIcon,
   ErrorCircleOIcon,
   ExclamationCircleIcon } from '@patternfly/react-icons';
-import { EmptyTable } from '@redhat-cloud-services/frontend-components';
+import { EmptyTable } from '@redhat-cloud-services/frontend-components/components/cjs/EmptyTable';
 
 const operationInfo = {
   memo: { displayName: 'Comment from', icon: <CommentIcon/> },

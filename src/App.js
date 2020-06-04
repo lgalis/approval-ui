@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { Main } from '@redhat-cloud-services/frontend-components/components/Main';
-import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications/';
+import { Main } from '@redhat-cloud-services/frontend-components/components/cjs/Main';
+import NotificationsPortal from '@redhat-cloud-services/frontend-components-notifications/dist/cjs/NotificationPortal';
 import { Routes } from './Routes';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
 import { defaultSettings } from './helpers/shared/pagination';
@@ -10,7 +10,7 @@ import { IntlProvider } from 'react-intl';
 import { BrowserRouter } from 'react-router-dom';
 
 import '@redhat-cloud-services/frontend-components-notifications/index.css';
-import '@redhat-cloud-services/frontend-components/index.css';
+import '@redhat-cloud-services/frontend-components/components/index.css';
 import { getRbacRoleApi } from './helpers/shared/user-login';
 import UserContext from './user-context';
 import { approvalPersona } from './helpers/shared/helpers';

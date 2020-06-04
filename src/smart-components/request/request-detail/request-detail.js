@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useReducer } from 'react';
 import { Route, useLocation, Switch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@patternfly/react-core';
-import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
+import { Section } from '@redhat-cloud-services/frontend-components/components/cjs/Section';
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
 import RequestTranscript from './request-transcript';
