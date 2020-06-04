@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import {
-  Bullseye,
   Button,
   Title,
   EmptyState,
@@ -23,7 +22,7 @@ const MESSAGES = {
 };
 
 const CommonApiError = () => {
-  const { state, pathname } = useLocation();
+  const { pathname } = useLocation();
   const { history } = useHistory();
   return (
     <Fragment>
@@ -50,7 +49,7 @@ const CommonApiError = () => {
           </EmptyStatePrimary>
         </EmptyState>
       </div>
-      </Fragment>
+    </Fragment>
   );
 };
 
