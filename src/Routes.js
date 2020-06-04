@@ -19,12 +19,8 @@ export const Routes = () => {
   const location = useLocation();
 
   const defaultRequestPath = () => {
-    if (isApprovalApprover(userRoles)) {
+    if (isApprovalApprover(userRoles) || isApprovalAdmin(userRoles)) {
       return paths.requests.index;}
-
-    if (isApprovalAdmin(userRoles)) {
-      return paths.allrequests.index;
-    }
     else {
       return {
         pathname: '/403',
