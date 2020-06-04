@@ -41,9 +41,9 @@ export const approvalPersona = (userRoles) => {
 export const approvalRoles = (roles = []) => {
   const userRoles  = {};
   roles.forEach(role => {
-    if ( role.name === APPROVAL_ADMINISTRATOR_ROLE ) {
+    if (role.name === APPROVAL_ADMINISTRATOR_ROLE) {
       userRoles[APPROVAL_ADMINISTRATOR_ROLE] = true;
-    }else if (role.name === APPROVAL_APPROVER_ROLE) {
+    } else if (role.name === APPROVAL_APPROVER_ROLE) {
       userRoles[APPROVAL_APPROVER_ROLE] = true;
     }
   });

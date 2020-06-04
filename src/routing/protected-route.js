@@ -6,7 +6,7 @@ import { useIsApprovalAdmin } from '../helpers/shared/helpers';
 const ProtectedRoute = (props) => {
   const { userRoles: userRoles } = useContext(UserContext);
   const location = useLocation();
-  const isApprovalAdmin = useIsApprovalAdmin(userRoles)
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
 
   return  isApprovalAdmin ? (
     <Route { ...props } />

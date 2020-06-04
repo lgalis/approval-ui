@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import { AddCircleOIcon } from '@patternfly/react-icons/dist/js/index';
-import {useIsApprovalAdmin, useIsApprovalApprover} from '../../helpers/shared/helpers';
+import { useIsApprovalAdmin } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
 import UserContext from '../../user-context';
