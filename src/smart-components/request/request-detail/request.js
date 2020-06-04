@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import {useIsApprovalAdmin, isRequestStateActive, useIsApprovalApprover} from '../../../helpers/shared/helpers';
+import { useIsApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
 import { ActionTranscript } from './action-transcript';
 
 import {
