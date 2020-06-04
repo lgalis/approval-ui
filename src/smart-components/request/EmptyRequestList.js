@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import { AddCircleOIcon } from '@patternfly/react-icons/dist/js/index';
-import { isApprovalAdmin } from '../../helpers/shared/helpers';
+import {useIsApprovalAdmin, useIsApprovalApprover} from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
 import UserContext from '../../user-context';
@@ -16,12 +16,13 @@ import {
 
 const EmptyRequestList = () => {
   const { userRoles: userRoles } = useContext(UserContext);
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
 
   return (
     <Fragment>
       <TopToolbar>
         <TopToolbarTitle title="Approval"/>
-        { isApprovalAdmin(userRoles) && <AppTabs/> }
+        { isApprovalAdmin && <AppTabs/> }
       </TopToolbar>
       <div className="pf-u-mt-xl">
         <EmptyState className="pf-u-ml-auto pf-u-mr-auto">

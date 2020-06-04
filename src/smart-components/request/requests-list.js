@@ -15,7 +15,7 @@ import { fetchRequests,
   resetRequestList } from '../../redux/actions/request-actions';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
-import { APPROVAL_APPROVER_PERSONA, isApprovalAdmin, isApprovalApprover } from '../../helpers/shared/helpers';
+import { APPROVAL_APPROVER_PERSONA, useIsApprovalAdmin, useIsApprovalApprover } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
 import asyncDebounce from '../../utilities/async-debounce';
@@ -87,9 +87,11 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
 
   const dispatch = useDispatch();
   const intl = useIntl();
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
+  const isApprovalApprover = useIsApprovalApprover(userRoles);
 
   const updateRequests = (pagination) => {
-    if (!isApprovalApprover(userRoles) && persona === APPROVAL_APPROVER_PERSONA) {
+    if (!isApprovalApprover && persona === APPROVAL_APPROVER_PERSONA) {
       stateDispatch({ type: 'setFetching', payload: false });
       return;
     }
@@ -162,7 +164,7 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
     <Fragment>
       <TopToolbar>
         <TopToolbarTitle title="Approval"/>
-        { isApprovalAdmin(userRoles) && <AppTabs/> }
+        { isApprovalAdmin && <AppTabs/> }
       </TopToolbar>
       <TableToolbarView
         sortBy={ sortBy }
