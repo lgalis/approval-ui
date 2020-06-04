@@ -73,7 +73,7 @@ const requestsListState = (state, action) => {
   }
 };
 
-const RequestsList = ({ routes, persona, actionResolver }) => {
+const RequestsList = ({ routes, persona, actionResolver, actionsDisabled }) => {
   const { requests: { data, meta }, sortBy, filterValue } = useSelector(
     ({ requestReducer: { requests, sortBy, filterValue }}) => ({ requests, sortBy, filterValue }),
     shallowEqual
@@ -175,6 +175,7 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
         fetchData={ updateRequests }
         routes={ routes }
         actionResolver={ actionResolver }
+        actionsDisabled={ actionsDisabled }
         titlePlural="requests"
         titleSingular="request"
         pagination={ meta }
@@ -276,7 +277,11 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
 RequestsList.propTypes = {
   routes: PropTypes.func,
   actionResolver: PropTypes.func,
+  actionsDisabled: PropTypes.func,
   persona: PropTypes.string
+};
+RequestsList.default = {
+  actionsDisabled: () => true,
 };
 
 export default RequestsList;

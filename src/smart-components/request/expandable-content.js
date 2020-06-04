@@ -20,7 +20,7 @@ ExpandedItem.propTypes = {
   detail: PropTypes.node
 };
 
-const ExpandableContent = ({ id, number_of_children, state, reason }) => {
+const ExpandableContent = ({ id, number_of_children, state, reason, actionsDisabled = true }) => {
   const requestActive = isRequestStateActive(state) && !number_of_children;
   const [ requestContent, setRequestContent ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
