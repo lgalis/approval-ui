@@ -1,5 +1,5 @@
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
-import React, { lazy, useContext } from 'react';
+import React, { lazy, useContext, useState, useEffect } from 'react';
 import ProtectedRoute from './routing/protected-route';
 import paths from './constants/routes';
 import UserContext from './user-context';
@@ -17,19 +17,22 @@ const errorPaths = [ '/400', '/401', '/403', '/404' ];
 export const Routes = () => {
   const { userRoles: userRoles } = useContext(UserContext);
   const location = useLocation();
+  const [defaultRequestPath, setDefaultRequestPath] = useState(paths.requests.index);
 
-  const defaultRequestPath = () => {
+  useEffect(() => {
     if (isApprovalApprover(userRoles) || isApprovalAdmin(userRoles)) {
-      return paths.requests.index;}
-    else {
-      return {
-        pathname: '/403',
-        state: {
-          from: location
-        }
-      };
+      setDefaultRequestPath(paths.requests.index);
     }
-  };
+    else
+      {
+        setDefaultRequestPath({
+          pathname: '/403',
+          state: {
+            from: location
+          }
+        });
+      }
+  }, [userRoles]);
 
   return <Switch>
     <ProtectedRoute path={ paths.workflows.index } component={ Workflows }/>
@@ -38,7 +41,7 @@ export const Routes = () => {
     <Route path={ paths.request.index } component={ RequestDetail }/>
     <Route path={ errorPaths } component={ CommonApiError }/>
     <Route>
-      <Redirect to={ defaultRequestPath() }/>
+      <Redirect to={ defaultRequestPath }/>
     </Route>
   </Switch>;
 };

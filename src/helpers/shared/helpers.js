@@ -22,8 +22,8 @@ export const timeAgo = (date) => (
   </span>
 );
 
-export const isApprovalAdmin = (roles) => roles && roles[APPROVAL_ADMINISTRATOR_ROLE];
-export const isApprovalApprover = (roles) => roles && roles[APPROVAL_APPROVER_ROLE];
+export const isApprovalAdmin = (roles = {}) => roles[APPROVAL_ADMINISTRATOR_ROLE];
+export const isApprovalApprover = (roles = {}) => roles[APPROVAL_APPROVER_ROLE];
 
 export const approvalPersona = (userRoles) => {
   if (isApprovalAdmin(userRoles)) {
@@ -35,15 +35,14 @@ export const approvalPersona = (userRoles) => {
   return APPROVAL_REQUESTER_PERSONA;
 };
 
-export const approvalRoles = (roles) => {
+export const approvalRoles = (roles = []) => {
   const userRoles  = {};
-  if (roles && roles.find(role => role.name === APPROVAL_ADMINISTRATOR_ROLE) !== undefined) {
-    userRoles[APPROVAL_ADMINISTRATOR_ROLE] = true;
-  }
-
-  if (roles && roles.find(role => role.name === APPROVAL_APPROVER_ROLE) !== undefined) {
-    userRoles[APPROVAL_APPROVER_ROLE] = true;
-  }
-
+  roles.forEach(role => {
+    if ( role.name === APPROVAL_ADMINISTRATOR_ROLE ) {
+      userRoles[APPROVAL_ADMINISTRATOR_ROLE] = true;
+    }else if (role.name === APPROVAL_APPROVER_ROLE) {
+      userRoles[APPROVAL_APPROVER_ROLE] = true;
+    }
+  });
   return userRoles;
 };
