@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { Route, Redirect, useLocation } from 'react-router-dom';
 import UserContext from '../user-context';
-import { isApprovalAdmin } from '../helpers/shared/helpers';
+import { useIsApprovalAdmin } from '../helpers/shared/helpers';
 
 const ProtectedRoute = (props) => {
   const { userRoles: userRoles } = useContext(UserContext);
   const location = useLocation();
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles)
 
-  return  isApprovalAdmin(userRoles) ? (
+  return  isApprovalAdmin ? (
     <Route { ...props } />
   ) : (
     <Redirect

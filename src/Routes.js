@@ -3,7 +3,7 @@ import React, { lazy, useContext, useState, useEffect } from 'react';
 import ProtectedRoute from './routing/protected-route';
 import paths from './constants/routes';
 import UserContext from './user-context';
-import { isApprovalAdmin, isApprovalApprover } from './helpers/shared/helpers';
+import {APPROVAL_APPROVER_ROLE, useIsApprovalAdmin, useIsApprovalApprover} from './helpers/shared/helpers';
 import RequestsRoute from './routing/requests-route';
 
 const Requests = lazy(() => import(/* webpackChunkName: "requests" */ './smart-components/request/requests'));
@@ -17,10 +17,13 @@ const errorPaths = [ '/400', '/401', '/403', '/404' ];
 export const Routes = () => {
   const { userRoles: userRoles } = useContext(UserContext);
   const location = useLocation();
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
+  const isApprovalApprover = useIsApprovalApprover(userRoles);
+
   const [defaultRequestPath, setDefaultRequestPath] = useState(paths.requests.index);
 
   useEffect(() => {
-    if (isApprovalApprover(userRoles) || isApprovalAdmin(userRoles)) {
+    if (isApprovalApprover || isApprovalAdmin) {
       setDefaultRequestPath(paths.requests.index);
     }
     else

@@ -22,13 +22,16 @@ export const timeAgo = (date) => (
   </span>
 );
 
-export const isApprovalAdmin = (roles = {}) => roles[APPROVAL_ADMINISTRATOR_ROLE];
-export const isApprovalApprover = (roles = {}) => roles[APPROVAL_APPROVER_ROLE];
+export const useIsApprovalAdmin = (roles = {}) => roles[APPROVAL_ADMINISTRATOR_ROLE];
+export const useIsApprovalApprover = (roles = {}) => roles[APPROVAL_APPROVER_ROLE];
 
 export const approvalPersona = (userRoles) => {
-  if (isApprovalAdmin(userRoles)) {
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
+  const isApprovalApprover = useIsApprovalApprover(userRoles);
+
+  if (isApprovalAdmin) {
     return APPROVAL_ADMIN_PERSONA;
-  } else if (isApprovalApprover(userRoles)) {
+  } else if (isApprovalApprover) {
     return APPROVAL_APPROVER_PERSONA;
   }
 

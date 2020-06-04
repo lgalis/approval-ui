@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { TextContent, Text, TextVariants, Level, LevelItem, Button, Bullseye, Spinner } from '@patternfly/react-core';
-import { isApprovalAdmin, isApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
+import { useIsApprovalAdmin, useIsApprovalApprover, isRequestStateActive } from '../../helpers/shared/helpers';
 import { fetchRequestContent } from '../../helpers/request/request-helper';
 import UserContext from '../../user-context';
 import routes from '../../constants/routes';
@@ -27,6 +27,8 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
   const [ fetchStarted, setIsFetching ] = useState(false);
   const { userRoles: userRoles } = useContext(UserContext);
   const expandedRequests = useSelector(({ requestReducer: { expandedRequests }}) => expandedRequests);
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
+  const isApprovalApprover = useIsApprovalApprover(userRoles);
 
   useEffect(() => {
     if (!fetchStarted && isLoading && expandedRequests.includes(id)) {
@@ -47,7 +49,7 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
         <LevelItem>
           <ExpandedItem title="Product" detail={ requestContent ? requestContent.product : 'Unknown' } />
         </LevelItem>
-        { requestActive && (isApprovalApprover(userRoles) || isApprovalAdmin(userRoles)) && <LevelItem>
+        { requestActive && (isApprovalApprover || isApprovalAdmin) && <LevelItem>
           <Link to={ { pathname: routes.requests.approve, search: `request=${id}` } }  className="pf-u-mr-md">
             <Button variant="primary" aria-label="Approve Request" isDisabled={ !requestActive }>
               Approve
