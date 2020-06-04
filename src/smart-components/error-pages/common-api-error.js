@@ -1,14 +1,15 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   Bullseye,
+  Button,
   Title,
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
   EmptyStatePrimary
 } from '@patternfly/react-core';
-import Exclamation from '@patternfly/react-icons/dist/js/icons/exclamation-icon';
+import LockIcon from '@patternfly/react-icons/dist/js/icons/lock-icon';
 
 const TITLES = {
   '/401': 'Unauthorized',
@@ -17,17 +18,17 @@ const TITLES = {
 
 const MESSAGES = {
   '/401': 'You are not authorized to access this section: ',
-  '/403': 'You are not authorized to access this section: '
+  '/403': 'You do not have access to Approval'
 };
 
 const CommonApiError = () => {
   const { state, pathname } = useLocation();
-
+  const { history } = useHistory();
   return (
     <Bullseye className="global-primary-background">
       <EmptyState>
         <div>
-          <EmptyStateIcon icon={ Exclamation } />
+          <EmptyStateIcon icon={ LockIcon } />
         </div>
         <div>
           <Title size="lg">{ TITLES[pathname] }</Title>
@@ -39,10 +40,14 @@ const CommonApiError = () => {
             { state?.from?.search }
           </span>
           <br />
-          If you believe this is a mistake, please contact support.
+          Contact your organization administrator for more information.
         </EmptyStateBody>
         <EmptyStatePrimary>
-          <Link to="/" >Return to approval</Link>
+          {
+            document.referrer ?
+              <Button variant="primary" onClick={ () => history.back() }>Return to previous page</Button> :
+              <Button variant="primary" component="a" href=".">Go to landing page</Button>
+          }
         </EmptyStatePrimary>
       </EmptyState>
     </Bullseye>

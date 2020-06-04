@@ -10,6 +10,7 @@ import {
 import UserContext from '../../user-context';
 import routesLinks from '../../constants/routes';
 import RequestsList from './requests-list';
+import EmptyRequestList from './EmptyRequestList';
 
 const Requests = () => {
   const { userRoles: userRoles } = useContext(UserContext);
@@ -44,12 +45,14 @@ const Requests = () => {
       ]);
   };
 
-  return <RequestsList
-    routes={ routes }
-    persona={ APPROVAL_APPROVER_PERSONA }
-    actionsDisabled={ actionsDisabled }
-    actionResolver={ actionResolver }
-  />;
+  return !isApprovalApprover(userRoles)  ?
+    <EmptyRequestList/>
+    : <RequestsList
+      routes={ routes }
+      persona={ APPROVAL_APPROVER_PERSONA }
+      actionsDisabled={ actionsDisabled }
+      actionResolver={ actionResolver }
+    />;
 };
 
 export default Requests;

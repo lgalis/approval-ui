@@ -1,6 +1,6 @@
-import { MemoryRouter, Link } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import CommonApiError from '../../../smart-components/error-pages/common-api-error';
-import { Bullseye, EmptyState, EmptyStateIcon, Title, EmptyStateBody } from '@patternfly/react-core';
+import { Bullseye, Button, EmptyState, EmptyStateIcon, Title, EmptyStateBody } from '@patternfly/react-core';
 
 describe('<CommonApiError />', () => {
   const ComponentWrapper = ({ children, initialEntry }) => <MemoryRouter
@@ -23,6 +23,6 @@ describe('<CommonApiError />', () => {
     expect(wrapper.find(Title).text().includes('Unauthorized')).toEqual(true);
     expect(wrapper.find(EmptyStateBody).text().includes('You are not authorized to access this section')).toEqual(true);
     expect(wrapper.find(EmptyStateBody).text().includes('/previous')).toEqual(true);
-    expect(wrapper.find(Link).props().to).toEqual('/');
+    expect(wrapper.find(Button).props().href).toEqual('.');
   });
 });
