@@ -17,7 +17,7 @@ const TITLES = {
 };
 
 const MESSAGES = {
-  '/401': 'You are not authorized to access this section: ',
+  '/401': 'You are not authorized to access this section',
   '/403': 'Contact your organization administrator for more information'
 };
 
