@@ -5,7 +5,8 @@ import {
   EXPAND_REQUEST,
   SORT_REQUESTS,
   SET_FILTER_REQUESTS,
-  CLEAR_FILTER_REQUESTS
+  CLEAR_FILTER_REQUESTS,
+  RESET_REQUEST_LIST
 } from '../../redux/action-types';
 
 // Initial State
@@ -69,6 +70,19 @@ const clearFilterValueRequests = (state) => ({
   filterValue: {}
 });
 
+const resetRequestList = (state) => ({
+  ...state,
+  requests: {
+    data: [],
+    meta: {
+      count: 0,
+      limit: 50,
+      offset: 0
+    }
+  },
+  filterValue: {}
+});
+
 export default {
   [`${FETCH_REQUESTS}_PENDING`]: setLoadingState,
   [`${FETCH_REQUESTS}_FULFILLED`]: setRequests,
@@ -79,5 +93,6 @@ export default {
   [EXPAND_REQUEST]: setexpandRequest,
   [SORT_REQUESTS]: setSortRequests,
   [SET_FILTER_REQUESTS]: setFilterValueRequests,
-  [CLEAR_FILTER_REQUESTS]: clearFilterValueRequests
+  [CLEAR_FILTER_REQUESTS]: clearFilterValueRequests,
+  [RESET_REQUEST_LIST]: resetRequestList
 };
