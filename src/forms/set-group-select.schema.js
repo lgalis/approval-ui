@@ -1,8 +1,8 @@
 import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
-import asyncDebounce from '../utilities/async-debounce';
-import { fetchFilterApprovalGroups } from '../helpers/group/group-helper';
 import { FormattedMessage } from 'react-intl';
+
+import loadOptions from './load-groups-debounced';
 
 const setGroupSelectSchema = (intl) => ({
   component: componentTypes.SELECT,
@@ -11,7 +11,7 @@ const setGroupSelectSchema = (intl) => ({
     id="create-approval-process-set-groups"
     defaultMessage="Set groups"
   />,
-  loadOptions: asyncDebounce(fetchFilterApprovalGroups),
+  loadOptions,
   noValueUpdates: true,
   isMulti: true,
   isSearchable: true,

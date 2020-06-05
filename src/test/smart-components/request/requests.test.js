@@ -12,6 +12,11 @@ import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/fronte
 import { RowWrapper } from '@patternfly/react-table';
 import { Table } from '@patternfly/react-table';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
+import TableEmptyState from '../../../presentational-components/shared/table-empty-state';
+import { APPROVAL_ADMIN_PERSONA } from '../../../helpers/shared/helpers';
+import UserContext from '../../../user-context';
+import routes from '../../../constants/routes';
+import ActionModal from '../../../smart-components/request/action-modal';
 
 const ComponentWrapper = ({ store, initialEntries = [ '/requests' ], children }) => (
   <Provider store={ store } value={ { roles: []} }>
@@ -162,7 +167,7 @@ describe('<Requests />', () => {
 
   it('should filter requests - and clear filters', async () => {
     jest.useFakeTimers();
-    expect.assertions(5);
+    expect.assertions(7);
 
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
       status: 200,
@@ -312,6 +317,75 @@ describe('<Requests />', () => {
     wrapper.update();
 
     apiClientMock.get(
+      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
+       + '&filter%5Bstate%5D%5Beq%5D%5B%5D=started'
+       + '&filter%5Bdecision%5D%5Beq%5D%5B%5D=approved'
+      + '&limit=50&offset=0&sort_by=created_at%3Adesc',
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': 'some-name',
+          'filter[requester_name][contains_i]': 'some-requester',
+          'filter[state][eq][]': 'started',
+          'filter[decision][eq][]': 'approved',
+          limit: '50',
+          offset: '0',
+          sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    // Switch to descision filter
+    await act(async () => {
+      wrapper.find('ConditionalFilter').setState({ stateValue: 3 });
+    });
+    wrapper.update();
+
+    await act(async () => {
+      const checkboxDropdownPropsDecision = wrapper.find('Select').last().props();
+      checkboxDropdownPropsDecision.onSelect(EVENT, 'approved');
+    });
+    wrapper.update();
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
+       + '&filter%5Bstate%5D%5Beq%5D%5B%5D=started'
+      + '&limit=50&offset=0&sort_by=created_at%3Adesc',
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': 'some-name',
+          'filter[requester_name][contains_i]': 'some-requester',
+          'filter[state][eq][]': 'started',
+          limit: '50',
+          offset: '0',
+          sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    // clear one chip
+    await act(async () => {
+      wrapper.find('.pf-c-chip').last().find('button').simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    apiClientMock.get(
       `${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
@@ -326,6 +400,7 @@ describe('<Requests />', () => {
       })
     );
 
+    // clear chips
     await act(async () => {
       wrapper.find('.ins-c-chip-filters').find('button').last().simulate('click');
     });
@@ -337,5 +412,251 @@ describe('<Requests />', () => {
     wrapper.update();
 
     jest.useRealTimers();
+  });
+
+  it('should paginate requests', async () => {
+    jest.useFakeTimers();
+    expect.assertions(2);
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
+      status: 200,
+      body: {
+        meta: { count: 1, limit: 50, offset: 0 },
+        data: [ request ]
+      }
+    }));
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+    const store = registry.getStore();
+
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(<ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>);
+    });
+    wrapper.update();
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=10&offset=0&sort_by=created_at%3Adesc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          limit: '10', offset: '0', sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 30, limit: 10, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('.pf-c-options-menu__toggle-button').first().simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      wrapper.find('.pf-c-options-menu__menu-item').first().simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=10&offset=10&sort_by=created_at%3Adesc`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          limit: '10', offset: '10', sort_by: 'created_at:desc'
+        });
+        return res.status(200).body({
+          meta: { count: 30, limit: 10, offset: 0 },
+          data: [ request ]
+        });
+      })
+    );
+
+    await act(async () => {
+      wrapper.find('.pf-c-pagination__nav').first().find('button').last().simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      jest.runAllTimers();
+    });
+    wrapper.update();
+
+    jest.useRealTimers();
+  });
+
+  it('should render table empty state', async () => {
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
+      status: 200,
+      body: {
+        meta: { count: 0, limit: 50, offset: 0 },
+        data: [ ]
+      }
+    }));
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+    const store = registry.getStore();
+
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(<ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>);
+    });
+    wrapper.update();
+
+    expect(wrapper.find(TableEmptyState)).toHaveLength(1);
+  });
+
+  describe('Actions', () => {
+    const request = {
+      id: '703',
+      state: 'notified',
+      decision: 'undecided',
+      workflow_id: '168',
+      created_at: '2020-05-13T13:35:48Z',
+      notified_at: '2020-05-13T13:36:29Z',
+      number_of_children: 0,
+      number_of_finished_children: 0,
+      owner: 'insights-qa',
+      requester_name: 'Insights QA',
+      name: 'Hello World',
+      group_name: 'Test Approval Group',
+      parent_id: '702',
+      metadata: {
+        user_capabilities: { show: true, create: true, approve: true, cancel: false, deny: true, memo: true }
+      }
+    };
+
+    const contentData = {
+      params: {
+        quest: 'Test Approval',
+        airspeed: 3,
+        username: 'insights-qa',
+        int_value: 5
+      },
+      product: 'Hello World',
+      order_id: '654',
+      platform: 'Dev Public Ansible Tower (18.188.178.206)',
+      portfolio: 'LGTestNoTags'
+    };
+
+    beforeEach(() => {
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ request ]
+        }
+      }));
+    });
+
+    it('should open comment modal from the list', async () => {
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+      const store = registry.getStore();
+
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(
+          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
+          </UserContext.Provider>
+        );
+      });
+      wrapper.update();
+
+      await act(async () => {
+        wrapper.find('.pf-c-table__action').first().find('.pf-c-dropdown__toggle').simulate('click');
+      });
+      wrapper.update();
+
+      expect(wrapper.find(ActionModal)).toHaveLength(0);
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.index);
+
+      await act(async () => {
+        wrapper.find('.pf-c-table__action').first().find('.pf-c-dropdown__menu').find('button').simulate('click');
+      });
+      wrapper.update();
+
+      expect(wrapper.find(ActionModal).props().actionType).toEqual('Add Comment');
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.addComment);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=703');
+    });
+
+    it('should open approve modal from the list', async () => {
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/703/content`, mockOnce({
+        status: 200,
+        body: contentData
+      }));
+
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+      const store = registry.getStore();
+
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(
+          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
+          </UserContext.Provider>
+        );
+      });
+      wrapper.update();
+
+      await act(async () => {
+        wrapper.find('.pf-c-table__toggle').first().find('button').simulate('click');
+      });
+      wrapper.update();
+
+      expect(wrapper.find(ActionModal)).toHaveLength(0);
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.index);
+
+      await act(async () => {
+        wrapper.find('.pf-c-table__expandable-row').first().find('a').first().simulate('click', { button: 0 });
+      });
+      wrapper.update();
+
+      expect(wrapper.find(ActionModal).props().actionType).toEqual('Approve');
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.approve);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=703');
+    });
+
+    it('should open deny modal from the list', async () => {
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/703/content`, mockOnce({
+        status: 200,
+        body: contentData
+      }));
+
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+      const store = registry.getStore();
+
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(
+          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
+            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
+          </UserContext.Provider>
+        );
+      });
+      wrapper.update();
+
+      await act(async () => {
+        wrapper.find('.pf-c-table__toggle').first().find('button').simulate('click');
+      });
+      wrapper.update();
+
+      expect(wrapper.find(ActionModal)).toHaveLength(0);
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.index);
+
+      await act(async () => {
+        wrapper.find('.pf-c-table__expandable-row').first().find('a').last().simulate('click', { button: 0 });
+      });
+      wrapper.update();
+
+      expect(wrapper.find(ActionModal).props().actionType).toEqual('Deny');
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.deny);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=703');
+    });
   });
 });
