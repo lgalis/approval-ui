@@ -7,10 +7,15 @@ import { useIntl } from 'react-intl';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
 import isEmpty from 'lodash/isEmpty';
 
-import { fetchRequests, expandRequest, sortRequests, setFilterValueRequests, clearFilterValueRequests } from '../../redux/actions/request-actions';
+import { fetchRequests,
+  expandRequest,
+  sortRequests,
+  setFilterValueRequests,
+  clearFilterValueRequests,
+  resetRequestList } from '../../redux/actions/request-actions';
 import { createRows } from './request-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
-import { isApprovalAdmin } from '../../helpers/shared/helpers';
+import { APPROVAL_APPROVER_PERSONA, useIsApprovalAdmin, useIsApprovalApprover } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
 import asyncDebounce from '../../utilities/async-debounce';
@@ -78,22 +83,34 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
     initialState(filterValue.name, filterValue.requester)
   );
 
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
 
   const dispatch = useDispatch();
   const intl = useIntl();
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
+  const isApprovalApprover = useIsApprovalApprover(userRoles);
 
   const updateRequests = (pagination) => {
+    if (!isApprovalApprover && persona === APPROVAL_APPROVER_PERSONA) {
+      stateDispatch({ type: 'setFetching', payload: false });
+      return;
+    }
+
     stateDispatch({ type: 'setFetching', payload: true });
     return dispatch(fetchRequests(persona, pagination))
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
 
+  const resetList = () => {
+    dispatch(resetRequestList());
+  };
+
   useEffect(() => {
+    resetList();
     updateRequests();
     scrollToTop();
-  }, []);
+  }, [ persona ]);
 
   const handleFilterChange = (value, type) => {
     const updateFilter = () => dispatch(setFilterValueRequests(value, type));
@@ -147,7 +164,7 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
     <Fragment>
       <TopToolbar>
         <TopToolbarTitle title="Approval"/>
-        { isApprovalAdmin(userPersona) && <AppTabs/> }
+        { isApprovalAdmin && <AppTabs/> }
       </TopToolbar>
       <TableToolbarView
         sortBy={ sortBy }

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { isApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
+import { useIsApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
 import { ActionTranscript } from './action-transcript';
 
 import {
@@ -28,7 +28,8 @@ import routes from '../../../constants/routes';
 
 export const Request = ({ item, isExpanded, toggleExpand }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
 
   const onKebabToggle = isOpen => {
     setIsKebabOpen(isOpen);
@@ -39,7 +40,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
   };
 
   const checkCapability = (item, capability) => {
-    if (isApprovalAdmin(userPersona)) {
+    if (isApprovalAdmin) {
       return true;
     }
 

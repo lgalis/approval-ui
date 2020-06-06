@@ -13,19 +13,24 @@ import { RowWrapper } from '@patternfly/react-table';
 import { Table } from '@patternfly/react-table';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 import TableEmptyState from '../../../presentational-components/shared/table-empty-state';
-import { APPROVAL_ADMIN_PERSONA } from '../../../helpers/shared/helpers';
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
 import ActionModal from '../../../smart-components/request/action-modal';
+import { APPROVAL_APPROVER_ROLE } from '../../../helpers/shared/helpers';
+
+const roles = {};
+roles[APPROVAL_APPROVER_ROLE] = true;
 
 const ComponentWrapper = ({ store, initialEntries = [ '/requests' ], children }) => (
-  <Provider store={ store } value={ { roles: []} }>
-    <MemoryRouter initialEntries={ initialEntries }>
-      <IntlProvider locale="en">
-        { children }
-      </IntlProvider>
-    </MemoryRouter>
-  </Provider>
+  <UserContext.Provider value={ { userRoles: roles } } >
+    <Provider store={ store } >
+      <MemoryRouter initialEntries={ initialEntries }>
+        <IntlProvider locale="en">
+          { children }
+        </IntlProvider>
+      </MemoryRouter>
+    </Provider>
+  </UserContext.Provider>
 );
 
 describe('<Requests />', () => {
@@ -558,9 +563,7 @@ describe('<Requests />', () => {
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
-            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
-          </UserContext.Provider>
+          <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
         );
       });
       wrapper.update();
@@ -596,9 +599,7 @@ describe('<Requests />', () => {
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
-            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
-          </UserContext.Provider>
+          <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
         );
       });
       wrapper.update();
@@ -634,9 +635,7 @@ describe('<Requests />', () => {
       let wrapper;
       await act(async () => {
         wrapper = mount(
-          <UserContext.Provider value={ { userPersona: APPROVAL_ADMIN_PERSONA } } >
-            <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
-          </UserContext.Provider>
+          <ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>
         );
       });
       wrapper.update();

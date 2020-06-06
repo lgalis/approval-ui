@@ -3,17 +3,20 @@ import { Route, useHistory } from 'react-router-dom';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import {
-  APPROVAL_APPROVER_PERSONA,
-  isApprovalApprover,
+  APPROVAL_APPROVER_PERSONA, useIsApprovalAdmin,
+  useIsApprovalApprover,
   isRequestStateActive
 } from '../../helpers/shared/helpers';
 import UserContext from '../../user-context';
 import routesLinks from '../../constants/routes';
 import RequestsList from './requests-list';
+import EmptyRequestList from './EmptyRequestList';
 
 const Requests = () => {
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
   const history = useHistory();
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
+  const isApprovalApprover = useIsApprovalApprover(userRoles);
 
   const routes = () => <Fragment>
     <Route exact path={ routesLinks.requests.addComment } render={ props => <ActionModal { ...props }
@@ -27,7 +30,8 @@ const Requests = () => {
 
   const actionsDisabled = (requestData) => requestData &&
     requestData.state ?
-    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 || !isApprovalApprover(userPersona) : true;
+    !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 ||
+      (!isApprovalApprover && !isApprovalAdmin) : true;
 
   const actionResolver = (requestData) => {
     return (requestData && requestData.id && actionsDisabled(requestData) ? null :
@@ -43,12 +47,14 @@ const Requests = () => {
       ]);
   };
 
-  return <RequestsList
-    routes={ routes }
-    persona={ APPROVAL_APPROVER_PERSONA }
-    actionsDisabled={ actionsDisabled }
-    actionResolver={ actionResolver }
-  />;
+  return !isApprovalApprover ?
+    <EmptyRequestList/>
+    : <RequestsList
+      routes={ routes }
+      persona={ APPROVAL_APPROVER_PERSONA }
+      actionsDisabled={ actionsDisabled }
+      actionResolver={ actionResolver }
+    />;
 };
 
 export default Requests;
