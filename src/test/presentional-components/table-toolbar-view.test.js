@@ -127,10 +127,11 @@ describe('<TableToolbarView />', () => {
     done();
   });
 
-  it('should select all rows correctly', async done => {
+  it('should select all rows correctly', async () => {
     const setCheckedItems = jest.fn();
     let wrapper;
-    const createRows = () => [{
+
+    const data = [{
       id: 1,
       cells: [ 'name - 1', 'description - 1' ]
     }, {
@@ -138,25 +139,28 @@ describe('<TableToolbarView />', () => {
       cells: [ 'name - 2', 'description' ]
     }];
 
+    const createRows = (data) => data;
+
     await act(async() => {
       wrapper = mount(
         <TableToolbarView
           { ...initialProps }
+          data={ data }
           columns={ [{ title: 'Name', cellFormatters: [ expandable ]}, 'Description' ] }
           createRows={ createRows }
           isSelectable
           setCheckedItems={ setCheckedItems }
         />);
     });
-
-    act(() => {
-      wrapper.update();
-    });
+    wrapper.update();
 
     expect(wrapper.find('tr')).toHaveLength(3);
-    wrapper.find('input[type="checkbox"]').first().simulate('change');
-    expect(setCheckedItems).not.toHaveBeenCalled();
-    done();
+
+    await act(async () => {
+      wrapper.find('input[type="checkbox"]').first().simulate('change', { target: { checked: true }});
+    });
+
+    expect(setCheckedItems).toHaveBeenCalledWith(data.map(d => ({ ...d, selected: true })));
   });
 
   it('should expand row correctly', async done => {

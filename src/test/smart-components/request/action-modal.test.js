@@ -1,7 +1,7 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
@@ -9,10 +9,11 @@ import thunk from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import ActionModal from '../../../smart-components/request/action-modal';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
+import routes from '../../../constants/routes';
 
 const ComponentWrapper = ({ store, children }) => (
   <Provider store={ store }>
-    <MemoryRouter initialEntries={ [ '/foo/123' ] }>
+    <MemoryRouter initialEntries={ [{ pathname: routes.request.index, search: '?request=123' }] }>
       { children }
     </MemoryRouter>
   </Provider>
@@ -25,8 +26,10 @@ describe('<ActionModal />', () => {
   let initialState;
 
   beforeEach(() => {
+    apiClientMock.reset();
     initialProps = {
-      postMethod: jest.fn()
+      postMethod: jest.fn(),
+      actionType: 'Add Comment'
     };
     mockStore = configureStore(middlewares);
     initialState = {
@@ -38,21 +41,54 @@ describe('<ActionModal />', () => {
     initialProps.postMethod.mockReset();
   });
 
-  it('should render action modal and post submit data', async done => {
+  it('should render action modal and post submit data', async () => {
+    expect.assertions(3);
     const store = mockStore(initialState);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {
-      comment: 'test'
-    }}));
     apiClientMock.post(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce((req, response) => {
-      expect(JSON.parse(req.body())).toEqual({ comments: 'foo' });
+      expect(JSON.parse(req.body())).toEqual({ operation: 'memo', comments: 'foo' });
       return response.status(200);
     }));
+
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" component={ props => <ActionModal { ...props } { ...initialProps } /> } />
+          <ActionModal { ...initialProps } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    const textarea = wrapper.find('textarea#comments');
+    textarea.getDOMNode().value = 'foo';
+    textarea.simulate('change');
+    wrapper.update();
+
+    expect(initialProps.postMethod).not.toHaveBeenCalled();
+
+    await act(async() => {
+      wrapper.find('form').simulate('submit');
+    });
+    wrapper.update();
+
+    expect(initialProps.postMethod).toHaveBeenCalled();
+  });
+
+  it('should render action modal and post submit data without post method', async () => {
+    expect.assertions(1);
+    const store = mockStore(initialState);
+    let wrapper;
+
+    apiClientMock.post(`${APPROVAL_API_BASE}/requests/123/actions`, mockOnce((req, response) => {
+      expect(JSON.parse(req.body())).toEqual({ operation: 'memo', comments: 'foo' });
+      return response.status(200);
+    }));
+
+    await act(async() => {
+      wrapper = mount(
+        <ComponentWrapper store={ store }>
+          <ActionModal { ...initialProps } postMethod={ undefined }/>
         </ComponentWrapper>
       );
     });
@@ -64,21 +100,19 @@ describe('<ActionModal />', () => {
     wrapper.update();
 
     await act(async() => {
-      wrapper.find('button').last().simulate('click');
+      wrapper.find('form').simulate('submit');
     });
     wrapper.update();
-    done();
   });
 
-  it('should call cancel callback', async done => {
+  it('should call cancel callback', async () => {
     const store = mockStore(initialState);
     let wrapper;
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo/:id" component={ props => <ActionModal { ...props } { ...initialProps } /> } />
+          <ActionModal { ...initialProps } />
         </ComponentWrapper>
       );
     });
@@ -92,14 +126,13 @@ describe('<ActionModal />', () => {
         type: '@@INSIGHTS-CORE/NOTIFICATIONS/ADD_NOTIFICATION',
         payload: {
           variant: 'warning',
-          title: 'undefined Request',
+          title: 'Add Comment',
           dismissable: true,
-          description: 'undefined Request was cancelled by the user.'
+          description: 'Add Comment was cancelled by the user.'
         }
       }
     ];
     expect(store.getActions()).toEqual(expectedActions);
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/requests');
-    done();
   });
 });

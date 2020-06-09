@@ -1,4 +1,7 @@
 const routes = {
+  allrequests: {
+    index: '/allrequests'
+  },
   requests: {
     index: '/requests',
     addComment: '/requests/add-comment',

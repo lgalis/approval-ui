@@ -47,8 +47,9 @@ describe('<EditWorkflowGroupsModal />', () => {
   });
 
   it('should mount with loader placeholder', async () => {
-    jest.useFakeTimers();
-
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: [{ uuid: 'id', name: 'name' }]}})
+    );
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, delay({ body: {
       group_refs: []
     }}, 20));
@@ -63,33 +64,12 @@ describe('<EditWorkflowGroupsModal />', () => {
 
     wrapper.update();
     expect(wrapper.find(WorkflowInfoFormLoader)).toHaveLength(1);
-
-    jest.useRealTimers();
-  });
-
-  it('should mount with no groups title', async () => {
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: []}}));
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
-      group_refs: []
-    }}));
-
-    await act(async() => {
-      wrapper = mount(
-        <ComponentWrapper initialEntries={ [ '/foo?workflow=123' ] } store={ store } >
-          <Route path="/foo" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
-        </ComponentWrapper>
-      );
-
-    });
-
-    wrapper.update();
-    expect(wrapper.find(WorkflowInfoFormLoader)).toHaveLength(0);
   });
 
   it('should mount with SetGroups child component', async () => {
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: []}}));
+      mockOnce({ body: { data: [{ uuid: 'id', name: 'name' }]}})
+    );
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -103,14 +83,18 @@ describe('<EditWorkflowGroupsModal />', () => {
           /> }/>
         </ComponentWrapper>
       );
-
     });
-
     wrapper.update();
+
+    expect(wrapper.find(WorkflowInfoFormLoader)).toHaveLength(0);
     expect(wrapper.find(FormRenderer)).toHaveLength(1);
   });
 
   it('should mount with workflow in the table', async () => {
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: [{ uuid: 'id', name: 'name' }]}})
+    );
+
     const store = mockStore({ workflowReducer: {
       workflows: {
         data: [
@@ -120,9 +104,6 @@ describe('<EditWorkflowGroupsModal />', () => {
     },
     groupReducer: { groups: [{  value: '123', label: 'Group 1' }]}});
     let wrapper;
-
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: []}}));
 
     await act(async() => {
       wrapper = mount(
@@ -141,7 +122,8 @@ describe('<EditWorkflowGroupsModal />', () => {
 
   it('should call onCancel and push to history', async () => {
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: []}}));
+      mockOnce({ body: { data: [{ uuid: 'id', name: 'name' }]}})
+    );
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -152,11 +134,13 @@ describe('<EditWorkflowGroupsModal />', () => {
           <Route path="/foo" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } /> }/>
         </ComponentWrapper>
       );
-
     });
 
     wrapper.update();
-    wrapper.find('button').last().simulate('click');
+    await act(async () => {
+      wrapper.find('button').last().simulate('click');
+    });
+    wrapper.update();
 
     const history = wrapper.find(MemoryRouter).instance().history;
     expect(history.length).toEqual(2);
@@ -167,7 +151,9 @@ describe('<EditWorkflowGroupsModal />', () => {
     const postMethod = jest.fn().mockImplementation(() => new Promise(resolve => resolve(true)));
 
     apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      { body: { data: []}});
+      mockOnce({ body: { data: [{ uuid: 'id', name: 'name' }]}})
+    );
+
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: {
       group_refs: []
     }}));
@@ -183,7 +169,6 @@ describe('<EditWorkflowGroupsModal />', () => {
           <Route path="/foo" render={ props => <EditWorkflowGroupsModal { ...props } { ...initialProps } postMethod={ postMethod } /> }/>
         </ComponentWrapper>
       );
-
     });
 
     wrapper.update();

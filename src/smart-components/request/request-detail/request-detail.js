@@ -12,6 +12,7 @@ import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/
 import UserContext from '../../../user-context';
 import useQuery from '../../../utilities/use-query';
 import routes from '../../../constants/routes';
+import { approvalPersona } from '../../../helpers/shared/helpers';
 
 const initialState = {
   isFetching: true
@@ -37,13 +38,13 @@ const RequestDetail = () => {
     }) => ({ selectedRequest, requestContent })
   );
 
-  const [{ request: id }, search ] = useQuery([ 'request' ]);
+  const [{ request: id }] = useQuery([ 'request' ]);
   const location = useLocation();
   const dispatch = useDispatch();
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
 
   useEffect(() => {
-    Promise.all([ dispatch(fetchRequest(id, userPersona)), dispatch(fetchRequestContent(id, userPersona)) ])
+    Promise.all([ dispatch(fetchRequest(id, approvalPersona(userRoles))), dispatch(fetchRequestContent(id, approvalPersona(userRoles))) ])
     .then(() => stateDispatch({ type: 'setFetching', payload: false }));
   }, []);
 
@@ -73,12 +74,15 @@ const RequestDetail = () => {
     <Fragment>
       <Switch>
         <Route exact path={ routes.request.addComment }>
-          <ActionModal actionType={ 'Add Comment' } closeUrl={ { pathname: routes.request.index, search } }/>
+          <ActionModal actionType={ 'Add Comment' }
+            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } }/>
         </Route>
         <Route exact path={ routes.request.approve } render={ props =>
-          <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ { pathname: routes.request.index, search } } /> } />
+          <ActionModal { ...props } actionType={ 'Approve' }
+            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
         <Route exact path={ routes.request.deny } render={ props =>
-          <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.request.index, search } }  /> } />
+          <ActionModal { ...props } actionType={ 'Deny' }
+            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
       </Switch>
       <TopToolbar
         breadcrumbs={ [

@@ -52,27 +52,23 @@ export const TableToolbarView = ({
       ...row
     });
 
-  const setSelected = (data, id) => {
-    const newData = data.map(row => row.id === id ?
+  const setSelected = (_event, selected, index, { id } = {}) => {
+    const newData = rows.map(row => row.id === id || index === -1 ?
       {
         ...row,
-        selected: !row.selected
+        selected: index === -1 ? selected : !row.selected
       } : {
         ...row
       });
 
     const checkedItems = newData.filter(item => (item.id && item.selected));
     setCheckedItems(checkedItems);
-    return newData;
+    return setRows(newData);
   };
 
-  const onCollapseInternal = (_event, _index, _isOpen, { id }) => onCollapse ?
-    onCollapse(id, setRows, setOpen) :
-    setRows((rows) => setOpen(rows, id));
-
-  const selectRow = (_event, selected, index, { id } = {}) => index === -1
-    ? setRows(rows.map(row => ({ ...row, selected })))
-    : setRows((rows) => setSelected(rows, id));
+  const onCollapseInternal = (_event, _index, _isOpen, { id }) => onCollapse
+    ? onCollapse(id, setRows, setOpen)
+    : setRows(setOpen(rows, id));
 
   const paginationConfig = {
     itemCount: pagination.count,
@@ -130,7 +126,7 @@ export const TableToolbarView = ({
             onCollapse={ onCollapseInternal }
             rows={ rows }
             cells={ columns }
-            onSelect={ isSelectable && selectRow }
+            onSelect={ isSelectable && setSelected }
             actionResolver={ actionResolver }
             className="table-fix"
             sortBy={ sortBy }
@@ -190,6 +186,5 @@ TableToolbarView.defaultProps = {
   isSelectable: null,
   routes: () => null,
   renderEmptyState: () => null,
-  onSort: () => null,
   filterConfig: []
 };

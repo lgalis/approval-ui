@@ -65,3 +65,7 @@ export const setFilterValueRequests = (filterValue, type) => ({
 export const clearFilterValueRequests = () => ({
   type: ActionTypes.CLEAR_FILTER_REQUESTS
 });
+
+export const resetRequestList = () => ({
+  type: ActionTypes.RESET_REQUEST_LIST
+});
