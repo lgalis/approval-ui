@@ -5,7 +5,7 @@ import RequestList from './request-list';
 
 const RequestTranscript = ({ request }) => {
   return (<Fragment>
-    <Title size="sm" style={ { paddingLeft: '32px' } }> Request transcript </Title>
+    <Title headingLevel="h5" size="lg" className="pf-u-pl-lg pf-u-pb-lg">Request transcript</Title>
     <RequestList items={ request.requests && request.requests.length > 0 ? request.requests : [ request ] }/>
   </Fragment>);
 };

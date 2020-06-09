@@ -9,10 +9,6 @@
   }
 }
 
-.detail-title {
-  margin-bottom: 16px;
-}
-
 .data-table-detail {
   &.heading {
     margin: 0 !important
@@ -23,9 +19,8 @@
 }
 
 .detail-pane {
-  background-color: white;
+  background-color: var(--pf-global--BackgroundColor--100);
   min-height: 100%;
-  padding: 20px;
   overflow: ellipsis;
   word-wrap: break-word
 }
@@ -39,7 +34,7 @@
 
 .destructive-color {
   &:not(:disabled) {
-    color: #FF0000 !important;
+    color: var(--pf-chart-color-red-100) !important;
   }
 }
 
@@ -81,10 +76,6 @@
       }
     }
   }
-}
-
-.global-primary-background {
-  background-color: #fff
 }
 
 .icon-danger-fill {
