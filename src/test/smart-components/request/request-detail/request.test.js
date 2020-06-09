@@ -51,6 +51,7 @@ describe('<Request />', () => {
       item: {
         id: '111',
         state: 'no-state',
+        group_name: 'Group1',
         metadata: {
           user_capabilities: { approve: true, deny: true }
         },
@@ -128,6 +129,7 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
+            group_name: 'Group1',
             actions: []
           } }
           isActive
@@ -142,7 +144,6 @@ describe('<Request />', () => {
   });
 
   it('should expand kebab menu', () => {
-    const toggleExpand = jest.fn();
     const wrapper = mount(
       <ComponentWrapper>
         <Request
@@ -150,13 +151,13 @@ describe('<Request />', () => {
           item={ {
             id: '111',
             state: 'notified',
+            group_name: 'Group1',
             metadata: {
               user_capabilities: { approve: true, deny: true, memo: true }
             },
             actions: []
           } }
           isActive
-          toggleExpand={ toggleExpand }
         />
       </ComponentWrapper>
     );
@@ -165,5 +166,60 @@ describe('<Request />', () => {
     wrapper.update();
     wrapper.find('Link#request-111-request-comment').first().simulate('click', { button: 0 });
     wrapper.update();
+
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.addComment);
+    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=111');
+  });
+
+  it('should open approve modal', () => {
+    const wrapper = mount(
+      <ComponentWrapper>
+        <Request
+          { ...initialProps }
+          item={ {
+            id: '111',
+            state: 'notified',
+            group_name: 'Group1',
+            metadata: {
+              user_capabilities: { approve: true, deny: true, memo: true }
+            },
+            actions: []
+          } }
+          isActive
+        />
+      </ComponentWrapper>
+    );
+    wrapper.update();
+    wrapper.find('a#approve-111').first().simulate('click', { button: 0 });
+    wrapper.update();
+
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.approve);
+    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=111');
+  });
+
+  it('should open deny modal', () => {
+    const wrapper = mount(
+      <ComponentWrapper>
+        <Request
+          { ...initialProps }
+          item={ {
+            id: '111',
+            state: 'notified',
+            group_name: 'Group1',
+            metadata: {
+              user_capabilities: { approve: true, deny: true, memo: true }
+            },
+            actions: []
+          } }
+          isActive
+        />
+      </ComponentWrapper>
+    );
+    wrapper.update();
+    wrapper.find('a#deny-111').first().simulate('click', { button: 0 });
+    wrapper.update();
+
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.deny);
+    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=111');
   });
 });

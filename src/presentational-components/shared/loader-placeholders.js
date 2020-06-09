@@ -9,111 +9,46 @@ import {
   Grid,
   GridItem,
   Form,
-  FormGroup
+  FormGroup,
+  Stack,
+  StackItem,
+  Card,
+  CardBody
 } from '@patternfly/react-core';
 import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
-import ContentLoader from 'react-content-loader';
+import { Main } from '@redhat-cloud-services/frontend-components/components/Main';
 
-export const RequestInfoBarLoader = () => (
-  <ContentLoader
-    height={ 500 }
-    width={ 200 }
-    speed={ 2 }
-    primaryColor="#f3f3f3"
-    secondaryColor="#ecebeb"
-  >
-    <rect x="10" y="15" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="65" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="115" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="165" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="215" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="265" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="315" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="365" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="415" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="465" rx="0" ry="0" width="174" height="26" />
-    <rect x="10" y="515" rx="0" ry="0" width="174" height="26" />
-  </ContentLoader>
+import clsx from 'clsx';
+
+import './loader.scss';
+import { TopToolbar, TopToolbarTitle } from './top-toolbar';
+
+const Loader = ({ width = '100%', height = '100%', className, ...props }) => (
+  <span
+    { ...props }
+    className={ clsx('ins__approval__loader', className) }
+    style={ { width, height } }
+  />
 );
 
-export const RequestLoader = ({ items, ...props }) => (
-  <Section type="content">
-    <Grid gutter="md">
-      <GridItem md={ 2 } className="detail-pane">
-        <RequestInfoBarLoader/>
-      </GridItem>
-      <GridItem md={ 10 } className="detail-pane">
-        <DataList aria-label="datalist-placeholder" style={ { margin: 32 } }>
-          { [ ...Array(items) ].map((_item, index) => (
-            <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
-              <DataListItemRow>
-                <DataListItemCells dataListCells={ [
-                  <DataListCell key="1">
-                    <ContentLoader
-                      height={ 12 }
-                      width={ 300 }
-                      speed={ 2 }
-                      primaryColor="#FFFFFF"
-                      secondaryColor="#ecebeb"
-                      { ...props }>
-                      <rect x="0" y="0" rx="0" ry="0" width="300" height="12" />
-                    </ContentLoader>
-                  </DataListCell>
-                ] }
-                />
-              </DataListItemRow>
-            </DataListItem>
-          )) }
-        </DataList>
-      </GridItem>
-    </Grid>
-  </Section>
-);
-
-RequestLoader.propTypes = {
-  items: PropTypes.number
+Loader.propTypes = {
+  width: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
+  height: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
+  className: PropTypes.string
 };
 
-RequestLoader.defaultProps = {
-  items: 5
-};
-
-export const AppPlaceholder = props => (
-  <div>
-    <ContentLoader
-      height={ 16 }
-      width={ 300 }
-      speed={ 2 }
-      primaryColor="#FFFFFF"
-      secondaryColor="#FFFFFF"
-      { ...props }>
-      <rect x="0" y="0" rx="0" ry="0" width="420" height="10" />
-    </ContentLoader>
-    <RequestLoader />
-  </div>
-);
-
-export const DataListLoader = ({ items, ...props }) => (
+export const DataListLoader = ({ items }) => (
   <DataList aria-label="data-list-loader" aria-labelledby="datalist-placeholder">
     { [ ...Array(items) ].map((_item, index) => (
       <DataListItem key={ index } aria-labelledby="datalist-item-placeholder">
         <DataListItemRow aria-label="datalist-item-placeholder-row">
           <DataListItemCells dataListCells={ [
             <DataListCell key="1">
-              <ContentLoader
-                height={ 12 }
-                width={ 300 }
-                speed={ 2 }
-                primaryColor="#FFFFFF"
-                secondaryColor="#ecebeb"
-                { ...props }>
-                <rect x="0" y="0" rx="0" ry="0" width="300" height="12" />
-              </ContentLoader>
+              <Loader height={ 64 } width='100%' />
             </DataListCell>
           ] }
           />
         </DataListItemRow>
-
       </DataListItem>
     )) }
   </DataList>
@@ -127,17 +62,39 @@ DataListLoader.defaultProps = {
   items: 5
 };
 
-const FormItemLoader = () => (
-  <ContentLoader
-    height={ 36 }
-    width={ 400 }
-    speed={ 2 }
-    primaryColor="#ffffff"
-    secondaryColor="#ecebeb"
-  >
-    <rect x="0" y="0" rx="0" ry="0" width="400" height="36" />
-  </ContentLoader>
+export const RequestLoader = () => (
+  <div className="ins__approval__request_loader">
+    <Grid gutter="md">
+      <GridItem md={ 4 } lg={ 3 } className="info-bar">
+        <Stack gutter="md">
+          <StackItem>
+            <Card>
+              <CardBody>
+                <Loader className="pf-u-mb-sm ins__approval__request_loader-card" />
+              </CardBody>
+            </Card>
+          </StackItem>
+        </Stack>
+      </GridItem>
+      <GridItem md={ 8 } lg={ 9 } className="detail-pane">
+        <DataListLoader/>
+      </GridItem>
+    </Grid>
+  </div>
 );
+
+export const AppPlaceholder = () => (
+  <Main className="pf-u-p-0 pf-u-ml-0">
+    <TopToolbar className="ins__approval__placeholder_toolbar">
+      <TopToolbarTitle/>
+    </TopToolbar>
+    <Section type="content">
+      <DataListLoader />
+    </Section>
+  </Main>
+);
+
+const FormItemLoader = () => <Loader height={ 64 } width='100%' />;
 
 export const WorkflowInfoFormLoader = () => (
   <Form>
@@ -150,16 +107,4 @@ export const WorkflowInfoFormLoader = () => (
   </Form>
 );
 
-export const ToolbarTitlePlaceholder = props => (
-  <ContentLoader
-    height={ 21 }
-    width={ 200 }
-    speed={ 2 }
-    primaryColor="#f3f3f3"
-    secondaryColor="#ecebeb"
-    { ...props }
-  >
-    <rect x="0" y="0" rx="0" ry="0" width="200" height="21" />
-  </ContentLoader>
-);
-
+export const ToolbarTitlePlaceholder = () => <Loader height={ 32 } width={ 200 } className="pf-u-mb-md" />;

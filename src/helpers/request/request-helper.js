@@ -6,10 +6,43 @@ import { APPROVAL_REQUESTER_PERSONA, APPROVAL_APPROVER_PERSONA } from '../shared
 const actionApi = getActionApi();
 const graphqlInstance = getGraphqlInstance();
 
-export function fetchRequests(filter = '', pagination = defaultSettings, persona = undefined) {
-  const paginationQuery = `&limit=${pagination.limit}&offset=${pagination.offset}`;
-  const filterQuery = `filter[name][contains_i]=${filter}`;
-  const fetchUrl = `${APPROVAL_API_BASE}/requests/?${filterQuery}${paginationQuery}`;
+const sortPropertiesMapper = (property) => ({
+  'request-id': 'id',
+  opened: 'created_at',
+  requester: 'requester_name',
+  status: 'state'
+}[property] || property
+);
+
+const filterQuery = (filterValue) => {
+  const query = [];
+  if (filterValue.name) {
+    query.push(`filter[name][contains_i]=${filterValue.name}`);
+  }
+
+  if (filterValue.requester) {
+    query.push(`filter[requester_name][contains_i]=${filterValue.requester}`);
+  }
+
+  if (filterValue.status) {
+    filterValue.status.forEach(state => {
+      query.push(`filter[state][eq][]=${state}`);
+    });
+  }
+
+  if (filterValue.decision) {
+    filterValue.decision.forEach(dec => {
+      query.push(`filter[decision][eq][]=${dec}`);
+    });
+  }
+
+  return query.join('&');
+};
+
+export function fetchRequests(filter = {}, pagination = defaultSettings, persona = undefined, sortBy) {
+  const paginationQuery = `&limit=${Math.max(pagination.limit, 10)}&offset=${pagination.offset}`;
+  const sortQuery = `&sort_by=${sortPropertiesMapper(sortBy.property)}:${sortBy.direction}`;
+  const fetchUrl = `${APPROVAL_API_BASE}/requests/?${filterQuery(filter)}${paginationQuery}${sortQuery}`;
   const fetchHeaders = persona ? { 'x-rh-persona': persona } : undefined;
   return getAxiosInstance()({ method: 'get', url: fetchUrl, headers: fetchHeaders });
 }
@@ -84,8 +117,10 @@ export async function fetchRequestWithSubrequests(id, persona) {
 
       if (result && result.data) {
         requestData[0].requests = requestData[0].requests.map(request => {
-          return { ...result.data.find((item) => (item.id === request.id) && item.metadata),
-            ...request };
+          return {
+            ...result.data.find((item) => (item.id === request.id) && item.metadata),
+            ...request
+          };
         });
       }
     }
@@ -97,9 +132,7 @@ export async function fetchRequestWithSubrequests(id, persona) {
     }
   }
 
-  return  { ...requestData[0] };
+  return requestData[0];
 }
 
-export async function createRequestAction (requestId, actionIn) {
-  return await actionApi.createAction(requestId, actionIn);
-}
+export const createRequestAction = (requestId, actionIn) => actionApi.createAction(requestId, actionIn);

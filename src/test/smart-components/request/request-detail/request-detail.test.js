@@ -13,6 +13,13 @@ import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 import RequestInfoBar from '../../../../smart-components/request/request-detail/request-info-bar';
 import RequestTranscript from '../../../../smart-components/request/request-detail/request-transcript';
 import { mockGraphql } from '../../../__mocks__/user-login';
+import { BreadcrumbItem } from '@patternfly/react-core';
+import routes from '../../../../constants/routes';
+import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
+import requestReducer, { requestsInitialState } from '../../../../redux/reducers/request-reducer';
+import UserContext from '../../../../user-context';
+import ActionModal from '../../../../smart-components/request/action-modal';
+import { APPROVAL_ADMINISTRATOR_ROLE } from '../../../../helpers/shared/helpers';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=123' ]}) => (
   <Provider store={ store } >
@@ -27,6 +34,7 @@ describe('<RequestDetail />', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
   let initialState;
+  let roles;
 
   beforeEach(() => {
     initialProps = {
@@ -34,6 +42,7 @@ describe('<RequestDetail />', () => {
         title: 'Foo'
       }]
     };
+    roles = {};
     mockStore = configureStore(middlewares);
     initialState = {
       requestReducer: {
@@ -47,7 +56,6 @@ describe('<RequestDetail />', () => {
   });
 
   it('should render request details', async done => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     const store = mockStore(
@@ -155,11 +163,17 @@ describe('<RequestDetail />', () => {
     wrapper.update();
     expect(wrapper.find(RequestInfoBar)).toHaveLength(1);
     expect(wrapper.find(RequestTranscript)).toHaveLength(1);
+
+    expect(wrapper.find(BreadcrumbItem)).toHaveLength(2);
+    expect(wrapper.find(BreadcrumbItem).first().text()).toEqual('Request queue');
+    expect(wrapper.find(BreadcrumbItem).first().props().isActive).toEqual(false);
+
+    expect(wrapper.find(BreadcrumbItem).last().text()).toEqual('Request 123');
+    expect(wrapper.find(BreadcrumbItem).last().props().isActive).toEqual(true);
     done();
   });
 
   it('should render request loader', async done => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123`, mockOnce({ body: {}}));
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, {
@@ -182,4 +196,138 @@ describe('<RequestDetail />', () => {
     done();
   });
 
+  describe('actions', () => {
+    const graphlQlData = {
+      data: {
+        requests: [
+          {
+            id: '123',
+            name: 'Hello World',
+            number_of_children: '0',
+            decision: 'undecided',
+            description: null,
+            group_name: 'Test Approval Group',
+            number_of_finished_children: '0',
+            state: 'notified',
+            actions: [
+              { id: '1209', operation: 'start', comments: null, created_at: '2020-05-13T13:36:05.580Z', processed_by: 'system' },
+              { id: '1211', operation: 'notify', comments: null, created_at: '2020-05-13T13:36:29.278Z', processed_by: 'system' }
+            ],
+            requests: []}
+        ]
+      }
+    };
+    const contentData = {
+      params: {
+        quest: 'Test Approval',
+        airspeed: 3,
+        username: 'insights-qa',
+        int_value: 5
+      },
+      product: 'Hello World',
+      order_id: '654',
+      platform: 'Dev Public Ansible Tower (18.188.178.206)',
+      portfolio: 'LGTestNoTags'
+    };
+
+    it('opens comment modal', async () => {
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+      const store = registry.getStore();
+
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
+      mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
+
+      let wrapper;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
+
+      await act(async() => {
+        wrapper = mount(
+          <UserContext.Provider value={ { userRoles: roles } }>
+            <ComponentWrapper store={ store }>
+              <RequestDetail { ...initialProps } />
+            </ComponentWrapper>
+          </UserContext.Provider>
+        );
+      });
+      wrapper.update();
+
+      await act(async() => {
+        wrapper.find('#request-request-dropdown-123').first().simulate('click');
+      });
+      wrapper.update();
+      await act(async() => {
+        wrapper.find('Link#request-123-request-comment').first().simulate('click', { button: 0 });
+      });
+      wrapper.update();
+
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.addComment);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=123');
+      expect(wrapper.find(ActionModal).props().actionType).toEqual('Add Comment');
+    });
+
+    it('opens approve modal', async () => {
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+      const store = registry.getStore();
+
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
+      mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
+
+      let wrapper;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
+
+      await act(async() => {
+        wrapper = mount(
+          <UserContext.Provider value={ { userRoles: roles } }>
+            <ComponentWrapper store={ store }>
+              <RequestDetail { ...initialProps } />
+            </ComponentWrapper>
+          </UserContext.Provider>
+        );
+      });
+      wrapper.update();
+
+      await act(async() => {
+        wrapper.find('a#approve-123').first().simulate('click', { button: 0 });
+      });
+      wrapper.update();
+
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.approve);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=123');
+      expect(wrapper.find(ActionModal).props().actionType).toEqual('Approve');
+    });
+
+    it('opens deny modal', async () => {
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
+      const store = registry.getStore();
+
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
+      mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
+
+      let wrapper;
+      roles[APPROVAL_ADMINISTRATOR_ROLE] = true;
+
+      await act(async() => {
+        wrapper = mount(
+          <UserContext.Provider value={ { userRoles: roles } }>
+            <ComponentWrapper store={ store }>
+              <RequestDetail { ...initialProps } />
+            </ComponentWrapper>
+          </UserContext.Provider>
+        );
+      });
+      wrapper.update();
+
+      await act(async() => {
+        wrapper.find('a#deny-123').first().simulate('click', { button: 0 });
+      });
+      wrapper.update();
+
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.deny);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=123');
+      expect(wrapper.find(ActionModal).props().actionType).toEqual('Deny');
+    });
+  });
 });

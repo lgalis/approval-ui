@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { isApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
+import { useIsApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
 import { ActionTranscript } from './action-transcript';
 
 import {
@@ -28,7 +28,8 @@ import routes from '../../../constants/routes';
 
 export const Request = ({ item, isExpanded, toggleExpand }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
-  const { userPersona: userPersona } = useContext(UserContext);
+  const { userRoles: userRoles } = useContext(UserContext);
+  const isApprovalAdmin = useIsApprovalAdmin(userRoles);
 
   const onKebabToggle = isOpen => {
     setIsKebabOpen(isOpen);
@@ -39,7 +40,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
   };
 
   const checkCapability = (item, capability) => {
-    if (isApprovalAdmin(userPersona)) {
+    if (isApprovalAdmin) {
       return true;
     }
 
@@ -54,7 +55,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
         toggle={ <KebabToggle id={ `request-request-dropdown-${request.id}` } onToggle={ onKebabToggle }/> }
         isOpen={ isKebabOpen }
         dropdownItems={ [
-          <DropdownItem aria-label="Add Comment" key={ `add_comment_${request.id}` }>
+          <DropdownItem aria-label="Add Comment" key={ `add_comment_${request.id}` } component="button">
             <Link
               id={ `request-${request.id}-request-comment` }
               to={ {
@@ -150,7 +151,7 @@ Request.propTypes = {
       data: PropTypes.array
     }),
     metadata: PropTypes.shape({
-      user_capabilities: PropTypes.array
+      user_capabilities: PropTypes.object
     })
   }).isRequired,
   idx: PropTypes.number,

@@ -28,7 +28,15 @@ describe('Request actions', () => {
   it('should dispatch correct actions after fetching requests', () => {
     const store = mockStore({
       requestReducer: {
-        isLoading: false
+        isLoading: false,
+        sortBy: {
+          index: 1,
+          property: 'name',
+          direction: 'desc'
+        },
+        filterValue: {
+          name: 'some-name'
+        }
       }
     });
 
@@ -41,16 +49,19 @@ describe('Request actions', () => {
       }]},
       type: `${FETCH_REQUESTS}_FULFILLED`
     }];
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=%5Bobject%20Object%5D&limit=50&offset=0', mockOnce({
-      body: {
-        data: [{
-          label: 'request',
-          value: '11'
-        }]
-      }
-    }));
+    apiClientMock.get(
+      APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&limit=10&offset=0&sort_by=name%3Adesc',
+      mockOnce({
+        body: {
+          data: [{
+            label: 'request',
+            value: '11'
+          }]
+        }
+      })
+    );
 
-    return store.dispatch(fetchRequests({ limit: 10, offset: 0 })).then(() => {
+    return store.dispatch(fetchRequests(undefined, { limit: 10, offset: 0 })).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -58,7 +69,12 @@ describe('Request actions', () => {
   it('should dispatch error notification if fetch requests fails', () => {
     const store = mockStore({
       requestReducer: {
-        isLoading: false
+        isLoading: false,
+        sortBy: {
+          index: 1,
+          property: 'name',
+          direction: 'desc'
+        }
       }
     });
 
@@ -74,7 +90,7 @@ describe('Request actions', () => {
 
     }) ]);
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?limit=50&offset=0&sort_by=name%3Adesc', mockOnce({
       status: 500
     }));
 
@@ -91,7 +107,7 @@ describe('Request actions', () => {
       }
     });
 
-    apiClientMock.get(APPROVAL_API_BASE + '/requests/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0', mockOnce({
+    apiClientMock.get(APPROVAL_API_BASE + '/requests/?limit=50&offset=0', mockOnce({
       body: {
         data: [{
           id: '111',

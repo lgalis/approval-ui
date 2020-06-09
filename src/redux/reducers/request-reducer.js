@@ -2,7 +2,11 @@ import {
   FETCH_REQUEST,
   FETCH_REQUEST_CONTENT,
   FETCH_REQUESTS,
-  EXPAND_REQUEST
+  EXPAND_REQUEST,
+  SORT_REQUESTS,
+  SET_FILTER_REQUESTS,
+  CLEAR_FILTER_REQUESTS,
+  RESET_REQUEST_LIST
 } from '../../redux/action-types';
 
 // Initial State
@@ -11,11 +15,11 @@ export const requestsInitialState = {
     data: [],
     meta: {
       count: 0,
-      limit: 10,
+      limit: 50,
       offset: 0
     }
   },
-  filterValue: '',
+  filterValue: {},
   isRequestDataLoading: false,
   expandedRequests: [],
   selectedRequest: {
@@ -23,6 +27,11 @@ export const requestsInitialState = {
       user_capabilities: {}
     },
     requests: []
+  },
+  sortBy: {
+    direction: 'desc',
+    property: 'opened',
+    index: 3
   }
 };
 
@@ -31,6 +40,48 @@ const setRequests = (state, { payload }) => ({ ...state, requests: payload, isRe
 const selectRequest = (state, { payload }) => ({ ...state, selectedRequest: payload, isRequestDataLoading: false });
 const setRequestContent = (state, { payload }) => ({ ...state, requestContent: payload, isRequestDataLoading: false });
 const setexpandRequest = (state, { payload }) => ({ ...state, expandedRequests: [ ...state.expandedRequests, payload ]});
+const setSortRequests = (state, { payload }) => ({
+  ...state,
+  sortBy: payload,
+  requests: {
+    ...state.requests,
+    meta: {
+      ...state.requests.meta,
+      offset: 0
+    }
+  }
+});
+const setFilterValueRequests = (state, { payload }) => ({
+  ...state,
+  filterValue: {
+    ...state.filterValue,
+    [payload.type]: payload.filterValue
+  },
+  requests: {
+    ...state.requests,
+    meta: {
+      ...state.requests.meta,
+      offset: 0
+    }
+  }
+});
+const clearFilterValueRequests = (state) => ({
+  ...state,
+  filterValue: {}
+});
+
+const resetRequestList = (state) => ({
+  ...state,
+  requests: {
+    data: [],
+    meta: {
+      count: 0,
+      limit: 50,
+      offset: 0
+    }
+  },
+  filterValue: {}
+});
 
 export default {
   [`${FETCH_REQUESTS}_PENDING`]: setLoadingState,
@@ -39,5 +90,9 @@ export default {
   [`${FETCH_REQUEST}_FULFILLED`]: selectRequest,
   [`${FETCH_REQUEST_CONTENT}_PENDING`]: setLoadingState,
   [`${FETCH_REQUEST_CONTENT}_FULFILLED`]: setRequestContent,
-  [EXPAND_REQUEST]: setexpandRequest
+  [EXPAND_REQUEST]: setexpandRequest,
+  [SORT_REQUESTS]: setSortRequests,
+  [SET_FILTER_REQUESTS]: setFilterValueRequests,
+  [CLEAR_FILTER_REQUESTS]: clearFilterValueRequests,
+  [RESET_REQUEST_LIST]: resetRequestList
 };
