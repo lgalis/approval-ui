@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/dist/cjs/actions';
 
 import { addWorkflow, fetchWorkflows } from '../../../redux/actions/workflow-actions';
 import routes from '../../../constants/routes';

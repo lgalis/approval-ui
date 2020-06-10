@@ -5,8 +5,8 @@ import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { defaultSettings, getCurrentPage, getNewPage  } from '../../helpers/shared/pagination';
 import { DataListLoader } from './loader-placeholders';
 import { useIntl } from 'react-intl';
-import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
-import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/components/PrimaryToolbar';
+import { Section } from '@redhat-cloud-services/frontend-components/components/cjs/Section';
+import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/components/cjs/PrimaryToolbar';
 
 /**
  * Need to optimize this component

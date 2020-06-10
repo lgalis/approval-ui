@@ -9,7 +9,7 @@ import {
   TextContent,
   TextVariants
 } from '@patternfly/react-core';
-import { EmptyTable } from '@redhat-cloud-services/frontend-components';
+import { EmptyTable } from '@redhat-cloud-services/frontend-components/components/cjs/EmptyTable';
 
 const TableEmptyState = ({
   title,
