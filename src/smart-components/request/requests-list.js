@@ -281,7 +281,7 @@ RequestsList.propTypes = {
   persona: PropTypes.string
 };
 RequestsList.default = {
-  actionsDisabled: () => true,
+  actionsDisabled: () => true
 };
 
 export default RequestsList;

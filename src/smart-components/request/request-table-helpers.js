@@ -9,7 +9,7 @@ import { decisionValues } from '../../utilities/constants';
 const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : '';
 const decisionDisplayName = (decision) => decisionValues[decision] ? decisionValues[decision].displayName : '';
 
-export const createRows = (data, actionsDisabled ) =>
+export const createRows = (data, actionsDisabled) =>
   data.reduce((acc, { id,
     name,
     requester_name,
@@ -42,7 +42,7 @@ export const createRows = (data, actionsDisabled ) =>
       parent: key * 2,
       fullWidth: true,
       cells: [{
-        title: <ExpandableContent actionsDisabled={actionsDisabled} id={ id }
+        title: <ExpandableContent actionsDisabled={ actionsDisabled } id={ id }
           number_of_children={ number_of_children }
           state={ state }
           reason={ reason }/>

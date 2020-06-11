@@ -42,7 +42,7 @@ export const TableToolbarView = ({
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
-    setRows(createRows(data, actionsDisabled ));
+    setRows(createRows(data, actionsDisabled));
   }, [ data ]);
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
