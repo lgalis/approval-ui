@@ -18,7 +18,7 @@ const RequestInfoBar = ({ request, requestContent }) => (
           <Stack gutter="md">
             <StackItem key={ 'request-summary' }>
               <Title headingLevel="h5" size="lg">
-                    Summary
+                Summary
               </Title>
             </StackItem>
             <StackItem key={ 'request-product' }>

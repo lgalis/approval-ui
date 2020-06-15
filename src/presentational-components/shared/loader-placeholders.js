@@ -76,7 +76,7 @@ export const RequestLoader = () => (
           </StackItem>
         </Stack>
       </GridItem>
-      <GridItem md={ 8 } lg={ 9 } className="detail-pane">
+      <GridItem md={ 8 } lg={ 9 } className="detail-pane pf-u-p-lg">
         <DataListLoader/>
       </GridItem>
     </Grid>

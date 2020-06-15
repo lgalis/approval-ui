@@ -62,7 +62,7 @@ const RequestDetail = () => {
           <GridItem md={ 4 } lg={ 3 } className="info-bar">
             <RequestInfoBar request={ selectedRequest } requestContent={ requestContent }/>
           </GridItem>
-          <GridItem md={ 8 } lg={ 9 } className="detail-pane">
+          <GridItem md={ 8 } lg={ 9 } className="detail-pane pf-u-p-lg">
             <RequestTranscript request={ selectedRequest } url={ location.url }/>
           </GridItem>
         </Fragment>
