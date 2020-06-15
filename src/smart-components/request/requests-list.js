@@ -277,7 +277,7 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled }) => {
 RequestsList.propTypes = {
   routes: PropTypes.func,
   actionResolver: PropTypes.func,
-  actionsDisabled: PropTypes.func,
+  actionsDisabled: PropTypes.bool,
   persona: PropTypes.string
 };
 RequestsList.default = {

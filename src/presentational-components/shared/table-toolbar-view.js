@@ -177,7 +177,8 @@ TableToolbarView.propTypes = {
   sortBy: propTypes.object,
   onSort: propTypes.func,
   activeFiltersConfig: propTypes.object,
-  filterConfig: propTypes.array
+  filterConfig: propTypes.array,
+  actionsDisabled: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
@@ -186,5 +187,6 @@ TableToolbarView.defaultProps = {
   pagination: defaultSettings,
   isSelectable: null,
   routes: () => null,
+  renderEmptyState: () => null,
   filterConfig: []
 };
