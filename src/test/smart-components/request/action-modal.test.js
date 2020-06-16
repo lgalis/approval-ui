@@ -120,19 +120,6 @@ describe('<ActionModal />', () => {
 
     wrapper.find('button.pf-c-button').first().simulate('click');
     wrapper.update();
-
-    const expectedActions = [
-      {
-        type: '@@INSIGHTS-CORE/NOTIFICATIONS/ADD_NOTIFICATION',
-        payload: {
-          variant: 'warning',
-          title: 'Add Comment',
-          dismissable: true,
-          description: 'Add Comment was cancelled by the user.'
-        }
-      }
-    ];
-    expect(store.getActions()).toEqual(expectedActions);
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual('/requests');
   });
 });

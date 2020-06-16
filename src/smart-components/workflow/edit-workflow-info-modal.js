@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useHistory } from 'react-router-dom';
 import { Modal } from '@patternfly/react-core';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/cjs/actions';
 import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/dist/cjs/validator-types';
@@ -68,7 +67,6 @@ const reducer = (state, { type, initialValues, schema }) => {
 };
 
 const EditWorkflowInfoModal = ({
-  addNotification,
   fetchWorkflow,
   updateWorkflow,
   postMethod,
@@ -95,20 +93,7 @@ const EditWorkflowInfoModal = ({
     return updateWorkflow(workflowData).then(() => postMethod()).then(() => push(routes.workflows.index));
   };
 
-  const onCancel = () => {
-    const { title, description } =
-        editType === 'sequence' ? { title: `Edit approval process's sequence`,
-          description: `Edit approval process's sequence was cancelled by the user.` } :
-          { title: `Edit approval process's information`,
-            description: `Edit approval process's information was cancelled by the user.` };
-    addNotification({
-      variant: 'warning',
-      title,
-      dismissable: true,
-      description
-    });
-    push(routes.workflows.index);
-  };
+  const onCancel = () => push(routes.workflows.index);
 
   return (
     <Modal
@@ -141,7 +126,6 @@ EditWorkflowInfoModal.defaultProps = {
 };
 
 EditWorkflowInfoModal.propTypes = {
-  addNotification: PropTypes.func.isRequired,
   fetchWorkflow: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired,
@@ -149,7 +133,6 @@ EditWorkflowInfoModal.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  addNotification,
   addWorkflow,
   updateWorkflow,
   fetchWorkflow
