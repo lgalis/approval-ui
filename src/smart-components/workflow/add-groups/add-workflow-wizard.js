@@ -2,7 +2,6 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/cjs/actions';
 
 import { addWorkflow, fetchWorkflows } from '../../../redux/actions/workflow-actions';
 import routes from '../../../constants/routes';
@@ -22,15 +21,7 @@ const AddWorkflow = () => {
     })).then(() => dispatch(fetchWorkflows()));
   };
 
-  const onCancel = () => {
-    dispatch(addNotification({
-      variant: 'warning',
-      title: 'Creating approval process',
-      dismissable: true,
-      description: 'Creating approval process was cancelled by the user.'
-    }));
-    push(routes.workflows.index);
-  };
+  const onCancel = () => push(routes.workflows.index);
 
   return (
     <FormRenderer
