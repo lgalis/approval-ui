@@ -3,11 +3,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import mock, { once } from 'xhr-mock';
 
-/**
- * mock fetch
- */
-import 'whatwg-fetch';
-
 configure({ adapter: new Adapter() });
 
 global.shallow = shallow;

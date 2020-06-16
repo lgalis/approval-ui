@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react';
-import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
+import { SearchIcon } from '@patternfly/react-icons';
 import { useIsApprovalAdmin } from '../../helpers/shared/helpers';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
 import { AppTabs } from '../../smart-components/app-tabs/app-tabs';

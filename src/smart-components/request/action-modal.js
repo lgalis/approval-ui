@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/dist/cjs/actions';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/cjs/actions';
 import { createRequestAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 import useQuery from '../../utilities/use-query';

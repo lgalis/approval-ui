@@ -1,8 +1,8 @@
 
 import promiseMiddleware from 'redux-promise-middleware';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/cjs/ReducerRegistry';
-import notifications from '@redhat-cloud-services/frontend-components-notifications/dist/cjs/notifications';
-import notificationsMiddleware from '@redhat-cloud-services/frontend-components-notifications/dist/cjs/notificationsMiddleware';
+import notifications from '@redhat-cloud-services/frontend-components-notifications/cjs/notifications';
+import notificationsMiddleware from '@redhat-cloud-services/frontend-components-notifications/cjs/notificationsMiddleware';
 
 import thunk from 'redux-thunk';
 import requestReducer, { requestsInitialState } from '../redux/reducers/request-reducer';
