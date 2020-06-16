@@ -4,7 +4,6 @@ import NotificationsPortal from '@redhat-cloud-services/frontend-components-noti
 import { Routes } from './Routes';
 import { AppPlaceholder } from './presentational-components/shared/loader-placeholders';
 import { defaultSettings } from './helpers/shared/pagination';
-import 'whatwg-fetch';
 // react-int eng locale data
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter } from 'react-router-dom';
