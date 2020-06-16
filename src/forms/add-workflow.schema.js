@@ -19,7 +19,7 @@ const addWorkflowSchema = (intl) => ({
     fields: [{
       name: 'general-information',
       showTitle: true,
-      customTitle: <Title size="md"> { <FormattedMessage id="enter-info" defaultMessage="Enter your information" /> } </Title>,
+      customTitle: <Title headingLevel="h3" size="md"> { <FormattedMessage id="enter-info" defaultMessage="Enter your information" /> } </Title>,
       title: intl.formatMessage({
         id: 'create-approval-process-gen-info',
         defaultMessage: 'General information'

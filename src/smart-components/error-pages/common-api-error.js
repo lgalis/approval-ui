@@ -35,7 +35,7 @@ const CommonApiError = () => {
             <EmptyStateIcon icon={ LockIcon } />
           </div>
           <div>
-            <Title size="lg">{ TITLES[pathname] }</Title>
+            <Title headingLevel="h5" size="lg">{ TITLES[pathname] }</Title>
           </div>
           <EmptyStateBody>
             { MESSAGES[pathname] }

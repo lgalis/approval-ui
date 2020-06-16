@@ -18,131 +18,97 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
   }
 >
   <Component>
-    <ComponentWithOuia
-      component={[Function]}
-      componentProps={
-        Object {
-          "children": Array [
-            <BreadcrumbItem
-              isActive={false}
-            >
-              <NavLink
-                exact={true}
-                isActive={[Function]}
-                to="/first-level"
-              >
-                First level
-              </NavLink>
-            </BreadcrumbItem>,
-            <BreadcrumbItem
-              isActive={true}
-            >
-              Second level
-            </BreadcrumbItem>,
-          ],
-        }
-      }
-      consumerContext={null}
+    <nav
+      aria-label="Breadcrumb"
+      className="pf-c-breadcrumb"
+      data-ouia-component-id={0}
+      data-ouia-component-type="PF4/Breadcrumb"
+      data-ouia-safe={true}
     >
-      <Breadcrumb
-        ouiaContext={
-          Object {
-            "isOuia": false,
-            "ouiaId": null,
-          }
-        }
+      <ol
+        className="pf-c-breadcrumb__list"
       >
-        <nav
-          aria-label="Breadcrumb"
-          className="pf-c-breadcrumb"
+        <Component
+          isActive={false}
+          key="First level"
         >
-          <ol
-            className="pf-c-breadcrumb__list"
+          <li
+            className="pf-c-breadcrumb__item"
           >
-            <BreadcrumbItem
-              isActive={false}
-              key="First level"
+            <NavLink
+              exact={true}
+              isActive={[Function]}
+              to="/first-level"
             >
-              <li
-                className="pf-c-breadcrumb__item"
+              <Link
+                aria-current={null}
+                to={
+                  Object {
+                    "hash": "",
+                    "pathname": "/first-level",
+                    "search": "",
+                    "state": null,
+                  }
+                }
               >
-                <NavLink
-                  exact={true}
-                  isActive={[Function]}
-                  to="/first-level"
+                <LinkAnchor
+                  aria-current={null}
+                  href="/first-level"
+                  navigate={[Function]}
                 >
-                  <Link
+                  <a
                     aria-current={null}
-                    to={
-                      Object {
-                        "hash": "",
-                        "pathname": "/first-level",
-                        "search": "",
-                        "state": null,
-                      }
-                    }
+                    href="/first-level"
+                    onClick={[Function]}
                   >
-                    <LinkAnchor
-                      aria-current={null}
-                      href="/first-level"
-                      navigate={[Function]}
-                    >
-                      <a
-                        aria-current={null}
-                        href="/first-level"
-                        onClick={[Function]}
-                      >
-                        First level
-                      </a>
-                    </LinkAnchor>
-                  </Link>
-                </NavLink>
-                <span
-                  className="pf-c-breadcrumb__item-divider"
-                >
-                  <AngleRightIcon
-                    color="currentColor"
-                    noVerticalAlign={false}
-                    size="sm"
-                    title={null}
-                  >
-                    <svg
-                      aria-hidden={true}
-                      aria-labelledby={null}
-                      fill="currentColor"
-                      height="1em"
-                      role="img"
-                      style={
-                        Object {
-                          "verticalAlign": "-0.125em",
-                        }
-                      }
-                      viewBox="0 0 256 512"
-                      width="1em"
-                    >
-                      <path
-                        d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
-                        transform=""
-                      />
-                    </svg>
-                  </AngleRightIcon>
-                </span>
-              </li>
-            </BreadcrumbItem>
-            <BreadcrumbItem
-              isActive={true}
-              key="Second level"
+                    First level
+                  </a>
+                </LinkAnchor>
+              </Link>
+            </NavLink>
+            <span
+              className="pf-c-breadcrumb__item-divider"
             >
-              <li
-                className="pf-c-breadcrumb__item"
+              <AngleRightIcon
+                color="currentColor"
+                noVerticalAlign={false}
+                size="sm"
               >
-                Second level
-              </li>
-            </BreadcrumbItem>
-          </ol>
-        </nav>
-      </Breadcrumb>
-    </ComponentWithOuia>
+                <svg
+                  aria-hidden={true}
+                  aria-labelledby={null}
+                  fill="currentColor"
+                  height="1em"
+                  role="img"
+                  style={
+                    Object {
+                      "verticalAlign": "-0.125em",
+                    }
+                  }
+                  viewBox="0 0 256 512"
+                  width="1em"
+                >
+                  <path
+                    d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    transform=""
+                  />
+                </svg>
+              </AngleRightIcon>
+            </span>
+          </li>
+        </Component>
+        <Component
+          isActive={true}
+          key="Second level"
+        >
+          <li
+            className="pf-c-breadcrumb__item"
+          >
+            Second level
+          </li>
+        </Component>
+      </ol>
+    </nav>
   </Component>
 </ApprovalBreadcrumbs>
 `;

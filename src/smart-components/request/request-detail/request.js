@@ -128,7 +128,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
       </DataListItemRow>
       <DataListContent aria-label="Request Content Details"
         isHidden={ !isExpanded }>
-        <Stack gutter="md">
+        <Stack hasGutter>
           <StackItem>
             <TextContent component={ TextVariants.h6 }>
               { renderActionList(item) }
