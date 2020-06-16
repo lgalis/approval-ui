@@ -45,38 +45,8 @@
   }
 }
 
-.stages-modal {
-    padding-bottom: 80px;
-}
-
 .disabled-link {
   pointer-events: none;
-}
-
-.toolbar-filter-input-group {
-  position: relative;
-  width: 300px;
-  height: 36px;
-  input {
-    position: absolute;
-    width: 300px;
-    background: transparent;
-  }
-  .filter-icons-container {
-    position: absolute;
-    right: 8px;
-    top: 8px;
-    svg {
-      z-index: 1000;
-      fill: #72767B;
-    }
-    &:hover {
-      svg.clear-filter {
-        fill: var(--pf-global--Color--100);
-        cursor: pointer;
-      }
-    }
-  }
 }
 
 .icon-danger-fill {
