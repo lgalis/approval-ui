@@ -22,6 +22,7 @@ export const TableToolbarView = ({
   toolbarButtons,
   data,
   actionResolver,
+  actionsDisabled,
   routes,
   titlePlural,
   titleSingular,
@@ -41,7 +42,7 @@ export const TableToolbarView = ({
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
-    setRows(createRows(data));
+    setRows(createRows(data, actionsDisabled));
   }, [ data ]);
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
@@ -176,7 +177,8 @@ TableToolbarView.propTypes = {
   sortBy: propTypes.object,
   onSort: propTypes.func,
   activeFiltersConfig: propTypes.object,
-  filterConfig: propTypes.array
+  filterConfig: propTypes.array,
+  actionsDisabled: propTypes.func
 };
 
 TableToolbarView.defaultProps = {
