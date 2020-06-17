@@ -40,6 +40,7 @@ const RemoveWorkflowModal = ({
 
   return (
     <Modal
+      aria-label="remove-workflow"
       isOpen
       variant="small"
       width={ '40%' }
