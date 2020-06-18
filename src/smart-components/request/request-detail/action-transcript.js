@@ -36,19 +36,18 @@ export const ActionTranscript = actionList => {
     <Stack>
       { actions.map(actionItem =>
         <div key={ `${actionItem.id}-action` }>
-          <TextContent><Text key={ `${actionItem.id}-action-created_at` } style={ { marginBottom: 0 } }
-            className="data-table-detail content" component={ TextVariants.small }>
+          <TextContent><Text key={ `${actionItem.id}-action-created_at` }
+            className="pf-u-mb-0" component={ TextVariants.small }>
             { timeAgo(actionItem.created_at) }
           </Text>
-          <Text key={ `${actionItem.id}-action-operation` }  style={ { marginBottom: 0 } }
-            className="data-table-detail content">
+          <Text key={ `${actionItem.id}-action-operation` }
+            className="pf-u-mb-md">
             { operationIcon(actionItem.operation) } { `${operationDisplayName(actionItem.operation)}  ${actionItem.processed_by}` }
           </Text>
-          { actionItem.comments && <Text key={ `${actionItem.id}-action-comments` } style={ { marginBottom: 0 } }
-            className="data-table-detail content" component={ TextVariants.h6 }>
+          { actionItem.comments && <Text key={ `${actionItem.id}-action-comments` }
+            className="pf-u-pt-0" component={ TextVariants.p }>
             { `${actionItem.comments}` }
           </Text> } </TextContent>
-          <br/>
         </div>)
       }
     </Stack>
