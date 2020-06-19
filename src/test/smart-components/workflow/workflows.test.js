@@ -647,16 +647,19 @@ describe('<Workflows />', () => {
     const wf1 = {
       id: '123',
       name: 'wf1',
+      selected: true,
       group_refs: []
     };
     const wf2 = {
       id: '456',
       name: 'wf2',
+      selected: true,
       group_refs: [ '' ]
     };
     const wf3 = {
       id: '789',
       name: 'wf',
+      selected: true,
       group_refs: [ '' ]
     };
     let storeReal;
@@ -693,6 +696,7 @@ describe('<Workflows />', () => {
       wrapper.update();
 
       await act(async () => {
+        wrapper.find('input[type="checkbox"]').first().getDOMNode().checked = true;
         wrapper.find('input[type="checkbox"]').first().simulate('change', { target: { checked: true }});
       });
       wrapper.update();
@@ -764,14 +768,16 @@ describe('<Workflows />', () => {
       expect(wrapper.find('Link#remove-multiple-workflows').find('button').props().disabled).toEqual(true);
 
       await act(async () => {
-        wrapper.find('input[type="checkbox"]').first().simulate('change', { target: { checked: true }});
+        wrapper.find('input[type="checkbox"]').first().getDOMNode().checked = true;
+        wrapper.find('input[type="checkbox"]').first().simulate('change');
       });
       wrapper.update();
 
       expect(wrapper.find('Link#remove-multiple-workflows').find('button').props().disabled).toEqual(false);
 
       await act(async () => {
-        wrapper.find('input[type="checkbox"]').first().simulate('change', { target: { checked: false }});
+        wrapper.find('input[type="checkbox"]').first().getDOMNode().checked = false;
+        wrapper.find('input[type="checkbox"]').first().simulate('change');
       });
       wrapper.update();
 

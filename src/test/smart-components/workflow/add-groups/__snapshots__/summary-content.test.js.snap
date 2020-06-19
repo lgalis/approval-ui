@@ -3,7 +3,7 @@
 exports[`<SummaryContent /> should render correctly with groups 1`] = `
 <SummaryContent>
   <Stack
-    gutter="md"
+    hasGutter={true}
   >
     <div
       className="pf-l-stack pf-m-gutter"
@@ -13,13 +13,14 @@ exports[`<SummaryContent /> should render correctly with groups 1`] = `
           className="pf-l-stack__item"
         >
           <Title
+            headingLevel="h6"
             size="xl"
           >
-            <h1
+            <h6
               className="pf-c-title pf-m-xl"
             >
                Review 
-            </h1>
+            </h6>
           </Title>
         </div>
       </StackItem>
@@ -28,7 +29,7 @@ exports[`<SummaryContent /> should render correctly with groups 1`] = `
           className="pf-l-stack__item"
         >
           <Stack
-            gutter="md"
+            hasGutter={true}
           >
             <div
               className="pf-l-stack pf-m-gutter"
@@ -61,7 +62,7 @@ exports[`<SummaryContent /> should render correctly with groups 1`] = `
                   className="pf-l-stack__item"
                 >
                   <Grid
-                    gutter="md"
+                    hasGutter={true}
                   >
                     <div
                       className="pf-l-grid pf-m-gutter"
@@ -107,7 +108,7 @@ exports[`<SummaryContent /> should render correctly with groups 1`] = `
                     </div>
                   </Grid>
                   <Grid
-                    gutter="md"
+                    hasGutter={true}
                   >
                     <div
                       className="pf-l-grid pf-m-gutter"
@@ -153,7 +154,7 @@ exports[`<SummaryContent /> should render correctly with groups 1`] = `
                     </div>
                   </Grid>
                   <Grid
-                    gutter="md"
+                    hasGutter={true}
                   >
                     <div
                       className="pf-l-grid pf-m-gutter"
@@ -199,7 +200,7 @@ exports[`<SummaryContent /> should render correctly with groups 1`] = `
                     </div>
                   </Grid>
                   <Grid
-                    gutter="md"
+                    hasGutter={true}
                   >
                     <div
                       className="pf-l-grid pf-m-gutter"
@@ -256,7 +257,7 @@ exports[`<SummaryContent /> should render correctly with groups 1`] = `
 exports[`<SummaryContent /> should render correctly without groups 1`] = `
 <SummaryContent>
   <Stack
-    gutter="md"
+    hasGutter={true}
   >
     <div
       className="pf-l-stack pf-m-gutter"
@@ -266,13 +267,14 @@ exports[`<SummaryContent /> should render correctly without groups 1`] = `
           className="pf-l-stack__item"
         >
           <Title
+            headingLevel="h6"
             size="xl"
           >
-            <h1
+            <h6
               className="pf-c-title pf-m-xl"
             >
                Review 
-            </h1>
+            </h6>
           </Title>
         </div>
       </StackItem>
@@ -281,7 +283,7 @@ exports[`<SummaryContent /> should render correctly without groups 1`] = `
           className="pf-l-stack__item"
         >
           <Stack
-            gutter="md"
+            hasGutter={true}
           >
             <div
               className="pf-l-stack pf-m-gutter"
@@ -314,7 +316,7 @@ exports[`<SummaryContent /> should render correctly without groups 1`] = `
                   className="pf-l-stack__item"
                 >
                   <Grid
-                    gutter="md"
+                    hasGutter={true}
                   >
                     <div
                       className="pf-l-grid pf-m-gutter"
@@ -360,7 +362,7 @@ exports[`<SummaryContent /> should render correctly without groups 1`] = `
                     </div>
                   </Grid>
                   <Grid
-                    gutter="md"
+                    hasGutter={true}
                   >
                     <div
                       className="pf-l-grid pf-m-gutter"

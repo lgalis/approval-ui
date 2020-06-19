@@ -17,7 +17,7 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
     ]
   }
 >
-  <Component>
+  <Breadcrumb>
     <nav
       aria-label="Breadcrumb"
       className="pf-c-breadcrumb"
@@ -28,9 +28,10 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
       <ol
         className="pf-c-breadcrumb__list"
       >
-        <Component
+        <BreadcrumbItem
           isActive={false}
-          key="First level"
+          key=".$First level"
+          showDivider={false}
         >
           <li
             className="pf-c-breadcrumb__item"
@@ -66,6 +67,16 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
                 </LinkAnchor>
               </Link>
             </NavLink>
+          </li>
+        </BreadcrumbItem>
+        <BreadcrumbItem
+          isActive={true}
+          key=".$Second level"
+          showDivider={true}
+        >
+          <li
+            className="pf-c-breadcrumb__item"
+          >
             <span
               className="pf-c-breadcrumb__item-divider"
             >
@@ -95,20 +106,11 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
                 </svg>
               </AngleRightIcon>
             </span>
-          </li>
-        </Component>
-        <Component
-          isActive={true}
-          key="Second level"
-        >
-          <li
-            className="pf-c-breadcrumb__item"
-          >
             Second level
           </li>
-        </Component>
+        </BreadcrumbItem>
       </ol>
     </nav>
-  </Component>
+  </Breadcrumb>
 </ApprovalBreadcrumbs>
 `;

@@ -132,6 +132,7 @@ export const TableToolbarView = ({
             className="table-fix"
             sortBy={ sortBy }
             onSort={ onSort }
+            canSelectAll={ true }
           >
             <TableHeader />
             <TableBody/>
