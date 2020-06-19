@@ -17,6 +17,7 @@ import { approvalPersona } from '../../../helpers/shared/helpers';
 const initialState = {
   isFetching: true
 };
+
 const requestState = (state, action) => {
   switch (action.type) {
     case 'setFetching':
@@ -26,7 +27,7 @@ const requestState = (state, action) => {
   }
 };
 
-const RequestDetail = () => {
+const RequestDetail = ( requestBreadcrumbs ) => {
   const [{ isFetching }, stateDispatch ] = useReducer(requestState, initialState);
 
   const { selectedRequest, requestContent } = useSelector(
@@ -85,10 +86,7 @@ const RequestDetail = () => {
             closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
       </Switch>
       <TopToolbar
-        breadcrumbs={ [
-          { title: 'My requests', to: routes.requests.index, id: 'requests' },
-          { title: `Request ${id}`, id }
-        ] }
+        breadcrumbs={ requestBreadcrumbs }
         paddingBottom={ true }
       >
         <TopToolbarTitle title={ `Request ${id}` } />
@@ -102,4 +100,8 @@ const RequestDetail = () => {
   );
 };
 
+RequestDetail.defaultProps = {
+  requestBreadcrumbs: [{ title: 'My requests', to: routes.requests.index, id: 'requests' },
+    { title: `Request ${id}`, id }]
+}
 export default RequestDetail;

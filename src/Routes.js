@@ -8,6 +8,7 @@ import RequestsRoute from './routing/requests-route';
 
 const Requests = lazy(() => import(/* webpackChunkName: "requests" */ './smart-components/request/requests'));
 const RequestDetail = lazy(() => import(/* webpackChunkName: "request-detail" */ './smart-components/request/request-detail/request-detail'));
+const AllRequestDetail = lazy(() => import(/* webpackChunkName: "all-request-detail" */ './smart-components/request/request-detail/all-request-detail'));
 const Workflows = lazy(() => import(/* webpackChunkName: "workflows" */ './smart-components/workflow/workflows'));
 const AllRequests = lazy(() => import(/* webpackChunkName: "requests" */ './smart-components/request/allrequests'));
 const CommonApiError = lazy(() => import(/* webpackChunkName: "error-page" */ './smart-components/error-pages/common-api-error'));
@@ -42,6 +43,7 @@ export const Routes = () => {
     <RequestsRoute path={ paths.requests.index } component={ Requests }/>
     <Route path={ paths.allrequests.index } component={ AllRequests }/>
     <Route path={ paths.request.index } component={ RequestDetail }/>
+    <Route path={ paths.allrequest.index } component={ AllRequestDetail }/>
     <Route path={ errorPaths } component={ CommonApiError }/>
     <Route>
       <Redirect to={ defaultRequestPath }/>

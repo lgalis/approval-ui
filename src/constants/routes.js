@@ -14,6 +14,12 @@ const routes = {
     approve: '/request/approve',
     deny: '/request/deny'
   },
+  allrequest: {
+    index: '/allrequest',
+    addComment: '/allrequest/add-comment',
+    approve: '/allrequest/approve',
+    deny: '/allrequest/deny'
+  },
   workflows: {
     index: '/workflows',
     add: '/workflows/add-workflow',
