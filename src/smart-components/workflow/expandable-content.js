@@ -8,14 +8,14 @@ const ExpandableContent = ({ description, groupRefs }) => {
   return (
     <Fragment>
       <TextContent>
-        <Text className="data-table-detail heading" component={ TextVariants.small }>Description</Text>
-        <Text className="data-table-detail content" component={ TextVariants.h5 }>{ description }</Text>
+        <Text className="pf-u-mb-0" component={ TextVariants.small }>Description</Text>
+        <Text className="pf-u-mb-md" component={ TextVariants.p }>{ description }</Text>
       </TextContent>
       <TextContent>
         <Fragment>
-          <Text className="data-table-detail heading" component={ TextVariants.small }>Groups</Text>
-          <Text className="data-table-detail content"
-            component={ TextVariants.h5 }>
+          <Text className="pf-u-mb-0" component={ TextVariants.small }>Groups</Text>
+          <Text className="pf-u-mb-md"
+            component={ TextVariants.p }>
             { listGroupNames(groupRefs).join(',') }
           </Text>
         </Fragment>

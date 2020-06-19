@@ -325,23 +325,13 @@ exports[`<Request /> should render correctly 1`] = `
                                     className="pf-c-content"
                                   >
                                     <Text
-                                      className="data-table-detail content"
+                                      className="pf-u-mb-0"
                                       component="small"
                                       key="1-action-created_at"
-                                      style={
-                                        Object {
-                                          "marginBottom": 0,
-                                        }
-                                      }
                                     >
                                       <small
-                                        className="data-table-detail content"
+                                        className="pf-u-mb-0"
                                         data-pf-content={true}
-                                        style={
-                                          Object {
-                                            "marginBottom": 0,
-                                          }
-                                        }
                                       >
                                         <span>
                                           <DateFormat
@@ -353,22 +343,12 @@ exports[`<Request /> should render correctly 1`] = `
                                       </small>
                                     </Text>
                                     <Text
-                                      className="data-table-detail content"
+                                      className="pf-u-mb-md"
                                       key="1-action-operation"
-                                      style={
-                                        Object {
-                                          "marginBottom": 0,
-                                        }
-                                      }
                                     >
                                       <p
-                                        className="data-table-detail content"
+                                        className="pf-u-mb-md"
                                         data-pf-content={true}
-                                        style={
-                                          Object {
-                                            "marginBottom": 0,
-                                          }
-                                        }
                                       >
                                         <OnRunningIcon
                                           color="currentColor"
@@ -403,7 +383,6 @@ exports[`<Request /> should render correctly 1`] = `
                                      
                                   </div>
                                 </TextContent>
-                                <br />
                               </div>
                               <div
                                 key="2-action"
@@ -413,23 +392,13 @@ exports[`<Request /> should render correctly 1`] = `
                                     className="pf-c-content"
                                   >
                                     <Text
-                                      className="data-table-detail content"
+                                      className="pf-u-mb-0"
                                       component="small"
                                       key="2-action-created_at"
-                                      style={
-                                        Object {
-                                          "marginBottom": 0,
-                                        }
-                                      }
                                     >
                                       <small
-                                        className="data-table-detail content"
+                                        className="pf-u-mb-0"
                                         data-pf-content={true}
-                                        style={
-                                          Object {
-                                            "marginBottom": 0,
-                                          }
-                                        }
                                       >
                                         <span>
                                           <DateFormat
@@ -441,22 +410,12 @@ exports[`<Request /> should render correctly 1`] = `
                                       </small>
                                     </Text>
                                     <Text
-                                      className="data-table-detail content"
+                                      className="pf-u-mb-md"
                                       key="2-action-operation"
-                                      style={
-                                        Object {
-                                          "marginBottom": 0,
-                                        }
-                                      }
                                     >
                                       <p
-                                        className="data-table-detail content"
+                                        className="pf-u-mb-md"
                                         data-pf-content={true}
-                                        style={
-                                          Object {
-                                            "marginBottom": 0,
-                                          }
-                                        }
                                       >
                                         <EnvelopeIcon
                                           color="currentColor"
@@ -491,7 +450,6 @@ exports[`<Request /> should render correctly 1`] = `
                                      
                                   </div>
                                 </TextContent>
-                                <br />
                               </div>
                             </div>
                           </Stack>

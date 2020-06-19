@@ -10,8 +10,8 @@ import routes from '../../constants/routes';
 
 export const ExpandedItem = ({ title = '', detail = '' }) => (
   <TextContent>
-    <Text className="data-table-detail heading" component={ TextVariants.small }>{ title }</Text>
-    <Text className="data-table-detail content" component={ TextVariants.h5 }>{ detail }</Text>
+    <Text className="pf-u-mb-0" component={ TextVariants.small }>{ title }</Text>
+    <Text className="pf-u-mb-md" component={ TextVariants.p }>{ detail }</Text>
   </TextContent>
 );
 

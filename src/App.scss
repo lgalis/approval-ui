@@ -1,15 +1,6 @@
 @import '~@redhat-cloud-services/frontend-components/index.css';
 @import '~@redhat-cloud-services/frontend-components-notifications/index.css';
 
-.data-table-detail {
-  &.heading {
-    margin: 0 !important
-  }
-  &.content {
-    margin-top: 0 !important
-  }
-}
-
 .detail-pane {
   background-color: var(--pf-global--BackgroundColor--100);
   min-height: 100%;

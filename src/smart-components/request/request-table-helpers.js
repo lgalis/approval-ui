@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ExpandableContent from './expandable-content';
 import { timeAgo }  from '../../helpers/shared/helpers';
 import routes from '../../constants/routes';
-import { Text } from '@patternfly/react-core';
+import { Text, TextVariants } from '@patternfly/react-core';
 import { decisionValues } from '../../utilities/constants';
 
 const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : '';
@@ -22,8 +22,8 @@ export const createRows = (data, actionsDisabled) => data.reduce((acc, request, 
       timeAgo(request.created_at),
       request.finished_at ? timeAgo(request.finished_at) : (request.notified_at ? timeAgo(request.notified_at) : timeAgo(request.created_at)),
       request.state,
-      <Fragment key={ `decision-${request.id}` }><Text key={ `${request.decision}-$(request.id}` } style={ { marginBottom: 0 } }
-        className="data-table-detail content">
+      <Fragment key={ `decision-${request.id}` }><Text key={ `${request.decision}-$(request.id}` }
+        className="pf-u-mb-md" component={ TextVariants.p } >
         { decisionIcon(request.decision) } { `${decisionDisplayName(request.decision)}` }
       </Text></Fragment>
     ]
