@@ -86,7 +86,7 @@ const RequestDetail = () => {
       </Switch>
       <TopToolbar
         breadcrumbs={ [
-          { title: 'Request queue', to: routes.requests.index, id: 'requests' },
+          { title: 'My requests', to: routes.requests.index, id: 'requests' },
           { title: `Request ${id}`, id }
         ] }
         paddingBottom={ true }
