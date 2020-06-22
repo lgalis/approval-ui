@@ -100,8 +100,4 @@ const RequestDetail = ( requestBreadcrumbs ) => {
   );
 };
 
-RequestDetail.defaultProps = {
-  requestBreadcrumbs: [{ title: 'My requests', to: routes.requests.index, id: 'requests' },
-    { title: `Request ${id}`, id }]
-}
 export default RequestDetail;
