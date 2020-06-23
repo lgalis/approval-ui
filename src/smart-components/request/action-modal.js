@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from '@patternfly/react-core';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import { createRequestAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 import useQuery from '../../utilities/use-query';
@@ -13,7 +12,6 @@ import routes from '../../constants/routes';
 
 const ActionModal = ({
   actionType,
-  addNotification,
   createRequestAction,
   closeUrl,
   postMethod
@@ -38,16 +36,7 @@ const ActionModal = ({
       ).then(() => push(closeUrl));
   };
 
-  const onCancel = () => {
-    const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
-    addNotification({
-      variant: 'warning',
-      title: actionName,
-      dismissable: true,
-      description: `${actionName} was cancelled by the user.`
-    });
-    push(closeUrl);
-  };
+  const onCancel = () => push(closeUrl);
 
   return (
     <Modal
@@ -71,7 +60,6 @@ ActionModal.defaultProps = {
 };
 
 ActionModal.propTypes = {
-  addNotification: PropTypes.func.isRequired,
   createRequestAction: PropTypes.func.isRequired,
   postMethod: PropTypes.func,
   actionType: PropTypes.string,
@@ -79,7 +67,6 @@ ActionModal.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  addNotification,
   createRequestAction
 }, dispatch);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DateFormat } from '@redhat-cloud-services/frontend-components/components/DateFormat';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/components/cjs/DateFormat';
 
 const activeStates = [ 'notified' ];
 export const APPROVAL_ADMINISTRATOR_ROLE = 'Approval Administrator';

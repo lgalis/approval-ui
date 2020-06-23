@@ -167,7 +167,7 @@ describe('<RequestDetail />', () => {
     expect(wrapper.find(RequestTranscript)).toHaveLength(1);
 
     expect(wrapper.find(BreadcrumbItem)).toHaveLength(2);
-    expect(wrapper.find(BreadcrumbItem).first().text()).toEqual('Request queue');
+    expect(wrapper.find(BreadcrumbItem).first().text()).toEqual('My requests');
     expect(wrapper.find(BreadcrumbItem).first().props().isActive).toEqual(false);
 
     expect(wrapper.find(BreadcrumbItem).last().text()).toEqual('Request 123');

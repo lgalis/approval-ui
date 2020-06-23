@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
 import toJson from 'enzyme-to-json';
-import ApprovalBreadcrumbs from '../../../presentational-components/shared/breadcrubms';
+import ApprovalBreadcrumbs from '../../../presentational-components/shared/breadcrumbs';
 
 describe('<ApprovalBreadcrumbs />', () => {
   let initialProps;

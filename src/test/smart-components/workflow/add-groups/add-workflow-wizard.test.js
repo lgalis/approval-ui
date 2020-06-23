@@ -9,7 +9,6 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications/';
 import AddWorkflow from '../../../../smart-components/workflow/add-groups/add-workflow-wizard';
-import { ADD_NOTIFICATION } from '@redhat-cloud-services/frontend-components-notifications/index';
 import { IntlProvider } from 'react-intl';
 import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 
@@ -51,32 +50,6 @@ describe('<AddWorkflow />', () => {
         }}
     };
     mockStore = configureStore(middlewares);
-  });
-
-  it('should post a warning message on Cancel', async () => {
-    const store = mockStore(initialState);
-
-    const wrapper = mount(
-      <ComponentWrapper store={ store }>
-        <Route path="/workflows/add-workflow/" render={ () => <AddWorkflow { ...initialProps } /> } />
-      </ComponentWrapper>
-    );
-    const expectedActions = expect.arrayContaining([
-      expect.objectContaining({
-        type: ADD_NOTIFICATION,
-        payload: expect.objectContaining({
-          title: 'Creating approval process',
-          variant: 'warning',
-          description: 'Creating approval process was cancelled by the user.',
-          dismissable: true
-        })
-      }) ]);
-
-    await act(async () => {
-      wrapper.find('Button').at(0).simulate('click');
-    });
-    wrapper.update();
-    expect(store.getActions()).toEqual(expectedActions);
   });
 
   it.skip('should submit the form', async () => {
