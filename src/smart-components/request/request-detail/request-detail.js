@@ -38,7 +38,7 @@ const RequestDetail = () => {
     }) => ({ selectedRequest, requestContent })
   );
 
-  const [{ request: id }, search ] = useQuery([ 'request' ]);
+  const [{ request: id }] = useQuery([ 'request' ]);
   const location = useLocation();
   const dispatch = useDispatch();
   const { userRoles: userRoles } = useContext(UserContext);
@@ -74,12 +74,15 @@ const RequestDetail = () => {
     <Fragment>
       <Switch>
         <Route exact path={ routes.request.addComment }>
-          <ActionModal actionType={ 'Add Comment' } closeUrl={ { pathname: routes.request.index, search } }/>
+          <ActionModal actionType={ 'Add Comment' }
+            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } }/>
         </Route>
         <Route exact path={ routes.request.approve } render={ props =>
-          <ActionModal { ...props } actionType={ 'Approve' } closeUrl={ { pathname: routes.request.index, search } } /> } />
+          <ActionModal { ...props } actionType={ 'Approve' }
+            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
         <Route exact path={ routes.request.deny } render={ props =>
-          <ActionModal { ...props } actionType={ 'Deny' } closeUrl={ { pathname: routes.request.index, search } }  /> } />
+          <ActionModal { ...props } actionType={ 'Deny' }
+            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
       </Switch>
       <TopToolbar
         breadcrumbs={ [
