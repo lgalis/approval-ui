@@ -3,50 +3,38 @@ import { Link } from 'react-router-dom';
 import ExpandableContent from './expandable-content';
 import { timeAgo }  from '../../helpers/shared/helpers';
 import routes from '../../constants/routes';
-import { Text } from '@patternfly/react-core';
+import { Text, TextVariants } from '@patternfly/react-core';
 import { decisionValues } from '../../utilities/constants';
 
 const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : '';
 const decisionDisplayName = (decision) => decisionValues[decision] ? decisionValues[decision].displayName : '';
 
-export const createRows = (data) =>
-  data.reduce((acc, { id,
-    name,
-    requester_name,
-    created_at,
-    notified_at,
-    finished_at,
-    state,
-    decision,
-    reason,
-    number_of_children
-  }, key) => ([
-    ...acc, {
-      id,
-      isOpen: false,
-      state,
-      number_of_children,
-      cells: [
-        <Fragment key={ id }><Link to={ { pathname: routes.request.index, search: `?request=${id}` } }>{ id }</Link></Fragment>,
-        name,
-        requester_name,
-        timeAgo(created_at),
-        finished_at ? timeAgo(finished_at) : (notified_at ? timeAgo(notified_at) : timeAgo(created_at)),
-        state,
-        <Fragment key={ `decision-${id}` }><Text key={ `${decision}-$(id}` } style={ { marginBottom: 0 } }
-          className="data-table-detail content">
-          { decisionIcon(decision) } { `${decisionDisplayName(decision)}` }
-        </Text></Fragment>
-      ]
-    }, {
-      parent: key * 2,
-      fullWidth: true,
-      cells: [{
-        title: <ExpandableContent id={ id }
-          number_of_children={ number_of_children }
-          state={ state }
-          reason={ reason }/>
-      }]
-    }
-  ]), []);
-
+export const createRows = (data, actionsDisabled) => data.reduce((acc, request, key) => ([
+  ...acc, {
+    id: request.id,
+    isOpen: false,
+    state: request.state,
+    number_of_children: request.number_of_children,
+    cells: [
+      <Fragment key={ request.id }><Link to={ { pathname: routes.request.index, search: `?request=${request.id}` } }>{ request.id }</Link></Fragment>,
+      request.name,
+      request.requester_name,
+      timeAgo(request.created_at),
+      request.finished_at ? timeAgo(request.finished_at) : (request.notified_at ? timeAgo(request.notified_at) : timeAgo(request.created_at)),
+      request.state,
+      <Fragment key={ `decision-${request.id}` }><Text key={ `${request.decision}-$(request.id}` }
+        className="pf-u-mb-md" component={ TextVariants.p } >
+        { decisionIcon(request.decision) } { `${decisionDisplayName(request.decision)}` }
+      </Text></Fragment>
+    ]
+  }, {
+    parent: key * 2,
+    fullWidth: true,
+    cells: [{
+      title: <ExpandableContent actionsDisabled={ actionsDisabled(request) } id={ request.id }
+        number_of_children={ request.number_of_children }
+        state={ request.state }
+        reason={ request.reason }/>
+    }]
+  }
+]), []);

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Level, LevelItem, Text, TextContent, TextVariants  } from '@patternfly/react-core';
 import { ToolbarTitlePlaceholder } from './loader-placeholders';
-import ApprovalBreadcrumbs from './breadcrubms';
+import ApprovalBreadcrumbs from './breadcrumbs';
 import clsx from 'clsx';
 
 import './top-toolbar.scss';

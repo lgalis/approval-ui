@@ -1,31 +1,9 @@
 @import '~@redhat-cloud-services/frontend-components/index.css';
-
-
-.modal-form-right-align {
-  .pf-m-action:last-child {
-    .data-driven-forms__pf4-button-group:first-child {
-      margin-left: auto
-    }
-  }
-}
-
-.detail-title {
-  margin-bottom: 16px;
-}
-
-.data-table-detail {
-  &.heading {
-    margin: 0 !important
-  }
-  &.content {
-    margin-top: 0 !important
-  }
-}
+@import '~@redhat-cloud-services/frontend-components-notifications/index.css';
 
 .detail-pane {
-  background-color: white;
+  background-color: var(--pf-global--BackgroundColor--100);
   min-height: 100%;
-  padding: 20px;
   overflow: ellipsis;
   word-wrap: break-word
 }
@@ -39,7 +17,7 @@
 
 .destructive-color {
   &:not(:disabled) {
-    color: #FF0000 !important;
+    color: var(--pf-chart-color-red-100) !important;
   }
 }
 
@@ -49,42 +27,8 @@
   }
 }
 
-.stages-modal {
-    padding-bottom: 80px;
-}
-
 .disabled-link {
   pointer-events: none;
-}
-
-.toolbar-filter-input-group {
-  position: relative;
-  width: 300px;
-  height: 36px;
-  input {
-    position: absolute;
-    width: 300px;
-    background: transparent;
-  }
-  .filter-icons-container {
-    position: absolute;
-    right: 8px;
-    top: 8px;
-    svg {
-      z-index: 1000;
-      fill: #72767B;
-    }
-    &:hover {
-      svg.clear-filter {
-        fill: var(--pf-global--Color--100);
-        cursor: pointer;
-      }
-    }
-  }
-}
-
-.global-primary-background {
-  background-color: #fff
 }
 
 .icon-danger-fill {
@@ -103,10 +47,4 @@
   font-size: 14px;
   color: var(--pf-global--Color--100);
   font-weight: bold;
-}
-
-.ins__approval__primary_toolbar {
-  .pf-c-data-toolbar__content {
-    padding: 0;
-  }
 }

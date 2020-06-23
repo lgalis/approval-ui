@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useLocation, useHistory } from 'react-router-dom';
 import { Tabs, Tab } from '@patternfly/react-core';
 
-const approvalTabItems = [{ eventKey: 0, title: 'Request queue', name: '/requests' },
+const approvalTabItems = [{ eventKey: 0, title: 'My requests', name: '/requests' },
   { eventKey: 1, title: 'All requests', name: '/allrequests' },
   { eventKey: 2, title: 'Approval processes', name: '/workflows' }];
 

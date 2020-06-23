@@ -10,8 +10,8 @@ import routes from '../../constants/routes';
 
 export const ExpandedItem = ({ title = '', detail = '' }) => (
   <TextContent>
-    <Text className="data-table-detail heading" component={ TextVariants.small }>{ title }</Text>
-    <Text className="data-table-detail content" component={ TextVariants.h5 }>{ detail }</Text>
+    <Text className="pf-u-mb-0" component={ TextVariants.small }>{ title }</Text>
+    <Text className="pf-u-mb-md" component={ TextVariants.p }>{ detail }</Text>
   </TextContent>
 );
 
@@ -20,7 +20,7 @@ ExpandedItem.propTypes = {
   detail: PropTypes.node
 };
 
-const ExpandableContent = ({ id, number_of_children, state, reason }) => {
+const ExpandableContent = ({ id, number_of_children, state, reason, actionsDisabled }) => {
   const requestActive = isRequestStateActive(state) && !number_of_children;
   const [ requestContent, setRequestContent ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(true);
@@ -49,7 +49,7 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
         <LevelItem>
           <ExpandedItem title="Product" detail={ requestContent ? requestContent.product : 'Unknown' } />
         </LevelItem>
-        { requestActive && (isApprovalApprover || isApprovalAdmin) && <LevelItem>
+        { requestActive && (isApprovalApprover || isApprovalAdmin) && !actionsDisabled && <LevelItem>
           <Link to={ { pathname: routes.requests.approve, search: `request=${id}` } }  className="pf-u-mr-md">
             <Button variant="primary" aria-label="Approve Request" isDisabled={ !requestActive }>
               Approve
@@ -73,13 +73,18 @@ const ExpandableContent = ({ id, number_of_children, state, reason }) => {
   );
 };
 
+ExpandableContent.defaultProps = {
+  actionsDisabled: true
+};
+
 ExpandableContent.propTypes = {
   id: PropTypes.string,
   content: PropTypes.object,
   number_of_children: PropTypes.number,
   uname: PropTypes.string,
   state: PropTypes.string,
-  reason: PropTypes.string
+  reason: PropTypes.string,
+  actionsDisabled: PropTypes.bool
 };
 
 export default ExpandableContent;

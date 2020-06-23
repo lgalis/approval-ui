@@ -15,8 +15,8 @@ import {
   Card,
   CardBody
 } from '@patternfly/react-core';
-import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
-import { Main } from '@redhat-cloud-services/frontend-components/components/Main';
+import { Section } from '@redhat-cloud-services/frontend-components/components/cjs/Section';
+import { Main } from '@redhat-cloud-services/frontend-components/components/cjs/Main';
 
 import clsx from 'clsx';
 
@@ -76,7 +76,7 @@ export const RequestLoader = () => (
           </StackItem>
         </Stack>
       </GridItem>
-      <GridItem md={ 8 } lg={ 9 } className="detail-pane">
+      <GridItem md={ 8 } lg={ 9 } className="detail-pane pf-u-p-lg">
         <DataListLoader/>
       </GridItem>
     </Grid>

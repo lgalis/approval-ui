@@ -7,27 +7,17 @@ import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-
 
 import SummaryContent from '../workflow/add-groups/summary-content';
 
-const buttonPositioning = {
-  default: {},
-  modal: {
-    buttonOrder: [ 'cancel', 'reset', 'save' ],
-    buttonClassName: 'modal-form-right-align'
-  }
-};
-
 const componentMapperExtended = {
   ...componentMapper,
   summary: SummaryContent
 };
 
 const FormRenderer = ({ formContainer, ...rest }) => (
-  <div className={ buttonPositioning[formContainer].buttonClassName }>
-    <ReactFormRender
-      componentMapper={ componentMapperExtended }
-      FormTemplate={ (props) => <FormTemplate { ...props } { ...buttonPositioning[formContainer] }/> }
-      { ...rest }
-    />
-  </div>
+  <ReactFormRender
+    componentMapper={ componentMapperExtended }
+    FormTemplate={ (props) => <FormTemplate { ...props }/> }
+    { ...rest }
+  />
 );
 
 FormRenderer.propTypes = {

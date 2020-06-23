@@ -26,13 +26,13 @@ exports[`<ApprovalBreadcrumbs /> should render breadcrumbs 1`] = `
             <BreadcrumbItem
               isActive={false}
             >
-              <ForwardRef
+              <NavLink
                 exact={true}
                 isActive={[Function]}
                 to="/first-level"
               >
                 First level
-              </ForwardRef>
+              </NavLink>
             </BreadcrumbItem>,
             <BreadcrumbItem
               isActive={true}
