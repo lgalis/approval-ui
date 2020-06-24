@@ -1,7 +1,7 @@
 import React from 'react';
 import routes from '../../../constants/routes';
-import useQuery from "../../../utilities/use-query";
-import RequestDetail from "./request-detail";
+import useQuery from '../../../utilities/use-query';
+import RequestDetail from './request-detail';
 
 const AllRequestDetail = () => {
   const [{ request: id }] = useQuery([ 'request' ]);
@@ -9,7 +9,7 @@ const AllRequestDetail = () => {
     { title: 'All requests', to: routes.allrequests.index, id: 'allrequests' },
     { title: `Request ${id}`, id }
   ];
-  return <RequestDetail breadcrumbs = { allRequestsBreadcrumbs} />;
+  return <RequestDetail requestBreadcrumbs={ allRequestsBreadcrumbs } />;
 };
 
 export default AllRequestDetail;

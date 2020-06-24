@@ -1,3 +1,4 @@
+
 import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
@@ -279,7 +280,8 @@ RequestsList.propTypes = {
   routes: PropTypes.func,
   actionResolver: PropTypes.func,
   actionsDisabled: PropTypes.func,
-  persona: PropTypes.string
+  persona: PropTypes.string,
+  type: PropTypes.string
 };
 RequestsList.default = {
   actionsDisabled: () => true

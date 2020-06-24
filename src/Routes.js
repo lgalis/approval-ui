@@ -8,7 +8,8 @@ import RequestsRoute from './routing/requests-route';
 
 const Requests = lazy(() => import(/* webpackChunkName: "requests" */ './smart-components/request/requests'));
 const MyRequestDetail = lazy(() => import(/* webpackChunkName: "request-detail" */ './smart-components/request/request-detail/my-request-detail'));
-const AllRequestDetail = lazy(() => import(/* webpackChunkName: "all-request-detail" */ './smart-components/request/request-detail/all-request-detail'));
+const AllRequestDetail = lazy(() =>
+  import(/* webpackChunkName: "all-request-detail" */ './smart-components/request/request-detail/all-request-detail'));
 const Workflows = lazy(() => import(/* webpackChunkName: "workflows" */ './smart-components/workflow/workflows'));
 const AllRequests = lazy(() => import(/* webpackChunkName: "requests" */ './smart-components/request/allrequests'));
 const CommonApiError = lazy(() => import(/* webpackChunkName: "error-page" */ './smart-components/error-pages/common-api-error'));

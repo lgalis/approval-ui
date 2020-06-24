@@ -13,6 +13,7 @@ import UserContext from '../../../user-context';
 import useQuery from '../../../utilities/use-query';
 import routes from '../../../constants/routes';
 import { approvalPersona } from '../../../helpers/shared/helpers';
+import PropTypes from 'prop-types';
 
 const initialState = {
   isFetching: true
@@ -27,7 +28,7 @@ const requestState = (state, action) => {
   }
 };
 
-const RequestDetail = ( requestBreadcrumbs ) => {
+const RequestDetail = ({ requestBreadcrumbs }) => {
   const [{ isFetching }, stateDispatch ] = useReducer(requestState, initialState);
 
   const { selectedRequest, requestContent } = useSelector(
@@ -98,6 +99,10 @@ const RequestDetail = ( requestBreadcrumbs ) => {
       </Section>
     </Fragment>
   );
+};
+
+RequestDetail.propTypes = {
+  requestBreadcrumbs: PropTypes.array
 };
 
 export default RequestDetail;
