@@ -129,7 +129,7 @@ export const TableToolbarView = ({
             cells={ columns }
             onSelect={ isSelectable && setSelected }
             actionResolver={ actionResolver }
-            className="table-fix"
+            className="pf-u-pt-0"
             sortBy={ sortBy }
             onSort={ onSort }
           >
