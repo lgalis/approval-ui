@@ -76,17 +76,16 @@ exports[`<Request /> should render correctly 1`] = `
                 >
                   <button
                     aria-controls={false}
-                    aria-disabled={null}
+                    aria-disabled={false}
                     aria-expanded={false}
                     aria-label="Toggle details for"
                     aria-labelledby={null}
                     className="pf-c-button pf-m-plain"
-                    data-ouia-component-id={null}
+                    data-ouia-component-id={0}
                     data-ouia-component-type="PF4/Button"
                     data-ouia-safe={true}
                     disabled={false}
                     id="request-111"
-                    tabIndex={null}
                     type="button"
                   >
                     <div
