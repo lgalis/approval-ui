@@ -94,7 +94,7 @@ const RequestDetail = () => {
         <TopToolbarTitle title={ `Request ${id}` } />
       </TopToolbar>
       <Section type="content">
-        <Grid gutter="md">
+        <Grid hasGutter>
           { renderRequestDetails() }
         </Grid>
       </Section>

@@ -18,12 +18,12 @@ const SummaryContent = () => {
 
   return (
     <Fragment>
-      <Stack gutter="md">
+      <Stack hasGutter>
         <StackItem>
-          <Title size="xl"> Review </Title>
+          <Title headingLevel="h6" size="xl"> Review </Title>
         </StackItem>
         <StackItem>
-          <Stack gutter="md">
+          <Stack hasGutter>
             <StackItem>
               <TextContent>
                 <Text className="pf-u-mb-0" component={ TextVariants.small }>
@@ -31,7 +31,7 @@ const SummaryContent = () => {
               </TextContent>
             </StackItem>
             <StackItem>
-              <Grid gutter="md">
+              <Grid hasGutter>
                 <GridItem span={ 2 }>
                   <Text className="pf-u-mb-0" component={ TextVariants.small }>Name</Text>
                 </GridItem>
@@ -39,7 +39,7 @@ const SummaryContent = () => {
                   <Text className="pf-u-mb-md" component={ TextVariants.p }>{ name }</Text>
                 </GridItem>
               </Grid>
-              <Grid gutter="md">
+              <Grid hasGutter>
                 <GridItem span={ 2 }>
                   <Text className="pf-u-mb-0" component={ TextVariants.small }>Description</Text>
                 </GridItem>
@@ -49,7 +49,7 @@ const SummaryContent = () => {
               </Grid>
               { wfGroups && wfGroups.length > 0 && wfGroups.map((group, idx) => (
                 <Fragment key={ group.value }>
-                  <Grid gutter="md">
+                  <Grid hasGutter>
                     <GridItem span={ 2 }>
                       <Text className="pf-u-mb-0" component={ TextVariants.small }>
                         { idx === 0 ? 'Groups' : '' }

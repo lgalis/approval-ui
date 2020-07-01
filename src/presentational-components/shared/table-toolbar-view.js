@@ -132,6 +132,7 @@ export const TableToolbarView = ({
             className="pf-u-pt-0"
             sortBy={ sortBy }
             onSort={ onSort }
+            canSelectAll
           >
             <TableHeader />
             <TableBody/>
