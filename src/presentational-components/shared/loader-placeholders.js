@@ -64,9 +64,9 @@ DataListLoader.defaultProps = {
 
 export const RequestLoader = () => (
   <div className="ins__approval__request_loader">
-    <Grid gutter="md">
+    <Grid hasGutter>
       <GridItem md={ 4 } lg={ 3 } className="info-bar">
-        <Stack gutter="md">
+        <Stack hasGutter>
           <StackItem>
             <Card>
               <CardBody>

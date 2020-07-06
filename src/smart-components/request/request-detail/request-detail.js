@@ -59,7 +59,7 @@ const RequestDetail = () => {
     else {
       return (
         <Fragment>
-          <GridItem md={ 4 } lg={ 3 } className="info-bar">
+          <GridItem md={ 4 } lg={ 3 } className="info-bar pf-u-p-0">
             <RequestInfoBar request={ selectedRequest } requestContent={ requestContent }/>
           </GridItem>
           <GridItem md={ 8 } lg={ 9 } className="detail-pane pf-u-p-lg">
@@ -94,7 +94,7 @@ const RequestDetail = () => {
         <TopToolbarTitle title={ `Request ${id}` } />
       </TopToolbar>
       <Section type="content">
-        <Grid gutter="md">
+        <Grid hasGutter>
           { renderRequestDetails() }
         </Grid>
       </Section>

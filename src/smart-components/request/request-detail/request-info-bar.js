@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Card, CardBody, CardHeader,
+  Card, CardBody, CardTitle,
   Stack,
   StackItem,
   Text,
@@ -11,11 +11,11 @@ import {
 } from '@patternfly/react-core';
 
 const RequestInfoBar = ({ request, requestContent }) => (
-  <Stack gutter="md">
+  <Stack hasGutter>
     <StackItem key={ 'request-detail-panel' }>
       <Card>
         <CardBody>
-          <Stack gutter="md">
+          <Stack hasGutter>
             <StackItem key={ 'request-summary' }>
               <Title headingLevel="h5" size="lg">
                 Summary
@@ -73,11 +73,11 @@ const RequestInfoBar = ({ request, requestContent }) => (
     </StackItem>
     <StackItem key={ 'request-parameters' }>
       <Card>
-        <CardHeader>
+        <CardTitle>
           <Title headingLevel="h5" size="lg">Parameters</Title>
-        </CardHeader>
+        </CardTitle>
         <CardBody>
-          <Stack gutter="md">
+          <Stack hasGutter>
             { requestContent.params && Object.keys(requestContent.params).map(param => {
               return ((requestContent.params[param]) &&
                       <StackItem key={ `request-${requestContent.params[param]}` }>

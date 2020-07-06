@@ -40,8 +40,9 @@ const RemoveWorkflowModal = ({
 
   return (
     <Modal
+      aria-label="remove-workflow"
       isOpen
-      isSmall
+      variant="small"
       width={ '40%' }
       title={ '' }
       onClose={ onCancel }
@@ -54,7 +55,7 @@ const RemoveWorkflowModal = ({
         </Button>
       ] }
     >
-      <Split gutter="md">
+      <Split hasGutter>
         <SplitItem>
           <WarningTriangleIcon size="xl" fill="#f0ab00" />
         </SplitItem>

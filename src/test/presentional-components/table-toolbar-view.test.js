@@ -133,10 +133,12 @@ describe('<TableToolbarView />', () => {
 
     const data = [{
       id: 1,
-      cells: [ 'name - 1', 'description - 1' ]
+      cells: [ 'name - 1', 'description - 1' ],
+      selected: false
     }, {
       id: 2,
-      cells: [ 'name - 2', 'description' ]
+      cells: [ 'name - 2', 'description' ],
+      selected: false
     }];
 
     const createRows = (data) => data;
@@ -150,6 +152,7 @@ describe('<TableToolbarView />', () => {
           createRows={ createRows }
           isSelectable
           setCheckedItems={ setCheckedItems }
+          canSelectAll={ true }
         />);
     });
     wrapper.update();
@@ -157,6 +160,7 @@ describe('<TableToolbarView />', () => {
     expect(wrapper.find('tr')).toHaveLength(3);
 
     await act(async () => {
+      wrapper.find('input[type="checkbox"]').first().getDOMNode().checked = true;
       wrapper.find('input[type="checkbox"]').first().simulate('change', { target: { checked: true }});
     });
 
