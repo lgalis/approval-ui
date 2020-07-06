@@ -9,7 +9,8 @@ const AllRequestDetail = () => {
     { title: 'All requests', to: routes.allrequests.index, id: 'allrequests' },
     { title: `Request ${id}`, id }
   ];
-  return <RequestDetail requestBreadcrumbs={ allRequestsBreadcrumbs } />;
+  console.log('Debug - allrequests');
+  return <RequestDetail indexpath={ routes.allrequest } requestBreadcrumbs={ allRequestsBreadcrumbs } />;
 };
 
 export default AllRequestDetail;

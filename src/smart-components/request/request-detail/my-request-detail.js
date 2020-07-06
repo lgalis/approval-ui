@@ -9,7 +9,7 @@ const MyRequestDetail = () => {
     { title: 'My requests', to: routes.requests.index, id: 'requests' },
     { title: `Request ${id}`, id }
   ];
-  return <RequestDetail requestBreadcrumbs={ myRequestsBreadcrumbs } />;
+  return <RequestDetail requestBreadcrumbs={ myRequestsBreadcrumbs } indexpath={routes.request} />;
 };
 
 export default MyRequestDetail;

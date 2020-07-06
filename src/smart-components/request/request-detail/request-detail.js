@@ -28,7 +28,7 @@ const requestState = (state, action) => {
   }
 };
 
-const RequestDetail = ({ requestBreadcrumbs }) => {
+const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
   const [{ isFetching }, stateDispatch ] = useReducer(requestState, initialState);
 
   const { selectedRequest, requestContent } = useSelector(
@@ -65,26 +65,26 @@ const RequestDetail = ({ requestBreadcrumbs }) => {
             <RequestInfoBar request={ selectedRequest } requestContent={ requestContent }/>
           </GridItem>
           <GridItem md={ 8 } lg={ 9 } className="detail-pane pf-u-p-lg">
-            <RequestTranscript request={ selectedRequest } url={ location.url }/>
+            <RequestTranscript request={ selectedRequest } url={ location.url } indexpath={indexpath}/>
           </GridItem>
         </Fragment>
       );
     }
   };
-
+console.log('Debug - indexpath', indexpath, indexpath.addComment);
   return (
     <Fragment>
       <Switch>
-        <Route exact path={ routes.request.addComment }>
+        <Route exact path={ indexpath.addComment }>
           <ActionModal actionType={ 'Add Comment' }
-            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } }/>
+            closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } }/>
         </Route>
-        <Route exact path={ routes.request.approve } render={ props =>
+        <Route exact path={ indexpath.approve } render={ props =>
           <ActionModal { ...props } actionType={ 'Approve' }
-            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
-        <Route exact path={ routes.request.deny } render={ props =>
+            closeUrl={ { pathname: indexpath, search: `?request=${selectedRequest.id}` } } /> } />
+        <Route exact path={ indexpath.deny } render={ props =>
           <ActionModal { ...props } actionType={ 'Deny' }
-            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
+            closeUrl={ { pathname: indexpath, search: `?request=${selectedRequest.id}` } } /> } />
       </Switch>
       <TopToolbar
         breadcrumbs={ requestBreadcrumbs }

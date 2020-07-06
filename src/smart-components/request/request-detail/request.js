@@ -26,7 +26,7 @@ import {
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
 
-export const Request = ({ item, isExpanded, toggleExpand }) => {
+export const Request = ({ item, isExpanded, toggleExpand, pathIndex }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
   const { userRoles: userRoles } = useContext(UserContext);
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
@@ -59,7 +59,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
             <Link
               id={ `request-${request.id}-request-comment` }
               to={ {
-                pathname: routes.request.addComment,
+                pathname: pathIndex.addComment,
                 search: `?request=${request.id}`
               } }
               className="pf-c-dropdown__menu-item"
@@ -102,7 +102,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
                 <LevelItem>
                   { (isRequestStateActive(item.state) && checkCapability(item, 'approve')) &&
                     <div>
-                      <Link id={ `approve-${item.id}` } to={ { pathname: routes.request.approve, search: `?request=${item.id}` } }>
+                      <Link id={ `approve-${item.id}` } to={ { pathname: routes.allrequest.approve, search: `?request=${item.id}` } }>
                         <Button variant="link" aria-label="Approve Request">
                           Approve
                         </Button>

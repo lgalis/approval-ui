@@ -7,7 +7,7 @@ import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
-import MyRequestDetail from '../../../../smart-components/request/request-detail/my-request-detail';
+import AllRequestDetail from '../../../../smart-components/request/request-detail/my-request-detail';
 import { RequestLoader } from '../../../../presentational-components/shared/loader-placeholders';
 import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 import RequestInfoBar from '../../../../smart-components/request/request-detail/request-info-bar';
@@ -29,7 +29,7 @@ const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=12
   </Provider>
 );
 
-describe('<MyRequestDetail />', () => {
+describe('<AllRequestDetail />', () => {
   let initialProps;
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
@@ -58,7 +58,7 @@ describe('<MyRequestDetail />', () => {
   });
 
   it('should render request details', async done => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
+    apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     const store = mockStore(
       initialState = {
@@ -158,7 +158,7 @@ describe('<MyRequestDetail />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo" render={ props => <MyRequestDetail { ...props } { ...initialProps } isFetching={ false }/> } />
+          <Route path="/foo" render={ props => <AllRequestDetail { ...props } { ...initialProps } isFetching={ false }/> } />
         </ComponentWrapper>
       );
     });
@@ -176,7 +176,7 @@ describe('<MyRequestDetail />', () => {
   });
 
   it('should render request loader', async done => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
+    apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, {
       data: {
@@ -190,7 +190,7 @@ describe('<MyRequestDetail />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo" render={ props => <MyRequestDetail { ...props } { ...initialProps } /> } />
+          <Route path="/foo" render={ props => <AllRequestDetail { ...props } { ...initialProps } /> } />
         </ComponentWrapper>
       );
     });
@@ -237,7 +237,7 @@ describe('<MyRequestDetail />', () => {
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
-      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
+      apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: contentData }));
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
@@ -247,7 +247,7 @@ describe('<MyRequestDetail />', () => {
         wrapper = mount(
           <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
-              <MyRequestDetail { ...initialProps } />
+              <AllRequestDetail { ...initialProps } />
             </ComponentWrapper>
           </UserContext.Provider>
         );
@@ -273,7 +273,7 @@ describe('<MyRequestDetail />', () => {
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
-      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
+      apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: contentData }));
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
@@ -283,7 +283,7 @@ describe('<MyRequestDetail />', () => {
         wrapper = mount(
           <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
-              <MyRequestDetail { ...initialProps } />
+              <AllRequestDetail { ...initialProps } />
             </ComponentWrapper>
           </UserContext.Provider>
         );
@@ -305,7 +305,7 @@ describe('<MyRequestDetail />', () => {
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
-      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
+      apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: contentData }));
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
@@ -315,7 +315,7 @@ describe('<MyRequestDetail />', () => {
         wrapper = mount(
           <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
-              <MyRequestDetail { ...initialProps } />
+              <AllRequestDetail { ...initialProps } />
             </ComponentWrapper>
           </UserContext.Provider>
         );
