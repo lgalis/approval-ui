@@ -1,7 +1,7 @@
 import React from 'react';
 import { APPROVAL_ADMIN_PERSONA } from '../../helpers/shared/helpers';
 import RequestsList from './requests-list';
-import routesLinks from '../../constants/routes';
+import routes from '../../constants/routes';
 
 const actionsDisabled = () => true;
 
@@ -12,7 +12,7 @@ const actionResolver = (requestData) => {
         title: 'Comment',
         component: 'button',
         onClick: () => history.push({
-          pathname: routesLinks.allrequest.addComment,
+          pathname: routes.allrequest.addComment,
           search: `?request=${requestData.id}`
         })
       }
@@ -20,7 +20,10 @@ const actionResolver = (requestData) => {
 };
 
 const AllRequests = () => {
-  return <RequestsList persona={ APPROVAL_ADMIN_PERSONA } actionsDisabled={ actionsDisabled } type={ 'all' } actionResolver={ actionResolver } />;
+  return <RequestsList persona={ APPROVAL_ADMIN_PERSONA }
+    actionsDisabled={ actionsDisabled }
+    indexpath={ routes.allrequest }
+    actionResolver={ actionResolver } />;
 };
 
 export default AllRequests;

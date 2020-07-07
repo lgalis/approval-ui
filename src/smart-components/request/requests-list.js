@@ -24,6 +24,7 @@ import { scrollToTop } from '../../helpers/shared/helpers';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 import UserContext from '../../user-context';
 import { prepareChips } from './chips-helpers';
+import routes from '../../constants/routes';
 
 const columns = [{
   title: 'Request ID',
@@ -74,7 +75,7 @@ const requestsListState = (state, action) => {
   }
 };
 
-const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, type }) => {
+const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexpath }) => {
   const { requests: { data, meta }, sortBy, filterValue } = useSelector(
     ({ requestReducer: { requests, sortBy, filterValue }}) => ({ requests, sortBy, filterValue }),
     shallowEqual
@@ -172,7 +173,7 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, type }
         onSort={ onSort }
         data={ data }
         createRows={ createRows }
-        type={ type }
+        indexpath={ indexpath }
         columns={ columns }
         fetchData={ updateRequests }
         routes={ routes }
@@ -281,10 +282,12 @@ RequestsList.propTypes = {
   actionResolver: PropTypes.func,
   actionsDisabled: PropTypes.func,
   persona: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
+  indexpath: PropTypes.shape ({ index: PropTypes.string })
 };
 RequestsList.default = {
-  actionsDisabled: () => true
+  actionsDisabled: () => true,
+  indexpath: routes.request
 };
 
 export default RequestsList;
