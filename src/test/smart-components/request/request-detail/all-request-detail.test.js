@@ -58,7 +58,7 @@ describe('<AllRequestDetail />', () => {
   });
 
   it('should render request details', async done => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: { params: { test: 'value' },
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     const store = mockStore(
       initialState = {
@@ -176,7 +176,7 @@ describe('<AllRequestDetail />', () => {
   });
 
   it('should render request loader', async done => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: { params: { test: 'value' },
+    apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: { params: { test: 'value' },
       product: 'Test product', order_id: '321', portfolio: 'TestPortfolio' }}));
     mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, {
       data: {
@@ -237,7 +237,7 @@ describe('<AllRequestDetail />', () => {
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
-      apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: contentData }));
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
@@ -273,7 +273,7 @@ describe('<AllRequestDetail />', () => {
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
-      apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: contentData }));
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;
@@ -305,7 +305,7 @@ describe('<AllRequestDetail />', () => {
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
-      apiClientMock.get(`${APPROVAL_API_BASE}/allrequests/123/content`, mockOnce({ body: contentData }));
+      apiClientMock.get(`${APPROVAL_API_BASE}/requests/123/content`, mockOnce({ body: contentData }));
       mockGraphql.onPost(`${APPROVAL_API_BASE}/graphql`).replyOnce(200, graphlQlData);
 
       let wrapper;

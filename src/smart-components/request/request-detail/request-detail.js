@@ -11,7 +11,6 @@ import { RequestLoader } from '../../../presentational-components/shared/loader-
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
 import UserContext from '../../../user-context';
 import useQuery from '../../../utilities/use-query';
-import routes from '../../../constants/routes';
 import { approvalPersona } from '../../../helpers/shared/helpers';
 import PropTypes from 'prop-types';
 
@@ -65,13 +64,13 @@ const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
             <RequestInfoBar request={ selectedRequest } requestContent={ requestContent }/>
           </GridItem>
           <GridItem md={ 8 } lg={ 9 } className="detail-pane pf-u-p-lg">
-            <RequestTranscript request={ selectedRequest } url={ location.url } indexpath={indexpath}/>
+            <RequestTranscript request={ selectedRequest } url={ location.url } indexpath={ indexpath }/>
           </GridItem>
         </Fragment>
       );
     }
   };
-console.log('Debug - indexpath', indexpath, indexpath.addComment);
+
   return (
     <Fragment>
       <Switch>
@@ -81,10 +80,10 @@ console.log('Debug - indexpath', indexpath, indexpath.addComment);
         </Route>
         <Route exact path={ indexpath.approve } render={ props =>
           <ActionModal { ...props } actionType={ 'Approve' }
-            closeUrl={ { pathname: indexpath, search: `?request=${selectedRequest.id}` } } /> } />
+            closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } } /> } />
         <Route exact path={ indexpath.deny } render={ props =>
           <ActionModal { ...props } actionType={ 'Deny' }
-            closeUrl={ { pathname: indexpath, search: `?request=${selectedRequest.id}` } } /> } />
+            closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } } /> } />
       </Switch>
       <TopToolbar
         breadcrumbs={ requestBreadcrumbs }
@@ -102,7 +101,8 @@ console.log('Debug - indexpath', indexpath, indexpath.addComment);
 };
 
 RequestDetail.propTypes = {
-  requestBreadcrumbs: PropTypes.array
+  requestBreadcrumbs: PropTypes.array,
+  indexpath: PropTypes.object
 };
 
 export default RequestDetail;
