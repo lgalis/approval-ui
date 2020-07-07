@@ -181,7 +181,7 @@ TableToolbarView.propTypes = {
   activeFiltersConfig: propTypes.object,
   filterConfig: propTypes.array,
   actionsDisabled: propTypes.func,
-  indexpath: propTypes.shape( { index: propTypes.string })
+  indexpath: propTypes.shape({ index: propTypes.string })
 };
 
 TableToolbarView.defaultProps = {
