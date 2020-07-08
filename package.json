@@ -74,6 +74,7 @@
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",
     "eslint-loader": "^3.0.2",
+    "eslint-plugin-formatjs": "^2.3.21",
     "eslint-plugin-react": "^7.16.0",
     "file-loader": "^4.3.0",
     "git-revision-webpack-plugin": "^3.0.6",
@@ -98,13 +99,14 @@
     "xhr-mock": "^2.4.1"
   },
   "scripts": {
-    "build": "NODE_ENV=production webpack --config config/webpack.config.js --env.prod=true --mode production",
     "analyze": "NODE_ENV=production webpack --config config/webpack.config.js --env.prod=true --env.analyze=true --mode production",
-    "test": "jest --passWithNoTests --runInBand",
+    "build": "NODE_ENV=production webpack --config config/webpack.config.js --env.prod=true --mode production",
+    "extract:messages": "npx @formatjs/cli extract 'src/**/*.{js,jsx}' --out-file ./translations/messages.json",
     "lint": "yarn eslint ./src",
     "prod": " NODE_ENV=production webpack-dev-server --config config/webpack.config.js --env.prod=true --mode production",
     "server:ctr": "node src/server/generateServerKey.js",
     "start": "rm -rf ./dist && webpack-dev-server --config config/webpack.config.js --env.prod=false --mode development",
+    "test": "jest --passWithNoTests --runInBand",
     "travis:build": "NODE_ENV=production webpack --config config/webpack.config.js --env.prod=true --mode production",
     "travis:verify": "npm-run-all travis:build lint test",
     "verify": "npm-run-all build lint test"

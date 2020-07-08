@@ -12,6 +12,9 @@ node_modules
 # production
 dist
 
+#translations
+translations
+
 #test coverage statistics
 cc-test-reporter
 coverage
