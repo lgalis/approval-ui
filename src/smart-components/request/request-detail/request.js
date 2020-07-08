@@ -26,7 +26,7 @@ import {
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
 
-export const Request = ({ item, isExpanded, toggleExpand }) => {
+export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
   const { userRoles: userRoles } = useContext(UserContext);
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
@@ -59,7 +59,7 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
             <Link
               id={ `request-${request.id}-request-comment` }
               to={ {
-                pathname: routes.request.addComment,
+                pathname: indexpath.addComment,
                 search: `?request=${request.id}`
               } }
               className="pf-c-dropdown__menu-item"
@@ -102,12 +102,12 @@ export const Request = ({ item, isExpanded, toggleExpand }) => {
                 <LevelItem>
                   { (isRequestStateActive(item.state) && checkCapability(item, 'approve')) &&
                     <div>
-                      <Link id={ `approve-${item.id}` } to={ { pathname: routes.request.approve, search: `?request=${item.id}` } }>
+                      <Link id={ `approve-${item.id}` } to={ { pathname: indexpath.approve, search: `?request=${item.id}` } }>
                         <Button variant="link" aria-label="Approve Request">
                           Approve
                         </Button>
                       </Link>
-                      <Link id={ `deny-${item.id}` } to={ { pathname: routes.request.deny, search: `?request=${item.id}` } }>
+                      <Link id={ `deny-${item.id}` } to={ { pathname: indexpath.deny, search: `?request=${item.id}` } }>
                         <Button variant="link" className="destructive-color" aria-label="Deny Request">
                           Deny
                         </Button>
@@ -157,5 +157,11 @@ Request.propTypes = {
   idx: PropTypes.number,
   isExpanded: PropTypes.bool.isRequired,
   toggleExpand: PropTypes.func.isRequired,
-  noItems: PropTypes.string
+  noItems: PropTypes.string,
+  indexpath: PropTypes.object
+
+};
+
+Request.defaultProps = {
+  indexpath: routes.request
 };

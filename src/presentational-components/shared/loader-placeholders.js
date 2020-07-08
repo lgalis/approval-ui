@@ -94,7 +94,7 @@ export const AppPlaceholder = () => (
   </Main>
 );
 
-const FormItemLoader = () => <Loader height={ 64 } width='100%' />;
+export const FormItemLoader = () => <Loader height={ 64 } width='100%' />;
 
 export const WorkflowInfoFormLoader = () => (
   <Form>

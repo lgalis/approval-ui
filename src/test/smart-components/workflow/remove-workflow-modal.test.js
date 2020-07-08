@@ -10,13 +10,15 @@ import { notificationsMiddleware } from '@redhat-cloud-services/frontend-compone
 import { IntlProvider } from 'react-intl';
 
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
-import { Modal } from '@patternfly/react-core';
+import { Modal, Text, Title } from '@patternfly/react-core';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 import routes from '../../../constants/routes';
+import { delay } from 'xhr-mock';
+import { FormItemLoader } from '../../../presentational-components/shared/loader-placeholders';
 
-const ComponentWrapper = ({ store, children }) => (
+const ComponentWrapper = ({ store, children, initialEntries = [ '/' ]}) => (
   <Provider store={ store }>
-    <MemoryRouter initialEntries={ [ '/foo/123' ] } initialIndex={ 1 }>
+    <MemoryRouter initialEntries={ initialEntries } initialIndex={ 1 }>
       <IntlProvider locale="en">
         { children }
       </IntlProvider>
@@ -36,7 +38,15 @@ describe('<RemoveWorkflowModal />', () => {
       setSelectedWorkflows: jest.fn()
     };
     mockStore = configureStore(middlewares);
-    initialState = {};
+    initialState = {
+      workflowReducer: {
+        workflows: {
+          data: [{
+            id: '123', name: 'WfName'
+          }]
+        }
+      }
+    };
   });
 
   it('should not render approval process modal', () => {
@@ -49,11 +59,104 @@ describe('<RemoveWorkflowModal />', () => {
     expect(wrapper.find(Modal)).toHaveLength(0);
   });
 
-  it('should render approval process modal and call cancel callback', () => {
+  it('should render approval process modal- single', () => {
+    const store = mockStore(initialState);
+    const wrapper = mount(
+      <ComponentWrapper store={ store } initialEntries={ [ '/?workflow=123' ] }>
+        <RemoveWorkflowModal { ...initialProps } />
+      </ComponentWrapper>
+    );
+    expect(wrapper.find(Modal)).toHaveLength(1);
+    expect(wrapper.find(Title).first().text()).toEqual('Delete approval process?');
+    expect(wrapper.find(Text).first().text()).toEqual('WfName will be removed.');
+  });
+
+  it('should render approval process modal - single - not in table', async () => {
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/235`, mockOnce({ body: { name: 'Fetched WF' }}));
+
+    let wrapper;
+    const store = mockStore(initialState);
+
+    await act(async () => {
+      wrapper = mount(
+        <ComponentWrapper store={ store } initialEntries={ [ '/?workflow=235' ] }>
+          <RemoveWorkflowModal { ...initialProps }/>
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    expect(wrapper.find(Modal)).toHaveLength(1);
+    expect(wrapper.find(Title).first().text()).toEqual('Delete approval process?');
+    expect(wrapper.find(Text).first().text()).toEqual('Fetched WF will be removed.');
+  });
+
+  it('should return to table when fetching failed', async () => {
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/235`, mockOnce({ status: 500 }));
+
+    let wrapper;
+    const store = mockStore(initialState);
+
+    await act(async () => {
+      wrapper = mount(
+        <ComponentWrapper store={ store } initialEntries={ [ '/?workflow=235' ] }>
+          <RemoveWorkflowModal { ...initialProps }/>
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.index);
+  });
+
+  it('should render placeholder when fetching', async () => {
+    jest.useFakeTimers();
+
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/235`, delay({ body: { name: 'Fetched WF' }}));
+
+    let wrapper;
+    const store = mockStore(initialState);
+
+    await act(async () => {
+      wrapper = mount(
+        <ComponentWrapper store={ store } initialEntries={ [ '/?workflow=235' ] }>
+          <RemoveWorkflowModal { ...initialProps }/>
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    expect(wrapper.find(Modal)).toHaveLength(1);
+    expect(wrapper.find(Title).first().text()).toEqual('Delete approval process?');
+    expect(wrapper.find(Text).first().text()).toEqual('');
+    expect(wrapper.find(FormItemLoader)).toHaveLength(1);
+
+    await act(async () => { jest.runAllTimers();});
+    wrapper.update();
+
+    expect(wrapper.find(Text).first().text()).toEqual('Fetched WF will be removed.');
+    expect(wrapper.find(FormItemLoader)).toHaveLength(0);
+
+    jest.useRealTimers();
+  });
+
+  it('should render approval process modal - multi', () => {
     const store = mockStore(initialState);
     const wrapper = mount(
       <ComponentWrapper store={ store }>
-        <Route to="/foo/:id" render={ props => <RemoveWorkflowModal { ...props } ids={ [ '123' ] } { ...initialProps } /> }/>
+        <RemoveWorkflowModal { ...initialProps } ids={ [ '123', '456' ] }/>
+      </ComponentWrapper>
+    );
+    expect(wrapper.find(Modal)).toHaveLength(1);
+    expect(wrapper.find(Title).first().text()).toEqual('Delete approval processes?');
+    expect(wrapper.find(Text).first().text()).toEqual('2 approval processes will be removed.');
+  });
+
+  it('should render approval process modal and call cancel callback', () => {
+    const store = mockStore(initialState);
+    const wrapper = mount(
+      <ComponentWrapper store={ store } initialEntries={ [ '/remove' ] }>
+        <Route to="/remove" render={ props => <RemoveWorkflowModal { ...props } ids={ [ '123' ] } { ...initialProps } /> }/>
       </ComponentWrapper>
     );
     wrapper.update();
@@ -73,8 +176,8 @@ describe('<RemoveWorkflowModal />', () => {
     }));
 
     const wrapper = mount(
-      <ComponentWrapper store={ store }>
-        <Route to="/foo/:id" render={ props => <RemoveWorkflowModal { ...props } ids={ [ '123' ] } { ...initialProps } /> }/>
+      <ComponentWrapper store={ store } initialEntries={ [ '/remove' ] }>
+        <Route to="/remove" render={ props => <RemoveWorkflowModal { ...props } ids={ [ '123' ] } { ...initialProps } /> }/>
       </ComponentWrapper>
     );
     wrapper.update();
@@ -101,8 +204,8 @@ describe('<RemoveWorkflowModal />', () => {
     }));
 
     const wrapper = mount(
-      <ComponentWrapper store={ store }>
-        <Route to="/foo/:id" render={ props => <RemoveWorkflowModal { ...props } ids={ [ '123', '456' ] } { ...initialProps } /> }/>
+      <ComponentWrapper store={ store } initialEntries={ [ '/remove' ] }>
+        <Route to="/remove" render={ props => <RemoveWorkflowModal { ...props } ids={ [ '123', '456' ] } { ...initialProps } /> }/>
       </ComponentWrapper>
     );
     wrapper.update();

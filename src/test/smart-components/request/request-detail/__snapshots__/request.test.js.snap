@@ -2,6 +2,14 @@
 
 exports[`<Request /> should render correctly 1`] = `
 <Request
+  indexpath={
+    Object {
+      "addComment": "/request/add-comment",
+      "approve": "/request/approve",
+      "deny": "/request/deny",
+      "index": "/request",
+    }
+  }
   isExpanded={false}
   item={
     Object {
