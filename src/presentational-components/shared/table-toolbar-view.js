@@ -85,7 +85,12 @@ export const TableToolbarView = ({
     <PrimaryToolbar
       className="pf-u-p-lg ins__approval__primary_toolbar"
       pagination={ paginationConfig }
-      { ...(toolbarButtons && { actionsConfig: {  actions: [ toolbarButtons() ]}}) }
+      { ...(toolbarButtons && { actionsConfig: {
+        dropdownProps: {
+          position: 'right'
+        },
+        actions: [ toolbarButtons() ]}
+      }) }
       filterConfig={ {
         items: [{
           label: intl.formatMessage({
