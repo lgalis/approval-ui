@@ -77,7 +77,7 @@ const EditWorkflowGroupsModal = ({
   return (
     <Modal
       title={ `Edit approval process's groups` }
-      width={ '40%' }
+      variant="small"
       isOpen
       onClose={ onCancel }>
       { state.isLoading ? <WorkflowInfoFormLoader/> : <FormRenderer

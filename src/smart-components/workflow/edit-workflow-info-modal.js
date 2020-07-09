@@ -98,7 +98,7 @@ const EditWorkflowInfoModal = ({
   return (
     <Modal
       title={ editType === 'sequence' ? 'Edit sequence' : 'Edit information' }
-      width={ '40%' }
+      variant="small"
       isOpen
       onClose={ onCancel }
     >
