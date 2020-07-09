@@ -4,6 +4,10 @@ NODE_ENV=production npm run build
 
 if [ "${TRAVIS_BRANCH}" = "master" ]; then
     .travis/release.sh "ci-beta"
-elif [[ "${TRAVIS_BRANCH}" = "ci-stable"  || "${TRAVIS_BRANCH}" = "qa-beta" || "${TRAVIS_BRANCH}" = "qa-stable" || "${TRAVIS_BRANCH}" = "prod-beta" || "${TRAVIS_BRANCH}" = "prod-stable" ]]; then
+    .travis/release.sh "qa-beta"
+elif [ "${TRAVIS_BRANCH}" = "master-stable" ]; then
+    .travis/release.sh "ci-stable"
+    .travis/release.sh "qa-stable"
+elif [[ "${TRAVIS_BRANCH}" = "prod-beta" || "${TRAVIS_BRANCH}" = "prod-stable" ]]; then
     .travis/release.sh "${TRAVIS_BRANCH}"
 fi
