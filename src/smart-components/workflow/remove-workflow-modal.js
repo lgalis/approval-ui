@@ -63,7 +63,6 @@ const RemoveWorkflowModal = ({
         },
         { count: finalId ? 1 : ids.length })
       }
-      width={ '40%' }
       header={
         <Title size="2xl" headingLevel="h1">
           <ExclamationTriangleIcon size="sm" fill="#f0ab00" className="pf-u-mr-sm" />
