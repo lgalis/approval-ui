@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useHistory } from 'react-router-dom';
 import { Modal } from '@patternfly/react-core';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
 import { useIntl, FormattedMessage } from 'react-intl';
 
@@ -48,7 +47,6 @@ const reducer = (state, { type, initialValues, intl }) => {
 };
 
 const EditWorkflowGroupsModal = ({
-  addNotification,
   fetchWorkflow,
   updateWorkflow,
   postMethod
@@ -74,20 +72,12 @@ const EditWorkflowGroupsModal = ({
     return updateWorkflow({ id, ...workflowData }).then(() => postMethod()).then(()=>push('/workflows'));
   };
 
-  const onCancel = () => {
-    addNotification({
-      variant: 'warning',
-      title: `Edit approval process's groups`,
-      dismissable: true,
-      description: `Edit approval process's groups was cancelled by the user.`
-    });
-    push('/workflows');
-  };
+  const onCancel = () => push('/workflows');
 
   return (
     <Modal
       title={ `Edit approval process's groups` }
-      width={ '40%' }
+      variant="small"
       isOpen
       onClose={ onCancel }>
       { state.isLoading ? <WorkflowInfoFormLoader/> : <FormRenderer
@@ -107,14 +97,12 @@ const EditWorkflowGroupsModal = ({
 };
 
 EditWorkflowGroupsModal.propTypes = {
-  addNotification: PropTypes.func.isRequired,
   fetchWorkflow: PropTypes.func.isRequired,
   postMethod: PropTypes.func.isRequired,
   updateWorkflow: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  addNotification,
   addWorkflow,
   updateWorkflow,
   fetchWorkflow

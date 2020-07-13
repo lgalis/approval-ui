@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useReducer } from 'react';
 import { Route, useLocation, Switch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, GridItem } from '@patternfly/react-core';
-import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
+import { Section } from '@redhat-cloud-services/frontend-components/components/cjs/Section';
 import ActionModal from '../action-modal';
 import RequestInfoBar from './request-info-bar';
 import RequestTranscript from './request-transcript';
@@ -11,12 +11,13 @@ import { RequestLoader } from '../../../presentational-components/shared/loader-
 import { TopToolbar, TopToolbarTitle } from '../../../presentational-components/shared/top-toolbar';
 import UserContext from '../../../user-context';
 import useQuery from '../../../utilities/use-query';
-import routes from '../../../constants/routes';
 import { approvalPersona } from '../../../helpers/shared/helpers';
+import PropTypes from 'prop-types';
 
 const initialState = {
   isFetching: true
 };
+
 const requestState = (state, action) => {
   switch (action.type) {
     case 'setFetching':
@@ -26,7 +27,7 @@ const requestState = (state, action) => {
   }
 };
 
-const RequestDetail = () => {
+const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
   const [{ isFetching }, stateDispatch ] = useReducer(requestState, initialState);
 
   const { selectedRequest, requestContent } = useSelector(
@@ -59,11 +60,11 @@ const RequestDetail = () => {
     else {
       return (
         <Fragment>
-          <GridItem md={ 4 } lg={ 3 } className="info-bar">
+          <GridItem md={ 4 } lg={ 3 } className="info-bar pf-u-p-0">
             <RequestInfoBar request={ selectedRequest } requestContent={ requestContent }/>
           </GridItem>
-          <GridItem md={ 8 } lg={ 9 } className="detail-pane">
-            <RequestTranscript request={ selectedRequest } url={ location.url }/>
+          <GridItem md={ 8 } lg={ 9 } className="detail-pane pf-u-p-lg">
+            <RequestTranscript request={ selectedRequest } url={ location.url } indexpath={ indexpath }/>
           </GridItem>
         </Fragment>
       );
@@ -73,33 +74,35 @@ const RequestDetail = () => {
   return (
     <Fragment>
       <Switch>
-        <Route exact path={ routes.request.addComment }>
+        <Route exact path={ indexpath.addComment }>
           <ActionModal actionType={ 'Add Comment' }
-            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } }/>
+            closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } }/>
         </Route>
-        <Route exact path={ routes.request.approve } render={ props =>
+        <Route exact path={ indexpath.approve } render={ props =>
           <ActionModal { ...props } actionType={ 'Approve' }
-            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
-        <Route exact path={ routes.request.deny } render={ props =>
+            closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } } /> } />
+        <Route exact path={ indexpath.deny } render={ props =>
           <ActionModal { ...props } actionType={ 'Deny' }
-            closeUrl={ { pathname: routes.request.index, search: `?request=${selectedRequest.id}` } } /> } />
+            closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } } /> } />
       </Switch>
       <TopToolbar
-        breadcrumbs={ [
-          { title: 'Request queue', to: routes.requests.index, id: 'requests' },
-          { title: `Request ${id}`, id }
-        ] }
+        breadcrumbs={ requestBreadcrumbs }
         paddingBottom={ true }
       >
         <TopToolbarTitle title={ `Request ${id}` } />
       </TopToolbar>
       <Section type="content">
-        <Grid gutter="md">
+        <Grid hasGutter>
           { renderRequestDetails() }
         </Grid>
       </Section>
     </Fragment>
   );
+};
+
+RequestDetail.propTypes = {
+  requestBreadcrumbs: PropTypes.array,
+  indexpath: PropTypes.object
 };
 
 export default RequestDetail;

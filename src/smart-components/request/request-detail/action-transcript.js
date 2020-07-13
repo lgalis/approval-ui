@@ -14,17 +14,17 @@ import { CheckCircleIcon,
   OnRunningIcon,
   ErrorCircleOIcon,
   ExclamationCircleIcon } from '@patternfly/react-icons';
-import { EmptyTable } from '@redhat-cloud-services/frontend-components';
+import { EmptyTable } from '@redhat-cloud-services/frontend-components/components/cjs/EmptyTable';
 
 const operationInfo = {
   memo: { displayName: 'Comment from', icon: <CommentIcon/> },
-  approve: { displayName: 'Approved by', icon: <CheckCircleIcon className="pf-u-mr-sm icon-success-fill"/> },
+  approve: { displayName: 'Approved by', icon: <CheckCircleIcon className="pf-u-mr-0 icon-success-fill"/> },
   deny: { displayName: 'Denied by', icon: <OutlinedTimesCircleIcon className="pf-u-mr-sm icon-danger-fill"/> },
   notify: { displayName: 'Notified by', icon: <EnvelopeIcon/> },
   skip: { displayName: 'Skipped by', icon: <AngleDoubleRightIcon/> },
   start: { displayName: 'Started by', icon: <OnRunningIcon/> },
   cancel: { displayName: 'Canceled by', icon: <ErrorCircleOIcon className="pf-u-mr-sm icon-danger-fill"/> },
-  error: { displayName: 'Error', icon: <ExclamationCircleIcon className="pf-u-mr-sm icon-danger-fill"/> }
+  error: { displayName: 'Error', icon: <ExclamationCircleIcon className="pf-u-mr-0 icon-danger-fill"/> }
 };
 
 const operationIcon = (operation) => operationInfo[operation] ? operationInfo[operation].icon : '';
@@ -36,19 +36,18 @@ export const ActionTranscript = actionList => {
     <Stack>
       { actions.map(actionItem =>
         <div key={ `${actionItem.id}-action` }>
-          <TextContent><Text key={ `${actionItem.id}-action-created_at` } style={ { marginBottom: 0 } }
-            className="data-table-detail content" component={ TextVariants.small }>
+          <TextContent><Text key={ `${actionItem.id}-action-created_at` }
+            className="pf-u-mb-0" component={ TextVariants.small }>
             { timeAgo(actionItem.created_at) }
           </Text>
-          <Text key={ `${actionItem.id}-action-operation` }  style={ { marginBottom: 0 } }
-            className="data-table-detail content">
+          <Text key={ `${actionItem.id}-action-operation` }
+            className="pf-u-mb-md">
             { operationIcon(actionItem.operation) } { `${operationDisplayName(actionItem.operation)}  ${actionItem.processed_by}` }
           </Text>
-          { actionItem.comments && <Text key={ `${actionItem.id}-action-comments` } style={ { marginBottom: 0 } }
-            className="data-table-detail content" component={ TextVariants.h6 }>
+          { actionItem.comments && <Text key={ `${actionItem.id}-action-comments` }
+            className="pf-u-pt-0" component={ TextVariants.p }>
             { `${actionItem.comments}` }
           </Text> } </TextContent>
-          <br/>
         </div>)
       }
     </Stack>

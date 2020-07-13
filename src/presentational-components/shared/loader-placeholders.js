@@ -15,8 +15,8 @@ import {
   Card,
   CardBody
 } from '@patternfly/react-core';
-import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
-import { Main } from '@redhat-cloud-services/frontend-components/components/Main';
+import { Section } from '@redhat-cloud-services/frontend-components/components/cjs/Section';
+import { Main } from '@redhat-cloud-services/frontend-components/components/cjs/Main';
 
 import clsx from 'clsx';
 
@@ -64,9 +64,9 @@ DataListLoader.defaultProps = {
 
 export const RequestLoader = () => (
   <div className="ins__approval__request_loader">
-    <Grid gutter="md">
+    <Grid hasGutter>
       <GridItem md={ 4 } lg={ 3 } className="info-bar">
-        <Stack gutter="md">
+        <Stack hasGutter>
           <StackItem>
             <Card>
               <CardBody>
@@ -76,7 +76,7 @@ export const RequestLoader = () => (
           </StackItem>
         </Stack>
       </GridItem>
-      <GridItem md={ 8 } lg={ 9 } className="detail-pane">
+      <GridItem md={ 8 } lg={ 9 } className="detail-pane pf-u-p-lg">
         <DataListLoader/>
       </GridItem>
     </Grid>
@@ -94,7 +94,7 @@ export const AppPlaceholder = () => (
   </Main>
 );
 
-const FormItemLoader = () => <Loader height={ 64 } width='100%' />;
+export const FormItemLoader = () => <Loader height={ 64 } width='100%' />;
 
 export const WorkflowInfoFormLoader = () => (
   <Form>

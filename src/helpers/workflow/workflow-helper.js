@@ -15,9 +15,7 @@ export function fetchWorkflows(filter = '', pagination = defaultSettings, sortBy
   );
 }
 
-export async function fetchWorkflow(id) {
-  return await workflowApi.showWorkflow(id);
-}
+export const fetchWorkflow = (id) => workflowApi.showWorkflow(id);
 
 export function fetchWorkflowByName(name) {
   return fetchWorkflows(name);

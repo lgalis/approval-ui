@@ -18,45 +18,45 @@ const SummaryContent = () => {
 
   return (
     <Fragment>
-      <Stack gutter="md">
+      <Stack hasGutter>
         <StackItem>
-          <Title size="xl"> Review </Title>
+          <Title headingLevel="h6" size="xl"> Review </Title>
         </StackItem>
         <StackItem>
-          <Stack gutter="md">
+          <Stack hasGutter>
             <StackItem>
               <TextContent>
-                <Text className="data-table-detail heading" component={ TextVariants.h5 }>
+                <Text className="pf-u-mb-0" component={ TextVariants.small }>
                     Review and confirm your inputs. If there is anything incorrect, click Back and revise.</Text>
               </TextContent>
             </StackItem>
             <StackItem>
-              <Grid gutter="md">
+              <Grid hasGutter>
                 <GridItem span={ 2 }>
-                  <Text className="data-table-detail heading" component={ TextVariants.h5 }>Name</Text>
+                  <Text className="pf-u-mb-0" component={ TextVariants.small }>Name</Text>
                 </GridItem>
                 <GridItem span={ 10 }>
-                  <Text className="data-table-detail content" component={ TextVariants.p }>{ name }</Text>
+                  <Text className="pf-u-mb-md" component={ TextVariants.p }>{ name }</Text>
                 </GridItem>
               </Grid>
-              <Grid gutter="md">
+              <Grid hasGutter>
                 <GridItem span={ 2 }>
-                  <Text className="data-table-detail heading" component={ TextVariants.h5 }>Description</Text>
+                  <Text className="pf-u-mb-0" component={ TextVariants.small }>Description</Text>
                 </GridItem>
                 <GridItem span={ 10 }>
-                  <Text className="data-table-detail content" component={ TextVariants.p }>{ description }</Text>
+                  <Text className="pf-u-mb-md" component={ TextVariants.p }>{ description }</Text>
                 </GridItem>
               </Grid>
               { wfGroups && wfGroups.length > 0 && wfGroups.map((group, idx) => (
                 <Fragment key={ group.value }>
-                  <Grid gutter="md">
+                  <Grid hasGutter>
                     <GridItem span={ 2 }>
-                      <Text className="data-table-detail heading" component={ TextVariants.h5 }>
+                      <Text className="pf-u-mb-0" component={ TextVariants.small }>
                         { idx === 0 ? 'Groups' : '' }
                       </Text>
                     </GridItem>
                     <GridItem span={ 10 }>
-                      <Text className="data-table-detail content" component={ TextVariants.p }>
+                      <Text className="pf-u-mb-md" component={ TextVariants.p }>
                         { group.label }
                       </Text>
                     </GridItem>

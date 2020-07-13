@@ -5,8 +5,8 @@ import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { defaultSettings, getCurrentPage, getNewPage  } from '../../helpers/shared/pagination';
 import { DataListLoader } from './loader-placeholders';
 import { useIntl } from 'react-intl';
-import { Section } from '@redhat-cloud-services/frontend-components/components/Section';
-import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/components/PrimaryToolbar';
+import { Section } from '@redhat-cloud-services/frontend-components/components/cjs/Section';
+import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/components/cjs/PrimaryToolbar';
 
 /**
  * Need to optimize this component
@@ -22,6 +22,7 @@ export const TableToolbarView = ({
   toolbarButtons,
   data,
   actionResolver,
+  actionsDisabled,
   routes,
   titlePlural,
   titleSingular,
@@ -35,13 +36,14 @@ export const TableToolbarView = ({
   sortBy,
   onSort,
   activeFiltersConfig,
-  filterConfig
+  filterConfig,
+  indexpath
 }) => {
   const intl = useIntl();
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
-    setRows(createRows(data));
+    setRows(createRows(data, actionsDisabled, indexpath));
   }, [ data ]);
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
@@ -83,7 +85,12 @@ export const TableToolbarView = ({
     <PrimaryToolbar
       className="pf-u-p-lg ins__approval__primary_toolbar"
       pagination={ paginationConfig }
-      { ...(toolbarButtons && { actionsConfig: {  actions: [ toolbarButtons() ]}}) }
+      { ...(toolbarButtons && { actionsConfig: {
+        dropdownProps: {
+          position: 'right'
+        },
+        actions: [ toolbarButtons() ]}
+      }) }
       filterConfig={ {
         items: [{
           label: intl.formatMessage({
@@ -128,9 +135,10 @@ export const TableToolbarView = ({
             cells={ columns }
             onSelect={ isSelectable && setSelected }
             actionResolver={ actionResolver }
-            className="table-fix"
+            className="pf-u-pt-0"
             sortBy={ sortBy }
             onSort={ onSort }
+            canSelectAll
           >
             <TableHeader />
             <TableBody/>
@@ -176,7 +184,9 @@ TableToolbarView.propTypes = {
   sortBy: propTypes.object,
   onSort: propTypes.func,
   activeFiltersConfig: propTypes.object,
-  filterConfig: propTypes.array
+  filterConfig: propTypes.array,
+  actionsDisabled: propTypes.func,
+  indexpath: propTypes.shape({ index: propTypes.string })
 };
 
 TableToolbarView.defaultProps = {

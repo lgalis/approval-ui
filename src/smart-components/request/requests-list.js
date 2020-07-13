@@ -1,10 +1,11 @@
+
 import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button } from '@patternfly/react-core';
 import { expandable, sortable, wrappable, cellWidth } from '@patternfly/react-table';
 import { useIntl } from 'react-intl';
-import { SearchIcon } from '@patternfly/react-icons/dist/js/index';
+import { SearchIcon } from '@patternfly/react-icons';
 import isEmpty from 'lodash/isEmpty';
 
 import { fetchRequests,
@@ -23,6 +24,7 @@ import { scrollToTop } from '../../helpers/shared/helpers';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 import UserContext from '../../user-context';
 import { prepareChips } from './chips-helpers';
+import routes from '../../constants/routes';
 
 const columns = [{
   title: 'Request ID',
@@ -73,7 +75,7 @@ const requestsListState = (state, action) => {
   }
 };
 
-const RequestsList = ({ routes, persona, actionResolver }) => {
+const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexpath }) => {
   const { requests: { data, meta }, sortBy, filterValue } = useSelector(
     ({ requestReducer: { requests, sortBy, filterValue }}) => ({ requests, sortBy, filterValue }),
     shallowEqual
@@ -171,10 +173,12 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
         onSort={ onSort }
         data={ data }
         createRows={ createRows }
+        indexpath={ indexpath }
         columns={ columns }
         fetchData={ updateRequests }
         routes={ routes }
         actionResolver={ actionResolver }
+        actionsDisabled={ actionsDisabled }
         titlePlural="requests"
         titleSingular="request"
         pagination={ meta }
@@ -276,7 +280,14 @@ const RequestsList = ({ routes, persona, actionResolver }) => {
 RequestsList.propTypes = {
   routes: PropTypes.func,
   actionResolver: PropTypes.func,
-  persona: PropTypes.string
+  actionsDisabled: PropTypes.func,
+  persona: PropTypes.string,
+  type: PropTypes.string,
+  indexpath: PropTypes.shape ({ index: PropTypes.string })
+};
+RequestsList.default = {
+  actionsDisabled: () => true,
+  indexpath: routes.request
 };
 
 export default RequestsList;
