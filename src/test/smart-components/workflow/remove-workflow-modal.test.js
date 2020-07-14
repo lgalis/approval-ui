@@ -64,7 +64,7 @@ describe('<RemoveWorkflowModal />', () => {
   it('should render approval process modal- single', () => {
     const store = mockStore(initialState);
     const wrapper = mount(
-      <ComponentWrapper store={ store } initialEntries={ [ '/?workflow=123' ] }>
+      <ComponentWrapper store={ store } initialEntries={ [ '?workflow=123' ] }>
         <RemoveWorkflowModal { ...initialProps } />
       </ComponentWrapper>
     );
