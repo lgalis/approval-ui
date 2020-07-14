@@ -8,6 +8,8 @@ import { useIntl } from 'react-intl';
 import { Section } from '@redhat-cloud-services/frontend-components/components/cjs/Section';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/components/cjs/PrimaryToolbar';
 
+import tableToolbarMessages from '../../messages/table-toolbar.messages';
+
 /**
  * Need to optimize this component
  * There is 7 renders before first table render
@@ -43,7 +45,7 @@ export const TableToolbarView = ({
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
-    setRows(createRows(data, actionsDisabled, indexpath));
+    setRows(createRows(data, actionsDisabled, indexpath, intl));
   }, [ data ]);
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
@@ -93,20 +95,11 @@ export const TableToolbarView = ({
       }) }
       filterConfig={ {
         items: [{
-          label: intl.formatMessage({
-            id: 'name',
-            defaultMessage: 'Name'
-          }),
+          label: intl.formatMessage(tableToolbarMessages.name),
           filterValues: {
             id: 'filter-by-name',
-            placeholder: intl.formatMessage({
-              id: 'filter-by-name',
-              defaultMessage: 'Filter by {title}'
-            }, { title: titleSingular }),
-            'aria-label': intl.formatMessage({
-              id: 'filter-by-name',
-              defaultMessage: 'Filter by {title}'
-            }, { title: titleSingular }),
+            placeholder: intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
+            'aria-label': intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
             onChange: (_event, value) => onFilterChange(value),
             value: filterValue
           }
@@ -129,7 +122,7 @@ export const TableToolbarView = ({
         <Fragment>
           { !isLoading &&
           <Table
-            aria-label={ `${titlePlural} table` }
+            aria-label={ intl.formatMessage(tableToolbarMessages.ariaLabel, { title: titlePlural }) }
             onCollapse={ onCollapseInternal }
             rows={ rows }
             cells={ columns }

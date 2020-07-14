@@ -1,5 +1,6 @@
 import * as ActionTypes from '../action-types';
 import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
+import worfklowMessages from '../../messages/workflows.messages';
 
 export const fetchWorkflows = (pagination) => (dispatch, getState) => {
   const { sortBy, workflows, filterValue } = getState().workflowReducer;
@@ -22,57 +23,57 @@ export const fetchWorkflow = apiProps => ({
   payload: WorkflowHelper.fetchWorkflow(apiProps)
 });
 
-export const addWorkflow = (workflowData) => ({
+export const addWorkflow = (workflowData, intl) => ({
   type: ActionTypes.ADD_WORKFLOW,
   payload: WorkflowHelper.addWorkflow(workflowData),
   meta: {
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success adding approval process',
-        description: 'The approval process was added successfully.'
+        title: intl.formatMessage(worfklowMessages.addProcessSuccessTitle),
+        description: intl.formatMessage(worfklowMessages.addProcessSuccessDescription)
       }
     }
   }
 });
 
-export const updateWorkflow = (workflowData) => ({
+export const updateWorkflow = (workflowData, intl) => ({
   type: ActionTypes.UPDATE_WORKFLOW,
   payload: WorkflowHelper.updateWorkflow(workflowData),
   meta: {
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success updating approval process',
-        description: 'The approval process was updated successfully.'
+        title: intl.formatMessage(worfklowMessages.updateProcessSuccessTitle),
+        description: intl.formatMessage(worfklowMessages.updateProcessSuccessDescription)
       }
     }
   }
 });
 
-export const removeWorkflow = (workflow) => ({
+export const removeWorkflow = (workflow, intl) => ({
   type: ActionTypes.REMOVE_WORKFLOW,
   payload: WorkflowHelper.removeWorkflow(workflow),
   meta: {
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success removing approval process',
-        description: 'The approval process was removed successfully.'
+        title: intl.formatMessage(worfklowMessages.removeProcessSuccessTitle),
+        description: intl.formatMessage(worfklowMessages.removeProcessSuccessDescription)
       }
     }
   }
 });
 
-export const removeWorkflows = (workflows) => ({
+export const removeWorkflows = (workflows, intl) => ({
   type: ActionTypes.REMOVE_WORKFLOWS,
   payload: WorkflowHelper.removeWorkflows(workflows),
   meta: {
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success removing approval processes',
-        description: 'The selected approval processes were removed successfully.'
+        title: intl.formatMessage(worfklowMessages.removeProcessesSuccessTitle),
+        description: intl.formatMessage(worfklowMessages.removeProcessesSuccessDescription)
       }
     }
   }

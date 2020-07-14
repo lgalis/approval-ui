@@ -7,6 +7,9 @@ import { useIsApprovalAdmin, useIsApprovalApprover, isRequestStateActive } from 
 import { fetchRequestContent } from '../../helpers/request/request-helper';
 import UserContext from '../../user-context';
 import routes from '../../constants/routes';
+import { useIntl } from 'react-intl';
+import requestsMessages from '../../messages/requests.messages';
+import commonMessages from '../../messages/common.message';
 
 export const ExpandedItem = ({ title = '', detail = '' }) => (
   <TextContent>
@@ -29,6 +32,7 @@ const ExpandableContent = ({ id, number_of_children, state, reason, actionsDisab
   const expandedRequests = useSelector(({ requestReducer: { expandedRequests }}) => expandedRequests);
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
   const isApprovalApprover = useIsApprovalApprover(userRoles);
+  const intl = useIntl();
 
   useEffect(() => {
     if (!fetchStarted && isLoading && expandedRequests.includes(id)) {
@@ -43,30 +47,32 @@ const ExpandableContent = ({ id, number_of_children, state, reason, actionsDisab
     </Bullseye>);
   }
 
+  const unknown = intl.formatMessage(commonMessages.unknown);
+
   return (
     <Fragment>
       <Level>
         <LevelItem>
-          <ExpandedItem title="Product" detail={ requestContent ? requestContent.product : 'Unknown' } />
+          <ExpandedItem title={ intl.formatMessage(commonMessages.product) } detail={ requestContent ? requestContent.product : unknown } />
         </LevelItem>
         { requestActive && (isApprovalApprover || isApprovalAdmin) && !actionsDisabled && <LevelItem>
           <Link to={ { pathname: routes.requests.approve, search: `request=${id}` } }  className="pf-u-mr-md">
-            <Button variant="primary" aria-label="Approve Request" isDisabled={ !requestActive }>
-              Approve
+            <Button variant="primary" aria-label={ intl.formatMessage(requestsMessages.approveRequest) } isDisabled={ !requestActive }>
+              { intl.formatMessage(requestsMessages.approveTitle) }
             </Button>
           </Link>
           <Link to={ { pathname: routes.requests.deny, search: `request=${id}` } }>
-            <Button variant="danger" aria-label="Deny Request">
-              Deny
+            <Button variant="danger" aria-label={ intl.formatMessage(requestsMessages.denyRequest) }>
+              { intl.formatMessage(requestsMessages.denyTitle) }
             </Button>
           </Link>
         </LevelItem>
         }</Level>
       <Level>
         <LevelItem>
-          <ExpandedItem title="Portfolio" detail={ requestContent ? requestContent.portfolio : 'Unknown' }/>
-          <ExpandedItem title="Platform" detail={ requestContent ? requestContent.platform : 'Unknown' }/>
-          <ExpandedItem title="Reason" detail={ reason ? reason : '' }/>
+          <ExpandedItem title={ intl.formatMessage(commonMessages.portfolio) } detail={ requestContent ? requestContent.portfolio : unknown }/>
+          <ExpandedItem title={ intl.formatMessage(commonMessages.platform) } detail={ requestContent ? requestContent.platform : unknown }/>
+          <ExpandedItem title={ intl.formatMessage(requestsMessages.reasonTitle) } detail={ reason ? reason : '' }/>
         </LevelItem>
       </Level>
     </Fragment>

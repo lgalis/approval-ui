@@ -18,14 +18,19 @@ import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 import routesLinks from '../../constants/routes';
+import { useIntl } from 'react-intl';
+import commonMessages from '../../messages/common.message';
+import worfklowMessages from '../../messages/workflows.messages';
+import formMessages from '../../messages/form.messages';
+import tableToolbarMessages from '../../messages/table-toolbar.messages';
 
-const columns = [{
-  title: 'Name',
+const columns = (intl) => [{
+  title: intl.formatMessage(tableToolbarMessages.name),
   cellFormatters: [ expandable ],
   transforms: [ sortable ]
 },
-{ title: 'Description', transforms: [ sortable ]},
-{ title: 'Sequence', transforms: [ sortable ]}
+{ title: intl.formatMessage(formMessages.description), transforms: [ sortable ]},
+{ title: intl.formatMessage(worfklowMessages.sequence), transforms: [ sortable ]}
 ];
 
 const debouncedFilter = asyncDebounce(
@@ -40,8 +45,8 @@ const debouncedFilter = asyncDebounce(
   1000
 );
 
-const prepareChips = (filterValue) => filterValue ? [{
-  category: 'Name',
+const prepareChips = (filterValue, intl) => filterValue ? [{
+  category: intl.formatMessage(tableToolbarMessages.name),
   key: 'name',
   chips: [{ name: filterValue, value: filterValue }]
 }] : [];
@@ -79,6 +84,7 @@ const Workflows = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const intl = useIntl();
 
   const updateWorkflows = (pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
@@ -130,25 +136,25 @@ const Workflows = () => {
     null
     : [
       {
-        title: 'Edit info',
+        title: intl.formatMessage(worfklowMessages.editInfo),
         component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
       },
       {
-        title: 'Edit groups',
+        title: intl.formatMessage(worfklowMessages.editGroups),
         component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editGroups, search: `?workflow=${workflow.id}` })
       },
       {
-        title: 'Edit sequence',
+        title: intl.formatMessage(worfklowMessages.editSequence),
         component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.editSequence, search: `?workflow=${workflow.id}` })
       },
       {
-        title: 'Delete',
+        title: intl.formatMessage(commonMessages.delete),
         component: 'button',
         onClick: (_event, _rowId, workflow) =>
           history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })
@@ -165,9 +171,9 @@ const Workflows = () => {
       <Link id="add-workflow-link" to={ { pathname: routesLinks.workflows.add } }>
         <Button
           variant="primary"
-          aria-label="Create approval process"
+          aria-label={ intl.formatMessage(formMessages.createApprovalTitle) }
         >
-          Create approval process
+          { intl.formatMessage(formMessages.createApprovalTitle) }
         </Button>
       </Link>
     </ToolbarItem>
@@ -181,9 +187,9 @@ const Workflows = () => {
           variant="link"
           isDisabled={ !anyWorkflowsSelected }
           style={ { color: anyWorkflowsSelected ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
-          aria-label="Delete approval process"
+          aria-label={ intl.formatMessage(worfklowMessages.deleteApprovalTitle) }
         >
-          Delete
+          { intl.formatMessage(commonMessages.delete) }
         </Button>
       </Link>
     </ToolbarItem>
@@ -197,7 +203,7 @@ const Workflows = () => {
   return (
     <Fragment>
       <TopToolbar>
-        <TopToolbarTitle title="Approval"/>
+        <TopToolbarTitle title={ intl.formatMessage(commonMessages.approvalTitle) }/>
         <AppTabs/>
       </TopToolbar>
       <TableToolbarView
@@ -206,12 +212,12 @@ const Workflows = () => {
         data={ data }
         isSelectable={ true }
         createRows={ createRows }
-        columns={ columns }
+        columns={ columns(intl) }
         fetchData={ updateWorkflows }
         routes={ routes }
         actionResolver={ actionResolver }
-        titlePlural="approval processes"
-        titleSingular="approval process"
+        titlePlural={ intl.formatMessage(worfklowMessages.approvalProcesses) }
+        titleSingular={ intl.formatMessage(worfklowMessages.approvalProcess) }
         pagination={ meta }
         setCheckedItems={ setCheckedItems }
         toolbarButtons={ toolbarButtons }
@@ -221,24 +227,27 @@ const Workflows = () => {
         onCollapse={ onCollapse }
         renderEmptyState={ () => (
           <TableEmptyState
-            title={ filterValue === '' ? 'No approval processes' : 'No results found' }
+            title={ filterValue === ''
+              ? intl.formatMessage(worfklowMessages.noApprovalProcesses)
+              : intl.formatMessage(tableToolbarMessages.noResultsFound)
+            }
             Icon={ SearchIcon }
             PrimaryAction={ () =>
               filterValue !== '' ? (
                 <Button onClick={ () => handleFilterChange('') } variant="link">
-                  Clear all filters
+                  { intl.formatMessage(tableToolbarMessages.clearAllFilters) }
                 </Button>
               ) : null
             }
             description={
               filterValue === ''
-                ? 'No approval processes.'
-                : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
+                ? intl.formatMessage(worfklowMessages.noApprovalProcesses)
+                : intl.formatMessage(tableToolbarMessages.clearAllFiltersDescription)
             }
           />
         ) }
         activeFiltersConfig={ {
-          filters: prepareChips(filterValue),
+          filters: prepareChips(filterValue, intl),
           onDelete: () => handleFilterChange('')
         } }
       />

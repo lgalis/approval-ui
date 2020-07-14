@@ -13,15 +13,19 @@ import {
   TextContent,
   TextVariants
 } from '@patternfly/react-core';
+import { useIntl } from 'react-intl';
+import requestsMessages from '../../messages/requests.messages';
+import commonMessages from '../../messages/common.message';
 
 const EmptyRequestList = () => {
   const { userRoles: userRoles } = useContext(UserContext);
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
+  const intl = useIntl();
 
   return (
     <Fragment>
       <TopToolbar>
-        <TopToolbarTitle title="Approval"/>
+        <TopToolbarTitle title={ intl.formatMessage(commonMessages.approvalTitle) }/>
         { isApprovalAdmin && <AppTabs/> }
       </TopToolbar>
       <div className="pf-u-mt-xl">
@@ -29,11 +33,11 @@ const EmptyRequestList = () => {
           <EmptyStateIcon icon={ SearchIcon } />
           <TextContent>
             <Text component={ TextVariants.h1 }>
-                No requests yet
+              { intl.formatMessage(requestsMessages.emptyRequestsTitle) }
             </Text>
           </TextContent>
           <EmptyStateBody>
-              Requests that need your attention will appear here.
+            { intl.formatMessage(requestsMessages.emptyRequestsDescription) }
           </EmptyStateBody>
         </EmptyState>
         <EmptyStateSecondaryActions>

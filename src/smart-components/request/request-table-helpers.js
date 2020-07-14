@@ -9,7 +9,9 @@ import { decisionValues } from '../../utilities/constants';
 const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : '';
 const decisionDisplayName = (decision) => decisionValues[decision] ? decisionValues[decision].displayName : '';
 
-export const createRows = (data, actionsDisabled, indexpath = routes.request) => data.reduce((acc, request, key) => ([
+export const capitlize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+export const createRows = (data, actionsDisabled, indexpath = routes.request, intl) => data.reduce((acc, request, key) => ([
   ...acc, {
     id: request.id,
     isOpen: false,
@@ -29,7 +31,7 @@ export const createRows = (data, actionsDisabled, indexpath = routes.request) =>
       request.state,
       <Fragment key={ `decision-${request.id}` }><Text key={ `${request.decision}-$(request.id}` }
         className="pf-u-mb-md" component={ TextVariants.p } >
-        { decisionIcon(request.decision) } { `${decisionDisplayName(request.decision)}` }
+        { decisionIcon(request.decision) } { capitlize(intl.formatMessage(decisionDisplayName(request.decision))) }
       </Text></Fragment>
     ]
   }, {

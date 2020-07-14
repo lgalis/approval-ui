@@ -1,6 +1,7 @@
 import * as ActionTypes from '../action-types';
 import * as RequestHelper from '../../helpers/request/request-helper';
 import { defaultSettings } from '../../helpers/shared/pagination';
+import actionModalMessages from '../../messages/action-modal.messages';
 
 export const fetchRequests = (persona, pagination) => (dispatch, getState) => {
   const { sortBy, requests, filterValue } = getState().requestReducer;
@@ -28,20 +29,20 @@ export const fetchRequestContent = (apiProps, persona) => ({
   payload: RequestHelper.fetchRequestContent(apiProps, persona)
 });
 
-export const createRequestAction = (actionName, requestId, actionIn) => ({
+export const createRequestAction = (actionName, requestId, actionIn, intl) => ({
   type: ActionTypes.CREATE_REQUEST_ACTION,
   payload: RequestHelper.createRequestAction(requestId, actionIn),
   meta: {
     notifications: {
       fulfilled: {
         variant: 'success',
-        title: 'Success',
-        description: `The ${actionName} was successful.`
+        title: intl.formatMessage(actionModalMessages.successTitle),
+        description: intl.formatMessage(actionModalMessages.fulfilledAction, { actionName })
       },
       rejected: {
         variant: 'danger',
-        title: `${actionName} error`,
-        description: `The ${actionName} action failed.`
+        title: intl.formatMessage(actionModalMessages.failedTitle, { actionName }),
+        description: intl.formatMessage(actionModalMessages.failedAction, { actionName })
       }
     }
   }

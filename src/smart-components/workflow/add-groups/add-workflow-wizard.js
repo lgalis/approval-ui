@@ -18,7 +18,7 @@ const AddWorkflow = () => {
     return dispatch(addWorkflow({
       ...values,
       group_refs: wfGroups.length > 0 ? wfGroups.map(group => ({ name: group.label, uuid: group.value })) : []
-    })).then(() => dispatch(fetchWorkflows()));
+    }, intl)).then(() => dispatch(fetchWorkflows()));
   };
 
   const onCancel = () => push(routes.workflows.index);
