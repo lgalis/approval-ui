@@ -73,6 +73,29 @@ describe('<RemoveWorkflowModal />', () => {
     expect(wrapper.find(Text).first().text()).toEqual('WfName will be removed.');
   });
 
+  it('should render linked apps and resources', () => {
+    const initialStateWithLinks = {
+      workflowReducer: {
+        workflows: {
+          data: [{
+            id: '123', name: 'WfName',
+            metadata: { object_dependencies: { catalog: [ 'PortfolioItem', 'Portfolio' ], topology: [ 'ServiceInventory' ]}}
+          }]
+        }
+      }
+    };
+    const store = mockStore(initialStateWithLinks);
+    const wrapper = mount(
+      <ComponentWrapper store={ store } initialEntries={ [ '?workflow=123' ] }>
+        <RemoveWorkflowModal { ...initialProps } />
+      </ComponentWrapper>
+    );
+    expect(wrapper.find(Modal)).toHaveLength(1);
+    expect(wrapper.find(Title).first().text()).toEqual('Delete approval process?');
+    expect(wrapper.find(Text).first().text())
+    .toEqual('WfName will be removed from: Automation Services Catalog: PortfolioItem,PortfolioTopological inventory: ServiceInventory');
+  });
+
   it('should render approval process modal - single - not in table', async () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/235`, mockOnce({ body: { name: 'Fetched WF' }}));
 
