@@ -18,6 +18,7 @@ import { EmptyTable } from '@redhat-cloud-services/frontend-components/component
 import { useIntl } from 'react-intl';
 import commonMessages from '../../../messages/common.message';
 import requestsMessages from '../../../messages/requests.messages';
+import { untranslatedMessage } from '../../../utilities/constants';
 
 const operationInfo = {
   memo: { displayName: requestsMessages.commentFrom, icon: <CommentIcon/> },
@@ -31,7 +32,7 @@ const operationInfo = {
 };
 
 const operationIcon = (operation) => operationInfo[operation] ? operationInfo[operation].icon : '';
-const operationDisplayName = (operation) => operationInfo[operation] ? operationInfo[operation].displayName : '';
+const operationDisplayName = (operation) => operationInfo[operation] ? operationInfo[operation].displayName : untranslatedMessage();
 
 export const ActionTranscript = actionList => {
   const intl = useIntl();

@@ -14,11 +14,12 @@ import useQuery from '../../utilities/use-query';
 import useWorkflow from '../../utilities/use-workflows';
 import setGroupSelectSchema from '../../forms/set-group-select.schema';
 import commonMessages from '../../messages/common.message';
+import worfklowMessages from '../../messages/workflows.messages';
 
 const createSchema = (name, intl) => ({
   fields: [{
     ...setGroupSelectSchema(intl),
-    label: intl.formatMessage(commonMessages.editGroupsLabel, { name })
+    label: intl.formatMessage(worfklowMessages.editGroupsLabel, { name })
   }]
 });
 
@@ -73,7 +74,7 @@ const EditWorkflowGroupsModal = ({
 
   return (
     <Modal
-      title={ intl.formatMessage(commonMessages.editGroupsTitle) }
+      title={ intl.formatMessage(worfklowMessages.editGroupsTitle) }
       variant="small"
       isOpen
       onClose={ onCancel }>

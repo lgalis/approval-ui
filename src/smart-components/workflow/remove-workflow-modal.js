@@ -86,7 +86,7 @@ const RemoveWorkflowModal = ({
             (finalId && !workflow && !fetchedWorkflow)
               ? <FormItemLoader/>
               : intl.formatMessage(worfklowMessages.removeProcessDescription, {
-                name: <b>{
+                name: <b key="remove-key">{
                   finalId
                     ? fetchedWorkflow && fetchedWorkflow.name || workflow && workflow.name
                     : (<React.Fragment>

@@ -28,6 +28,7 @@ import routes from '../../../constants/routes';
 import { useIntl } from 'react-intl';
 import requestsMessages from '../../../messages/requests.messages';
 import commonMessages from '../../../messages/common.message';
+import { untranslatedMessage } from '../../../utilities/constants';
 
 export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
@@ -95,7 +96,9 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
               <span id={ `${item.id}-name` }>{ item.group_name ? item.group_name : item.name }</span>
             </DataListCell>,
             <DataListCell key={ `${item.id}-state` }>
-              <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ intl.formatMessage(requestsMessages[item.state]) }</span>
+              <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>
+                { intl.formatMessage(requestsMessages[item.state] || untranslatedMessage(item.state)) }
+              </span>
             </DataListCell>,
             <DataListCell key={ `${item.id}-action` }>
               <Level>

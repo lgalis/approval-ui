@@ -4,10 +4,10 @@ import ExpandableContent from './expandable-content';
 import { timeAgo }  from '../../helpers/shared/helpers';
 import routes from '../../constants/routes';
 import { Text, TextVariants } from '@patternfly/react-core';
-import { decisionValues } from '../../utilities/constants';
+import { decisionValues, untranslatedMessage } from '../../utilities/constants';
 
 const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : '';
-const decisionDisplayName = (decision) => decisionValues[decision] ? decisionValues[decision].displayName : '';
+const decisionDisplayName = (decision) => decisionValues[decision] ? decisionValues[decision].displayName : untranslatedMessage();
 
 export const capitlize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 

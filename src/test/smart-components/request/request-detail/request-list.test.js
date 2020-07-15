@@ -1,8 +1,12 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount as enzymeMount } from 'enzyme';
 
 import RequestList from '../../../../smart-components/request/request-detail/request-list';
 import { DataListLoader } from '../../../../presentational-components/shared/loader-placeholders';
+import { IntlProvider } from 'react-intl';
+import { Request } from '../../../../smart-components/request/request-detail/request';
+
+const mount = (children) => enzymeMount(<IntlProvider locale="en">{ children }</IntlProvider>);
 
 describe('<RequestList />', () => {
   let initialProps;
@@ -25,10 +29,12 @@ describe('<RequestList />', () => {
       group_name: 'Group',
       actions: []
     }] }/>);
+    expect(wrapper.find(Request).props().isExpanded).toEqual(false);
+
     const button = wrapper.find('button.pf-c-button.pf-m-plain');
     expect(button.props().className).toEqual('pf-c-button pf-m-plain');
     button.simulate('click');
-    expect(wrapper.state()).toEqual({ expanded: [ 'request-foo' ]});
+    expect(wrapper.find(Request).props().isExpanded).toEqual(true);
   });
 
   it('should use the group name for sub-requests', () => {
@@ -41,12 +47,8 @@ describe('<RequestList />', () => {
     }] }/>);
     const title = wrapper.find('span');
     expect(title.first().props()).toEqual({
-      children: [
-        'Group Name',
-        ' '
-      ],
+      children: 'Group Name',
       id: '1-name'
     });
   });
-
 });

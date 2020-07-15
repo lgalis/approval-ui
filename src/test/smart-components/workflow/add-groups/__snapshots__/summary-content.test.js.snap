@@ -1,419 +1,439 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<SummaryContent /> should render correctly with groups 1`] = `
-<SummaryContent>
-  <Stack
-    hasGutter={true}
-  >
-    <div
-      className="pf-l-stack pf-m-gutter"
+<IntlProvider
+  defaultFormats={Object {}}
+  defaultLocale="en"
+  formats={Object {}}
+  locale="en"
+  messages={Object {}}
+  onError={[Function]}
+  textComponent={Symbol(react.fragment)}
+>
+  <SummaryContent>
+    <Stack
+      hasGutter={true}
     >
-      <StackItem>
-        <div
-          className="pf-l-stack__item"
-        >
-          <Title
-            headingLevel="h6"
-            size="xl"
+      <div
+        className="pf-l-stack pf-m-gutter"
+      >
+        <StackItem>
+          <div
+            className="pf-l-stack__item"
           >
-            <h6
-              className="pf-c-title pf-m-xl"
+            <Title
+              headingLevel="h6"
+              size="xl"
             >
-               Review 
-            </h6>
-          </Title>
-        </div>
-      </StackItem>
-      <StackItem>
-        <div
-          className="pf-l-stack__item"
-        >
-          <Stack
-            hasGutter={true}
+              <h6
+                className="pf-c-title pf-m-xl"
+              >
+                Review
+              </h6>
+            </Title>
+          </div>
+        </StackItem>
+        <StackItem>
+          <div
+            className="pf-l-stack__item"
           >
-            <div
-              className="pf-l-stack pf-m-gutter"
+            <Stack
+              hasGutter={true}
             >
-              <StackItem>
-                <div
-                  className="pf-l-stack__item"
-                >
-                  <TextContent>
-                    <div
-                      className="pf-c-content"
-                    >
-                      <Text
-                        className="pf-u-mb-0"
-                        component="small"
+              <div
+                className="pf-l-stack pf-m-gutter"
+              >
+                <StackItem>
+                  <div
+                    className="pf-l-stack__item"
+                  >
+                    <TextContent>
+                      <div
+                        className="pf-c-content"
                       >
-                        <small
+                        <Text
                           className="pf-u-mb-0"
-                          data-pf-content={true}
+                          component="small"
                         >
-                          Review and confirm your inputs. If there is anything incorrect, click Back and revise.
-                        </small>
-                      </Text>
-                    </div>
-                  </TextContent>
-                </div>
-              </StackItem>
-              <StackItem>
-                <div
-                  className="pf-l-stack__item"
-                >
-                  <Grid
-                    hasGutter={true}
-                  >
-                    <div
-                      className="pf-l-grid pf-m-gutter"
-                    >
-                      <GridItem
-                        span={2}
-                      >
-                        <div
-                          className="pf-l-grid__item pf-m-2-col"
-                        >
-                          <Text
+                          <small
                             className="pf-u-mb-0"
-                            component="small"
+                            data-pf-content={true}
                           >
-                            <small
-                              className="pf-u-mb-0"
-                              data-pf-content={true}
-                            >
-                              Name
-                            </small>
-                          </Text>
-                        </div>
-                      </GridItem>
-                      <GridItem
-                        span={10}
-                      >
-                        <div
-                          className="pf-l-grid__item pf-m-10-col"
-                        >
-                          <Text
-                            className="pf-u-mb-md"
-                            component="p"
-                          >
-                            <p
-                              className="pf-u-mb-md"
-                              data-pf-content={true}
-                            >
-                              Group summary name
-                            </p>
-                          </Text>
-                        </div>
-                      </GridItem>
-                    </div>
-                  </Grid>
-                  <Grid
-                    hasGutter={true}
+                            Review and confirm your inputs. If there is anything incorrect, click Back and revise.
+                          </small>
+                        </Text>
+                      </div>
+                    </TextContent>
+                  </div>
+                </StackItem>
+                <StackItem>
+                  <div
+                    className="pf-l-stack__item"
                   >
-                    <div
-                      className="pf-l-grid pf-m-gutter"
+                    <Grid
+                      hasGutter={true}
                     >
-                      <GridItem
-                        span={2}
+                      <div
+                        className="pf-l-grid pf-m-gutter"
                       >
-                        <div
-                          className="pf-l-grid__item pf-m-2-col"
+                        <GridItem
+                          span={2}
                         >
-                          <Text
-                            className="pf-u-mb-0"
-                            component="small"
+                          <div
+                            className="pf-l-grid__item pf-m-2-col"
                           >
-                            <small
+                            <Text
                               className="pf-u-mb-0"
-                              data-pf-content={true}
+                              component="small"
                             >
-                              Description
-                            </small>
-                          </Text>
-                        </div>
-                      </GridItem>
-                      <GridItem
-                        span={10}
-                      >
-                        <div
-                          className="pf-l-grid__item pf-m-10-col"
+                              <small
+                                className="pf-u-mb-0"
+                                data-pf-content={true}
+                              >
+                                Name
+                              </small>
+                            </Text>
+                          </div>
+                        </GridItem>
+                        <GridItem
+                          span={10}
                         >
-                          <Text
-                            className="pf-u-mb-md"
-                            component="p"
+                          <div
+                            className="pf-l-grid__item pf-m-10-col"
                           >
-                            <p
+                            <Text
                               className="pf-u-mb-md"
-                              data-pf-content={true}
+                              component="p"
                             >
-                              Group summary description
-                            </p>
-                          </Text>
-                        </div>
-                      </GridItem>
-                    </div>
-                  </Grid>
-                  <Grid
-                    hasGutter={true}
-                  >
-                    <div
-                      className="pf-l-grid pf-m-gutter"
+                              <p
+                                className="pf-u-mb-md"
+                                data-pf-content={true}
+                              >
+                                Group summary name
+                              </p>
+                            </Text>
+                          </div>
+                        </GridItem>
+                      </div>
+                    </Grid>
+                    <Grid
+                      hasGutter={true}
                     >
-                      <GridItem
-                        span={2}
+                      <div
+                        className="pf-l-grid pf-m-gutter"
                       >
-                        <div
-                          className="pf-l-grid__item pf-m-2-col"
+                        <GridItem
+                          span={2}
                         >
-                          <Text
-                            className="pf-u-mb-0"
-                            component="small"
+                          <div
+                            className="pf-l-grid__item pf-m-2-col"
                           >
-                            <small
+                            <Text
                               className="pf-u-mb-0"
-                              data-pf-content={true}
+                              component="small"
                             >
-                              Groups
-                            </small>
-                          </Text>
-                        </div>
-                      </GridItem>
-                      <GridItem
-                        span={10}
-                      >
-                        <div
-                          className="pf-l-grid__item pf-m-10-col"
+                              <small
+                                className="pf-u-mb-0"
+                                data-pf-content={true}
+                              >
+                                Description
+                              </small>
+                            </Text>
+                          </div>
+                        </GridItem>
+                        <GridItem
+                          span={10}
                         >
-                          <Text
-                            className="pf-u-mb-md"
-                            component="p"
+                          <div
+                            className="pf-l-grid__item pf-m-10-col"
                           >
-                            <p
+                            <Text
                               className="pf-u-mb-md"
-                              data-pf-content={true}
+                              component="p"
                             >
-                              Group 1
-                            </p>
-                          </Text>
-                        </div>
-                      </GridItem>
-                    </div>
-                  </Grid>
-                  <Grid
-                    hasGutter={true}
-                  >
-                    <div
-                      className="pf-l-grid pf-m-gutter"
+                              <p
+                                className="pf-u-mb-md"
+                                data-pf-content={true}
+                              >
+                                Group summary description
+                              </p>
+                            </Text>
+                          </div>
+                        </GridItem>
+                      </div>
+                    </Grid>
+                    <Grid
+                      hasGutter={true}
                     >
-                      <GridItem
-                        span={2}
+                      <div
+                        className="pf-l-grid pf-m-gutter"
                       >
-                        <div
-                          className="pf-l-grid__item pf-m-2-col"
+                        <GridItem
+                          span={2}
                         >
-                          <Text
-                            className="pf-u-mb-0"
-                            component="small"
+                          <div
+                            className="pf-l-grid__item pf-m-2-col"
                           >
-                            <small
+                            <Text
                               className="pf-u-mb-0"
-                              data-pf-content={true}
-                            />
-                          </Text>
-                        </div>
-                      </GridItem>
-                      <GridItem
-                        span={10}
-                      >
-                        <div
-                          className="pf-l-grid__item pf-m-10-col"
-                        >
-                          <Text
-                            className="pf-u-mb-md"
-                            component="p"
-                          >
-                            <p
-                              className="pf-u-mb-md"
-                              data-pf-content={true}
+                              component="small"
                             >
-                              Group 2
-                            </p>
-                          </Text>
-                        </div>
-                      </GridItem>
-                    </div>
-                  </Grid>
-                </div>
-              </StackItem>
-            </div>
-          </Stack>
-        </div>
-      </StackItem>
-    </div>
-  </Stack>
-</SummaryContent>
+                              <small
+                                className="pf-u-mb-0"
+                                data-pf-content={true}
+                              >
+                                Groups
+                              </small>
+                            </Text>
+                          </div>
+                        </GridItem>
+                        <GridItem
+                          span={10}
+                        >
+                          <div
+                            className="pf-l-grid__item pf-m-10-col"
+                          >
+                            <Text
+                              className="pf-u-mb-md"
+                              component="p"
+                            >
+                              <p
+                                className="pf-u-mb-md"
+                                data-pf-content={true}
+                              >
+                                Group 1
+                              </p>
+                            </Text>
+                          </div>
+                        </GridItem>
+                      </div>
+                    </Grid>
+                    <Grid
+                      hasGutter={true}
+                    >
+                      <div
+                        className="pf-l-grid pf-m-gutter"
+                      >
+                        <GridItem
+                          span={2}
+                        >
+                          <div
+                            className="pf-l-grid__item pf-m-2-col"
+                          >
+                            <Text
+                              className="pf-u-mb-0"
+                              component="small"
+                            >
+                              <small
+                                className="pf-u-mb-0"
+                                data-pf-content={true}
+                              />
+                            </Text>
+                          </div>
+                        </GridItem>
+                        <GridItem
+                          span={10}
+                        >
+                          <div
+                            className="pf-l-grid__item pf-m-10-col"
+                          >
+                            <Text
+                              className="pf-u-mb-md"
+                              component="p"
+                            >
+                              <p
+                                className="pf-u-mb-md"
+                                data-pf-content={true}
+                              >
+                                Group 2
+                              </p>
+                            </Text>
+                          </div>
+                        </GridItem>
+                      </div>
+                    </Grid>
+                  </div>
+                </StackItem>
+              </div>
+            </Stack>
+          </div>
+        </StackItem>
+      </div>
+    </Stack>
+  </SummaryContent>
+</IntlProvider>
 `;
 
 exports[`<SummaryContent /> should render correctly without groups 1`] = `
-<SummaryContent>
-  <Stack
-    hasGutter={true}
-  >
-    <div
-      className="pf-l-stack pf-m-gutter"
+<IntlProvider
+  defaultFormats={Object {}}
+  defaultLocale="en"
+  formats={Object {}}
+  locale="en"
+  messages={Object {}}
+  onError={[Function]}
+  textComponent={Symbol(react.fragment)}
+>
+  <SummaryContent>
+    <Stack
+      hasGutter={true}
     >
-      <StackItem>
-        <div
-          className="pf-l-stack__item"
-        >
-          <Title
-            headingLevel="h6"
-            size="xl"
+      <div
+        className="pf-l-stack pf-m-gutter"
+      >
+        <StackItem>
+          <div
+            className="pf-l-stack__item"
           >
-            <h6
-              className="pf-c-title pf-m-xl"
+            <Title
+              headingLevel="h6"
+              size="xl"
             >
-               Review 
-            </h6>
-          </Title>
-        </div>
-      </StackItem>
-      <StackItem>
-        <div
-          className="pf-l-stack__item"
-        >
-          <Stack
-            hasGutter={true}
+              <h6
+                className="pf-c-title pf-m-xl"
+              >
+                Review
+              </h6>
+            </Title>
+          </div>
+        </StackItem>
+        <StackItem>
+          <div
+            className="pf-l-stack__item"
           >
-            <div
-              className="pf-l-stack pf-m-gutter"
+            <Stack
+              hasGutter={true}
             >
-              <StackItem>
-                <div
-                  className="pf-l-stack__item"
-                >
-                  <TextContent>
-                    <div
-                      className="pf-c-content"
-                    >
-                      <Text
-                        className="pf-u-mb-0"
-                        component="small"
+              <div
+                className="pf-l-stack pf-m-gutter"
+              >
+                <StackItem>
+                  <div
+                    className="pf-l-stack__item"
+                  >
+                    <TextContent>
+                      <div
+                        className="pf-c-content"
                       >
-                        <small
+                        <Text
                           className="pf-u-mb-0"
-                          data-pf-content={true}
+                          component="small"
                         >
-                          Review and confirm your inputs. If there is anything incorrect, click Back and revise.
-                        </small>
-                      </Text>
-                    </div>
-                  </TextContent>
-                </div>
-              </StackItem>
-              <StackItem>
-                <div
-                  className="pf-l-stack__item"
-                >
-                  <Grid
-                    hasGutter={true}
-                  >
-                    <div
-                      className="pf-l-grid pf-m-gutter"
-                    >
-                      <GridItem
-                        span={2}
-                      >
-                        <div
-                          className="pf-l-grid__item pf-m-2-col"
-                        >
-                          <Text
+                          <small
                             className="pf-u-mb-0"
-                            component="small"
+                            data-pf-content={true}
                           >
-                            <small
-                              className="pf-u-mb-0"
-                              data-pf-content={true}
-                            >
-                              Name
-                            </small>
-                          </Text>
-                        </div>
-                      </GridItem>
-                      <GridItem
-                        span={10}
-                      >
-                        <div
-                          className="pf-l-grid__item pf-m-10-col"
-                        >
-                          <Text
-                            className="pf-u-mb-md"
-                            component="p"
-                          >
-                            <p
-                              className="pf-u-mb-md"
-                              data-pf-content={true}
-                            >
-                              Group summary name
-                            </p>
-                          </Text>
-                        </div>
-                      </GridItem>
-                    </div>
-                  </Grid>
-                  <Grid
-                    hasGutter={true}
+                            Review and confirm your inputs. If there is anything incorrect, click Back and revise.
+                          </small>
+                        </Text>
+                      </div>
+                    </TextContent>
+                  </div>
+                </StackItem>
+                <StackItem>
+                  <div
+                    className="pf-l-stack__item"
                   >
-                    <div
-                      className="pf-l-grid pf-m-gutter"
+                    <Grid
+                      hasGutter={true}
                     >
-                      <GridItem
-                        span={2}
+                      <div
+                        className="pf-l-grid pf-m-gutter"
                       >
-                        <div
-                          className="pf-l-grid__item pf-m-2-col"
+                        <GridItem
+                          span={2}
                         >
-                          <Text
-                            className="pf-u-mb-0"
-                            component="small"
+                          <div
+                            className="pf-l-grid__item pf-m-2-col"
                           >
-                            <small
+                            <Text
                               className="pf-u-mb-0"
-                              data-pf-content={true}
+                              component="small"
                             >
-                              Description
-                            </small>
-                          </Text>
-                        </div>
-                      </GridItem>
-                      <GridItem
-                        span={10}
-                      >
-                        <div
-                          className="pf-l-grid__item pf-m-10-col"
+                              <small
+                                className="pf-u-mb-0"
+                                data-pf-content={true}
+                              >
+                                Name
+                              </small>
+                            </Text>
+                          </div>
+                        </GridItem>
+                        <GridItem
+                          span={10}
                         >
-                          <Text
-                            className="pf-u-mb-md"
-                            component="p"
+                          <div
+                            className="pf-l-grid__item pf-m-10-col"
                           >
-                            <p
+                            <Text
                               className="pf-u-mb-md"
-                              data-pf-content={true}
+                              component="p"
                             >
-                              Group summary description
-                            </p>
-                          </Text>
-                        </div>
-                      </GridItem>
-                    </div>
-                  </Grid>
-                </div>
-              </StackItem>
-            </div>
-          </Stack>
-        </div>
-      </StackItem>
-    </div>
-  </Stack>
-</SummaryContent>
+                              <p
+                                className="pf-u-mb-md"
+                                data-pf-content={true}
+                              >
+                                Group summary name
+                              </p>
+                            </Text>
+                          </div>
+                        </GridItem>
+                      </div>
+                    </Grid>
+                    <Grid
+                      hasGutter={true}
+                    >
+                      <div
+                        className="pf-l-grid pf-m-gutter"
+                      >
+                        <GridItem
+                          span={2}
+                        >
+                          <div
+                            className="pf-l-grid__item pf-m-2-col"
+                          >
+                            <Text
+                              className="pf-u-mb-0"
+                              component="small"
+                            >
+                              <small
+                                className="pf-u-mb-0"
+                                data-pf-content={true}
+                              >
+                                Description
+                              </small>
+                            </Text>
+                          </div>
+                        </GridItem>
+                        <GridItem
+                          span={10}
+                        >
+                          <div
+                            className="pf-l-grid__item pf-m-10-col"
+                          >
+                            <Text
+                              className="pf-u-mb-md"
+                              component="p"
+                            >
+                              <p
+                                className="pf-u-mb-md"
+                                data-pf-content={true}
+                              >
+                                Group summary description
+                              </p>
+                            </Text>
+                          </div>
+                        </GridItem>
+                      </div>
+                    </Grid>
+                  </div>
+                </StackItem>
+              </div>
+            </Stack>
+          </div>
+        </StackItem>
+      </div>
+    </Stack>
+  </SummaryContent>
+</IntlProvider>
 `;

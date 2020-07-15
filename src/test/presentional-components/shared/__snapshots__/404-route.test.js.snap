@@ -1,11 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<NoMatch /> should render correctly 1`] = `
-<NoMatch>
-  <div>
-    <h1>
-      Page you are looking for does not exist.
-    </h1>
-  </div>
-</NoMatch>
+<IntlProvider
+  defaultFormats={Object {}}
+  defaultLocale="en"
+  formats={Object {}}
+  locale="en"
+  messages={Object {}}
+  onError={[Function]}
+  textComponent={Symbol(react.fragment)}
+>
+  <NoMatch>
+    <div>
+      <h1>
+        Page you are looking for does not exist.
+      </h1>
+    </div>
+  </NoMatch>
+</IntlProvider>
 `;

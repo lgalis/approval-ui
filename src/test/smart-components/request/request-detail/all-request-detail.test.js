@@ -20,13 +20,16 @@ import requestReducer, { requestsInitialState } from '../../../../redux/reducers
 import UserContext from '../../../../user-context';
 import ActionModal from '../../../../smart-components/request/action-modal';
 import { APPROVAL_ADMINISTRATOR_ROLE } from '../../../../helpers/shared/helpers';
+import { IntlProvider } from 'react-intl';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=123' ]}) => (
-  <Provider store={ store } >
-    <MemoryRouter initialEntries={ initialEntries }>
-      { children }
-    </MemoryRouter>
-  </Provider>
+  <IntlProvider locale="en">
+    <Provider store={ store } >
+      <MemoryRouter initialEntries={ initialEntries }>
+        { children }
+      </MemoryRouter>
+    </Provider>
+  </IntlProvider>
 );
 
 describe('<AllRequestDetail />', () => {

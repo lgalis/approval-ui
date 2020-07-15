@@ -4,11 +4,14 @@ import toJson from 'enzyme-to-json';
 import { MemoryRouter } from 'react-router-dom';
 import { Request } from '../../../../smart-components/request/request-detail/request';
 import routes from '../../../../constants/routes';
+import { IntlProvider } from 'react-intl';
 
 const ComponentWrapper = ({ children }) => (
-  <MemoryRouter initialEntries={ [ '/foo' ] }>
-    { children }
-  </MemoryRouter>
+  <IntlProvider locale="en">
+    <MemoryRouter initialEntries={ [ '/foo' ] }>
+      { children }
+    </MemoryRouter>
+  </IntlProvider>
 );
 
 describe('<Request />', () => {

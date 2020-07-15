@@ -18,3 +18,6 @@ export const decisionValues = {
   canceled: { displayName: requestsMessages.canceled, icon: <ErrorCircleOIcon className="pf-u-mr-sm icon-danger-fill"/> },
   error: { displayName: requestsMessages.error, icon: <ExclamationCircleIcon className="pf-u-mr-sm icon-danger-fill"/> }
 };
+
+// React intl does not support empty strings
+export const untranslatedMessage = (defaultMessage = ' ') => ({ id: 'untranslated', defaultMessage });
