@@ -21,3 +21,7 @@ export const decisionValues = {
 
 // React intl does not support empty strings
 export const untranslatedMessage = (defaultMessage = ' ') => ({ id: 'untranslated', defaultMessage });
+export const APP_DISPLAY_NAME = {
+  catalog: 'Automation Services Catalog',
+  topology: 'Topological inventory'
+};

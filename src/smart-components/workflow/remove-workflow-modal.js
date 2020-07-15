@@ -13,6 +13,7 @@ import { FormItemLoader } from '../../presentational-components/shared/loader-pl
 import worfklowMessages from '../../messages/workflows.messages';
 import commonMessages from '../../messages/common.message';
 import isEmpty from 'lodash/isEmpty';
+import { APP_DISPLAY_NAME } from '../../utilities/constants';
 
 const RemoveWorkflowModal = ({
   ids = [],
@@ -63,7 +64,7 @@ const RemoveWorkflowModal = ({
     {return [];}
 
     return Object.keys(wf.metadata.object_dependencies).reduce((acc, item) =>
-    { acc.push(`${item}: ${wf.metadata.object_dependencies[item].join(',')}`); return acc; }, []);
+    { acc.push(`${APP_DISPLAY_NAME[item] || item}: ${wf.metadata.object_dependencies[item].join(',')}`); return acc; }, []);
   };
 
   return (
@@ -108,7 +109,7 @@ const RemoveWorkflowModal = ({
                   dependenciesMessageValue:
                       isEmpty(dependenciesMessage()) ? '.' :
                           <React.Fragment>
-                            &nbsp from <br/><br/>
+                            &nbsp;from: <br/><br/>
                             { dependenciesMessage().map(item => <React.Fragment key={ item }><li>{ item }</li>
                             </React.Fragment>) }
                           </React.Fragment>
