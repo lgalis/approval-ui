@@ -64,7 +64,7 @@ const RemoveWorkflowModal = ({
     {return [];}
 
     return Object.keys(wf.metadata.object_dependencies).reduce((acc, item) =>
-    { acc.push(`${APP_DISPLAY_NAME[item] || item}: ${wf.metadata.object_dependencies[item].join(',')}`); return acc; }, []);
+    { acc.push(`${APP_DISPLAY_NAME[item] || item}`); return acc; }, []);
   };
 
   return (
@@ -109,7 +109,7 @@ const RemoveWorkflowModal = ({
                   dependenciesMessageValue:
                       isEmpty(dependenciesMessage()) ? '.' :
                           <React.Fragment>
-                            &nbsp;from: <br/><br/>
+                            &nbsp;from the following applications: <br/><br/>
                             { dependenciesMessage().map(item => <React.Fragment key={ item }><li>{ item }</li>
                             </React.Fragment>) }
                           </React.Fragment>
