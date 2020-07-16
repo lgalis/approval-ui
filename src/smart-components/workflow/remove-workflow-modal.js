@@ -63,8 +63,8 @@ const RemoveWorkflowModal = ({
         || isEmpty(wf.metadata.object_dependencies))
     {return [];}
 
-    return Object.keys(wf.metadata.object_dependencies).reduce((acc, item) =>
-    { acc.push(`${APP_DISPLAY_NAME[item] || item}`); return acc; }, []);
+    return Object.keys(wf.metadata.object_dependencies)
+    .reduce((acc, item) => [ ...acc, `${APP_DISPLAY_NAME[item] || item}` ], []);
   };
 
   return (
@@ -106,13 +106,13 @@ const RemoveWorkflowModal = ({
                       { ids.length } { intl.formatMessage(worfklowMessages.approvalProcesses) }
                     </React.Fragment>)
                 }</b>,
-                  dependenciesMessageValue:
+                dependenciesMessageValue:
                       isEmpty(dependenciesMessage()) ? '.' :
-                          <React.Fragment>
-                            &nbsp;from the following applications: <br/><br/>
-                            { dependenciesMessage().map(item => <React.Fragment key={ item }><li>{ item }</li>
-                            </React.Fragment>) }
-                          </React.Fragment>
+                        <React.Fragment>
+                            &nbsp;{ intl.formatMessage(worfklowMessages.fromProcessDependencies) }: <br/><br/>
+                          { dependenciesMessage().map(item => <React.Fragment key={ item }><li>{ item }</li>
+                          </React.Fragment>) }
+                        </React.Fragment>
               })
           }
         </Text>
