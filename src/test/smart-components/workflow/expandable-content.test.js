@@ -7,6 +7,7 @@ import { notificationsMiddleware } from '@redhat-cloud-services/frontend-compone
 import { Skeleton } from '@redhat-cloud-services/frontend-components/components/cjs/Skeleton';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
+import { IntlProvider } from 'react-intl';
 
 import ExpandableContent from '../../../smart-components/workflow/expandable-content';
 
@@ -20,11 +21,13 @@ describe('ExpandableContent', () => {
   let groupName2;
 
   const ComponentWrapper = ({ store, children }) => (
-    <Provider store={ store }>
-      <MemoryRouter initialEntries={ [ '' ] }>
-        { children }
-      </MemoryRouter>
-    </Provider>
+    <IntlProvider locale="en">
+      <Provider store={ store }>
+        <MemoryRouter initialEntries={ [ '' ] }>
+          { children }
+        </MemoryRouter>
+      </Provider>
+    </IntlProvider>
   );
 
   beforeEach(() => {

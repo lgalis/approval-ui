@@ -1,16 +1,12 @@
-import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
-import { FormattedMessage } from 'react-intl';
 
 import loadOptions from './load-groups-debounced';
+import formMessages from '../messages/form.messages';
 
 const setGroupSelectSchema = (intl) => ({
   component: componentTypes.SELECT,
   name: 'wfGroups',
-  label: <FormattedMessage
-    id="create-approval-process-set-groups"
-    defaultMessage="Set groups"
-  />,
+  label: intl.formatMessage(formMessages.setGroups),
   loadOptions,
   noValueUpdates: true,
   isMulti: true,
@@ -18,10 +14,7 @@ const setGroupSelectSchema = (intl) => ({
   simpleValue: false,
   menuIsPortal: true,
   isClearable: true,
-  placeholder: intl.formatMessage({
-    id: 'create-approval-process-set-groups-placeholder',
-    defaultMessage: 'Select...'
-  })
+  placeholder: intl.formatMessage(formMessages.selectPlaceholder)
 });
 
 export default setGroupSelectSchema;

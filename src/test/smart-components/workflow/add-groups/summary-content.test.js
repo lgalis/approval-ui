@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import SummaryContent from '../../../../smart-components/workflow/add-groups/summary-content';
 import rendererContext from '@data-driven-forms/react-form-renderer/dist/cjs/renderer-context';
+import { IntlProvider } from 'react-intl';
 
 describe('<SummaryContent />', () => {
   let formData;
@@ -14,11 +15,15 @@ describe('<SummaryContent />', () => {
       wfGroups: []
     };
 
-    const wrapper = mount(<rendererContext.Provider value={ { formOptions: {
-      getState: () => ({ values: formData })
-    }} }>
-      <SummaryContent />
-    </rendererContext.Provider>);
+    const wrapper = mount(
+      <IntlProvider locale="en">
+        <rendererContext.Provider value={ { formOptions: {
+          getState: () => ({ values: formData })
+        }} }>
+          <SummaryContent />
+        </rendererContext.Provider>
+      </IntlProvider>
+    );
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
@@ -32,11 +37,15 @@ describe('<SummaryContent />', () => {
       ]
     };
 
-    const wrapper = mount(<rendererContext.Provider value={ { formOptions: {
-      getState: () => ({ values: formData })
-    }} }>
-      <SummaryContent />
-    </rendererContext.Provider>);
+    const wrapper = mount(
+      <IntlProvider locale="en">
+        <rendererContext.Provider value={ { formOptions: {
+          getState: () => ({ values: formData })
+        }} }>
+          <SummaryContent />
+        </rendererContext.Provider>
+      </IntlProvider>
+    );
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 });

@@ -22,15 +22,17 @@ const roles = {};
 roles[APPROVAL_APPROVER_ROLE] = true;
 
 const ComponentWrapper = ({ store, initialEntries = [ '/requests' ], children }) => (
-  <UserContext.Provider value={ { userRoles: roles } } >
-    <Provider store={ store } >
-      <MemoryRouter initialEntries={ initialEntries }>
-        <IntlProvider locale="en">
-          { children }
-        </IntlProvider>
-      </MemoryRouter>
-    </Provider>
-  </UserContext.Provider>
+  <IntlProvider locale="en">
+    <UserContext.Provider value={ { userRoles: roles } } >
+      <Provider store={ store } >
+        <MemoryRouter initialEntries={ initialEntries }>
+          <IntlProvider locale="en">
+            { children }
+          </IntlProvider>
+        </MemoryRouter>
+      </Provider>
+    </UserContext.Provider>
+  </IntlProvider>
 );
 
 describe('<Requests />', () => {

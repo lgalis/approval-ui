@@ -138,7 +138,6 @@ exports[`<Request /> should render correctly 1`] = `
                     id="111-name"
                   >
                     Group1
-                     
                   </span>
                 </DataListCell>,
                 <DataListCell>
@@ -151,7 +150,6 @@ exports[`<Request /> should render correctly 1`] = `
                     }
                   >
                     no-state
-                     
                   </span>
                 </DataListCell>,
                 <DataListCell>
@@ -183,7 +181,6 @@ exports[`<Request /> should render correctly 1`] = `
                     id="111-name"
                   >
                     Group1
-                     
                   </span>
                 </div>
               </DataListCell>
@@ -202,7 +199,6 @@ exports[`<Request /> should render correctly 1`] = `
                     }
                   >
                     no-state
-                     
                   </span>
                 </div>
               </DataListCell>
@@ -353,8 +349,8 @@ exports[`<Request /> should render correctly 1`] = `
                                             />
                                           </svg>
                                         </OnRunningIcon>
-                                         
-                                        Started by  system
+                                         
+                                        Started by system
                                       </p>
                                     </Text>
                                      
@@ -419,8 +415,8 @@ exports[`<Request /> should render correctly 1`] = `
                                             />
                                           </svg>
                                         </EnvelopeIcon>
-                                         
-                                        Notified by  system
+                                         
+                                        Notified by system
                                       </p>
                                     </Text>
                                      

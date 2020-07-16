@@ -10,6 +10,9 @@ import {
   TextVariants
 } from '@patternfly/react-core';
 import { EmptyTable } from '@redhat-cloud-services/frontend-components/components/cjs/EmptyTable';
+import { useIntl } from 'react-intl';
+
+import tableEmptyMessages from '../../messages/table-empty.messages';
 
 const TableEmptyState = ({
   title,
@@ -17,23 +20,26 @@ const TableEmptyState = ({
   description,
   PrimaryAction,
   renderDescription
-}) => (
-  <EmptyTable centered aria-label="No records">
-    <EmptyState className="pf-u-ml-auto pf-u-mr-auto">
-      <EmptyStateIcon icon={ Icon } />
-      <TextContent>
-        <Text component={ TextVariants.h1 }>{ title }</Text>
-      </TextContent>
-      <EmptyStateBody>
-        { description }
-        { renderDescription && renderDescription() }
-      </EmptyStateBody>
-      <EmptyStateSecondaryActions>
-        { PrimaryAction && <PrimaryAction /> }
-      </EmptyStateSecondaryActions>
-    </EmptyState>
-  </EmptyTable>
-);
+}) => {
+  const intl = useIntl();
+
+  return (
+    <EmptyTable centered aria-label={ intl.formatMessage(tableEmptyMessages.noRecords) }>
+      <EmptyState className="pf-u-ml-auto pf-u-mr-auto">
+        <EmptyStateIcon icon={ Icon } />
+        <TextContent>
+          <Text component={ TextVariants.h1 }>{ title }</Text>
+        </TextContent>
+        <EmptyStateBody>
+          { description }
+          { renderDescription && renderDescription() }
+        </EmptyStateBody>
+        <EmptyStateSecondaryActions>
+          { PrimaryAction && <PrimaryAction /> }
+        </EmptyStateSecondaryActions>
+      </EmptyState>
+    </EmptyTable>
+  );};
 
 TableEmptyState.propTypes = {
   title: PropTypes.string.isRequired,

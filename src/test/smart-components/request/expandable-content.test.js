@@ -9,6 +9,7 @@ import { MemoryRouter } from 'react-router-dom';
 import ExpandableContent, { ExpandedItem } from '../../../smart-components/request/expandable-content';
 import * as helpers from '../../../helpers/request/request-helper';
 import UserContext from '../../../user-context';
+import { IntlProvider } from 'react-intl';
 
 describe('requests - expendableContent', () => {
   describe('ExpandedItem', () => {
@@ -54,13 +55,15 @@ describe('requests - expendableContent', () => {
     let requestDetail;
 
     const ComponentWrapper = ({ store, children }) => (
-      <Provider store={ store }>
-        <UserContext.Provider value={ { userRoles: {}} }>
-          <MemoryRouter initialEntries={ [ '' ] }>
-            { children }
-          </MemoryRouter>
-        </UserContext.Provider>
-      </Provider>
+      <IntlProvider locale="en">
+        <Provider store={ store }>
+          <UserContext.Provider value={ { userRoles: {}} }>
+            <MemoryRouter initialEntries={ [ '' ] }>
+              { children }
+            </MemoryRouter>
+          </UserContext.Provider>
+        </Provider>
+      </IntlProvider>
     );
 
     beforeEach(() => {

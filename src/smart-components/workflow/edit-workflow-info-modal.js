@@ -7,7 +7,7 @@ import { Modal } from '@patternfly/react-core';
 import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/dist/cjs/validator-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import { addWorkflow, updateWorkflow, fetchWorkflow } from '../../redux/actions/workflow-actions';
 import { WorkflowInfoFormLoader } from '../../presentational-components/shared/loader-placeholders';
@@ -16,36 +16,29 @@ import useWorkflow from '../../utilities/use-workflows';
 import FormRenderer from '../common/form-renderer';
 import routes from '../../constants/routes';
 import workflowInfoSchema from '../../forms/workflow-info.schema';
+import commonMessages from '../../messages/common.message';
+import worfklowMessages from '../../messages/workflows.messages';
 
-const createSchema = (editType, name, id) => editType === 'info' ? ({
+const createSchema = (editType, name, intl, id) => editType === 'info' ? ({
   fields: [{
     component: componentTypes.SUB_FORM,
     title: <span className="pf-c-title pf-m-md">
-      <FormattedMessage
-        id="edit-info-title-subform"
-        defaultMessage="Make any changes to approval process {name}"
-        values={ { name } } />
+      { intl.formatMessage(worfklowMessages.editProcessTitle, { name }) }
     </span>,
     name: 'info-sub',
-    fields: workflowInfoSchema(id)
+    fields: workflowInfoSchema(intl, id)
   }]
 }) : ({
   fields: [{
     component: componentTypes.SUB_FORM,
     title: <span className="pf-c-title pf-m-md">
-      <FormattedMessage
-        id="edit-sequence-title-subform"
-        defaultMessage="Set the sequence for the approval process {name}"
-        values={ { name } } />
+      { intl.formatMessage(worfklowMessages.editSequenceTitle, { name }) }
     </span>,
     name: 'info-sub',
     fields: [{
       component: componentTypes.TEXT_FIELD,
       name: 'sequence',
-      label: <FormattedMessage
-        id="sequence-label"
-        defaultMessage="Enter sequence"
-      />,
+      label: intl.formatMessage(worfklowMessages.enterSequence),
       isRequired: true,
       validate: [{ type: validatorTypes.REQUIRED }]
     }]
@@ -90,14 +83,14 @@ const EditWorkflowInfoModal = ({
 
   const onSave = ({ name, description, sequence }) => {
     const workflowData = { id, name, description, sequence };
-    return updateWorkflow(workflowData).then(() => postMethod()).then(() => push(routes.workflows.index));
+    return updateWorkflow(workflowData, intl).then(() => postMethod()).then(() => push(routes.workflows.index));
   };
 
   const onCancel = () => push(routes.workflows.index);
 
   return (
     <Modal
-      title={ editType === 'sequence' ? 'Edit sequence' : 'Edit information' }
+      title={ editType === 'sequence' ? intl.formatMessage(worfklowMessages.editSequence) : intl.formatMessage(worfklowMessages.editInformation) }
       variant="small"
       isOpen
       onClose={ onCancel }
@@ -107,7 +100,7 @@ const EditWorkflowInfoModal = ({
         !state.isLoading && <FormRenderer
           FormTemplate={ (props) => <FormTemplate
             { ...props }
-            submitLabel={ <FormattedMessage id="save" defaultMessage="Save" /> }
+            submitLabel={ intl.formatMessage(commonMessages.save) }
             buttonClassName="pf-u-mt-0"
             disableSubmit={ [ 'submitting' ] }
           /> }

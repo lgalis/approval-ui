@@ -705,7 +705,7 @@ describe('<Workflows />', () => {
       });
       wrapper.update();
 
-      expect(wrapper.find('ModalBoxBody').find('p').text()).toEqual('3 approval processes will be removed.');
+      expect(wrapper.find('ModalBoxBody').find('p').text()).toEqual('3 approval processes will be removed.');
 
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.remove);
       expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('');

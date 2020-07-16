@@ -17,13 +17,15 @@ import { delay } from 'xhr-mock';
 import { FormItemLoader } from '../../../presentational-components/shared/loader-placeholders';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/' ]}) => (
-  <Provider store={ store }>
-    <MemoryRouter initialEntries={ initialEntries } initialIndex={ 1 }>
-      <IntlProvider locale="en">
-        { children }
-      </IntlProvider>
-    </MemoryRouter>
-  </Provider>
+  <IntlProvider locale="en">
+    <Provider store={ store }>
+      <MemoryRouter initialEntries={ initialEntries } initialIndex={ 1 }>
+        <IntlProvider locale="en">
+          { children }
+        </IntlProvider>
+      </MemoryRouter>
+    </Provider>
+  </IntlProvider>
 );
 
 describe('<RemoveWorkflowModal />', () => {
@@ -149,7 +151,7 @@ describe('<RemoveWorkflowModal />', () => {
     );
     expect(wrapper.find(Modal)).toHaveLength(1);
     expect(wrapper.find(Title).first().text()).toEqual('Delete approval processes?');
-    expect(wrapper.find(Text).first().text()).toEqual('2 approval processes will be removed.');
+    expect(wrapper.find(Text).first().text()).toEqual('2 approval processes will be removed.');
   });
 
   it('should render approval process modal and call cancel callback', () => {

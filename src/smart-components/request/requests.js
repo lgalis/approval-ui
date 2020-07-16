@@ -11,8 +11,12 @@ import UserContext from '../../user-context';
 import routesLinks from '../../constants/routes';
 import RequestsList from './requests-list';
 import EmptyRequestList from './EmptyRequestList';
+import { useIntl } from 'react-intl';
+
+import requestsMessages from '../../messages/requests.messages';
 
 const Requests = () => {
+  const intl = useIntl();
   const { userRoles: userRoles } = useContext(UserContext);
   const history = useHistory();
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
@@ -37,7 +41,7 @@ const Requests = () => {
     return (requestData && requestData.id && actionsDisabled(requestData) ? null :
       [
         {
-          title: 'Comment',
+          title: intl.formatMessage(requestsMessages.commentTitle),
           component: 'button',
           onClick: () => history.push({
             pathname: routesLinks.requests.addComment,

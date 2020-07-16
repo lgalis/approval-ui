@@ -13,6 +13,8 @@ import UserContext from '../../../user-context';
 import useQuery from '../../../utilities/use-query';
 import { approvalPersona } from '../../../helpers/shared/helpers';
 import PropTypes from 'prop-types';
+import { useIntl } from 'react-intl';
+import requestsMessages from '../../../messages/requests.messages';
 
 const initialState = {
   isFetching: true
@@ -43,6 +45,7 @@ const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { userRoles: userRoles } = useContext(UserContext);
+  const intl = useIntl();
 
   useEffect(() => {
     Promise.all([ dispatch(fetchRequest(id, approvalPersona(userRoles))), dispatch(fetchRequestContent(id, approvalPersona(userRoles))) ])
@@ -89,7 +92,7 @@ const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
         breadcrumbs={ requestBreadcrumbs }
         paddingBottom={ true }
       >
-        <TopToolbarTitle title={ `Request ${id}` } />
+        <TopToolbarTitle title={ intl.formatMessage(requestsMessages.requestTitle, { id }) } />
       </TopToolbar>
       <Section type="content">
         <Grid hasGutter>

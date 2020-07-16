@@ -26,6 +26,8 @@ import {
   APPROVAL_API_BASE
 } from '../../../utilities/constants';
 
+const INTL = { formatMessage: ({ defaultMessage }) => defaultMessage };
+
 describe('Approval process actions', () => {
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
@@ -163,7 +165,7 @@ describe('Approval process actions', () => {
       meta: expect.any(Object),
       payload: { foo: 'bar' }
     }];
-    store.dispatch(addWorkflow({ foo: 'bar' })).then(() => {
+    store.dispatch(addWorkflow({ foo: 'bar' }, INTL)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });
@@ -199,7 +201,7 @@ describe('Approval process actions', () => {
       payload: expect.any(Object),
       error: true
     }];
-    store.dispatch(addWorkflow({ foo: 'bar' })).catch(() => {
+    store.dispatch(addWorkflow({ foo: 'bar' }, INTL)).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });
@@ -230,7 +232,7 @@ describe('Approval process actions', () => {
       meta: expect.any(Object),
       payload: { foo: 'bar' }
     }];
-    store.dispatch(updateWorkflow({ id: '321', foo: 'bar' })).then(() => {
+    store.dispatch(updateWorkflow({ id: '321', foo: 'bar' }, INTL)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });
@@ -260,7 +262,7 @@ describe('Approval process actions', () => {
       error: true,
       payload: expect.any(Object)
     }];
-    store.dispatch(updateWorkflow({ id: '321', foo: 'bar' })).catch(() => {
+    store.dispatch(updateWorkflow({ id: '321', foo: 'bar' }, INTL)).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });
@@ -286,7 +288,7 @@ describe('Approval process actions', () => {
     }, expect.objectContaining({
       type: `${REMOVE_WORKFLOW}_FULFILLED`
     }) ];
-    store.dispatch(removeWorkflow('123')).then(() => {
+    store.dispatch(removeWorkflow('123', INTL)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });
@@ -311,7 +313,7 @@ describe('Approval process actions', () => {
       type: `${REMOVE_WORKFLOW}_REJECTED`,
       payload: expect.any(Object)
     }) ];
-    store.dispatch(removeWorkflow('123')).catch(() => {
+    store.dispatch(removeWorkflow('123', INTL)).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });
@@ -339,7 +341,7 @@ describe('Approval process actions', () => {
       type: `${REMOVE_WORKFLOWS}_FULFILLED`
     }) ];
 
-    store.dispatch(removeWorkflows([ '123', '321' ])).then(() => {
+    store.dispatch(removeWorkflows([ '123', '321' ], INTL)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });
@@ -368,7 +370,7 @@ describe('Approval process actions', () => {
       type: `${REMOVE_WORKFLOWS}_REJECTED`,
       payload: expect.any(Object)
     }) ];
-    store.dispatch(removeWorkflows([ '123', '321' ])).catch(() => {
+    store.dispatch(removeWorkflows([ '123', '321' ], INTL)).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
       done();
     });

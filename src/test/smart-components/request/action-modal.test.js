@@ -10,13 +10,16 @@ import { notificationsMiddleware } from '@redhat-cloud-services/frontend-compone
 import ActionModal from '../../../smart-components/request/action-modal';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 import routes from '../../../constants/routes';
+import { IntlProvider } from 'react-intl';
 
 const ComponentWrapper = ({ store, children }) => (
-  <Provider store={ store }>
-    <MemoryRouter initialEntries={ [{ pathname: routes.request.index, search: '?request=123' }] }>
-      { children }
-    </MemoryRouter>
-  </Provider>
+  <IntlProvider locale="en">
+    <Provider store={ store }>
+      <MemoryRouter initialEntries={ [{ pathname: routes.request.index, search: '?request=123' }] }>
+        { children }
+      </MemoryRouter>
+    </Provider>
+  </IntlProvider>
 );
 
 describe('<ActionModal />', () => {
