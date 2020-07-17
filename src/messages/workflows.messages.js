@@ -31,7 +31,7 @@ const worfklowMessages = defineMessages({
   },
   fromProcessDependencies: {
     id: 'worfklowMessages.fromProcessDependencies',
-    defaultMessage: 'from the following applications'
+    defaultMessage: '{space}from the following applications: {newline} {dependenciesList}'
   },
   noApprovalProcesses: {
     id: 'worfklowMessages.noApprovalProcesses',

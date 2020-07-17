@@ -107,13 +107,15 @@ const RemoveWorkflowModal = ({
                     </React.Fragment>)
                 }</b>,
                 dependenciesMessageValue:
-                      isEmpty(dependenciesMessage()) ? '.' :
-                        <React.Fragment>
-                            &nbsp;{ intl.formatMessage(worfklowMessages.fromProcessDependencies) }: <br/><br/>
-                          { dependenciesMessage().map(item => <React.Fragment key={ item }><li>{ item }</li>
-                          </React.Fragment>) }
-                        </React.Fragment>
-              })
+                      isEmpty(dependenciesMessage()) ? '.' : intl.formatMessage(worfklowMessages.fromProcessDependencies, {
+                        space: <React.Fragment>&nbsp;</React.Fragment>,
+                        newline: <React.Fragment><br/><br/></React.Fragment>,
+                        dependenciesList: <React.Fragment>{ dependenciesMessage().map(item => <React.Fragment key={ item }>
+                          <li>{ item }</li>
+                        </React.Fragment>) }</React.Fragment>
+                      })
+              }
+              )
           }
         </Text>
       </TextContent>
