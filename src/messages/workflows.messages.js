@@ -29,6 +29,10 @@ const worfklowMessages = defineMessages({
     id: 'worfklowMessages.approvalProcesses',
     defaultMessage: 'approval processes'
   },
+  fromProcessDependencies: {
+    id: 'worfklowMessages.fromProcessDependencies',
+    defaultMessage: '{space}from the following applications: {newline} {dependenciesList}'
+  },
   noApprovalProcesses: {
     id: 'worfklowMessages.noApprovalProcesses',
     defaultMessage: 'No approval processes'
@@ -51,7 +55,7 @@ const worfklowMessages = defineMessages({
   },
   removeProcessDescription: {
     id: 'workflowMessages.removeProcessDescription',
-    defaultMessage: '{name} will be removed.'
+    defaultMessage: '{name} will be removed{dependenciesMessageValue}'
   },
   editProcessTitle: {
     id: 'workflowMessages.editProcessTitle',

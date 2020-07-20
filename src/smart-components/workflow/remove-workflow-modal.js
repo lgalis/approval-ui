@@ -12,6 +12,8 @@ import useWorkflow from '../../utilities/use-workflows';
 import { FormItemLoader } from '../../presentational-components/shared/loader-placeholders';
 import worfklowMessages from '../../messages/workflows.messages';
 import commonMessages from '../../messages/common.message';
+import isEmpty from 'lodash/isEmpty';
+import { APP_DISPLAY_NAME } from '../../utilities/constants';
 
 const RemoveWorkflowModal = ({
   ids = [],
@@ -54,6 +56,17 @@ const RemoveWorkflowModal = ({
     return removeWf();
   };
 
+  const dependenciesMessage = () => {
+    const wf = workflow || fetchedWorkflow;
+    if (!wf || isEmpty(wf) ||
+        !wf.metadata || !wf.metadata.object_dependencies
+        || isEmpty(wf.metadata.object_dependencies))
+    {return [];}
+
+    return Object.keys(wf.metadata.object_dependencies)
+    .reduce((acc, item) => [ ...acc, `${APP_DISPLAY_NAME[item] || item}` ], []);
+  };
+
   return (
     <Modal
       isOpen
@@ -92,8 +105,17 @@ const RemoveWorkflowModal = ({
                     : (<React.Fragment>
                       { ids.length } { intl.formatMessage(worfklowMessages.approvalProcesses) }
                     </React.Fragment>)
-                }</b>
-              })
+                }</b>,
+                dependenciesMessageValue:
+                      isEmpty(dependenciesMessage()) ? '.' : intl.formatMessage(worfklowMessages.fromProcessDependencies, {
+                        space: <React.Fragment>&nbsp;</React.Fragment>,
+                        newline: <React.Fragment><br/><br/></React.Fragment>,
+                        dependenciesList: <React.Fragment>{ dependenciesMessage().map(item => <React.Fragment key={ item }>
+                          <li>{ item }</li>
+                        </React.Fragment>) }</React.Fragment>
+                      })
+              }
+              )
           }
         </Text>
       </TextContent>
