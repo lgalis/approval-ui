@@ -36,13 +36,14 @@ export const TableToolbarView = ({
   sortBy,
   onSort,
   activeFiltersConfig,
-  filterConfig
+  filterConfig,
+  indexpath
 }) => {
   const intl = useIntl();
   const [ rows, setRows ] = useState([]);
 
   useEffect(() => {
-    setRows(createRows(data, actionsDisabled));
+    setRows(createRows(data, actionsDisabled, indexpath));
   }, [ data ]);
 
   const setOpen = (data, id) => data.map(row => row.id === id ?
@@ -84,7 +85,12 @@ export const TableToolbarView = ({
     <PrimaryToolbar
       className="pf-u-p-lg ins__approval__primary_toolbar"
       pagination={ paginationConfig }
-      { ...(toolbarButtons && { actionsConfig: {  actions: [ toolbarButtons() ]}}) }
+      { ...(toolbarButtons && { actionsConfig: {
+        dropdownProps: {
+          position: 'right'
+        },
+        actions: [ toolbarButtons() ]}
+      }) }
       filterConfig={ {
         items: [{
           label: intl.formatMessage({
@@ -129,9 +135,10 @@ export const TableToolbarView = ({
             cells={ columns }
             onSelect={ isSelectable && setSelected }
             actionResolver={ actionResolver }
-            className="table-fix"
+            className="pf-u-pt-0"
             sortBy={ sortBy }
             onSort={ onSort }
+            canSelectAll
           >
             <TableHeader />
             <TableBody/>
@@ -178,7 +185,8 @@ TableToolbarView.propTypes = {
   onSort: propTypes.func,
   activeFiltersConfig: propTypes.object,
   filterConfig: propTypes.array,
-  actionsDisabled: propTypes.func
+  actionsDisabled: propTypes.func,
+  indexpath: propTypes.shape({ index: propTypes.string })
 };
 
 TableToolbarView.defaultProps = {

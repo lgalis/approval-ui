@@ -9,14 +9,19 @@ import { decisionValues } from '../../utilities/constants';
 const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : '';
 const decisionDisplayName = (decision) => decisionValues[decision] ? decisionValues[decision].displayName : '';
 
-export const createRows = (data, actionsDisabled) => data.reduce((acc, request, key) => ([
+export const createRows = (data, actionsDisabled, indexpath = routes.request) => data.reduce((acc, request, key) => ([
   ...acc, {
     id: request.id,
     isOpen: false,
     state: request.state,
     number_of_children: request.number_of_children,
     cells: [
-      <Fragment key={ request.id }><Link to={ { pathname: routes.request.index, search: `?request=${request.id}` } }>{ request.id }</Link></Fragment>,
+      <Fragment key={ request.id }>
+        <Link to={
+          { pathname: indexpath.index, search: `?request=${request.id}` } }>
+          { request.id }
+        </Link>
+      </Fragment>,
       request.name,
       request.requester_name,
       timeAgo(request.created_at),

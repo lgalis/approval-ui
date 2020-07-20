@@ -7,7 +7,7 @@ import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
-import RequestDetail from '../../../../smart-components/request/request-detail/request-detail';
+import AllRequestDetail from '../../../../smart-components/request/request-detail/my-request-detail';
 import { RequestLoader } from '../../../../presentational-components/shared/loader-placeholders';
 import { APPROVAL_API_BASE } from '../../../../utilities/constants';
 import RequestInfoBar from '../../../../smart-components/request/request-detail/request-info-bar';
@@ -29,7 +29,7 @@ const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=12
   </Provider>
 );
 
-describe('<RequestDetail />', () => {
+describe('<AllRequestDetail />', () => {
   let initialProps;
   const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
   let mockStore;
@@ -47,7 +47,7 @@ describe('<RequestDetail />', () => {
     initialState = {
       requestReducer: {
         isRequestDataLoading: true,
-        selectedRequest: { id: 123 },
+        selectedRequest: { id: '123', name: 'Test product', group_name: 'Test group' },
         requestContent: {}
       }
     };
@@ -158,7 +158,7 @@ describe('<RequestDetail />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo" render={ props => <RequestDetail { ...props } { ...initialProps } isFetching={ false }/> } />
+          <Route path="/foo" render={ props => <AllRequestDetail { ...props } { ...initialProps } isFetching={ false }/> } />
         </ComponentWrapper>
       );
     });
@@ -190,7 +190,7 @@ describe('<RequestDetail />', () => {
     await act(async() => {
       wrapper = mount(
         <ComponentWrapper store={ store }>
-          <Route path="/foo" render={ props => <RequestDetail { ...props } { ...initialProps } /> } />
+          <Route path="/foo" render={ props => <AllRequestDetail { ...props } { ...initialProps } /> } />
         </ComponentWrapper>
       );
     });
@@ -247,7 +247,7 @@ describe('<RequestDetail />', () => {
         wrapper = mount(
           <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
-              <RequestDetail { ...initialProps } />
+              <AllRequestDetail { ...initialProps } />
             </ComponentWrapper>
           </UserContext.Provider>
         );
@@ -283,7 +283,7 @@ describe('<RequestDetail />', () => {
         wrapper = mount(
           <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
-              <RequestDetail { ...initialProps } />
+              <AllRequestDetail { ...initialProps } />
             </ComponentWrapper>
           </UserContext.Provider>
         );
@@ -315,7 +315,7 @@ describe('<RequestDetail />', () => {
         wrapper = mount(
           <UserContext.Provider value={ { userRoles: roles } }>
             <ComponentWrapper store={ store }>
-              <RequestDetail { ...initialProps } />
+              <AllRequestDetail { ...initialProps } />
             </ComponentWrapper>
           </UserContext.Provider>
         );

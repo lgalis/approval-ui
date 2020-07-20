@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useHistory } from 'react-router-dom';
-import { Tabs, Tab } from '@patternfly/react-core';
+import { Tabs, Tab, TabTitleText } from '@patternfly/react-core';
 
 const approvalTabItems = [{ eventKey: 0, title: 'My requests', name: '/requests' },
   { eventKey: 1, title: 'All requests', name: '/allrequests' },
@@ -16,7 +16,8 @@ export const AppTabs = ({ tabItems = approvalTabItems }) => {
 
   return (
     <Tabs className="pf-u-mt-sm" activeKey={ activeTab ? activeTab.eventKey : 0 } onSelect={ handleTabClick }>
-      { tabItems.map((item) => <Tab title={ item.title } key={ item.eventKey } eventKey={ item.eventKey } name={ item.name }/>) }
+      { tabItems.map((item) => <Tab title={ <TabTitleText>{ item.title }</TabTitleText> }
+        key={ item.eventKey } eventKey={ item.eventKey } name={ item.name }/>) }
     </Tabs>
   );
 };

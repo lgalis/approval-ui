@@ -3,27 +3,21 @@
 
 .detail-pane {
   background-color: var(--pf-global--BackgroundColor--100);
-  min-height: 100%;
-  overflow: ellipsis;
-  word-wrap: break-word
 }
 
-.info-bar {
+.detail-pane, .info-bar {
   min-height: 100%;
-  padding: 0;
-  overflow: ellipsis;
-  word-wrap: break-word
+  @supports not (overflow-wrap: anywhere) {
+    word-break: break-all;
+  }
+  @supports (overflow-wrap: anywhere) {
+    overflow-wrap: anywhere;
+  }
 }
 
 .destructive-color {
   &:not(:disabled) {
     color: var(--pf-chart-color-red-100) !important;
-  }
-}
-
-.table-fix {
-  .pf-c-table__toggle {
-    padding-top: 0;
   }
 }
 

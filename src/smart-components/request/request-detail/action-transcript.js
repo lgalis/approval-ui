@@ -18,13 +18,13 @@ import { EmptyTable } from '@redhat-cloud-services/frontend-components/component
 
 const operationInfo = {
   memo: { displayName: 'Comment from', icon: <CommentIcon/> },
-  approve: { displayName: 'Approved by', icon: <CheckCircleIcon className="pf-u-mr-sm icon-success-fill"/> },
+  approve: { displayName: 'Approved by', icon: <CheckCircleIcon className="pf-u-mr-0 icon-success-fill"/> },
   deny: { displayName: 'Denied by', icon: <OutlinedTimesCircleIcon className="pf-u-mr-sm icon-danger-fill"/> },
   notify: { displayName: 'Notified by', icon: <EnvelopeIcon/> },
   skip: { displayName: 'Skipped by', icon: <AngleDoubleRightIcon/> },
   start: { displayName: 'Started by', icon: <OnRunningIcon/> },
   cancel: { displayName: 'Canceled by', icon: <ErrorCircleOIcon className="pf-u-mr-sm icon-danger-fill"/> },
-  error: { displayName: 'Error', icon: <ExclamationCircleIcon className="pf-u-mr-sm icon-danger-fill"/> }
+  error: { displayName: 'Error', icon: <ExclamationCircleIcon className="pf-u-mr-0 icon-danger-fill"/> }
 };
 
 const operationIcon = (operation) => operationInfo[operation] ? operationInfo[operation].icon : '';

@@ -40,7 +40,7 @@ const ActionModal = ({
 
   return (
     <Modal
-      isLarge
+      variant="large"
       title={ actionType === 'Add Comment' ? `Request #${id}` : `${actionType} Request #${id}` }
       isOpen
       onClose={ onCancel }
