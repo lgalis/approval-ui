@@ -57,6 +57,7 @@ const requestTranscriptQuery = (parent_id) => `query {
     group_name
     number_of_finished_children
     state
+    requester_name
     actions {
       id
       operation
