@@ -1,49 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { useIsApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
+import { useIsApprovalAdmin } from '../../../helpers/shared/helpers';
 import { ActionTranscript } from './action-transcript';
 
 import {
   Stack,
   StackItem,
-  Button,
   DataListItem,
   DataListItemRow,
   DataListCell,
   DataListToggle,
   DataListItemCells,
   DataListContent,
-  DropdownItem,
-  Dropdown,
-  DropdownPosition,
-  KebabToggle,
   TextVariants,
-  TextContent,
-  Level,
-  LevelItem
+  TextContent
 } from '@patternfly/react-core';
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
 import { useIntl } from 'react-intl';
 import requestsMessages from '../../../messages/requests.messages';
-import commonMessages from '../../../messages/common.message';
 import { untranslatedMessage } from '../../../utilities/constants';
 import RequestActions from '../request-actions';
 
 export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
-  const [ isKebabOpen, setIsKebabOpen ] = useState(false);
   const { userRoles: userRoles } = useContext(UserContext);
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
   const intl = useIntl();
-
-  const onKebabToggle = isOpen => {
-    setIsKebabOpen(isOpen);
-  };
-
-  const onKebabSelect = () => {
-    setIsKebabOpen(isKebabOpen => !isKebabOpen);
-  };
 
   const checkCapability = (item, capability) => {
     if (isApprovalAdmin) {
@@ -52,8 +34,6 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
 
     return item.metadata && item.metadata.user_capabilities && item.metadata.user_capabilities[capability];
   };
-
-  const renderActionList = (request) => <ActionTranscript actionList={ request.actions }/>;
 
   return (
     <DataListItem key={ `request-${item.id}` }
@@ -94,7 +74,7 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
         <Stack hasGutter>
           <StackItem>
             <TextContent component={ TextVariants.h6 }>
-              { renderActionList(item) }
+              <ActionTranscript actionList={ item.actions }/>
             </TextContent>
           </StackItem>
         </Stack>
@@ -108,6 +88,7 @@ Request.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
     state: PropTypes.string,
+    actions: PropTypes.array,
     group_name: PropTypes.string.isRequired,
     requestActions: PropTypes.shape({
       data: PropTypes.array

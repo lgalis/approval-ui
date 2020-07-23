@@ -257,8 +257,9 @@ RequestsList.propTypes = {
   actionResolver: PropTypes.func
 };
 
-RequestsList.default = {
-  indexpath: routes.request
+RequestsList.defaultProps = {
+  indexpath: routes.request,
+  actionResolver: () => false
 };
 
 export default RequestsList;

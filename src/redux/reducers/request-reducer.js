@@ -2,7 +2,6 @@ import {
   FETCH_REQUEST,
   FETCH_REQUEST_CONTENT,
   FETCH_REQUESTS,
-  EXPAND_REQUEST,
   SORT_REQUESTS,
   SET_FILTER_REQUESTS,
   CLEAR_FILTER_REQUESTS,
@@ -21,7 +20,6 @@ export const requestsInitialState = {
   },
   filterValue: {},
   isRequestDataLoading: false,
-  expandedRequests: [],
   selectedRequest: {
     metadata: {
       user_capabilities: {}
@@ -39,7 +37,6 @@ const setLoadingState = state => ({ ...state, isRequestDataLoading: true, expand
 const setRequests = (state, { payload }) => ({ ...state, requests: payload, isRequestDataLoading: false });
 const selectRequest = (state, { payload }) => ({ ...state, selectedRequest: payload, isRequestDataLoading: false });
 const setRequestContent = (state, { payload }) => ({ ...state, requestContent: payload, isRequestDataLoading: false });
-const setexpandRequest = (state, { payload }) => ({ ...state, expandedRequests: [ ...state.expandedRequests, payload ]});
 const setSortRequests = (state, { payload }) => ({
   ...state,
   sortBy: payload,
@@ -90,7 +87,6 @@ export default {
   [`${FETCH_REQUEST}_FULFILLED`]: selectRequest,
   [`${FETCH_REQUEST_CONTENT}_PENDING`]: setLoadingState,
   [`${FETCH_REQUEST_CONTENT}_FULFILLED`]: setRequestContent,
-  [EXPAND_REQUEST]: setexpandRequest,
   [SORT_REQUESTS]: setSortRequests,
   [SET_FILTER_REQUESTS]: setFilterValueRequests,
   [CLEAR_FILTER_REQUESTS]: clearFilterValueRequests,

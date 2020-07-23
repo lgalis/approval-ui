@@ -7,10 +7,11 @@ import { Link } from 'react-router-dom';
 import requestsMessages from '../../messages/requests.messages';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 
-const JustChildren = ({ children }) => <React.Fragment>{ children }</React.Fragment>;
+const JustChildren = ({ children, className }) => <span className={ className }>{ children }</span>;
 
 JustChildren.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  className: PropTypes.string
 };
 
 const RequestActions = ({
@@ -23,16 +24,20 @@ const RequestActions = ({
 }) => {
   const intl = useIntl();
 
-  const { id, state, number_of_children } = request;
+  const { id, state } = request;
   const approveDenyAllowed = isRequestStateActive(state) && canApproveDeny;
   const commentAllowed = canComment;
 
   const ApproveDenyLink = approveDenyAllowed ? Link : JustChildren;
-  const CommentLink = approveDenyAllowed ? Link : JustChildren;
+  const CommentLink = commentAllowed ? Link : JustChildren;
 
   return (
     <div style={ { display: 'flex' } }>
-      <ApproveDenyLink to={ { pathname: approveLink, search: `request=${id}` } } className="pf-u-mr-sm">
+      <ApproveDenyLink
+        to={ { pathname: approveLink, search: `request=${id}` } }
+        className="pf-u-mr-sm"
+        id={ `approve-${request.id}` }
+      >
         <Button
           variant="primary"
           aria-label={ intl.formatMessage(requestsMessages.approveRequest) }
@@ -41,16 +46,23 @@ const RequestActions = ({
           { intl.formatMessage(requestsMessages.approveTitle) }
         </Button>
       </ApproveDenyLink>
-      <ApproveDenyLink to={ { pathname: denyLink, search: `request=${id}` } } className="pf-u-mr-sm">
+      <ApproveDenyLink
+        to={ { pathname: denyLink, search: `request=${id}` } }
+        className="pf-u-mr-sm"
+        id={ `deny-${request.id}` }
+      >
         <Button
           variant="danger"
-          isDisabled={ !commentAllowed }
+          isDisabled={ !approveDenyAllowed }
           aria-label={ intl.formatMessage(requestsMessages.denyTitle) }
         >
           { intl.formatMessage(requestsMessages.denyTitle) }
         </Button>
       </ApproveDenyLink>
-      <CommentLink to={ { pathname: commentLink, search: `request=${id}` } }>
+      <CommentLink
+        to={ { pathname: commentLink, search: `request=${id}` } }
+        id={ `comment-${request.id}` }
+      >
         <Button
           variant="secondary"
           isDisabled={ !commentAllowed }

@@ -5,13 +5,9 @@ import routes from '../../constants/routes';
 import { Label } from '@patternfly/react-core';
 import { decisionValues, untranslatedMessage } from '../../utilities/constants';
 
-const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : undefined;
-const decisionDisplayName = (decision) => decisionValues[decision] ? decisionValues[decision].displayName : untranslatedMessage();
-const decisionColor = (decision) => decisionValues[decision] ? decisionValues[decision].color : undefined;
-
 export const capitlize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-export const createRows = (actionResolver) => (data, actionsDisabled, indexpath = routes.request, intl) => data.reduce((acc, request, key) => ([
+export const createRows = (actionResolver) => (data, actionsDisabled, indexpath = routes.request, intl) => data.reduce((acc, request) => ([
   ...acc, {
     id: request.id,
     state: request.state,
@@ -29,10 +25,12 @@ export const createRows = (actionResolver) => (data, actionsDisabled, indexpath 
       <Fragment key={ `decision-${request.id}` }>
         { actionResolver(request) || (<Label
           variant="outline"
-          icon={ decisionIcon(request.decision) }
-          color={ decisionColor(request.decision) }
+          icon={ decisionValues[request.decision]?.icon }
+          color={ decisionValues[request.decision]?.color }
         >
-          { capitlize(intl.formatMessage(decisionDisplayName(request.decision))) }
+          { capitlize(intl.formatMessage(
+              decisionValues[request.decision]?.displayName || untranslatedMessage()
+          )) }
         </Label>) }
       </Fragment>
     ]

@@ -7,7 +7,6 @@ const AllRequests = () => (
   <RequestsList
     persona={ APPROVAL_ADMIN_PERSONA }
     indexpath={ routes.allrequest }
-    actionResolver={ () => {} }
   />
 );
 
