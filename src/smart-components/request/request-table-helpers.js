@@ -1,20 +1,19 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import ExpandableContent from './expandable-content';
 import { timeAgo }  from '../../helpers/shared/helpers';
 import routes from '../../constants/routes';
-import { Text, TextVariants } from '@patternfly/react-core';
+import { Label } from '@patternfly/react-core';
 import { decisionValues, untranslatedMessage } from '../../utilities/constants';
 
-const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : '';
+const decisionIcon = (decision) => decisionValues[decision] ? decisionValues[decision].icon : undefined;
 const decisionDisplayName = (decision) => decisionValues[decision] ? decisionValues[decision].displayName : untranslatedMessage();
+const decisionColor = (decision) => decisionValues[decision] ? decisionValues[decision].color : undefined;
 
 export const capitlize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-export const createRows = (data, actionsDisabled, indexpath = routes.request, intl) => data.reduce((acc, request, key) => ([
+export const createRows = (actionResolver) => (data, actionsDisabled, indexpath = routes.request, intl) => data.reduce((acc, request, key) => ([
   ...acc, {
     id: request.id,
-    isOpen: false,
     state: request.state,
     number_of_children: request.number_of_children,
     cells: [
@@ -26,22 +25,16 @@ export const createRows = (data, actionsDisabled, indexpath = routes.request, in
       </Fragment>,
       request.name,
       request.requester_name,
-      timeAgo(request.created_at),
       request.finished_at ? timeAgo(request.finished_at) : (request.notified_at ? timeAgo(request.notified_at) : timeAgo(request.created_at)),
-      request.state,
-      <Fragment key={ `decision-${request.id}` }><Text key={ `${request.decision}-$(request.id}` }
-        className="pf-u-mb-md" component={ TextVariants.p } >
-        { decisionIcon(request.decision) } { capitlize(intl.formatMessage(decisionDisplayName(request.decision))) }
-      </Text></Fragment>
+      <Fragment key={ `decision-${request.id}` }>
+        { actionResolver(request) || (<Label
+          variant="outline"
+          icon={ decisionIcon(request.decision) }
+          color={ decisionColor(request.decision) }
+        >
+          { capitlize(intl.formatMessage(decisionDisplayName(request.decision))) }
+        </Label>) }
+      </Fragment>
     ]
-  }, {
-    parent: key * 2,
-    fullWidth: true,
-    cells: [{
-      title: <ExpandableContent actionsDisabled={ actionsDisabled(request) } id={ request.id }
-        number_of_children={ request.number_of_children }
-        state={ request.state }
-        reason={ request.reason }/>
-    }]
   }
 ]), []);

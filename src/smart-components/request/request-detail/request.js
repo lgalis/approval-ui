@@ -29,6 +29,7 @@ import { useIntl } from 'react-intl';
 import requestsMessages from '../../../messages/requests.messages';
 import commonMessages from '../../../messages/common.message';
 import { untranslatedMessage } from '../../../utilities/constants';
+import RequestActions from '../request-actions';
 
 export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
   const [ isKebabOpen, setIsKebabOpen ] = useState(false);
@@ -51,30 +52,6 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
 
     return item.metadata && item.metadata.user_capabilities && item.metadata.user_capabilities[capability];
   };
-
-  const buildRequestActionKebab = (request) => (
-    <Dropdown
-      position={ DropdownPosition.right }
-      onSelect={ onKebabSelect }
-      toggle={ <KebabToggle id={ `request-request-dropdown-${request.id}` } onToggle={ onKebabToggle }/> }
-      isOpen={ isKebabOpen }
-      dropdownItems={ [
-        <DropdownItem aria-label={ intl.formatMessage(requestsMessages.addCommentTitle) } key={ `add_comment_${request.id}` } component="button">
-          <Link
-            id={ `request-${request.id}-request-comment` }
-            to={ {
-              pathname: indexpath.addComment,
-              search: `?request=${request.id}`
-            } }
-            className="pf-c-dropdown__menu-item"
-          >
-            { intl.formatMessage(requestsMessages.commentTitle) }
-          </Link>
-        </DropdownItem>
-      ] }
-      isPlain
-    />
-  );
 
   const renderActionList = (request) => <ActionTranscript actionList={ request.actions }/>;
 
@@ -101,32 +78,14 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
               </span>
             </DataListCell>,
             <DataListCell key={ `${item.id}-action` }>
-              <Level>
-                <LevelItem>
-                  { (isRequestStateActive(item.state) && checkCapability(item, 'approve')) &&
-                    <div>
-                      <Link id={ `approve-${item.id}` } to={ { pathname: indexpath.approve, search: `?request=${item.id}` } }>
-                        <Button variant="link" aria-label={ intl.formatMessage(requestsMessages.approveRequest) }>
-                          { intl.formatMessage(requestsMessages.approveTitle) }
-                        </Button>
-                      </Link>
-                      <Link id={ `deny-${item.id}` } to={ { pathname: indexpath.deny, search: `?request=${item.id}` } }>
-                        <Button variant="link" className="destructive-color" aria-label={ intl.formatMessage(requestsMessages.denyRequest) }>
-                          { intl.formatMessage(requestsMessages.denyTitle) }
-                        </Button>
-                      </Link>
-                    </div> }
-                </LevelItem>
-              </Level>
-            </DataListCell>,
-            <DataListCell
-              key={ `request-${item.id}` }
-              className="pf-c-data-list__action"
-              aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
-              id={ `workflow-${item.id}` }
-              aria-label={ intl.formatMessage(commonMessages.actions) }
-            >
-              { isRequestStateActive(item.state) && checkCapability(item, 'memo') && buildRequestActionKebab(item) }
+              <RequestActions
+                approveLink={ indexpath.approve }
+                denyLink={ indexpath.deny }
+                commentLink={ indexpath.addComment }
+                request={ item }
+                canApproveDeny={ checkCapability(item, 'approve') }
+                canComment={ checkCapability(item, 'memo') }
+              />
             </DataListCell>
           ] }/>
       </DataListItemRow>
