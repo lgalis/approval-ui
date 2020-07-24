@@ -67,6 +67,20 @@ const RemoveWorkflowModal = ({
     .reduce((acc, item) => [ ...acc, `${APP_DISPLAY_NAME[item] || item}` ], []);
   };
 
+  const name = (
+    <b key="remove-key">
+      {
+        finalId
+          ? fetchedWorkflow && fetchedWorkflow.name || workflow && workflow.name
+          : (<React.Fragment>
+            { ids.length } { intl.formatMessage(worfklowMessages.approvalProcesses) }
+          </React.Fragment>)
+      }
+    </b>
+  );
+
+  const isLoading = finalId && !workflow && !fetchedWorkflow;
+
   return (
     <Modal
       isOpen
@@ -96,26 +110,16 @@ const RemoveWorkflowModal = ({
       <TextContent>
         <Text component={ TextVariants.p }>
           {
-            (finalId && !workflow && !fetchedWorkflow)
+            isLoading
               ? <FormItemLoader/>
-              : intl.formatMessage(worfklowMessages.removeProcessDescription, {
-                name: <b key="remove-key">{
-                  finalId
-                    ? fetchedWorkflow && fetchedWorkflow.name || workflow && workflow.name
-                    : (<React.Fragment>
-                      { ids.length } { intl.formatMessage(worfklowMessages.approvalProcesses) }
-                    </React.Fragment>)
-                }</b>,
-                dependenciesMessageValue:
-                      isEmpty(dependenciesMessage()) ? '.' : intl.formatMessage(worfklowMessages.fromProcessDependencies, {
-                        space: <React.Fragment>&nbsp;</React.Fragment>,
-                        newline: <React.Fragment><br/><br/></React.Fragment>,
-                        dependenciesList: <React.Fragment>{ dependenciesMessage().map(item => <React.Fragment key={ item }>
-                          <li>{ item }</li>
-                        </React.Fragment>) }</React.Fragment>
-                      })
-              }
-              )
+              : isEmpty(dependenciesMessage())
+                ? intl.formatMessage(worfklowMessages.removeProcessDescription, { name })
+                : intl.formatMessage(worfklowMessages.removeProcessDescriptionWithDeps, {
+                  name,
+                  dependenciesList: <span key="span" className="pf-u-mt-lg span-block">
+                    { dependenciesMessage().map(item => <li key={ item }>{ item }</li>) }
+                  </span>
+                })
           }
         </Text>
       </TextContent>
