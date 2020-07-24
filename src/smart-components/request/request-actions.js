@@ -26,7 +26,7 @@ const RequestActions = ({
 
   const { id, state } = request;
   const approveDenyAllowed = isRequestStateActive(state) && canApproveDeny;
-  const commentAllowed = canComment;
+  const commentAllowed = isRequestStateActive(state) && canComment;
 
   const ApproveDenyLink = approveDenyAllowed ? Link : JustChildren;
   const CommentLink = commentAllowed ? Link : JustChildren;

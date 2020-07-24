@@ -342,7 +342,7 @@ exports[`<Request /> should render correctly 1`] = `
                           </Button>
                         </span>
                       </JustChildren>
-                      <Link
+                      <JustChildren
                         id="comment-111"
                         to={
                           Object {
@@ -351,37 +351,28 @@ exports[`<Request /> should render correctly 1`] = `
                           }
                         }
                       >
-                        <LinkAnchor
-                          href="/request/add-comment?request=111"
-                          id="comment-111"
-                          navigate={[Function]}
-                        >
-                          <a
-                            href="/request/add-comment?request=111"
-                            id="comment-111"
-                            onClick={[Function]}
+                        <span>
+                          <Button
+                            aria-label="Comment"
+                            isDisabled={true}
+                            variant="secondary"
                           >
-                            <Button
+                            <button
+                              aria-disabled={true}
                               aria-label="Comment"
-                              isDisabled={false}
-                              variant="secondary"
+                              className="pf-c-button pf-m-secondary pf-m-disabled"
+                              data-ouia-component-id={3}
+                              data-ouia-component-type="PF4/Button"
+                              data-ouia-safe={true}
+                              disabled={true}
+                              tabIndex={null}
+                              type="button"
                             >
-                              <button
-                                aria-disabled={false}
-                                aria-label="Comment"
-                                className="pf-c-button pf-m-secondary"
-                                data-ouia-component-id={3}
-                                data-ouia-component-type="PF4/Button"
-                                data-ouia-safe={true}
-                                disabled={false}
-                                type="button"
-                              >
-                                Comment
-                              </button>
-                            </Button>
-                          </a>
-                        </LinkAnchor>
-                      </Link>
+                              Comment
+                            </button>
+                          </Button>
+                        </span>
+                      </JustChildren>
                     </div>
                   </RequestActions>
                 </div>

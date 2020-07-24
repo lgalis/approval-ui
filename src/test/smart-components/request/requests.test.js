@@ -9,8 +9,6 @@ import Requests from '../../../smart-components/request/requests';
 import requestReducer, { requestsInitialState } from '../../../redux/reducers/request-reducer';
 import { act } from 'react-dom/test-utils';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
-import { RowWrapper } from '@patternfly/react-table';
-import { Table } from '@patternfly/react-table';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 import TableEmptyState from '../../../presentational-components/shared/table-empty-state';
 import UserContext from '../../../user-context';
@@ -450,19 +448,6 @@ describe('<Requests />', () => {
       metadata: {
         user_capabilities: { show: true, create: true, approve: true, cancel: false, deny: true, memo: true }
       }
-    };
-
-    const contentData = {
-      params: {
-        quest: 'Test Approval',
-        airspeed: 3,
-        username: 'insights-qa',
-        int_value: 5
-      },
-      product: 'Hello World',
-      order_id: '654',
-      platform: 'Dev Public Ansible Tower (18.188.178.206)',
-      portfolio: 'LGTestNoTags'
     };
 
     beforeEach(() => {
