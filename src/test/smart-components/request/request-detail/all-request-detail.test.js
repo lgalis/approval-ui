@@ -258,11 +258,7 @@ describe('<AllRequestDetail />', () => {
       wrapper.update();
 
       await act(async() => {
-        wrapper.find('#request-request-dropdown-123').first().simulate('click');
-      });
-      wrapper.update();
-      await act(async() => {
-        wrapper.find('Link#request-123-request-comment').first().simulate('click', { button: 0 });
+        wrapper.find('a#comment-123').first().simulate('click', { button: 0 });
       });
       wrapper.update();
 

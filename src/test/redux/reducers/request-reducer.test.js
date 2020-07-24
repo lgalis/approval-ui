@@ -3,8 +3,7 @@ import { callReducer } from '../redux-helpers';
 
 import {
   FETCH_REQUEST,
-  FETCH_REQUESTS,
-  EXPAND_REQUEST
+  FETCH_REQUESTS
 } from '../../../redux/action-types';
 
 describe('Request reducer', () => {
@@ -37,12 +36,5 @@ describe('Request reducer', () => {
       { type: `${FETCH_REQUEST}_FULFILLED`, payload: 'single request' }
     ))
     .toEqual(expectedState);
-  });
-
-  it('should set opened request', () => {
-    const id = '54787';
-    initialState = { expandedRequests: [ '123' ]};
-    const expectedState = { expandedRequests: [ '123', id ]};
-    expect(reducer(initialState, { type: EXPAND_REQUEST, payload: id })).toEqual(expectedState);
   });
 });

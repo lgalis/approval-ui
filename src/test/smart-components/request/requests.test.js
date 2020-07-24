@@ -56,47 +56,6 @@ describe('<Requests />', () => {
     initialProps = {};
   });
 
-  it('should open row in the table and load its data', async () => {
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
-      status: 200,
-      body: {
-        meta: { count: 1, limit: 50, offset: 0 },
-        data: [ request ]
-      }
-    }));
-
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
-    registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
-    const store = registry.getStore();
-
-    let wrapper;
-    await act(async () => {
-      wrapper = mount(<ComponentWrapper store={ store }><Requests { ...initialProps } /></ComponentWrapper>);
-    });
-    wrapper.update();
-
-    expect(wrapper.find(RowWrapper)).toHaveLength(2); // one item + expanded
-
-    const contentSpy = jest.fn().mockImplementation(mockOnce({
-      status: 200,
-      body: {
-        product: 'CostManagement',
-        platform: 'Linux',
-        portfolio: 'Very'
-      }
-    }));
-
-    apiClientMock.get(`${APPROVAL_API_BASE}/requests/${request.id}/content`, contentSpy);
-
-    await act(async () => {
-      wrapper.find(Table).props().onCollapse({}, {}, {}, { id: request.id });
-    });
-    wrapper.update();
-
-    expect(contentSpy).toHaveBeenCalled();
-    expect(store.getState().requestReducer.expandedRequests).toEqual([ request.id ]);
-  });
-
   it('should sort requests when click on sort', async () => {
     expect.assertions(3);
 
@@ -174,7 +133,7 @@ describe('<Requests />', () => {
 
   it('should filter requests - and clear filters', async () => {
     jest.useFakeTimers();
-    expect.assertions(7);
+    expect.assertions(6);
 
     apiClientMock.get(`${APPROVAL_API_BASE}/requests/?limit=50&offset=0&sort_by=created_at%3Adesc`, mockOnce({
       status: 200,
@@ -258,13 +217,13 @@ describe('<Requests />', () => {
 
     apiClientMock.get(
       `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
-       + '&filter%5Bstate%5D%5Beq%5D%5B%5D=canceled&filter%5Bstate%5D%5Beq%5D%5B%5D=started'
+       + '&filter%5Bdecision%5D%5Beq%5D%5B%5D=canceled&filter%5Bdecision%5D%5Beq%5D%5B%5D=approved'
       + '&limit=50&offset=0&sort_by=created_at%3Adesc',
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
           'filter[name][contains_i]': 'some-name',
           'filter[requester_name][contains_i]': 'some-requester',
-          'filter[state][eq][]': [ 'canceled', 'started' ],
+          'filter[decision][eq][]': [ 'canceled', 'approved' ],
           limit: '50',
           offset: '0',
           sort_by: 'created_at:desc'
@@ -284,7 +243,7 @@ describe('<Requests />', () => {
     });
     wrapper.update();
     await act(async () => {
-      checkboxDropdownProps.onSelect(EVENT, 'started');
+      checkboxDropdownProps.onSelect(EVENT, 'approved');
     });
     wrapper.update();
 
@@ -295,13 +254,13 @@ describe('<Requests />', () => {
 
     apiClientMock.get(
       `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
-       + '&filter%5Bstate%5D%5Beq%5D%5B%5D=started'
+       + '&filter%5Bdecision%5D%5Beq%5D%5B%5D=approved'
       + '&limit=50&offset=0&sort_by=created_at%3Adesc',
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
           'filter[name][contains_i]': 'some-name',
           'filter[requester_name][contains_i]': 'some-requester',
-          'filter[state][eq][]': 'started',
+          'filter[decision][eq][]': 'approved',
           limit: '50',
           offset: '0',
           sort_by: 'created_at:desc'
@@ -325,52 +284,11 @@ describe('<Requests />', () => {
 
     apiClientMock.get(
       `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
-       + '&filter%5Bstate%5D%5Beq%5D%5B%5D=started'
-       + '&filter%5Bdecision%5D%5Beq%5D%5B%5D=approved'
       + '&limit=50&offset=0&sort_by=created_at%3Adesc',
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
           'filter[name][contains_i]': 'some-name',
           'filter[requester_name][contains_i]': 'some-requester',
-          'filter[state][eq][]': 'started',
-          'filter[decision][eq][]': 'approved',
-          limit: '50',
-          offset: '0',
-          sort_by: 'created_at:desc'
-        });
-        return res.status(200).body({
-          meta: { count: 1, limit: 50, offset: 0 },
-          data: [ request ]
-        });
-      })
-    );
-
-    // Switch to descision filter
-    await act(async () => {
-      wrapper.find('ConditionalFilter').setState({ stateValue: 3 });
-    });
-    wrapper.update();
-
-    await act(async () => {
-      const checkboxDropdownPropsDecision = wrapper.find('Select').last().props();
-      checkboxDropdownPropsDecision.onSelect(EVENT, 'approved');
-    });
-    wrapper.update();
-
-    await act(async () => {
-      jest.runAllTimers();
-    });
-    wrapper.update();
-
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/requests/?filter%5Bname%5D%5Bcontains_i%5D=some-name&filter%5Brequester_name%5D%5Bcontains_i%5D=some-requester`
-       + '&filter%5Bstate%5D%5Beq%5D%5B%5D=started'
-      + '&limit=50&offset=0&sort_by=created_at%3Adesc',
-      mockOnce((req, res) => {
-        expect(req.url().query).toEqual({
-          'filter[name][contains_i]': 'some-name',
-          'filter[requester_name][contains_i]': 'some-requester',
-          'filter[state][eq][]': 'started',
           limit: '50',
           offset: '0',
           sort_by: 'created_at:desc'
@@ -557,7 +475,7 @@ describe('<Requests />', () => {
       }));
     });
 
-    it('should open comment modal from the list', async () => {
+    it('should open comment modal', async () => {
       const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
@@ -570,16 +488,11 @@ describe('<Requests />', () => {
       });
       wrapper.update();
 
-      await act(async () => {
-        wrapper.find('.pf-c-table__action').first().find('.pf-c-dropdown__toggle').simulate('click');
-      });
-      wrapper.update();
-
       expect(wrapper.find(ActionModal)).toHaveLength(0);
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.index);
 
       await act(async () => {
-        wrapper.find('.pf-c-table__action').first().find('.pf-c-dropdown__menu').find('button').simulate('click');
+        wrapper.find(`a#comment-${request.id}`).simulate('click', { button: 0 });
       });
       wrapper.update();
 
@@ -589,11 +502,6 @@ describe('<Requests />', () => {
     });
 
     it('should open approve modal from the list', async () => {
-      apiClientMock.get(`${APPROVAL_API_BASE}/requests/703/content`, mockOnce({
-        status: 200,
-        body: contentData
-      }));
-
       const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
@@ -606,16 +514,11 @@ describe('<Requests />', () => {
       });
       wrapper.update();
 
-      await act(async () => {
-        wrapper.find('.pf-c-table__toggle').first().find('button').simulate('click');
-      });
-      wrapper.update();
-
       expect(wrapper.find(ActionModal)).toHaveLength(0);
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.index);
 
       await act(async () => {
-        wrapper.find('.pf-c-table__expandable-row').first().find('a').first().simulate('click', { button: 0 });
+        wrapper.find(`a#approve-${request.id}`).simulate('click', { button: 0 });
       });
       wrapper.update();
 
@@ -625,11 +528,6 @@ describe('<Requests />', () => {
     });
 
     it('should open deny modal from the list', async () => {
-      apiClientMock.get(`${APPROVAL_API_BASE}/requests/703/content`, mockOnce({
-        status: 200,
-        body: contentData
-      }));
-
       const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
@@ -642,16 +540,11 @@ describe('<Requests />', () => {
       });
       wrapper.update();
 
-      await act(async () => {
-        wrapper.find('.pf-c-table__toggle').first().find('button').simulate('click');
-      });
-      wrapper.update();
-
       expect(wrapper.find(ActionModal)).toHaveLength(0);
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.index);
 
       await act(async () => {
-        wrapper.find('.pf-c-table__expandable-row').first().find('a').last().simulate('click', { button: 0 });
+        wrapper.find(`a#deny-${request.id}`).simulate('click', { button: 0 });
       });
       wrapper.update();
 
