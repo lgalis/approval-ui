@@ -93,7 +93,7 @@ describe('<RemoveWorkflowModal />', () => {
     expect(wrapper.find(Modal)).toHaveLength(1);
     expect(wrapper.find(Title).first().text()).toEqual('Delete approval process?');
     expect(wrapper.find(Text).first().text())
-    .toEqual('WfName will be removed from the following applications:  Automation Services CatalogTopological inventory');
+    .toEqual('WfName will be removed from the following applications: Automation Services CatalogTopological inventory');
   });
 
   it('should render approval process modal - single - not in table', async () => {
