@@ -146,7 +146,7 @@ describe('<Request />', () => {
     expect(toggleExpand).toHaveBeenCalledWith('request-111');
   });
 
-  it('should expand kebab menu', () => {
+  it('should open comment modal', () => {
     const wrapper = mount(
       <ComponentWrapper>
         <Request
@@ -165,9 +165,8 @@ describe('<Request />', () => {
       </ComponentWrapper>
     );
     wrapper.update();
-    wrapper.find('#request-request-dropdown-111').first().simulate('click');
-    wrapper.update();
-    wrapper.find('Link#request-111-request-comment').first().simulate('click', { button: 0 });
+
+    wrapper.find('a#comment-111').first().simulate('click', { button: 0 });
     wrapper.update();
 
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.addComment);

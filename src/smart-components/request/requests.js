@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { fetchRequests } from '../../redux/actions/request-actions';
 import ActionModal from './action-modal';
 import {
@@ -11,14 +11,11 @@ import UserContext from '../../user-context';
 import routesLinks from '../../constants/routes';
 import RequestsList from './requests-list';
 import EmptyRequestList from './EmptyRequestList';
-import { useIntl } from 'react-intl';
 
-import requestsMessages from '../../messages/requests.messages';
+import RequestActions from './request-actions';
 
 const Requests = () => {
-  const intl = useIntl();
   const { userRoles: userRoles } = useContext(UserContext);
-  const history = useHistory();
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
   const isApprovalApprover = useIsApprovalApprover(userRoles);
 
@@ -37,26 +34,22 @@ const Requests = () => {
     !isRequestStateActive(requestData.state) || requestData.number_of_children > 0 ||
       (!isApprovalApprover && !isApprovalAdmin) : true;
 
-  const actionResolver = (requestData) => {
-    return (requestData && requestData.id && actionsDisabled(requestData) ? null :
-      [
-        {
-          title: intl.formatMessage(requestsMessages.commentTitle),
-          component: 'button',
-          onClick: () => history.push({
-            pathname: routesLinks.requests.addComment,
-            search: `?request=${requestData.id}`
-          })
-        }
-      ]);
-  };
+  const actionResolver = (request) => (
+    request && request.id && actionsDisabled(request)
+      ? null
+      : <RequestActions
+        commentLink={ routesLinks.requests.addComment }
+        approveLink={ routesLinks.requests.approve }
+        denyLink={ routesLinks.requests.deny }
+        request={ request }
+      />
+  );
 
   return !isApprovalApprover ?
     <EmptyRequestList/>
     : <RequestsList
       routes={ routes }
       persona={ APPROVAL_APPROVER_PERSONA }
-      actionsDisabled={ actionsDisabled }
       actionResolver={ actionResolver }
     />;
 };

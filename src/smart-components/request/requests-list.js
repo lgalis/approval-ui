@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button } from '@patternfly/react-core';
-import { expandable, sortable, wrappable, cellWidth } from '@patternfly/react-table';
+import { sortable, wrappable, cellWidth } from '@patternfly/react-table';
 import { useIntl } from 'react-intl';
 import { SearchIcon } from '@patternfly/react-icons';
 import isEmpty from 'lodash/isEmpty';
@@ -31,15 +31,12 @@ import commonMessages from '../../messages/common.message';
 
 const columns = (intl) => [{
   title: intl.formatMessage(requestsMessages.requestsIdColumn),
-  cellFormatters: [ expandable ],
   transforms: [ sortable, cellWidth(5) ]
 },
 { title: intl.formatMessage(tableToolbarMessages.name), transforms: [ sortable, wrappable, cellWidth(25) ]},
 { title: intl.formatMessage(requestsMessages.requesterColumn), transforms: [ sortable, wrappable, cellWidth(20) ]},
-{ title: intl.formatMessage(requestsMessages.openedColumn), transforms: [ sortable, cellWidth(10) ]},
 { title: intl.formatMessage(requestsMessages.updatedColumn), transforms: [ cellWidth(10) ]},
-{ title: intl.formatMessage(requestsMessages.statusColumn), transforms: [ sortable, cellWidth(15) ]},
-{ title: intl.formatMessage(requestsMessages.decisionColumn), transforms: [ sortable, cellWidth(15) ]}
+{ title: intl.formatMessage(requestsMessages.statusColumn), transforms: [ sortable, cellWidth(15) ]}
 ];
 
 const debouncedFilter = asyncDebounce(
@@ -78,7 +75,7 @@ const requestsListState = (state, action) => {
   }
 };
 
-const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexpath }) => {
+const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
   const { requests: { data, meta }, sortBy, filterValue } = useSelector(
     ({ requestReducer: { requests, sortBy, filterValue }}) => ({ requests, sortBy, filterValue }),
     shallowEqual
@@ -175,13 +172,11 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexp
         sortBy={ sortBy }
         onSort={ onSort }
         data={ data }
-        createRows={ createRows }
+        createRows={ createRows(actionResolver) }
         indexpath={ indexpath }
         columns={ columns(intl) }
         fetchData={ updateRequests }
         routes={ routes }
-        actionResolver={ actionResolver }
-        actionsDisabled={ actionsDisabled }
         titlePlural={ intl.formatMessage(requestsMessages.requests) }
         titleSingular={ intl.formatMessage(requestsMessages.request) }
         pagination={ meta }
@@ -212,7 +207,7 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexp
           />
         ) }
         activeFiltersConfig={ {
-          filters: prepareChips({ name: nameValue, requester: requesterValue, status: filterValue.status, decision: filterValue.decision }, intl),
+          filters: prepareChips({ name: nameValue, requester: requesterValue, decision: filterValue.decision }, intl),
           onDelete: (_e, chip, deleteAll) => deleteAll ? clearFilters() : onDeleteChip(chip)
         } }
         filterConfig={ [
@@ -242,25 +237,6 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexp
                 tableToolbarMessages.filterByTitle,
                 { title: intl.formatMessage(requestsMessages.statusColumn).toLowerCase() }
               ),
-              onChange: (_event, value) => handleFilterChange(value, 'status'),
-              value: filterValue.status,
-              items: [ 'canceled', 'completed', 'failed', 'notified', 'pending', 'skipped', 'started' ].map((state) => ({
-                label: intl.formatMessage(requestsMessages[state]),
-                value: state
-              }))
-            }
-          }, {
-            label: intl.formatMessage(requestsMessages.decisionColumn),
-            type: 'checkbox',
-            filterValues: {
-              placeholder: intl.formatMessage(
-                tableToolbarMessages.filterByTitle,
-                { title: intl.formatMessage(requestsMessages.decisionColumn).toLowerCase() }
-              ),
-              'aria-label': intl.formatMessage(
-                tableToolbarMessages.filterByTitle,
-                { title: intl.formatMessage(requestsMessages.decisionColumn).toLowerCase() }
-              ),
               onChange: (_event, value) => handleFilterChange(value, 'decision'),
               value: filterValue.decision,
               items: [ 'approved', 'canceled', 'denied', 'error', 'undecided' ].map((state) => ({
@@ -276,16 +252,14 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexp
 
 RequestsList.propTypes = {
   routes: PropTypes.func,
-  actionResolver: PropTypes.func,
-  actionsDisabled: PropTypes.func,
   persona: PropTypes.string,
-  type: PropTypes.string,
-  indexpath: PropTypes.shape ({ index: PropTypes.string })
+  indexpath: PropTypes.shape ({ index: PropTypes.string }),
+  actionResolver: PropTypes.func
 };
 
-RequestsList.default = {
-  actionsDisabled: () => true,
-  indexpath: routes.request
+RequestsList.defaultProps = {
+  indexpath: routes.request,
+  actionResolver: () => false
 };
 
 export default RequestsList;

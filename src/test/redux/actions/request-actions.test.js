@@ -4,13 +4,11 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware, ADD_NOTIFICATION } from '@redhat-cloud-services/frontend-components-notifications';
 import {
   FETCH_REQUESTS,
-  FETCH_REQUEST,
-  EXPAND_REQUEST
+  FETCH_REQUEST
 } from '../../../redux/action-types';
 import {
   fetchRequests,
-  fetchRequest,
-  expandRequest
+  fetchRequest
 } from '../../../redux/actions/request-actions';
 import {
   APPROVAL_API_BASE
@@ -286,14 +284,6 @@ describe('Request actions', () => {
 
     return store.dispatch(fetchRequest(111)).then(() => {
       expect(store.getActions()).toEqual(expectedData);
-    });
-  });
-
-  it('creates object for opening a request', () => {
-    const id = '546451';
-    expect(expandRequest(id)).toEqual({
-      type: EXPAND_REQUEST,
-      payload: id
     });
   });
 });

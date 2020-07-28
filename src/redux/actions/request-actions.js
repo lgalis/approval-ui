@@ -48,11 +48,6 @@ export const createRequestAction = (actionName, requestId, actionIn, intl) => ({
   }
 });
 
-export const expandRequest = (id) => ({
-  type: ActionTypes.EXPAND_REQUEST,
-  payload: id
-});
-
 export const sortRequests = (sortBy) => ({
   type: ActionTypes.SORT_REQUESTS,
   payload: sortBy

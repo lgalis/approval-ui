@@ -5,8 +5,11 @@ import RequestList from '../../../../smart-components/request/request-detail/req
 import { DataListLoader } from '../../../../presentational-components/shared/loader-placeholders';
 import { IntlProvider } from 'react-intl';
 import { Request } from '../../../../smart-components/request/request-detail/request';
+import { MemoryRouter } from 'react-router-dom';
 
-const mount = (children) => enzymeMount(<IntlProvider locale="en">{ children }</IntlProvider>);
+const mount = (children) => enzymeMount(<MemoryRouter>
+  <IntlProvider locale="en">{ children }</IntlProvider>
+</MemoryRouter>);
 
 describe('<RequestList />', () => {
   let initialProps;
