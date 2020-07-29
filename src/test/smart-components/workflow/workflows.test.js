@@ -15,7 +15,7 @@ import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import EditWorkflowInfoModal from '../../../smart-components/workflow/edit-workflow-info-modal';
 import EditWorkflowGroupsModal from '../../../smart-components/workflow/edit-workflow-groups-modal';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
-import AddWorkflowWizard from '../../../smart-components/workflow/add-groups/add-workflow-wizard';
+import AddWorkflowModal from '../../../smart-components/workflow/add-workflow-modal';
 import { Table, RowWrapper } from '@patternfly/react-table';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 import routes from '../../../constants/routes';
@@ -266,6 +266,9 @@ describe('<Workflows />', () => {
       })
     );
 
+    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
+      mockOnce({ body: { data: [{ uuid: 'id', name: 'name' }]}}));
+
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
@@ -288,7 +291,7 @@ describe('<Workflows />', () => {
     wrapper.update();
 
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.add);
-    expect(wrapper.find(AddWorkflowWizard)).toHaveLength(1);
+    expect(wrapper.find(AddWorkflowModal)).toHaveLength(1);
 
     jest.useRealTimers();
   });
