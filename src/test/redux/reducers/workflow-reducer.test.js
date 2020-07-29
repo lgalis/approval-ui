@@ -4,7 +4,6 @@ import { callReducer } from '../redux-helpers';
 import {
   FETCH_WORKFLOW,
   FETCH_WORKFLOWS,
-  EXPAND_WORKFLOW,
   SET_FILTER_WORKFLOWS
 } from '../../../redux/action-types';
 
@@ -17,7 +16,7 @@ describe('Approval process reducer', () => {
   });
 
   it('should set loading state', () => {
-    const expectedState = { isLoading: true, expandedWorkflows: []};
+    const expectedState = { isLoading: true };
     expect(reducer(initialState, { type: `${FETCH_WORKFLOWS}_PENDING` })).toEqual(expectedState);
   });
 
@@ -35,13 +34,6 @@ describe('Approval process reducer', () => {
   it('should select approval process and set record loading state to true', () => {
     const expectedState = { ... workflowsInitialState, isRecordLoading: false, workflow: 'my workflow' };
     expect(reducer({ ...workflowsInitialState }, { type: `${FETCH_WORKFLOW}_FULFILLED`, payload: 'my workflow' })).toEqual(expectedState);
-  });
-
-  it('should set expanded approval process', () => {
-    const id = '54787';
-    initialState = { expandedWorkflows: [ '123' ]};
-    const expectedState = { expandedWorkflows: [ '123', id ]};
-    expect(reducer(initialState, { type: EXPAND_WORKFLOW, payload: id })).toEqual(expectedState);
   });
 
   it('should set filter value', () => {

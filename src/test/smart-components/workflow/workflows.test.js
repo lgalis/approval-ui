@@ -16,7 +16,6 @@ import EditWorkflowInfoModal from '../../../smart-components/workflow/edit-workf
 import EditWorkflowGroupsModal from '../../../smart-components/workflow/edit-workflow-groups-modal';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
 import AddWorkflowModal from '../../../smart-components/workflow/add-workflow-modal';
-import { Table, RowWrapper } from '@patternfly/react-table';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 import routes from '../../../constants/routes';
 import TableEmptyState from '../../../presentational-components/shared/table-empty-state';
@@ -77,7 +76,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        group_refs: [ 'group-1' ]
+        group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
     // async name validator
@@ -88,7 +87,7 @@ describe('<Workflows />', () => {
           data: [{
             id: 'edit-id',
             name: 'foo',
-            group_refs: [ 'group-1' ]
+            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
           }
           ]
         }
@@ -180,7 +179,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        group_refs: [ 'group-1' ]
+        group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
     await act(async()=> {
@@ -213,7 +212,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        group_refs: [ 'group-1' ]
+        group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
     await act(async()=> {
@@ -248,7 +247,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        group_refs: [ 'group-1' ],
+        group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
         group_names: [ 'group-name-1' ]
       }]}}));
 
@@ -260,7 +259,7 @@ describe('<Workflows />', () => {
           data: [{
             id: 'edit-id',
             name: 'foo',
-            group_refs: [ 'group-1' ]
+            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
           }]
         }
       })
@@ -305,7 +304,7 @@ describe('<Workflows />', () => {
       mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        group_refs: [ 'group-1' ],
+        group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
         group_names: [ 'group-name-1' ]
       }]}})
     );
@@ -326,53 +325,13 @@ describe('<Workflows />', () => {
     expect(wrapper.find(RemoveWorkflowModal)).toHaveLength(1);
   });
 
-  it('should expand approval process', async () => {
-    const id = 'edit-id';
-
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
-      mockOnce({ body: { data: [{
-        id,
-        name: 'foo',
-        group_refs: [ 'group-1' ]
-      }],
-      meta: {
-        count: 1,
-        limit: 50,
-        offset: 0
-      }}})
-    );
-
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
-    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
-    const storeReal = registry.getStore();
-
-    let wrapper;
-    await act(async()=> {
-      wrapper = mount(
-        <ComponentWrapper store={ storeReal }>
-          <Route path={ routes.workflows.index } component={ Workflows } />
-        </ComponentWrapper>
-      );
-    });
-    wrapper.update();
-
-    expect(wrapper.find(RowWrapper)).toHaveLength(2); // one item + expanded
-
-    await act(async () => {
-      wrapper.find(Table).props().onCollapse({}, {}, {}, { id });
-    });
-    wrapper.update();
-    expect(storeReal.getState().workflowReducer.expandedWorkflows).toEqual([ id ]);
-  });
-
   it('should sort', async () => {
     expect.assertions(3);
 
     const wf = {
       id: 'so',
       name: 'foo',
-      group_refs: [ 'group-1' ]
+      group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
     };
 
     apiClientMock.get(
@@ -413,7 +372,7 @@ describe('<Workflows />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(11).simulate('click'); // name column
+      wrapper.find('button').at(12).simulate('click'); // name column
     });
     wrapper.update();
 
@@ -431,7 +390,7 @@ describe('<Workflows />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(11).simulate('click'); // name column
+      wrapper.find('button').at(12).simulate('click'); // name column
     });
     wrapper.update();
 
@@ -449,7 +408,7 @@ describe('<Workflows />', () => {
     );
 
     await act(async () => {
-      wrapper.find('button').at(12).simulate('click'); // description column
+      wrapper.find('button').at(13).simulate('click'); // description column
     });
     wrapper.update();
   });
@@ -461,7 +420,7 @@ describe('<Workflows />', () => {
     const wf = {
       id: 'so',
       name: 'foo',
-      group_refs: [ 'group-1' ]
+      group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
     };
 
     apiClientMock.get(
@@ -657,13 +616,13 @@ describe('<Workflows />', () => {
       id: '456',
       name: 'wf2',
       selected: true,
-      group_refs: [ '' ]
+      group_refs: [ ]
     };
     const wf3 = {
       id: '789',
       name: 'wf',
       selected: true,
-      group_refs: [ '' ]
+      group_refs: [ ]
     };
     let storeReal;
 

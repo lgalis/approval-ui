@@ -9,7 +9,6 @@ import { SearchIcon } from '@patternfly/react-icons';
 import isEmpty from 'lodash/isEmpty';
 
 import { fetchRequests,
-  expandRequest,
   sortRequests,
   setFilterValueRequests,
   clearFilterValueRequests,
@@ -140,11 +139,6 @@ const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
     );
   };
 
-  const onCollapse = (id, setRows, setOpen) => {
-    dispatch(expandRequest(id));
-    setRows((rows) => setOpen(rows, id));
-  };
-
   const onSort = (_e, index, direction, { property }) => {
     stateDispatch({ type: 'setFetching', payload: true });
     dispatch(sortRequests({ index, direction, property }));
@@ -184,7 +178,6 @@ const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
         filterValue={ nameValue }
         onFilterChange={ (value) => handleFilterChange(value, 'name') }
         isLoading={ isFetching || isFiltering }
-        onCollapse={ onCollapse }
         renderEmptyState={ () => (
           <TableEmptyState
             title={ isEmpty(filterValue)

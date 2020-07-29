@@ -1,7 +1,6 @@
 import {
   FETCH_WORKFLOW,
   FETCH_WORKFLOWS,
-  EXPAND_WORKFLOW,
   SORT_WORKFLOWS,
   SET_FILTER_WORKFLOWS
 } from '../../redux/action-types';
@@ -20,7 +19,6 @@ export const workflowsInitialState = {
   filterValue: '',
   isLoading: false,
   isRecordLoading: false,
-  expandedWorkflows: [],
   sortBy: {
     index: 4,
     property: 'sequence',
@@ -28,11 +26,10 @@ export const workflowsInitialState = {
   }
 };
 
-const setLoadingState = state => ({ ...state, isLoading: true, expandedWorkflows: []});
+const setLoadingState = state => ({ ...state, isLoading: true });
 const setRecordLoadingState = state => ({ ...state, isRecordLoading: true });
 const setWorkflows = (state, { payload }) => ({ ...state, workflows: payload, isLoading: false });
 const selectWorkflow = (state, { payload }) => ({ ...state, workflow: payload, isRecordLoading: false });
-const expandWorkflow = (state, { payload }) => ({ ...state, expandedWorkflows: [ ...state.expandedWorkflows, payload ]});
 const setSortWorkflows = (state, { payload }) => ({
   ...state,
   sortBy: payload,
@@ -61,7 +58,6 @@ export default {
   [`${FETCH_WORKFLOWS}_FULFILLED`]: setWorkflows,
   [`${FETCH_WORKFLOW}_PENDING`]: setRecordLoadingState,
   [`${FETCH_WORKFLOW}_FULFILLED`]: selectWorkflow,
-  [EXPAND_WORKFLOW]: expandWorkflow,
   [SORT_WORKFLOWS]: setSortWorkflows,
   [SET_FILTER_WORKFLOWS]: setFilterValue
 };

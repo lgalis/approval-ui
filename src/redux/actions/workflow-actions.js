@@ -79,11 +79,6 @@ export const removeWorkflows = (workflows, intl) => ({
   }
 });
 
-export const expandWorkflow = (id) => ({
-  type: ActionTypes.EXPAND_WORKFLOW,
-  payload: id
-});
-
 export const sortWorkflows = (sortBy) => ({
   type: ActionTypes.SORT_WORKFLOWS,
   payload: sortBy

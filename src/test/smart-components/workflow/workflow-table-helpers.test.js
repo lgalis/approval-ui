@@ -1,6 +1,5 @@
 
-import { createRows } from '../../../smart-components/workflow/workflow-table-helpers';
-import ExpandableContent from '../../../smart-components/workflow/expandable-content';
+import { createRows, GroupsLabels } from '../../../smart-components/workflow/workflow-table-helpers';
 
 describe('approval process table helpers', () => {
   it('should create rows correctly', () => {
@@ -9,46 +8,23 @@ describe('approval process table helpers', () => {
       name: 'foo',
       description: 'bar',
       sequence: '2',
-      group_refs: [ 'group_refs' ],
-      group_names: [ 'group_names' ]
+      group_refs: [{ name: 'group_refs', uuid: 'group_uuid' }]
     }, {
       name: 'should be in result',
       id: '2',
       description: 'baz',
       sequence: '1',
-      group_refs: [ 'group_refs' ],
-      group_names: [ 'group_names' ]
+      group_refs: [{ name: 'group_refs', uuid: 'group_uuid' }]
     }];
 
     const expectedData = [{
-      cells: [ 'foo', 'bar', '2' ],
+      cells: [ '2', 'foo', 'bar', <GroupsLabels id="1" key={ 1 } group_refs={ [{ name: 'group_refs', uuid: 'group_uuid' }] } /> ],
       id: '1',
-      isOpen: false,
-      selected: false
-    },
-    {
-      cells: [{
-        title: <ExpandableContent
-          description="bar"
-          groupRefs={ [ 'group_refs' ] }
-          id="1"
-        />
-      }],
-      parent: 0
-    },      {
-      cells: [ 'should be in result', 'baz', '1' ],
-      id: '2',
-      isOpen: false,
       selected: false
     }, {
-      cells: [{
-        title: <ExpandableContent
-          description="baz"
-          groupRefs={ [ 'group_refs' ] }
-          id="2"
-        />
-      }],
-      parent: 2
+      cells: [ '1', 'should be in result', 'baz', <GroupsLabels id="2" key={ 2 } group_refs={ [{ name: 'group_refs', uuid: 'group_uuid' }] } /> ],
+      id: '2',
+      selected: false
     }];
     expect(createRows(data, 'result')).toEqual(expectedData);
   });

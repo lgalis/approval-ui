@@ -3,8 +3,8 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
-import { expandable, sortable } from '@patternfly/react-table';
-import { fetchWorkflows, expandWorkflow, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
+import { sortable, truncate } from '@patternfly/react-table';
+import { fetchWorkflows, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
 import EditWorkflowInfo from './edit-workflow-info-modal';
 import EditWorkflowGroups from './edit-workflow-groups-modal';
@@ -24,13 +24,14 @@ import worfklowMessages from '../../messages/workflows.messages';
 import formMessages from '../../messages/form.messages';
 import tableToolbarMessages from '../../messages/table-toolbar.messages';
 
-const columns = (intl) => [{
-  title: intl.formatMessage(tableToolbarMessages.name),
-  cellFormatters: [ expandable ],
-  transforms: [ sortable ]
-},
-{ title: intl.formatMessage(formMessages.description), transforms: [ sortable ]},
-{ title: intl.formatMessage(worfklowMessages.sequence), transforms: [ sortable ]}
+const columns = (intl) => [
+  { title: intl.formatMessage(worfklowMessages.sequence), transforms: [ sortable ]},
+  {
+    title: intl.formatMessage(tableToolbarMessages.name),
+    transforms: [ sortable ]
+  },
+  { title: intl.formatMessage(formMessages.description), transforms: [ sortable ], cellTransforms: [ truncate ]},
+  { title: intl.formatMessage(formMessages.groups) }
 ];
 
 const debouncedFilter = asyncDebounce(
@@ -132,34 +133,32 @@ const Workflows = () => {
     />
   </Fragment>;
 
-  const actionResolver = (_workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
-    null
-    : [
-      {
-        title: intl.formatMessage(worfklowMessages.editInfo),
-        component: 'button',
-        onClick: (_event, _rowId, workflow) =>
-          history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
-      },
-      {
-        title: intl.formatMessage(worfklowMessages.editGroups),
-        component: 'button',
-        onClick: (_event, _rowId, workflow) =>
-          history.push({ pathname: routesLinks.workflows.editGroups, search: `?workflow=${workflow.id}` })
-      },
-      {
-        title: intl.formatMessage(worfklowMessages.editSequence),
-        component: 'button',
-        onClick: (_event, _rowId, workflow) =>
-          history.push({ pathname: routesLinks.workflows.editSequence, search: `?workflow=${workflow.id}` })
-      },
-      {
-        title: intl.formatMessage(commonMessages.delete),
-        component: 'button',
-        onClick: (_event, _rowId, workflow) =>
-          history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })
-      }
-    ];
+  const actionResolver = () => [
+    {
+      title: intl.formatMessage(worfklowMessages.editInfo),
+      component: 'button',
+      onClick: (_event, _rowId, workflow) =>
+        history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
+    },
+    {
+      title: intl.formatMessage(worfklowMessages.editGroups),
+      component: 'button',
+      onClick: (_event, _rowId, workflow) =>
+        history.push({ pathname: routesLinks.workflows.editGroups, search: `?workflow=${workflow.id}` })
+    },
+    {
+      title: intl.formatMessage(worfklowMessages.editSequence),
+      component: 'button',
+      onClick: (_event, _rowId, workflow) =>
+        history.push({ pathname: routesLinks.workflows.editSequence, search: `?workflow=${workflow.id}` })
+    },
+    {
+      title: intl.formatMessage(commonMessages.delete),
+      component: 'button',
+      onClick: (_event, _rowId, workflow) =>
+        history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })
+    }
+  ];
 
   const setCheckedItems = (checkedWorkflows) =>
     setSelectedWorkflows(checkedWorkflows.map(wf => wf.id));
@@ -171,9 +170,9 @@ const Workflows = () => {
       <Link id="add-workflow-link" to={ { pathname: routesLinks.workflows.add } }>
         <Button
           variant="primary"
-          aria-label={ intl.formatMessage(formMessages.createApprovalTitle) }
+          aria-label={ intl.formatMessage(formMessages.create) }
         >
-          { intl.formatMessage(formMessages.createApprovalTitle) }
+          { intl.formatMessage(formMessages.create) }
         </Button>
       </Link>
     </ToolbarItem>
@@ -184,9 +183,8 @@ const Workflows = () => {
         to={ { pathname: routesLinks.workflows.remove } }
       >
         <Button
-          variant="link"
+          variant="secondary"
           isDisabled={ !anyWorkflowsSelected }
-          style={ { color: anyWorkflowsSelected ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
           aria-label={ intl.formatMessage(worfklowMessages.deleteApprovalTitle) }
         >
           { intl.formatMessage(commonMessages.delete) }
@@ -194,11 +192,6 @@ const Workflows = () => {
       </Link>
     </ToolbarItem>
   </ToolbarGroup>;
-
-  const onCollapse = (id, setRows, setOpen) => {
-    dispatch(expandWorkflow(id));
-    setRows((rows) => setOpen(rows, id));
-  };
 
   return (
     <Fragment>
@@ -224,7 +217,6 @@ const Workflows = () => {
         filterValue={ filterValue }
         onFilterChange={ handleFilterChange }
         isLoading={ isFetching || isFiltering }
-        onCollapse={ onCollapse }
         renderEmptyState={ () => (
           <TableEmptyState
             title={ filterValue === ''
