@@ -13,17 +13,13 @@ const formMessages = defineMessages({
     id: 'formMessages.setGroups',
     defaultMessage: 'Set groups'
   },
-  review: {
-    id: 'formMessages.Review',
-    defaultMessage: 'Review'
-  },
   enterInfo: {
     id: 'formMessages.enterInfo',
     defaultMessage: 'Enter your information'
   },
   approvalProcessName: {
     id: 'formMessages.approvalProcessName',
-    defaultMessage: 'Approval process name'
+    defaultMessage: 'Name'
   },
   enterApprovalName: {
     id: 'formMessages.enterApprovalName',
@@ -48,10 +44,6 @@ const formMessages = defineMessages({
   groups: {
     id: 'formMessages.groups',
     defaultMessage: 'Groups'
-  },
-  summaryDescription: {
-    id: 'formMessages.summaryDescription',
-    defaultMessage: 'Review and confirm your inputs. If there is anything incorrect, click Back and revise.'
   }
 });
 

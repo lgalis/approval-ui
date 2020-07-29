@@ -5,7 +5,7 @@ import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import { expandable, sortable } from '@patternfly/react-table';
 import { fetchWorkflows, expandWorkflow, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
-import AddWorkflow from './add-groups/add-workflow-wizard';
+import AddWorkflow from './add-workflow-modal';
 import EditWorkflowInfo from './edit-workflow-info-modal';
 import EditWorkflowGroups from './edit-workflow-groups-modal';
 import RemoveWorkflow from './remove-workflow-modal';
