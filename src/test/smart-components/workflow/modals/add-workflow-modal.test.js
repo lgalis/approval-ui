@@ -38,20 +38,7 @@ describe('<AddWorkflow />', () => {
       handleChange: jest.fn()
     };
 
-    initialState = {
-      groupReducer: {
-        groups: [{
-          label: 'foo',
-          value: 'bar'
-        }]
-      },
-      workflowReducer: {
-        workflows: { data: { id: 1, group_refs: [{
-          uuid: '123',
-          name: 'SampleWorkflow'
-        }]}
-        }}
-    };
+    initialState = {};
     mockStore = configureStore(middlewares);
   });
 

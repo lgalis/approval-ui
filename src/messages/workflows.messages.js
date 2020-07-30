@@ -1,21 +1,13 @@
 const { defineMessages } = require('react-intl');
 
 const worfklowMessages = defineMessages({
-  editInfo: {
-    id: 'worfklowMessages.editInfo',
-    defaultMessage: 'Edit info'
+  edit: {
+    id: 'worfklowMessages.edit',
+    defaultMessage: 'Edit'
   },
   editInformation: {
     id: 'worfklowMessages.editInformation',
     defaultMessage: 'Edit information'
-  },
-  editGroups: {
-    id: 'worfklowMessages.editGroups',
-    defaultMessage: 'Edit groups'
-  },
-  editSequence: {
-    id: 'worfklowMessages.editSequence',
-    defaultMessage: 'Edit sequence'
   },
   deleteApprovalTitle: {
     id: 'worfklowMessages.deleteApprovalTitle',
@@ -60,18 +52,6 @@ const worfklowMessages = defineMessages({
   editProcessTitle: {
     id: 'workflowMessages.editProcessTitle',
     defaultMessage: 'Make any changes to approval process {name}'
-  },
-  editSequenceTitle: {
-    id: 'workflowMessages.editSequenceTitle',
-    defaultMessage: 'Set the sequence for the approval process {name}'
-  },
-  editGroupsTitle: {
-    id: 'workflowMessages.editGroupsTitle',
-    defaultMessage: 'Edit approval process\'s groups'
-  },
-  editGroupsLabel: {
-    id: 'workflowMessages.editGroupsLabel',
-    defaultMessage: 'Add or remove {name}\'s groups'
   },
   addProcessSuccessTitle: {
     id: 'workflowMessages.addProcessSuccessTitle',

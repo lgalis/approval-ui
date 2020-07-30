@@ -6,8 +6,6 @@ import { SearchIcon } from '@patternfly/react-icons';
 import { sortable, truncate } from '@patternfly/react-table';
 import { fetchWorkflows, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
-import EditWorkflowInfo from './edit-workflow-info-modal';
-import EditWorkflowGroups from './edit-workflow-groups-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
@@ -23,6 +21,7 @@ import commonMessages from '../../messages/common.message';
 import worfklowMessages from '../../messages/workflows.messages';
 import formMessages from '../../messages/form.messages';
 import tableToolbarMessages from '../../messages/table-toolbar.messages';
+import EditWorkflow from './edit-workflow-modal';
 
 const columns = (intl) => [
   { title: intl.formatMessage(worfklowMessages.sequence), transforms: [ sortable ]},
@@ -117,12 +116,7 @@ const Workflows = () => {
   const routes = () => <Fragment>
     <Route exact path={ routesLinks.workflows.add } render={ props => <AddWorkflow { ...props }
       postMethod={ updateWorkflows } /> }/>
-    <Route exact path={ routesLinks.workflows.editInfo } render={ props => <EditWorkflowInfo editType='info' { ...props }
-      postMethod={ updateWorkflows } /> }/>
-    <Route exact path={ routesLinks.workflows.editGroups } render={ props => <EditWorkflowGroups editType='groups' { ...props }
-      postMethod={ updateWorkflows } /> }/>
-    <Route exact path={ routesLinks.workflows.editSequence } render={ props => <EditWorkflowInfo editType='sequence' { ...props }
-      postMethod={ updateWorkflows } /> }/>
+    <Route exact path={ routesLinks.workflows.edit } component={ EditWorkflow }/>
     <Route exact path={ routesLinks.workflows.remove }
       render={ props => <RemoveWorkflow
         { ...props }
@@ -135,22 +129,10 @@ const Workflows = () => {
 
   const actionResolver = () => [
     {
-      title: intl.formatMessage(worfklowMessages.editInfo),
+      title: intl.formatMessage(worfklowMessages.edit),
       component: 'button',
       onClick: (_event, _rowId, workflow) =>
-        history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
-    },
-    {
-      title: intl.formatMessage(worfklowMessages.editGroups),
-      component: 'button',
-      onClick: (_event, _rowId, workflow) =>
-        history.push({ pathname: routesLinks.workflows.editGroups, search: `?workflow=${workflow.id}` })
-    },
-    {
-      title: intl.formatMessage(worfklowMessages.editSequence),
-      component: 'button',
-      onClick: (_event, _rowId, workflow) =>
-        history.push({ pathname: routesLinks.workflows.editSequence, search: `?workflow=${workflow.id}` })
+        history.push({ pathname: routesLinks.workflows.edit, search: `?workflow=${workflow.id}` })
     },
     {
       title: intl.formatMessage(commonMessages.delete),

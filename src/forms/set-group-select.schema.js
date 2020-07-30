@@ -5,7 +5,7 @@ import formMessages from '../messages/form.messages';
 
 const setGroupSelectSchema = (intl) => ({
   component: componentTypes.SELECT,
-  name: 'wfGroups',
+  name: 'group_refs',
   label: intl.formatMessage(formMessages.setGroups),
   loadOptions,
   noValueUpdates: true,
