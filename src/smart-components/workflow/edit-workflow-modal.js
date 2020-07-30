@@ -84,7 +84,7 @@ const EditWorkflow = () => {
           { ...props }
           submitLabel={ intl.formatMessage(commonMessages.save) }
           buttonClassName="pf-u-mt-0"
-          disableSubmit={ [ 'validating' ] }
+          disableSubmit={ [ 'validating', 'pristine' ] }
         /> }
       /> }
     </Modal>
