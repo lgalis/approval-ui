@@ -1,28 +1,45 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Label, Flex, FlexItem } from '@patternfly/react-core';
 
-import ExpandableContent from './expandable-content';
+export const GroupsLabels = ({ group_refs, id }) => (
+  <Flex key={ id } className="pf-u-mt-sm">
+    { group_refs.map(({ name, uuid }) => (
+      <FlexItem key={ uuid }>
+        <Label className="group-label pf-u-mb-sm">
+          { name }
+        </Label>
+      </FlexItem>
+    )) }
+  </Flex>
+);
 
-export const createRows = (data) =>
-  data.reduce((acc,
-    {
-      id,
-      name,
-      description,
-      sequence,
-      group_refs
-    }, key) => ([
-    ...acc, {
-      id,
-      isOpen: false,
-      selected: false,
-      cells: [ name, description, sequence ]
-    }, {
-      parent: key * 2,
-      cells: [{ title: <ExpandableContent
-        description={ description }
-        groupRefs={ group_refs }
-        id={ id }
-      /> }]
-    }
-  ]), []);
+GroupsLabels.propTypes = {
+  id: PropTypes.string,
+  group_refs: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    uuid: PropTypes.string.isRequired
+  }))
+};
 
+export const createRows = (data) => data.map((
+  {
+    id,
+    name,
+    description,
+    sequence,
+    group_refs
+  }
+) => ({
+  id,
+  selected: false,
+  cells: [
+    sequence,
+    name,
+    description,
+    <React.Fragment key={ id }>
+      <GroupsLabels key={ id } group_refs={ group_refs } id={ id } />
+    </React.Fragment>
+  ]
+})
+);

@@ -50,3 +50,10 @@
 .span-block {
   display: block;
 }
+
+.group-label {
+  max-width: 256px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

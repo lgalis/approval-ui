@@ -44,6 +44,10 @@ const formMessages = defineMessages({
   groups: {
     id: 'formMessages.groups',
     defaultMessage: 'Groups'
+  },
+  create: {
+    id: 'formMessages.create',
+    defaultMessage: 'Create'
   }
 });
 

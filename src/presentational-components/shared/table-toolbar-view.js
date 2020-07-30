@@ -143,7 +143,8 @@ export const TableToolbarView = ({
                 ...paginationConfig,
                 dropDirection: 'up',
                 variant: 'bottom',
-                isCompact: false
+                isCompact: false,
+                className: 'pf-u-pr-0'
               } }
             />
           ) }
