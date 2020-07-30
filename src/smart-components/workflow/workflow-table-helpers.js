@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import { Label, Flex, FlexItem } from '@patternfly/react-core';
 
 export const GroupsLabels = ({ group_refs, id }) => (
-  <React.Fragment key={ id }>
-    <Flex key={ id } className="pf-u-mt-sm">
-      { group_refs.map(({ name, uuid }) => (
-        <FlexItem key={ uuid }>
-          <Label className="group-label pf-u-mb-sm">
-            { name }
-          </Label>
-        </FlexItem>
-      )) }
-    </Flex>
-  </React.Fragment>
+  <Flex key={ id } className="pf-u-mt-sm">
+    { group_refs.map(({ name, uuid }) => (
+      <FlexItem key={ uuid }>
+        <Label className="group-label pf-u-mb-sm">
+          { name }
+        </Label>
+      </FlexItem>
+    )) }
+  </Flex>
 );
 
 GroupsLabels.propTypes = {
@@ -39,7 +37,9 @@ export const createRows = (data) => data.map((
     sequence,
     name,
     description,
-    <GroupsLabels key={ id } group_refs={ group_refs } id={ id } />
+    <React.Fragment key={ id }>
+      <GroupsLabels key={ id } group_refs={ group_refs } id={ id } />
+    </React.Fragment>
   ]
 })
 );

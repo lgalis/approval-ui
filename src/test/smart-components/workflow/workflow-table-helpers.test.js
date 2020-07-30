@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { createRows, GroupsLabels } from '../../../smart-components/workflow/workflow-table-helpers';
 
 describe('approval process table helpers', () => {
@@ -18,14 +19,24 @@ describe('approval process table helpers', () => {
     }];
 
     const expectedData = [{
-      cells: [ '2', 'foo', 'bar', <GroupsLabels id="1" key={ 1 } group_refs={ [{ name: 'group_refs', uuid: 'group_uuid' }] } /> ],
       id: '1',
-      selected: false
+      selected: false,
+      cells: [
+        '2',
+        'foo',
+        'bar',
+        <React.Fragment key="1"><GroupsLabels key="1" group_refs={ [{ name: 'group_refs', uuid: 'group_uuid' }] } id="1" /></React.Fragment>
+      ]
     }, {
-      cells: [ '1', 'should be in result', 'baz', <GroupsLabels id="2" key={ 2 } group_refs={ [{ name: 'group_refs', uuid: 'group_uuid' }] } /> ],
       id: '2',
-      selected: false
+      selected: false,
+      cells: [
+        '1',
+        'should be in result',
+        'baz',
+        <React.Fragment key="2"><GroupsLabels key="2" group_refs={ [{ name: 'group_refs', uuid: 'group_uuid' }] } id="2"/></React.Fragment>
+      ]
     }];
-    expect(createRows(data, 'result')).toEqual(expectedData);
+    expect(JSON.stringify(createRows(data, 'result'))).toEqual(JSON.stringify(expectedData));
   });
 });
