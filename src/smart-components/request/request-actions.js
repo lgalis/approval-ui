@@ -7,13 +7,6 @@ import { Link } from 'react-router-dom';
 import requestsMessages from '../../messages/requests.messages';
 import { isRequestStateActive } from '../../helpers/shared/helpers';
 
-const JustChildren = ({ children, className }) => <span className={ className }>{ children }</span>;
-
-JustChildren.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string
-};
-
 const RequestActions = ({
   denyLink,
   approveLink,
@@ -28,49 +21,45 @@ const RequestActions = ({
   const approveDenyAllowed = isRequestStateActive(state) && canApproveDeny;
   const commentAllowed = isRequestStateActive(state) && canComment;
 
-  const ApproveDenyLink = approveDenyAllowed ? Link : JustChildren;
-  const CommentLink = commentAllowed ? Link : JustChildren;
-
   return (
     <div style={ { display: 'flex' } }>
-      <ApproveDenyLink
-        to={ { pathname: approveLink, search: `request=${id}` } }
-        className="pf-u-mr-sm"
-        id={ `approve-${request.id}` }
-      >
-        <Button
-          variant="primary"
-          aria-label={ intl.formatMessage(requestsMessages.approveRequest) }
-          isDisabled={ !approveDenyAllowed }
+      { approveDenyAllowed && (<React.Fragment>
+        <Link
+          to={ { pathname: approveLink, search: `request=${id}` } }
+          className="pf-u-mr-sm"
+          id={ `approve-${request.id}` }
         >
-          { intl.formatMessage(requestsMessages.approveTitle) }
-        </Button>
-      </ApproveDenyLink>
-      <ApproveDenyLink
-        to={ { pathname: denyLink, search: `request=${id}` } }
-        className="pf-u-mr-sm"
-        id={ `deny-${request.id}` }
-      >
-        <Button
-          variant="danger"
-          isDisabled={ !approveDenyAllowed }
-          aria-label={ intl.formatMessage(requestsMessages.denyTitle) }
+          <Button
+            variant="primary"
+            aria-label={ intl.formatMessage(requestsMessages.approveRequest) }
+          >
+            { intl.formatMessage(requestsMessages.approveTitle) }
+          </Button>
+        </Link>
+        <Link
+          to={ { pathname: denyLink, search: `request=${id}` } }
+          className="pf-u-mr-sm"
+          id={ `deny-${request.id}` }
         >
-          { intl.formatMessage(requestsMessages.denyTitle) }
-        </Button>
-      </ApproveDenyLink>
-      <CommentLink
+          <Button
+            variant="danger"
+            aria-label={ intl.formatMessage(requestsMessages.denyTitle) }
+          >
+            { intl.formatMessage(requestsMessages.denyTitle) }
+          </Button>
+        </Link>
+      </React.Fragment>) }
+      { commentAllowed && <Link
         to={ { pathname: commentLink, search: `request=${id}` } }
         id={ `comment-${request.id}` }
       >
         <Button
           variant="secondary"
-          isDisabled={ !commentAllowed }
           aria-label={ intl.formatMessage(requestsMessages.commentTitle) }
         >
           { intl.formatMessage(requestsMessages.commentTitle) }
         </Button>
-      </CommentLink>
+      </Link> }
     </div>
   );
 };

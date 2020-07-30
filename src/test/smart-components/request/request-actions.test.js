@@ -45,7 +45,7 @@ describe('<RequestActions />', () => {
     />);
 
     expect(wrapper.find(Link)).toHaveLength(1);
-    expect(wrapper.find(Button)).toHaveLength(3);
+    expect(wrapper.find(Button)).toHaveLength(1);
   });
 
   it('cannot comment', () => {
@@ -55,7 +55,7 @@ describe('<RequestActions />', () => {
     />);
 
     expect(wrapper.find(Link)).toHaveLength(2);
-    expect(wrapper.find(Button)).toHaveLength(3);
+    expect(wrapper.find(Button)).toHaveLength(2);
   });
 
   it('cannot do anything comment', () => {
@@ -66,6 +66,6 @@ describe('<RequestActions />', () => {
     />);
 
     expect(wrapper.find(Link)).toHaveLength(0);
-    expect(wrapper.find(Button)).toHaveLength(3);
+    expect(wrapper.find(Button)).toHaveLength(0);
   });
 });
