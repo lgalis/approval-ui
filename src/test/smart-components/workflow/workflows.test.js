@@ -12,13 +12,12 @@ import workflowReducer, { workflowsInitialState } from '../../../redux/reducers/
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import { groupsInitialState } from '../../../redux/reducers/group-reducer';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
-import EditWorkflowInfoModal from '../../../smart-components/workflow/edit-workflow-info-modal';
-import EditWorkflowGroupsModal from '../../../smart-components/workflow/edit-workflow-groups-modal';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';
 import AddWorkflowModal from '../../../smart-components/workflow/add-workflow-modal';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/ReducerRegistry';
 import routes from '../../../constants/routes';
 import TableEmptyState from '../../../presentational-components/shared/table-empty-state';
+import * as edit from '../../../smart-components/workflow/edit-workflow-modal';
 
 const ComponentWrapper = ({ store, initialEntries = [ routes.workflows.index ], children }) => (
   <Provider store={ store }>
@@ -68,6 +67,8 @@ describe('<Workflows />', () => {
   });
 
   it('should redirect to Edit info page', async () => {
+    edit.default = jest.fn().mockImplementation(() => <span />);
+
     jest.useFakeTimers();
 
     const store = mockStore(stateWithData);
@@ -79,20 +80,6 @@ describe('<Workflows />', () => {
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
-    // async name validator
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=foo&limit=50&offset=0`,
-      mockOnce({
-        body: {
-          data: [{
-            id: 'edit-id',
-            name: 'foo',
-            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
-          }
-          ]
-        }
-      })
-    );
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ store }>
@@ -116,92 +103,11 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
 
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.editInfo);
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.edit);
     expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?workflow=edit-id');
-    expect(wrapper.find(EditWorkflowInfoModal)).toHaveLength(1);
+    expect(wrapper.find(edit.default)).toHaveLength(1);
 
     jest.useRealTimers();
-  });
-
-  it('should redirect to Edit approval process groups page', async () => {
-    jest.useFakeTimers();
-
-    const store = mockStore(stateWithData);
-    let wrapper;
-
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({
-        body: {
-          data: [{
-            id: 'edit-id',
-            name: 'foo',
-            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
-          }]
-        }
-      })
-    );
-    apiClientMock.get(`${RBAC_API_BASE}/groups/?role_names=%22%2CApproval%20Administrator%2CApproval%20Approver%2C%22`,
-      mockOnce({ body: { data: [{ uuid: 'id', name: 'name' }]}}));
-    await act(async()=> {
-      wrapper = mount(
-        <ComponentWrapper store={ store }>
-          <Route path={ routes.workflows.index } component={ Workflows } />
-        </ComponentWrapper>
-      );
-    });
-    wrapper.update();
-    /**
-     * Open action drop down and click on edit groups action
-     */
-    wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
-    await act(async() => {
-      wrapper.find('button.pf-c-dropdown__menu-item').at(1).simulate('click');
-    });
-
-    await act(async () => {
-      jest.runAllTimers(); // debounced async call
-    });
-    wrapper.update();
-
-    wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.editGroups);
-    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?workflow=edit-id');
-    expect(wrapper.find(EditWorkflowGroupsModal)).toHaveLength(1);
-
-    jest.useRealTimers();
-  });
-
-  it('should redirect to Edit sequence page', async () => {
-    const store = mockStore(stateWithData);
-    let wrapper;
-
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
-        id: 'edit-id',
-        name: 'foo',
-        group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
-      }]}}));
-
-    await act(async()=> {
-      wrapper = mount(
-        <ComponentWrapper store={ store }>
-          <Route path={ routes.workflows.index } component={ Workflows } />
-        </ComponentWrapper>
-      );
-    });
-    wrapper.update();
-    /**
-     * Open action drop down and click on edit info action
-     */
-    wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
-    await act(async() => {
-      wrapper.find('button.pf-c-dropdown__menu-item').at(2).simulate('click');
-    });
-
-    wrapper.update();
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.editSequence);
-    expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?workflow=edit-id');
-    expect(wrapper.find(EditWorkflowInfoModal)).toHaveLength(1);
   });
 
   it('should redirect to Delete approval process page', async () => {
@@ -228,7 +134,7 @@ describe('<Workflows />', () => {
      */
     wrapper.find('button.pf-c-dropdown__toggle.pf-m-plain').last().simulate('click');
     await act(async() => {
-      wrapper.find('button.pf-c-dropdown__menu-item').at(3).simulate('click');
+      wrapper.find('button.pf-c-dropdown__menu-item').last().simulate('click');
     });
 
     wrapper.update();
