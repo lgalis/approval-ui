@@ -32,7 +32,7 @@ const ActionModal = ({
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
     const actionName = actionType === 'Add Comment'
       ? intl.formatMessage(requestsMessages.addCommentTitle)
-      : intl.formatMessage(actionModalMessages.actionName, { actionName: intl.formatMessage(actionTypeToMsg[actionType]) }) ;
+      : intl.formatMessage(actionModalMessages.actionName, { actionType: intl.formatMessage(actionTypeToMsg[actionType]) }) ;
 
     return postMethod ?
       createRequestAction(
