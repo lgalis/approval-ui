@@ -17,8 +17,7 @@ import { APP_DISPLAY_NAME } from '../../utilities/constants';
 
 const RemoveWorkflowModal = ({
   ids = [],
-  fetchData,
-  setSelectedWorkflows
+  fetchData
 }) => {
   const dispatch = useDispatch();
   const [ fetchedWorkflow, setFetchedWorkflow ] = useState();
@@ -46,7 +45,6 @@ const RemoveWorkflowModal = ({
   const removeWf = () =>(finalId ? dispatch(removeWorkflow(finalId, intl)) : dispatch(removeWorkflows(ids, intl)))
   .catch(() => setSubmitting(false))
   .then(() => push(routes.workflows.index))
-  .then(() => setSelectedWorkflows([]))
   .then(() => fetchData());
 
   const onCancel = () => push(routes.workflows.index);
@@ -129,7 +127,6 @@ const RemoveWorkflowModal = ({
 
 RemoveWorkflowModal.propTypes = {
   fetchData: PropTypes.func.isRequired,
-  setSelectedWorkflows: PropTypes.func.isRequired,
   ids: PropTypes.array
 };
 

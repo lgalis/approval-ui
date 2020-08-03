@@ -45,7 +45,8 @@ describe('<Workflows />', () => {
           data: [{
             id: 'edit-id',
             name: 'foo',
-            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
+            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
+            sequence: 1
           }],
           meta: {
             count: 0,
@@ -58,7 +59,7 @@ describe('<Workflows />', () => {
         isLoading: false,
         isRecordLoading: false,
         sortBy: {
-          index: 1,
+          index: 2,
           property: 'sequence',
           direction: 'asc'
         }
@@ -77,6 +78,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
+        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
@@ -118,6 +120,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
+        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
@@ -153,6 +156,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
+        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
         group_names: [ 'group-name-1' ]
       }]}}));
@@ -165,6 +169,7 @@ describe('<Workflows />', () => {
           data: [{
             id: 'edit-id',
             name: 'foo',
+            sequence: 1,
             group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
           }]
         }
@@ -210,6 +215,7 @@ describe('<Workflows />', () => {
       mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
+        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
         group_names: [ 'group-name-1' ]
       }]}})
@@ -237,6 +243,7 @@ describe('<Workflows />', () => {
     const wf = {
       id: 'so',
       name: 'foo',
+      sequence: 1,
       group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
     };
 
@@ -326,6 +333,7 @@ describe('<Workflows />', () => {
     const wf = {
       id: 'so',
       name: 'foo',
+      sequence: 1,
       group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
     };
 
@@ -516,18 +524,21 @@ describe('<Workflows />', () => {
       id: '123',
       name: 'wf1',
       selected: true,
+      sequence: 1,
       group_refs: []
     };
     const wf2 = {
       id: '456',
       name: 'wf2',
       selected: true,
+      sequence: 1,
       group_refs: [ ]
     };
     const wf3 = {
       id: '789',
       name: 'wf',
       selected: true,
+      sequence: 1,
       group_refs: [ ]
     };
     let storeReal;

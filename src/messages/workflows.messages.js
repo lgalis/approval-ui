@@ -84,6 +84,14 @@ const worfklowMessages = defineMessages({
   removeProcessesSuccessDescription: {
     id: 'workflowMessages.removeProcessesSuccessDescription',
     defaultMessage: 'The selected approval processes were removed successfully.'
+  },
+  up: {
+    id: 'workflowMessages.up',
+    defaultMessage: 'up'
+  },
+  down: {
+    id: 'workflowMessages.down',
+    defaultMessage: 'down'
   }
 });
 
