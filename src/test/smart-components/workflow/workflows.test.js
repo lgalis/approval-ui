@@ -519,6 +519,148 @@ describe('<Workflows />', () => {
     jest.useRealTimers();
   });
 
+  it('should move workflow by using buttons', async () => {
+    jest.useFakeTimers();
+    expect.assertions(1);
+
+    const wf = {
+      id: '987',
+      name: 'foo',
+      sequence: 10,
+      group_refs: []
+    };
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path={ routes.workflows.index } component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    await act(async () => {
+      wrapper.find(`button#down-${wf.id}`).simulate('click');
+    });
+    wrapper.update();
+
+    // PATCH WF
+    apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/${wf.id}`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ id: wf.id, sequence: wf.sequence + 1 });
+      return res.status(200).body({ foo: 'bar' });
+    }));
+
+    // RELOAD WORKFLOWS
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    await act(async () => {
+      jest.runAllTimers(); // debounced async call
+    });
+    wrapper.update();
+
+    jest.useRealTimers();
+  });
+
+  it('should move workflow by using buttons, multiple clicks', async () => {
+    jest.useFakeTimers();
+    expect.assertions(1);
+
+    const wf = {
+      id: '987',
+      name: 'foo',
+      sequence: 10,
+      group_refs: []
+    };
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path={ routes.workflows.index } component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    await act(async () => {
+      wrapper.find(`button#down-${wf.id}`).simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      wrapper.find(`button#down-${wf.id}`).simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      wrapper.find(`button#down-${wf.id}`).simulate('click');
+    });
+    wrapper.update();
+
+    // PATCH WF
+    apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/${wf.id}`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ id: wf.id, sequence: wf.sequence + 3 });
+      return res.status(200).body({ foo: 'bar' });
+    }));
+
+    // RELOAD WORKFLOWS
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    await act(async () => {
+      jest.runAllTimers(); // debounced async call
+    });
+    wrapper.update();
+
+    jest.useRealTimers();
+  });
+
   describe('table removal actions', () => {
     const wf1 = {
       id: '123',
