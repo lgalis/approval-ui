@@ -63,20 +63,22 @@ const initialState = (filterValue = '') => ({
   rows: []
 });
 
-const workflowsListState = (state, action) => {
+const areSelectedAll = (rows = [], selected) => rows.every(row => selected.includes(row.id));
+
+const unique = (value, index, self) => self.indexOf(value) === index;
+
+export const workflowsListState = (state, action) => {
   switch (action.type) {
     case 'setRows':
       return {
         ...state,
         rows: action.payload,
-        selectedAll: false
+        selectedAll: areSelectedAll(action.payload, state.selectedWorkflows)
       };
     case 'setFetching':
       return {
         ...state,
-        isFetching: action.payload,
-        selectedWorkflows: [],
-        selectedAll: false
+        isFetching: action.payload
       };
     case 'setFilterValue':
       return { ...state, filterValue: action.payload };
@@ -89,11 +91,28 @@ const workflowsListState = (state, action) => {
           : [ ...state.selectedWorkflows, action.payload ]
       };
     case 'selectAll':
-      return { ...state, selectedWorkflows: action.payload, selectedAll: true };
+      return {
+        ...state,
+        selectedWorkflows: [ ...state.selectedWorkflows, ...action.payload ].filter(unique),
+        selectedAll: true
+      };
     case 'unselectAll':
-      return { ...state, selectedWorkflows: [], selectedAll: false };
+      return {
+        ...state,
+        selectedWorkflows: state.selectedWorkflows.filter(selected => !action.payload.includes(selected)),
+        selectedAll: false
+      };
+    case 'resetSelected':
+      return {
+        ...state,
+        selectedWorkflows: [],
+        selectedAll: false
+      };
     case 'setFilteringFlag':
-      return { ...state, isFiltering: action.payload, selectedAll: false, selectedWorkflows: []};
+      return {
+        ...state,
+        isFiltering: action.payload
+      };
     default:
       return state;
   }
@@ -156,6 +175,7 @@ const Workflows = () => {
         { ...props }
         ids={ selectedWorkflows }
         fetchData={ updateWorkflows }
+        resetSelectedWorkflows={ () => stateDispatch({ type: 'resetSelected' }) }
       /> }
     />
   </Fragment>;
@@ -176,7 +196,7 @@ const Workflows = () => {
   ];
 
   const selectAllFunction = () => selectedAll
-    ? stateDispatch({ type: 'unselectAll' })
+    ? stateDispatch({ type: 'unselectAll', payload: data.map(wf => wf.id) })
     : stateDispatch({ type: 'selectAll', payload: data.map(wf => wf.id) });
 
   const anyWorkflowsSelected = selectedWorkflows.length > 0;

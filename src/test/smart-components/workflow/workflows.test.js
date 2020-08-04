@@ -7,7 +7,7 @@ import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store' ;
 import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
-import Workflows from '../../../smart-components/workflow/workflows';
+import Workflows, { workflowsListState } from '../../../smart-components/workflow/workflows';
 import workflowReducer, { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import { groupsInitialState } from '../../../redux/reducers/group-reducer';
@@ -857,6 +857,57 @@ describe('<Workflows />', () => {
       await act(async () => {
         wrapper.find('button#submit-remove-workflow').simulate('click');
       });
+    });
+  });
+
+  describe('#reducer', () => {
+    let state;
+    let expectedResults;
+
+    it('reset selected', () => {
+      state = { selectedWorkflows: [ 'id1', 'id3' ], selectedAll: true };
+      expectedResults = { ...state, selectedAll: false, selectedWorkflows: []};
+
+      expect(workflowsListState(state, { type: 'resetSelected' })).toEqual(expectedResults);
+    });
+
+    it('select all on current page', () => {
+      state = { selectedWorkflows: [ 'id1', 'id3' ], selectedAll: false };
+      expectedResults = { ...state, selectedAll: true, selectedWorkflows: [ 'id1', 'id3', 'id2' ]};
+
+      expect(workflowsListState(state, { type: 'selectAll', payload: [ 'id1', 'id2' ]})).toEqual(expectedResults);
+    });
+
+    it('unselect all on current page', () => {
+      state = { selectedWorkflows: [ 'id1', 'id3', 'id2' ], selectedAll: true };
+      expectedResults = { ...state, selectedAll: false, selectedWorkflows: [ 'id3' ]};
+
+      expect(workflowsListState(state, { type: 'unselectAll', payload: [ 'id1', 'id2' ]})).toEqual(expectedResults);
+    });
+
+    it('all are selected on new page', () => {
+      const rows = [{ id: 'id1' }, { id: 'id3' }];
+
+      state = { selectedWorkflows: [ 'id1', 'id3', 'id2' ], selectedAll: false };
+      expectedResults = { ...state, selectedAll: true, rows };
+
+      expect(workflowsListState(state, { type: 'setRows', payload: rows })).toEqual(expectedResults);
+    });
+
+    it('not all are selected on new page', () => {
+      const rows = [{ id: 'id1' }, { id: 'id4' }];
+
+      state = { selectedWorkflows: [ 'id1', 'id3', 'id2' ], selectedAll: false };
+      expectedResults = { ...state, selectedAll: false, rows };
+
+      expect(workflowsListState(state, { type: 'setRows', payload: rows })).toEqual(expectedResults);
+    });
+
+    it('default', () => {
+      state = { selectedWorkflows: [ 'id1', 'id3', 'id2' ], selectedAll: false };
+      expectedResults = { ...state };
+
+      expect(workflowsListState(state, { type: 'default' })).toEqual(expectedResults);
     });
   });
 });
