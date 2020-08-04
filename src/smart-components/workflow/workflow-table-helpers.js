@@ -10,23 +10,22 @@ import worfklowMessages from '../../messages/workflows.messages';
 import { updateWorkflow, fetchWorkflows, moveSequence } from '../../redux/actions/workflow-actions';
 import asyncDebounce from '../../utilities/async-debounce';
 
-const debouncedFunctionsCache = {};
-
-const debouncedMove = (id) => {
-  if (debouncedFunctionsCache[id]) {
-    return debouncedFunctionsCache[id];
+const debouncedMove = (cache, id) => {
+  if (cache[id]) {
+    return cache[id];
   }
 
-  debouncedFunctionsCache[id] = asyncDebounce(
+  cache[id] = asyncDebounce(
     (workflow, dispatch, intl) => dispatch(updateWorkflow(workflow, intl))
     .then(() => dispatch(fetchWorkflows())),
     1500
   );
 
-  return debouncedFunctionsCache[id];
+  return cache[id];
 };
 
 export const MoveButtons = ({ id, sequence }) => {
+  const { cache } = useContext(WorkflowTableContext);
   const dispatch = useDispatch();
   const intl = useIntl();
   const { isUpdating, direction, property } = useSelector(
@@ -35,12 +34,10 @@ export const MoveButtons = ({ id, sequence }) => {
     )
   );
 
-  const move = debouncedMove(id);
-
   const updateSequence = (sequence) => {
     dispatch(moveSequence({ id, sequence }));
 
-    return move({ id, sequence }, dispatch, intl);
+    return debouncedMove(cache, id)({ id, sequence }, dispatch, intl);
   };
 
   if (property !== 'sequence') {

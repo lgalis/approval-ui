@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useReducer } from 'react';
+import React, { Fragment, useEffect, useReducer, useRef } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button, Checkbox } from '@patternfly/react-core';
@@ -100,6 +100,7 @@ const workflowsListState = (state, action) => {
 };
 
 const Workflows = () => {
+  const moveFunctionsCache = useRef({});
   const { workflows: { data, meta }, sortBy, filterValueRedux } = useSelector(
     ({ workflowReducer: { workflows, sortBy, filterValue: filterValueRedux }}) => ({ workflows, sortBy, filterValueRedux })
     , shallowEqual
@@ -214,7 +215,7 @@ const Workflows = () => {
         <TopToolbarTitle title={ intl.formatMessage(commonMessages.approvalTitle) }/>
         <AppTabs/>
       </TopToolbar>
-      <WorkflowTableContext.Provider value={ { selectedWorkflows, setSelectedWorkflows } }>
+      <WorkflowTableContext.Provider value={ { selectedWorkflows, setSelectedWorkflows, cache: moveFunctionsCache.current } }>
         <TableToolbarView
           sortBy={ sortBy }
           onSort={ onSort }

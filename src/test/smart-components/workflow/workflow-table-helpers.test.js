@@ -16,6 +16,7 @@ import { AngleDownIcon, AngleUpIcon } from '@patternfly/react-icons';
 import * as asyncDebounce from '../../../utilities/async-debounce';
 import * as actions from '../../../redux/actions/workflow-actions';
 import * as helpers from '../../../helpers/workflow/workflow-helper';
+import WorkflowTableContext from '../../../smart-components/workflow/workflow-table-context';
 
 describe('approval process table helpers', () => {
   it('should create rows correctly', () => {
@@ -77,7 +78,9 @@ describe('approval process table helpers', () => {
     const mountComponent = (props, store) => mount(
       <IntlProvider locale="en">
         <Provider store={ store } >
-          <MoveButtons { ...props }/>
+          <WorkflowTableContext.Provider value={ { cache: []} }>
+            <MoveButtons { ...props }/>
+          </WorkflowTableContext.Provider>
         </Provider>
       </IntlProvider>
     );
