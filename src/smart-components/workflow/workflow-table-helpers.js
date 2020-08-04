@@ -27,11 +27,12 @@ const debouncedMove = (id) => {
 };
 
 export const MoveButtons = ({ id, sequence }) => {
-  const { sortBy: { direction, property }} = useContext(WorkflowTableContext);
   const dispatch = useDispatch();
   const intl = useIntl();
-  const isUpdating = useSelector(
-    ({ workflowReducer: { isUpdating, isLoading }}) => isUpdating > 0 || isLoading
+  const { isUpdating, direction, property } = useSelector(
+    ({ workflowReducer: { isUpdating, isLoading, sortBy: { direction, property }}}) => (
+      { isUpdating: isUpdating > 0 || isLoading, direction, property }
+    )
   );
 
   const move = debouncedMove(id);

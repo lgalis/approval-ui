@@ -214,7 +214,7 @@ const Workflows = () => {
         <TopToolbarTitle title={ intl.formatMessage(commonMessages.approvalTitle) }/>
         <AppTabs/>
       </TopToolbar>
-      <WorkflowTableContext.Provider value={ { selectedWorkflows, setSelectedWorkflows, sortBy } }>
+      <WorkflowTableContext.Provider value={ { selectedWorkflows, setSelectedWorkflows } }>
         <TableToolbarView
           sortBy={ sortBy }
           onSort={ onSort }
