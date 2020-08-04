@@ -65,7 +65,6 @@ const ActionModal = ({
         schema={ createRequestCommentSchema(actionType === 'Deny', intl) }
         onSubmit={ onSubmit }
         onCancel={ onCancel }
-        formContainer="modal"
       />
     </Modal>
   );

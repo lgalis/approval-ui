@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { Modal } from '@patternfly/react-core';
+import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
 
 import { addWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
 import routes from '../../constants/routes';
@@ -37,7 +38,11 @@ const AddWorkflow = () => {
         onSubmit={ onSave }
         onCancel={ onCancel }
         schema={ addWorkflowSchema(intl) }
-        disableSubmit={ [ 'validating' ] }
+        FormTemplate={ (props) => <FormTemplate
+          { ...props }
+          buttonClassName="pf-u-mt-0"
+          disableSubmit={ [ 'validating', 'pristine' ] }
+        /> }
       />
     </Modal>
   );
