@@ -37,7 +37,7 @@ describe('<RemoveWorkflowModal />', () => {
   beforeEach(() => {
     initialProps = {
       fetchData: jest.fn(),
-      setSelectedWorkflows: jest.fn()
+      resetSelectedWorkflows: jest.fn()
     };
     mockStore = configureStore(middlewares);
     initialState = {

@@ -88,3 +88,8 @@ export const setFilterValueWorkflows = (filterValue) => ({
   type: ActionTypes.SET_FILTER_WORKFLOWS,
   payload: filterValue
 });
+
+export const moveSequence = process => ({
+  type: ActionTypes.MOVE_SEQUENCE,
+  payload: process
+});

@@ -7,7 +7,7 @@ import { decisionValues, untranslatedMessage } from '../../utilities/constants';
 
 export const capitlize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-export const createRows = (actionResolver) => (data, actionsDisabled, indexpath = routes.request, intl) => data.reduce((acc, request) => ([
+export const createRows = (actionResolver, data, indexpath = routes.request, intl) => data.reduce((acc, request) => ([
   ...acc, {
     id: request.id,
     state: request.state,

@@ -54,7 +54,8 @@ const initialState = (nameValue = '', requesterValue = '') => ({
   requesterValue,
   isOpen: false,
   isFetching: true,
-  isFiltering: false
+  isFiltering: false,
+  rows: []
 });
 
 const requestsListState = (state, action) => {
@@ -69,6 +70,8 @@ const requestsListState = (state, action) => {
       return { ...state, requesterValue: '', nameValue: '', isFetching: true };
     case 'setFilteringFlag':
       return { ...state, isFiltering: action.payload };
+    case 'setRows':
+      return { ...state, rows: action.payload };
     default:
       return state;
   }
@@ -79,7 +82,7 @@ const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
     ({ requestReducer: { requests, sortBy, filterValue }}) => ({ requests, sortBy, filterValue }),
     shallowEqual
   );
-  const [{ nameValue, isFetching, isFiltering, requesterValue }, stateDispatch ] = useReducer(
+  const [{ nameValue, isFetching, isFiltering, requesterValue, rows }, stateDispatch ] = useReducer(
     requestsListState,
     initialState(filterValue.name, filterValue.requester)
   );
@@ -112,6 +115,10 @@ const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
     updateRequests();
     scrollToTop();
   }, [ persona ]);
+
+  useEffect(() => {
+    stateDispatch({ type: 'setRows', payload: createRows(actionResolver, data, indexpath, intl) });
+  }, [ data ]);
 
   const handleFilterChange = (value, type) => {
     const updateFilter = () => dispatch(setFilterValueRequests(value, type));
@@ -165,9 +172,7 @@ const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
       <TableToolbarView
         sortBy={ sortBy }
         onSort={ onSort }
-        data={ data }
-        createRows={ createRows(actionResolver) }
-        indexpath={ indexpath }
+        rows={ rows }
         columns={ columns(intl) }
         fetchData={ updateRequests }
         routes={ routes }

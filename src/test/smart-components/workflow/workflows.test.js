@@ -7,7 +7,7 @@ import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store' ;
 import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
-import Workflows from '../../../smart-components/workflow/workflows';
+import Workflows, { workflowsListState } from '../../../smart-components/workflow/workflows';
 import workflowReducer, { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
 import { groupsInitialState } from '../../../redux/reducers/group-reducer';
@@ -45,7 +45,8 @@ describe('<Workflows />', () => {
           data: [{
             id: 'edit-id',
             name: 'foo',
-            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
+            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
+            sequence: 1
           }],
           meta: {
             count: 0,
@@ -58,7 +59,7 @@ describe('<Workflows />', () => {
         isLoading: false,
         isRecordLoading: false,
         sortBy: {
-          index: 1,
+          index: 2,
           property: 'sequence',
           direction: 'asc'
         }
@@ -77,6 +78,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
+        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
@@ -118,6 +120,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
+        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
@@ -153,6 +156,7 @@ describe('<Workflows />', () => {
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
+        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
         group_names: [ 'group-name-1' ]
       }]}}));
@@ -165,6 +169,7 @@ describe('<Workflows />', () => {
           data: [{
             id: 'edit-id',
             name: 'foo',
+            sequence: 1,
             group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
           }]
         }
@@ -210,6 +215,7 @@ describe('<Workflows />', () => {
       mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
+        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
         group_names: [ 'group-name-1' ]
       }]}})
@@ -237,6 +243,7 @@ describe('<Workflows />', () => {
     const wf = {
       id: 'so',
       name: 'foo',
+      sequence: 1,
       group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
     };
 
@@ -326,6 +333,7 @@ describe('<Workflows />', () => {
     const wf = {
       id: 'so',
       name: 'foo',
+      sequence: 1,
       group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
     };
 
@@ -511,23 +519,168 @@ describe('<Workflows />', () => {
     jest.useRealTimers();
   });
 
+  it('should move workflow by using buttons', async () => {
+    jest.useFakeTimers();
+    expect.assertions(1);
+
+    const wf = {
+      id: '987',
+      name: 'foo',
+      sequence: 10,
+      group_refs: []
+    };
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path={ routes.workflows.index } component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    await act(async () => {
+      wrapper.find(`button#down-${wf.id}`).simulate('click');
+    });
+    wrapper.update();
+
+    // PATCH WF
+    apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/${wf.id}`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ id: wf.id, sequence: wf.sequence + 1 });
+      return res.status(200).body({ foo: 'bar' });
+    }));
+
+    // RELOAD WORKFLOWS
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    await act(async () => {
+      jest.runAllTimers(); // debounced async call
+    });
+    wrapper.update();
+
+    jest.useRealTimers();
+  });
+
+  it('should move workflow by using buttons, multiple clicks', async () => {
+    jest.useFakeTimers();
+    expect.assertions(1);
+
+    const wf = {
+      id: '987',
+      name: 'foo',
+      sequence: 10,
+      group_refs: []
+    };
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
+    const storeReal = registry.getStore();
+
+    let wrapper;
+    await act(async()=> {
+      wrapper = mount(
+        <ComponentWrapper store={ storeReal }>
+          <Route path={ routes.workflows.index } component={ Workflows } />
+        </ComponentWrapper>
+      );
+    });
+    wrapper.update();
+
+    await act(async () => {
+      wrapper.find(`button#down-${wf.id}`).simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      wrapper.find(`button#down-${wf.id}`).simulate('click');
+    });
+    wrapper.update();
+    await act(async () => {
+      wrapper.find(`button#down-${wf.id}`).simulate('click');
+    });
+    wrapper.update();
+
+    // PATCH WF
+    apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/${wf.id}`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ id: wf.id, sequence: wf.sequence + 3 });
+      return res.status(200).body({ foo: 'bar' });
+    }));
+
+    // RELOAD WORKFLOWS
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        }
+      })
+    );
+
+    await act(async () => {
+      jest.runAllTimers(); // debounced async call
+    });
+    wrapper.update();
+
+    jest.useRealTimers();
+  });
+
   describe('table removal actions', () => {
     const wf1 = {
       id: '123',
       name: 'wf1',
       selected: true,
+      sequence: 1,
       group_refs: []
     };
     const wf2 = {
       id: '456',
       name: 'wf2',
       selected: true,
+      sequence: 1,
       group_refs: [ ]
     };
     const wf3 = {
       id: '789',
       name: 'wf',
       selected: true,
+      sequence: 1,
       group_refs: [ ]
     };
     let storeReal;
@@ -704,6 +857,57 @@ describe('<Workflows />', () => {
       await act(async () => {
         wrapper.find('button#submit-remove-workflow').simulate('click');
       });
+    });
+  });
+
+  describe('#reducer', () => {
+    let state;
+    let expectedResults;
+
+    it('reset selected', () => {
+      state = { selectedWorkflows: [ 'id1', 'id3' ], selectedAll: true };
+      expectedResults = { ...state, selectedAll: false, selectedWorkflows: []};
+
+      expect(workflowsListState(state, { type: 'resetSelected' })).toEqual(expectedResults);
+    });
+
+    it('select all on current page', () => {
+      state = { selectedWorkflows: [ 'id1', 'id3' ], selectedAll: false };
+      expectedResults = { ...state, selectedAll: true, selectedWorkflows: [ 'id1', 'id3', 'id2' ]};
+
+      expect(workflowsListState(state, { type: 'selectAll', payload: [ 'id1', 'id2' ]})).toEqual(expectedResults);
+    });
+
+    it('unselect all on current page', () => {
+      state = { selectedWorkflows: [ 'id1', 'id3', 'id2' ], selectedAll: true };
+      expectedResults = { ...state, selectedAll: false, selectedWorkflows: [ 'id3' ]};
+
+      expect(workflowsListState(state, { type: 'unselectAll', payload: [ 'id1', 'id2' ]})).toEqual(expectedResults);
+    });
+
+    it('all are selected on new page', () => {
+      const rows = [{ id: 'id1' }, { id: 'id3' }];
+
+      state = { selectedWorkflows: [ 'id1', 'id3', 'id2' ], selectedAll: false };
+      expectedResults = { ...state, selectedAll: true, rows };
+
+      expect(workflowsListState(state, { type: 'setRows', payload: rows })).toEqual(expectedResults);
+    });
+
+    it('not all are selected on new page', () => {
+      const rows = [{ id: 'id1' }, { id: 'id4' }];
+
+      state = { selectedWorkflows: [ 'id1', 'id3', 'id2' ], selectedAll: false };
+      expectedResults = { ...state, selectedAll: false, rows };
+
+      expect(workflowsListState(state, { type: 'setRows', payload: rows })).toEqual(expectedResults);
+    });
+
+    it('default', () => {
+      state = { selectedWorkflows: [ 'id1', 'id3', 'id2' ], selectedAll: false };
+      expectedResults = { ...state };
+
+      expect(workflowsListState(state, { type: 'default' })).toEqual(expectedResults);
     });
   });
 });
