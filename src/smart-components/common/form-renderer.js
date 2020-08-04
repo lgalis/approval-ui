@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import ReactFormRender from '@data-driven-forms/react-form-renderer/dist/cjs/form-renderer';
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
@@ -10,7 +9,7 @@ import Textarea from '@data-driven-forms/pf4-component-mapper/dist/cjs/textarea'
 import TextField from '@data-driven-forms/pf4-component-mapper/dist/cjs/text-field';
 import SubForm from '@data-driven-forms/pf4-component-mapper/dist/cjs/sub-form';
 
-const FormRenderer = ({ formContainer, ...rest }) => (
+const FormRenderer = (rest) => (
   <ReactFormRender
     componentMapper={ {
       [componentTypes.SELECT]: Select,
@@ -22,13 +21,5 @@ const FormRenderer = ({ formContainer, ...rest }) => (
     { ...rest }
   />
 );
-
-FormRenderer.propTypes = {
-  formContainer: PropTypes.oneOf([ 'default', 'modal' ])
-};
-
-FormRenderer.defaultProps = {
-  formContainer: 'default'
-};
 
 export default FormRenderer;
