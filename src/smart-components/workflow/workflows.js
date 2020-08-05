@@ -3,7 +3,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button, Checkbox } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
-import { sortable, truncate } from '@patternfly/react-table';
+import { sortable, truncate, cellWidth, wrappable } from '@patternfly/react-table';
 import { fetchWorkflows, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
@@ -25,14 +25,14 @@ import EditWorkflow from './edit-workflow-modal';
 import WorkflowTableContext from './workflow-table-context';
 
 const columns = (intl, selectedAll, selectAll) => [
-  { title: '' },
-  { title: <Checkbox onChange={ selectAll } isChecked={ selectedAll } id="select-all"/> },
-  { title: intl.formatMessage(worfklowMessages.sequence), transforms: [ sortable ]},
+  { title: '', transforms: [ cellWidth(1) ]},
+  { title: <Checkbox onChange={ selectAll } isChecked={ selectedAll } id="select-all"/>, transforms: [ cellWidth(1) ]},
+  { title: intl.formatMessage(worfklowMessages.sequence), transforms: [ sortable, wrappable ]},
   {
     title: intl.formatMessage(tableToolbarMessages.name),
     transforms: [ sortable ]
   },
-  { title: intl.formatMessage(formMessages.description), transforms: [ sortable ], cellTransforms: [ truncate ]},
+  { title: intl.formatMessage(formMessages.description), transforms: [ sortable, cellWidth(35) ], cellTransforms: [ truncate ]},
   { title: intl.formatMessage(formMessages.groups) }
 ];
 
