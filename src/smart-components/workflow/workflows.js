@@ -1,13 +1,11 @@
-import React, { Fragment, useEffect, useReducer, useState } from 'react';
+import React, { Fragment, useEffect, useReducer, useRef } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
-import { ToolbarGroup, ToolbarItem, Button } from '@patternfly/react-core';
+import { ToolbarGroup, ToolbarItem, Button, Checkbox } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
-import { expandable, sortable } from '@patternfly/react-table';
-import { fetchWorkflows, expandWorkflow, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
-import AddWorkflow from './add-groups/add-workflow-wizard';
-import EditWorkflowInfo from './edit-workflow-info-modal';
-import EditWorkflowGroups from './edit-workflow-groups-modal';
+import { sortable, truncate, cellWidth, wrappable } from '@patternfly/react-table';
+import { fetchWorkflows, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
+import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
 import { TableToolbarView } from '../../presentational-components/shared/table-toolbar-view';
@@ -18,14 +16,24 @@ import asyncDebounce from '../../utilities/async-debounce';
 import { scrollToTop } from '../../helpers/shared/helpers';
 import TableEmptyState from '../../presentational-components/shared/table-empty-state';
 import routesLinks from '../../constants/routes';
+import { useIntl } from 'react-intl';
+import commonMessages from '../../messages/common.message';
+import worfklowMessages from '../../messages/workflows.messages';
+import formMessages from '../../messages/form.messages';
+import tableToolbarMessages from '../../messages/table-toolbar.messages';
+import EditWorkflow from './edit-workflow-modal';
+import WorkflowTableContext from './workflow-table-context';
 
-const columns = [{
-  title: 'Name',
-  cellFormatters: [ expandable ],
-  transforms: [ sortable ]
-},
-{ title: 'Description', transforms: [ sortable ]},
-{ title: 'Sequence', transforms: [ sortable ]}
+const columns = (intl, selectedAll, selectAll) => [
+  { title: '', transforms: [ cellWidth(1) ]},
+  { title: <Checkbox onChange={ selectAll } isChecked={ selectedAll } id="select-all"/>, transforms: [ cellWidth(1) ]},
+  { title: intl.formatMessage(worfklowMessages.sequence), transforms: [ sortable, wrappable ]},
+  {
+    title: intl.formatMessage(tableToolbarMessages.name),
+    transforms: [ sortable ]
+  },
+  { title: intl.formatMessage(formMessages.description), transforms: [ sortable, cellWidth(35) ], cellTransforms: [ truncate ]},
+  { title: intl.formatMessage(formMessages.groups) }
 ];
 
 const debouncedFilter = asyncDebounce(
@@ -40,45 +48,92 @@ const debouncedFilter = asyncDebounce(
   1000
 );
 
-const prepareChips = (filterValue) => filterValue ? [{
-  category: 'Name',
+const prepareChips = (filterValue, intl) => filterValue ? [{
+  category: intl.formatMessage(tableToolbarMessages.name),
   key: 'name',
   chips: [{ name: filterValue, value: filterValue }]
 }] : [];
 
 const initialState = (filterValue = '') => ({
   filterValue,
-  isOpen: false,
   isFetching: true,
-  isFiltering: false
+  isFiltering: false,
+  selectedWorkflows: [],
+  selectedAll: false,
+  rows: []
 });
 
-const workflowsListState = (state, action) => {
+const areSelectedAll = (rows = [], selected) => rows.every(row => selected.includes(row.id));
+
+const unique = (value, index, self) => self.indexOf(value) === index;
+
+export const workflowsListState = (state, action) => {
   switch (action.type) {
+    case 'setRows':
+      return {
+        ...state,
+        rows: action.payload,
+        selectedAll: areSelectedAll(action.payload, state.selectedWorkflows)
+      };
     case 'setFetching':
-      return { ...state, isFetching: action.payload };
+      return {
+        ...state,
+        isFetching: action.payload
+      };
     case 'setFilterValue':
       return { ...state, filterValue: action.payload };
+    case 'select':
+      return {
+        ...state,
+        selectedAll: false,
+        selectedWorkflows: state.selectedWorkflows.includes(action.payload)
+          ? state.selectedWorkflows.filter(id => id !== action.payload)
+          : [ ...state.selectedWorkflows, action.payload ]
+      };
+    case 'selectAll':
+      return {
+        ...state,
+        selectedWorkflows: [ ...state.selectedWorkflows, ...action.payload ].filter(unique),
+        selectedAll: true
+      };
+    case 'unselectAll':
+      return {
+        ...state,
+        selectedWorkflows: state.selectedWorkflows.filter(selected => !action.payload.includes(selected)),
+        selectedAll: false
+      };
+    case 'resetSelected':
+      return {
+        ...state,
+        selectedWorkflows: [],
+        selectedAll: false
+      };
     case 'setFilteringFlag':
-      return { ...state, isFiltering: action.payload };
+      return {
+        ...state,
+        isFiltering: action.payload
+      };
     default:
       return state;
   }
 };
 
 const Workflows = () => {
-  const [ selectedWorkflows, setSelectedWorkflows ] = useState([]);
+  const moveFunctionsCache = useRef({});
   const { workflows: { data, meta }, sortBy, filterValueRedux } = useSelector(
     ({ workflowReducer: { workflows, sortBy, filterValue: filterValueRedux }}) => ({ workflows, sortBy, filterValueRedux })
     , shallowEqual
   );
-  const [{ filterValue, isFetching, isFiltering }, stateDispatch ] = useReducer(
+  const [{ filterValue, isFetching, isFiltering, selectedWorkflows, selectedAll, rows }, stateDispatch ] = useReducer(
     workflowsListState,
     initialState(filterValueRedux)
   );
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const intl = useIntl();
+
+  const setSelectedWorkflows = (id) => stateDispatch({ type: 'select', payload: id });
 
   const updateWorkflows = (pagination) => {
     stateDispatch({ type: 'setFetching', payload: true });
@@ -91,6 +146,10 @@ const Workflows = () => {
     updateWorkflows(defaultSettings);
     scrollToTop();
   }, []);
+
+  useEffect(() => {
+    stateDispatch({ type: 'setRows', payload: createRows(data) });
+  }, [ data ]);
 
   const handleFilterChange = (value) => {
     stateDispatch({ type: 'setFilterValue', payload: value });
@@ -110,54 +169,35 @@ const Workflows = () => {
   const routes = () => <Fragment>
     <Route exact path={ routesLinks.workflows.add } render={ props => <AddWorkflow { ...props }
       postMethod={ updateWorkflows } /> }/>
-    <Route exact path={ routesLinks.workflows.editInfo } render={ props => <EditWorkflowInfo editType='info' { ...props }
-      postMethod={ updateWorkflows } /> }/>
-    <Route exact path={ routesLinks.workflows.editGroups } render={ props => <EditWorkflowGroups editType='groups' { ...props }
-      postMethod={ updateWorkflows } /> }/>
-    <Route exact path={ routesLinks.workflows.editSequence } render={ props => <EditWorkflowInfo editType='sequence' { ...props }
-      postMethod={ updateWorkflows } /> }/>
+    <Route exact path={ routesLinks.workflows.edit } component={ EditWorkflow }/>
     <Route exact path={ routesLinks.workflows.remove }
       render={ props => <RemoveWorkflow
         { ...props }
         ids={ selectedWorkflows }
         fetchData={ updateWorkflows }
-        setSelectedWorkflows={ setSelectedWorkflows }
+        resetSelectedWorkflows={ () => stateDispatch({ type: 'resetSelected' }) }
       /> }
     />
   </Fragment>;
 
-  const actionResolver = (_workflowData, { rowIndex }) => rowIndex % 2 === 1 ?
-    null
-    : [
-      {
-        title: 'Edit info',
-        component: 'button',
-        onClick: (_event, _rowId, workflow) =>
-          history.push({ pathname: routesLinks.workflows.editInfo, search: `?workflow=${workflow.id}` })
-      },
+  const actionResolver = () => [
+    {
+      title: intl.formatMessage(worfklowMessages.edit),
+      component: 'button',
+      onClick: (_event, _rowId, workflow) =>
+        history.push({ pathname: routesLinks.workflows.edit, search: `?workflow=${workflow.id}` })
+    },
+    {
+      title: intl.formatMessage(commonMessages.delete),
+      component: 'button',
+      onClick: (_event, _rowId, workflow) =>
+        history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })
+    }
+  ];
 
-      {
-        title: 'Edit groups',
-        component: 'button',
-        onClick: (_event, _rowId, workflow) =>
-          history.push({ pathname: routesLinks.workflows.editGroups, search: `?workflow=${workflow.id}` })
-      },
-      {
-        title: 'Edit sequence',
-        component: 'button',
-        onClick: (_event, _rowId, workflow) =>
-          history.push({ pathname: routesLinks.workflows.editSequence, search: `?workflow=${workflow.id}` })
-      },
-      {
-        title: 'Delete',
-        component: 'button',
-        onClick: (_event, _rowId, workflow) =>
-          history.push({ pathname: routesLinks.workflows.remove, search: `?workflow=${workflow.id}` })
-      }
-    ];
-
-  const setCheckedItems = (checkedWorkflows) =>
-    setSelectedWorkflows(checkedWorkflows.map(wf => wf.id));
+  const selectAllFunction = () => selectedAll
+    ? stateDispatch({ type: 'unselectAll', payload: data.map(wf => wf.id) })
+    : stateDispatch({ type: 'selectAll', payload: data.map(wf => wf.id) });
 
   const anyWorkflowsSelected = selectedWorkflows.length > 0;
 
@@ -166,9 +206,9 @@ const Workflows = () => {
       <Link id="add-workflow-link" to={ { pathname: routesLinks.workflows.add } }>
         <Button
           variant="primary"
-          aria-label="Create approval process"
+          aria-label={ intl.formatMessage(formMessages.create) }
         >
-          Create approval process
+          { intl.formatMessage(formMessages.create) }
         </Button>
       </Link>
     </ToolbarItem>
@@ -179,70 +219,65 @@ const Workflows = () => {
         to={ { pathname: routesLinks.workflows.remove } }
       >
         <Button
-          variant="link"
+          variant="secondary"
           isDisabled={ !anyWorkflowsSelected }
-          style={ { color: anyWorkflowsSelected ? 'var(--pf-global--danger-color--100)' : 'var(--pf-global--disabled-color--100)'	} }
-          aria-label="Delete approval process"
+          aria-label={ intl.formatMessage(worfklowMessages.deleteApprovalTitle) }
         >
-          Delete
+          { intl.formatMessage(commonMessages.delete) }
         </Button>
       </Link>
     </ToolbarItem>
   </ToolbarGroup>;
 
-  const onCollapse = (id, setRows, setOpen) => {
-    dispatch(expandWorkflow(id));
-    setRows((rows) => setOpen(rows, id));
-  };
-
   return (
     <Fragment>
       <TopToolbar>
-        <TopToolbarTitle title="Approval"/>
+        <TopToolbarTitle title={ intl.formatMessage(commonMessages.approvalTitle) }/>
         <AppTabs/>
       </TopToolbar>
-      <TableToolbarView
-        sortBy={ sortBy }
-        onSort={ onSort }
-        data={ data }
-        isSelectable={ true }
-        createRows={ createRows }
-        columns={ columns }
-        fetchData={ updateWorkflows }
-        routes={ routes }
-        actionResolver={ actionResolver }
-        titlePlural="approval processes"
-        titleSingular="approval process"
-        pagination={ meta }
-        setCheckedItems={ setCheckedItems }
-        toolbarButtons={ toolbarButtons }
-        filterValue={ filterValue }
-        onFilterChange={ handleFilterChange }
-        isLoading={ isFetching || isFiltering }
-        onCollapse={ onCollapse }
-        renderEmptyState={ () => (
-          <TableEmptyState
-            title={ filterValue === '' ? 'No approval processes' : 'No results found' }
-            Icon={ SearchIcon }
-            PrimaryAction={ () =>
-              filterValue !== '' ? (
-                <Button onClick={ () => handleFilterChange('') } variant="link">
-                  Clear all filters
-                </Button>
-              ) : null
-            }
-            description={
-              filterValue === ''
-                ? 'No approval processes.'
-                : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
-            }
-          />
-        ) }
-        activeFiltersConfig={ {
-          filters: prepareChips(filterValue),
-          onDelete: () => handleFilterChange('')
-        } }
-      />
+      <WorkflowTableContext.Provider value={ { selectedWorkflows, setSelectedWorkflows, cache: moveFunctionsCache.current } }>
+        <TableToolbarView
+          sortBy={ sortBy }
+          onSort={ onSort }
+          rows={ rows }
+          columns={ columns(intl, selectedAll, selectAllFunction) }
+          fetchData={ updateWorkflows }
+          routes={ routes }
+          actionResolver={ actionResolver }
+          titlePlural={ intl.formatMessage(worfklowMessages.approvalProcesses) }
+          titleSingular={ intl.formatMessage(worfklowMessages.approvalProcess) }
+          pagination={ meta }
+          toolbarButtons={ toolbarButtons }
+          filterValue={ filterValue }
+          onFilterChange={ handleFilterChange }
+          isLoading={ isFetching || isFiltering }
+          renderEmptyState={ () => (
+            <TableEmptyState
+              title={ filterValue === ''
+                ? intl.formatMessage(worfklowMessages.noApprovalProcesses)
+                : intl.formatMessage(tableToolbarMessages.noResultsFound)
+              }
+              Icon={ SearchIcon }
+              PrimaryAction={ () =>
+                filterValue !== '' ? (
+                  <Button onClick={ () => handleFilterChange('') } variant="link">
+                    { intl.formatMessage(tableToolbarMessages.clearAllFilters) }
+                  </Button>
+                ) : null
+              }
+              description={
+                filterValue === ''
+                  ? intl.formatMessage(worfklowMessages.noApprovalProcesses)
+                  : intl.formatMessage(tableToolbarMessages.clearAllFiltersDescription)
+              }
+            />
+          ) }
+          activeFiltersConfig={ {
+            filters: prepareChips(filterValue, intl),
+            onDelete: () => handleFilterChange('')
+          } }
+        />
+      </WorkflowTableContext.Provider>
     </Fragment>
   );
 };

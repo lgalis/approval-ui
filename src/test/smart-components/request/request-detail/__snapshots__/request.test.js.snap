@@ -138,7 +138,6 @@ exports[`<Request /> should render correctly 1`] = `
                     id="111-name"
                   >
                     Group1
-                     
                   </span>
                 </DataListCell>,
                 <DataListCell>
@@ -151,20 +150,44 @@ exports[`<Request /> should render correctly 1`] = `
                     }
                   >
                     no-state
-                     
                   </span>
                 </DataListCell>,
                 <DataListCell>
-                  <Level>
-                    <LevelItem />
-                  </Level>
+                  <RequestActions
+                    approveLink="/request/approve"
+                    canApproveDeny={true}
+                    canComment={true}
+                    commentLink="/request/add-comment"
+                    denyLink="/request/deny"
+                    request={
+                      Object {
+                        "actions": Array [
+                          Object {
+                            "comments": null,
+                            "id": "1",
+                            "operation": "start",
+                            "processed_by": "system",
+                          },
+                          Object {
+                            "comments": null,
+                            "id": "2",
+                            "operation": "notify",
+                            "processed_by": "system",
+                          },
+                        ],
+                        "group_name": "Group1",
+                        "id": "111",
+                        "metadata": Object {
+                          "user_capabilities": Object {
+                            "approve": true,
+                            "deny": true,
+                          },
+                        },
+                        "state": "no-state",
+                      }
+                    }
+                  />
                 </DataListCell>,
-                <DataListCell
-                  aria-label="Actions"
-                  aria-labelledby="request-111 check-request-action111"
-                  className="pf-c-data-list__action"
-                  id="workflow-111"
-                />,
               ]
             }
             key=".1"
@@ -183,7 +206,6 @@ exports[`<Request /> should render correctly 1`] = `
                     id="111-name"
                   >
                     Group1
-                     
                   </span>
                 </div>
               </DataListCell>
@@ -202,7 +224,6 @@ exports[`<Request /> should render correctly 1`] = `
                     }
                   >
                     no-state
-                     
                   </span>
                 </div>
               </DataListCell>
@@ -212,30 +233,49 @@ exports[`<Request /> should render correctly 1`] = `
                 <div
                   className="pf-c-data-list__cell"
                 >
-                  <Level>
+                  <RequestActions
+                    approveLink="/request/approve"
+                    canApproveDeny={true}
+                    canComment={true}
+                    commentLink="/request/add-comment"
+                    denyLink="/request/deny"
+                    request={
+                      Object {
+                        "actions": Array [
+                          Object {
+                            "comments": null,
+                            "id": "1",
+                            "operation": "start",
+                            "processed_by": "system",
+                          },
+                          Object {
+                            "comments": null,
+                            "id": "2",
+                            "operation": "notify",
+                            "processed_by": "system",
+                          },
+                        ],
+                        "group_name": "Group1",
+                        "id": "111",
+                        "metadata": Object {
+                          "user_capabilities": Object {
+                            "approve": true,
+                            "deny": true,
+                          },
+                        },
+                        "state": "no-state",
+                      }
+                    }
+                  >
                     <div
-                      className="pf-l-level"
-                    >
-                      <LevelItem>
-                        <div />
-                      </LevelItem>
-                    </div>
-                  </Level>
+                      style={
+                        Object {
+                          "display": "flex",
+                        }
+                      }
+                    />
+                  </RequestActions>
                 </div>
-              </DataListCell>
-              <DataListCell
-                aria-label="Actions"
-                aria-labelledby="request-111 check-request-action111"
-                className="pf-c-data-list__action"
-                id="workflow-111"
-                key="request-111"
-              >
-                <div
-                  aria-label="Actions"
-                  aria-labelledby="request-111 check-request-action111"
-                  className="pf-c-data-list__cell pf-c-data-list__action"
-                  id="workflow-111"
-                />
               </DataListCell>
             </div>
           </DataListItemCells>
@@ -353,11 +393,10 @@ exports[`<Request /> should render correctly 1`] = `
                                             />
                                           </svg>
                                         </OnRunningIcon>
-                                         
-                                        Started by  system
+                                         
+                                        Started by system
                                       </p>
                                     </Text>
-                                     
                                   </div>
                                 </TextContent>
                               </div>
@@ -419,11 +458,10 @@ exports[`<Request /> should render correctly 1`] = `
                                             />
                                           </svg>
                                         </EnvelopeIcon>
-                                         
-                                        Notified by  system
+                                         
+                                        Notified by system
                                       </p>
                                     </Text>
-                                     
                                   </div>
                                 </TextContent>
                               </div>

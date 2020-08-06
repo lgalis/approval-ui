@@ -42,3 +42,18 @@
   color: var(--pf-global--Color--100);
   font-weight: bold;
 }
+
+.ins-c-primary-toolbar .ins-c-primary-toolbar__group-filter {
+   margin-right: 7px;
+ }
+
+.span-block {
+  display: block;
+}
+
+.group-label {
+  max-width: 256px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

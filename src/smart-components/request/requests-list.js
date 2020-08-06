@@ -3,13 +3,12 @@ import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button } from '@patternfly/react-core';
-import { expandable, sortable, wrappable, cellWidth } from '@patternfly/react-table';
+import { sortable, wrappable, cellWidth } from '@patternfly/react-table';
 import { useIntl } from 'react-intl';
 import { SearchIcon } from '@patternfly/react-icons';
 import isEmpty from 'lodash/isEmpty';
 
 import { fetchRequests,
-  expandRequest,
   sortRequests,
   setFilterValueRequests,
   clearFilterValueRequests,
@@ -25,18 +24,18 @@ import TableEmptyState from '../../presentational-components/shared/table-empty-
 import UserContext from '../../user-context';
 import { prepareChips } from './chips-helpers';
 import routes from '../../constants/routes';
+import tableToolbarMessages from '../../messages/table-toolbar.messages';
+import requestsMessages from '../../messages/requests.messages';
+import commonMessages from '../../messages/common.message';
 
-const columns = [{
-  title: 'Request ID',
-  cellFormatters: [ expandable ],
+const columns = (intl) => [{
+  title: intl.formatMessage(requestsMessages.requestsIdColumn),
   transforms: [ sortable, cellWidth(5) ]
 },
-{ title: 'Name', transforms: [ sortable, wrappable, cellWidth(25) ]},
-{ title: 'Requester', transforms: [ sortable, wrappable, cellWidth(20) ]},
-{ title: 'Opened   ', transforms: [ sortable, cellWidth(10) ]},
-{ title: 'Updated  ', transforms: [ cellWidth(10) ]},
-{ title: 'Status   ', transforms: [ sortable, cellWidth(15) ]},
-{ title: 'Decision ', transforms: [ sortable, cellWidth(15) ]}
+{ title: intl.formatMessage(tableToolbarMessages.name), transforms: [ sortable, wrappable, cellWidth(25) ]},
+{ title: intl.formatMessage(requestsMessages.requesterColumn), transforms: [ sortable, wrappable, cellWidth(20) ]},
+{ title: intl.formatMessage(requestsMessages.updatedColumn), transforms: [ cellWidth(10) ]},
+{ title: intl.formatMessage(requestsMessages.statusColumn), transforms: [ sortable, cellWidth(15) ]}
 ];
 
 const debouncedFilter = asyncDebounce(
@@ -55,7 +54,8 @@ const initialState = (nameValue = '', requesterValue = '') => ({
   requesterValue,
   isOpen: false,
   isFetching: true,
-  isFiltering: false
+  isFiltering: false,
+  rows: []
 });
 
 const requestsListState = (state, action) => {
@@ -70,17 +70,19 @@ const requestsListState = (state, action) => {
       return { ...state, requesterValue: '', nameValue: '', isFetching: true };
     case 'setFilteringFlag':
       return { ...state, isFiltering: action.payload };
+    case 'setRows':
+      return { ...state, rows: action.payload };
     default:
       return state;
   }
 };
 
-const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexpath }) => {
+const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
   const { requests: { data, meta }, sortBy, filterValue } = useSelector(
     ({ requestReducer: { requests, sortBy, filterValue }}) => ({ requests, sortBy, filterValue }),
     shallowEqual
   );
-  const [{ nameValue, isFetching, isFiltering, requesterValue }, stateDispatch ] = useReducer(
+  const [{ nameValue, isFetching, isFiltering, requesterValue, rows }, stateDispatch ] = useReducer(
     requestsListState,
     initialState(filterValue.name, filterValue.requester)
   );
@@ -114,6 +116,10 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexp
     scrollToTop();
   }, [ persona ]);
 
+  useEffect(() => {
+    stateDispatch({ type: 'setRows', payload: createRows(actionResolver, data, indexpath, intl) });
+  }, [ data ]);
+
   const handleFilterChange = (value, type) => {
     const updateFilter = () => dispatch(setFilterValueRequests(value, type));
 
@@ -140,11 +146,6 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexp
     );
   };
 
-  const onCollapse = (id, setRows, setOpen) => {
-    dispatch(expandRequest(id));
-    setRows((rows) => setOpen(rows, id));
-  };
-
   const onSort = (_e, index, direction, { property }) => {
     stateDispatch({ type: 'setFetching', payload: true });
     dispatch(sortRequests({ index, direction, property }));
@@ -165,109 +166,79 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexp
   return (
     <Fragment>
       <TopToolbar>
-        <TopToolbarTitle title="Approval"/>
+        <TopToolbarTitle title={ intl.formatMessage(commonMessages.approvalTitle) }/>
         { isApprovalAdmin && <AppTabs/> }
       </TopToolbar>
       <TableToolbarView
         sortBy={ sortBy }
         onSort={ onSort }
-        data={ data }
-        createRows={ createRows }
-        indexpath={ indexpath }
-        columns={ columns }
+        rows={ rows }
+        columns={ columns(intl) }
         fetchData={ updateRequests }
         routes={ routes }
-        actionResolver={ actionResolver }
-        actionsDisabled={ actionsDisabled }
-        titlePlural="requests"
-        titleSingular="request"
+        titlePlural={ intl.formatMessage(requestsMessages.requests) }
+        titleSingular={ intl.formatMessage(requestsMessages.request) }
         pagination={ meta }
         handlePagination={ updateRequests }
         filterValue={ nameValue }
         onFilterChange={ (value) => handleFilterChange(value, 'name') }
         isLoading={ isFetching || isFiltering }
-        onCollapse={ onCollapse }
         renderEmptyState={ () => (
           <TableEmptyState
-            title={ isEmpty(filterValue) ? 'No requests' : 'No results found' }
+            title={ isEmpty(filterValue)
+              ? intl.formatMessage(tableToolbarMessages.noResultsFound, { results: intl.formatMessage(requestsMessages.requests) })
+              : intl.formatMessage(tableToolbarMessages.noResultsFound)
+            }
             Icon={ SearchIcon }
             PrimaryAction={ () =>
               isEmpty(filterValue) ? null : (
                 <Button onClick={ clearFilters } variant="link">
-                            Clear all filters
+                  { intl.formatMessage(tableToolbarMessages.clearAllFilters) }
                 </Button>
               )
             }
             description={
               isEmpty(filterValue)
                 ? ''
-                : 'No results match the filter criteria. Remove all filters or clear all filters to show results.'
+                : intl.formatMessage(tableToolbarMessages.clearAllFiltersDescription)
             }
           />
         ) }
         activeFiltersConfig={ {
-          filters: prepareChips({ name: nameValue, requester: requesterValue, status: filterValue.status, decision: filterValue.decision }),
+          filters: prepareChips({ name: nameValue, requester: requesterValue, decision: filterValue.decision }, intl),
           onDelete: (_e, chip, deleteAll) => deleteAll ? clearFilters() : onDeleteChip(chip)
         } }
         filterConfig={ [
           {
-            label: intl.formatMessage({
-              id: 'requester',
-              defaultMessage: 'Requester'
-            }),
+            label: intl.formatMessage(requestsMessages.requesterColumn),
             filterValues: {
-              placeholder: intl.formatMessage({
-                id: 'filter-by-requester',
-                defaultMessage: 'Filter by requester'
-              }),
-              'aria-label': intl.formatMessage({
-                id: 'filter-by-requester',
-                defaultMessage: 'Filter by requester'
-              }),
+              placeholder: intl.formatMessage(
+                tableToolbarMessages.filterByTitle,
+                { title: intl.formatMessage(requestsMessages.requesterColumn).toLowerCase() }
+              ),
+              'aria-label': intl.formatMessage(
+                tableToolbarMessages.filterByTitle,
+                { title: intl.formatMessage(requestsMessages.requesterColumn).toLowerCase() }
+              ),
               onChange: (_event, value) => handleFilterChange(value, 'requester'),
               value: requesterValue
             }
           }, {
-            label: intl.formatMessage({
-              id: 'status',
-              defaultMessage: 'Status'
-            }),
+            label: intl.formatMessage(requestsMessages.statusColumn),
             type: 'checkbox',
             filterValues: {
-              placeholder: intl.formatMessage({
-                id: 'filter-by-status',
-                defaultMessage: 'Filter by status'
-              }),
-              'aria-label': intl.formatMessage({
-                id: 'filter-by-status',
-                defaultMessage: 'Filter by status'
-              }),
-              onChange: (_event, value) => handleFilterChange(value, 'status'),
-              value: filterValue.status,
-              items: [ 'canceled', 'completed', 'failed', 'notified', 'pending', 'skipped', 'started' ].map((state) => ({
-                label: state,
-                value: state
-              }))
-            }
-          }, {
-            label: intl.formatMessage({
-              id: 'decision',
-              defaultMessage: 'Decision'
-            }),
-            type: 'checkbox',
-            filterValues: {
-              placeholder: intl.formatMessage({
-                id: 'filter-by-decision',
-                defaultMessage: 'Filter by decision'
-              }),
-              'aria-label': intl.formatMessage({
-                id: 'filter-by-decision',
-                defaultMessage: 'Filter by decision'
-              }),
+              placeholder: intl.formatMessage(
+                tableToolbarMessages.filterByTitle,
+                { title: intl.formatMessage(requestsMessages.statusColumn).toLowerCase() }
+              ),
+              'aria-label': intl.formatMessage(
+                tableToolbarMessages.filterByTitle,
+                { title: intl.formatMessage(requestsMessages.statusColumn).toLowerCase() }
+              ),
               onChange: (_event, value) => handleFilterChange(value, 'decision'),
               value: filterValue.decision,
               items: [ 'approved', 'canceled', 'denied', 'error', 'undecided' ].map((state) => ({
-                label: state,
+                label: intl.formatMessage(requestsMessages[state]),
                 value: state
               }))
             }
@@ -279,15 +250,14 @@ const RequestsList = ({ routes, persona, actionResolver, actionsDisabled, indexp
 
 RequestsList.propTypes = {
   routes: PropTypes.func,
-  actionResolver: PropTypes.func,
-  actionsDisabled: PropTypes.func,
   persona: PropTypes.string,
-  type: PropTypes.string,
-  indexpath: PropTypes.shape ({ index: PropTypes.string })
+  indexpath: PropTypes.shape ({ index: PropTypes.string }),
+  actionResolver: PropTypes.func
 };
-RequestsList.default = {
-  actionsDisabled: () => true,
-  indexpath: routes.request
+
+RequestsList.defaultProps = {
+  indexpath: routes.request,
+  actionResolver: () => false
 };
 
 export default RequestsList;

@@ -20,13 +20,16 @@ import requestReducer, { requestsInitialState } from '../../../../redux/reducers
 import UserContext from '../../../../user-context';
 import ActionModal from '../../../../smart-components/request/action-modal';
 import { APPROVAL_ADMINISTRATOR_ROLE } from '../../../../helpers/shared/helpers';
+import { IntlProvider } from 'react-intl';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=123' ]}) => (
-  <Provider store={ store } >
-    <MemoryRouter initialEntries={ initialEntries }>
-      { children }
-    </MemoryRouter>
-  </Provider>
+  <IntlProvider locale="en">
+    <Provider store={ store } >
+      <MemoryRouter initialEntries={ initialEntries }>
+        { children }
+      </MemoryRouter>
+    </Provider>
+  </IntlProvider>
 );
 
 describe('<AllRequestDetail />', () => {
@@ -255,11 +258,7 @@ describe('<AllRequestDetail />', () => {
       wrapper.update();
 
       await act(async() => {
-        wrapper.find('#request-request-dropdown-123').first().simulate('click');
-      });
-      wrapper.update();
-      await act(async() => {
-        wrapper.find('Link#request-123-request-comment').first().simulate('click', { button: 0 });
+        wrapper.find('a#comment-123').first().simulate('click', { button: 0 });
       });
       wrapper.update();
 

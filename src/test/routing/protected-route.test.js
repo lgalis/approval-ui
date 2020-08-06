@@ -2,15 +2,20 @@ import { MemoryRouter, Route, Redirect } from 'react-router-dom';
 import UserContext from '../../user-context';
 import ProtectedRoute from '../../routing/protected-route';
 import { APPROVAL_ADMINISTRATOR_ROLE } from '../../helpers/shared/helpers';
+import { IntlProvider } from 'react-intl';
 
 describe('<ProtectedRoute />', () => {
-  const ComponentWrapper = ({ children, value }) => <MemoryRouter initialEntries={ [ '/initial' ] } initialIndex={ 0 }>
-    <UserContext.Provider value={ value }>
-      <Route path="/initial">
-        { children }
-      </Route>
-    </UserContext.Provider>
-  </MemoryRouter>;
+  const ComponentWrapper = ({ children, value }) => (
+    <IntlProvider locale="en">
+      <MemoryRouter initialEntries={ [ '/initial' ] } initialIndex={ 0 }>
+        <UserContext.Provider value={ value }>
+          <Route path="/initial">
+            { children }
+          </Route>
+        </UserContext.Provider>
+      </MemoryRouter>
+    </IntlProvider>
+  );
 
   it('is admin', () => {
     const roles = {};
