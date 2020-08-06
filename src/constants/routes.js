@@ -24,9 +24,7 @@ const routes = {
     index: '/workflows',
     add: '/workflows/add-workflow',
     remove: '/workflows/remove',
-    editInfo: '/workflows/edit-info',
-    editGroups: '/workflows/edit-groups',
-    editSequence: '/workflows/edit-sequence'
+    edit: '/workflows/edit'
   }
 };
 

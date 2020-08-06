@@ -1,43 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { useIsApprovalAdmin, isRequestStateActive } from '../../../helpers/shared/helpers';
+import { useIsApprovalAdmin } from '../../../helpers/shared/helpers';
 import { ActionTranscript } from './action-transcript';
 
 import {
   Stack,
   StackItem,
-  Button,
   DataListItem,
   DataListItemRow,
   DataListCell,
   DataListToggle,
   DataListItemCells,
   DataListContent,
-  DropdownItem,
-  Dropdown,
-  DropdownPosition,
-  KebabToggle,
   TextVariants,
-  TextContent,
-  Level,
-  LevelItem
+  TextContent
 } from '@patternfly/react-core';
 import UserContext from '../../../user-context';
 import routes from '../../../constants/routes';
+import { useIntl } from 'react-intl';
+import requestsMessages from '../../../messages/requests.messages';
+import { untranslatedMessage } from '../../../utilities/constants';
+import RequestActions from '../request-actions';
 
 export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
-  const [ isKebabOpen, setIsKebabOpen ] = useState(false);
   const { userRoles: userRoles } = useContext(UserContext);
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
-
-  const onKebabToggle = isOpen => {
-    setIsKebabOpen(isOpen);
-  };
-
-  const onKebabSelect = () => {
-    setIsKebabOpen(isKebabOpen => !isKebabOpen);
-  };
+  const intl = useIntl();
 
   const checkCapability = (item, capability) => {
     if (isApprovalAdmin) {
@@ -45,36 +33,6 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
     }
 
     return item.metadata && item.metadata.user_capabilities && item.metadata.user_capabilities[capability];
-  };
-
-  const buildRequestActionKebab = (request) => {
-    return (
-      <Dropdown
-        position={ DropdownPosition.right }
-        onSelect={ onKebabSelect }
-        toggle={ <KebabToggle id={ `request-request-dropdown-${request.id}` } onToggle={ onKebabToggle }/> }
-        isOpen={ isKebabOpen }
-        dropdownItems={ [
-          <DropdownItem aria-label="Add Comment" key={ `add_comment_${request.id}` } component="button">
-            <Link
-              id={ `request-${request.id}-request-comment` }
-              to={ {
-                pathname: indexpath.addComment,
-                search: `?request=${request.id}`
-              } }
-              className="pf-c-dropdown__menu-item"
-            >
-              Comment
-            </Link>
-          </DropdownItem>
-        ] }
-        isPlain
-      />
-    );
-  };
-
-  const renderActionList = (request) => {
-    return <ActionTranscript actionList={ request.actions }/>;
   };
 
   return (
@@ -87,51 +45,36 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
           isExpanded={ isExpanded }
           id={ `request-${item.id}` }
           aria-labelledby={ `request-${item.id} request-${item.id}` }
-          aria-label="Toggle details for"
+          aria-label={ intl.formatMessage(requestsMessages.toogleDetailsFor) }
         />
         <DataListItemCells
           dataListCells={ [
             <DataListCell key={ item.id }>
-              <span id={ `${item.id}-name` }>{ `${item.group_name ? item.group_name : item.name}` } </span>
+              <span id={ `${item.id}-name` }>{ item.group_name ? item.group_name : item.name }</span>
             </DataListCell>,
             <DataListCell key={ `${item.id}-state` }>
-              <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>{ `${item.state}` } </span>
+              <span style={ { textTransform: 'capitalize' } } id={ `${item.id}-state` }>
+                { intl.formatMessage(requestsMessages[item.state] || untranslatedMessage(item.state)) }
+              </span>
             </DataListCell>,
             <DataListCell key={ `${item.id}-action` }>
-              <Level>
-                <LevelItem>
-                  { (isRequestStateActive(item.state) && checkCapability(item, 'approve')) &&
-                    <div>
-                      <Link id={ `approve-${item.id}` } to={ { pathname: indexpath.approve, search: `?request=${item.id}` } }>
-                        <Button variant="link" aria-label="Approve Request">
-                          Approve
-                        </Button>
-                      </Link>
-                      <Link id={ `deny-${item.id}` } to={ { pathname: indexpath.deny, search: `?request=${item.id}` } }>
-                        <Button variant="link" className="destructive-color" aria-label="Deny Request">
-                          Deny
-                        </Button>
-                      </Link>
-                    </div> }
-                </LevelItem>
-              </Level>
-            </DataListCell>,
-            <DataListCell
-              key={ `request-${item.id}` }
-              className="pf-c-data-list__action"
-              aria-labelledby={ `request-${item.id} check-request-action${item.id}` }
-              id={ `workflow-${item.id}` }
-              aria-label="Actions">
-              { isRequestStateActive(item.state) && checkCapability(item, 'memo') && buildRequestActionKebab(item) }
+              <RequestActions
+                approveLink={ indexpath.approve }
+                denyLink={ indexpath.deny }
+                commentLink={ indexpath.addComment }
+                request={ item }
+                canApproveDeny={ checkCapability(item, 'approve') }
+                canComment={ checkCapability(item, 'memo') }
+              />
             </DataListCell>
           ] }/>
       </DataListItemRow>
-      <DataListContent aria-label="Request Content Details"
+      <DataListContent aria-label={ intl.formatMessage(requestsMessages.requestContentDetails) }
         isHidden={ !isExpanded }>
         <Stack hasGutter>
           <StackItem>
             <TextContent component={ TextVariants.h6 }>
-              { renderActionList(item) }
+              <ActionTranscript actionList={ item.actions }/>
             </TextContent>
           </StackItem>
         </Stack>
@@ -141,11 +84,11 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
 };
 
 Request.propTypes = {
-  isLoading: PropTypes.bool,
   item: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
     state: PropTypes.string,
+    actions: PropTypes.array,
     group_name: PropTypes.string.isRequired,
     requestActions: PropTypes.shape({
       data: PropTypes.array
@@ -154,12 +97,9 @@ Request.propTypes = {
       user_capabilities: PropTypes.object
     })
   }).isRequired,
-  idx: PropTypes.number,
   isExpanded: PropTypes.bool.isRequired,
   toggleExpand: PropTypes.func.isRequired,
-  noItems: PropTypes.string,
   indexpath: PropTypes.object
-
 };
 
 Request.defaultProps = {

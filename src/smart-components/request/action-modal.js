@@ -9,6 +9,14 @@ import { createRequestAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 import useQuery from '../../utilities/use-query';
 import routes from '../../constants/routes';
+import { useIntl } from 'react-intl';
+import actionModalMessages from '../../messages/action-modal.messages';
+import requestsMessages from '../../messages/requests.messages';
+
+const actionTypeToMsg = {
+  Approve: requestsMessages.approveTitle,
+  Deny: requestsMessages.denyTitle
+};
 
 const ActionModal = ({
   actionType,
@@ -16,23 +24,28 @@ const ActionModal = ({
   closeUrl,
   postMethod
 }) => {
+  const intl = useIntl();
   const { push } = useHistory();
   const [{ request: id }] = useQuery([ 'request' ]);
 
   const onSubmit = (data) => {
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
-    const actionName = actionType === 'Add Comment' ? actionType : `${actionType} Request`;
+    const actionName = actionType === 'Add Comment'
+      ? intl.formatMessage(requestsMessages.addCommentTitle)
+      : intl.formatMessage(actionModalMessages.actionName, { actionType: intl.formatMessage(actionTypeToMsg[actionType]) }) ;
 
     return postMethod ?
       createRequestAction(
         actionName,
         id,
-        { operation: operationType[actionType], ...data }
+        { operation: operationType[actionType], ...data },
+        intl
       ).then(() => postMethod()).then(() => push(closeUrl))
       : createRequestAction(
         actionName,
         id,
-        { operation: operationType[actionType], ...data }
+        { operation: operationType[actionType], ...data },
+        intl
       ).then(() => push(closeUrl));
   };
 
@@ -41,15 +54,17 @@ const ActionModal = ({
   return (
     <Modal
       variant="large"
-      title={ actionType === 'Add Comment' ? `Request #${id}` : `${actionType} Request #${id}` }
+      title={ actionType === 'Add Comment'
+        ? intl.formatMessage(actionModalMessages.requestTitle, { id })
+        : intl.formatMessage(actionModalMessages.requestActionTitle, { id, actionType: intl.formatMessage(actionTypeToMsg[actionType]) })
+      }
       isOpen
       onClose={ onCancel }
     >
       <FormRenderer
-        schema={ createRequestCommentSchema(actionType === 'Deny') }
+        schema={ createRequestCommentSchema(actionType === 'Deny', intl) }
         onSubmit={ onSubmit }
         onCancel={ onCancel }
-        formContainer="modal"
       />
     </Modal>
   );
