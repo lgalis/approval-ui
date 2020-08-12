@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button } from '@patternfly/react-core';
-import {sortable, wrappable, cellWidth, breakWord} from '@patternfly/react-table';
+import { sortable, wrappable, cellWidth, breakWord } from '@patternfly/react-table';
 import { useIntl } from 'react-intl';
 import { SearchIcon } from '@patternfly/react-icons';
 import isEmpty from 'lodash/isEmpty';
@@ -30,12 +30,12 @@ import commonMessages from '../../messages/common.message';
 
 const columns = (intl) => [{
   title: intl.formatMessage(requestsMessages.requestsIdColumn),
-  transforms: [ sortable, cellWidth(5) ]
+  transforms: [ sortable, cellWidth(10) ]
 },
 { title: intl.formatMessage(tableToolbarMessages.name), transforms: [ sortable, wrappable, cellWidth(25) ], cellTransforms: [ breakWord ]},
-{ title: intl.formatMessage(requestsMessages.requesterColumn), transforms: [ sortable, wrappable, cellWidth(20) ]},
-{ title: intl.formatMessage(requestsMessages.updatedColumn), transforms: [ cellWidth(10) ]},
-{ title: intl.formatMessage(requestsMessages.statusColumn), transforms: [ sortable, cellWidth(15) ]}
+{ title: intl.formatMessage(requestsMessages.requesterColumn), transforms: [ sortable, wrappable, cellWidth(25) ]},
+{ title: intl.formatMessage(requestsMessages.updatedColumn), transforms: [ cellWidth(15) ]},
+{ title: intl.formatMessage(requestsMessages.statusColumn), transforms: [ sortable, cellWidth(25) ]}
 ];
 
 const debouncedFilter = asyncDebounce(
