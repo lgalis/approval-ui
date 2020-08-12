@@ -28,7 +28,7 @@ const MESSAGES = {
 const CommonApiError = () => {
   const intl = useIntl();
   const { pathname } = useLocation();
-  const { history } = useHistory();
+  const history = useHistory();
   return (
     <Fragment>
       <TopToolbar className="pf-u-pb-md">
@@ -48,7 +48,7 @@ const CommonApiError = () => {
           <EmptyStatePrimary>
             {
               document.referrer ?
-                <Button variant="primary" onClick={ () => history.back() }>{ intl.formatMessage(commonApiErrorMessages.returnBack) }</Button> :
+                <Button variant="primary" onClick={ () => history.goBack() }>{ intl.formatMessage(commonApiErrorMessages.returnBack) }</Button> :
                 <Button variant="primary" component="a" href=".">{ intl.formatMessage(commonApiErrorMessages.goToLanding) }</Button>
             }
           </EmptyStatePrimary>
