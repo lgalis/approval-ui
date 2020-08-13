@@ -5,8 +5,7 @@ import {
   FETCH_WORKFLOW,
   FETCH_WORKFLOWS,
   SET_FILTER_WORKFLOWS,
-  UPDATE_WORKFLOW,
-  MOVE_SEQUENCE
+  UPDATE_WORKFLOW
 } from '../../../redux/action-types';
 
 describe('Approval process reducer', () => {
@@ -61,77 +60,5 @@ describe('Approval process reducer', () => {
     initialState = { isUpdating: 1 };
     const expectedState = { isUpdating: 0 };
     expect(reducer(initialState, { type: `${UPDATE_WORKFLOW}_REJECTED` })).toEqual(expectedState);
-  });
-
-  describe('sequence moving', () => {
-    const id = '1234';
-    const id2 = '987';
-
-    const wf = (sequence, wfId = id) => ({
-      id: wfId,
-      sequence
-    });
-
-    let sequence;
-
-    describe('direction = asc', () => {
-      it('should move up', () => {
-        sequence = 10;
-        initialState = { sortBy: { direction: 'asc' }, workflows: { data: [ wf(1) ]}};
-        const expectedState = { ...initialState, workflows: { data: [ wf(sequence) ]}};
-        expect(reducer(initialState, { type: MOVE_SEQUENCE, payload: { id, sequence }})).toEqual(expectedState);
-      });
-
-      it('should move down', () => {
-        sequence = 1;
-        initialState = { sortBy: { direction: 'asc' }, workflows: { data: [ wf(10) ]}};
-        const expectedState = { ...initialState, workflows: { data: [ wf(sequence) ]}};
-        expect(reducer(initialState, { type: MOVE_SEQUENCE, payload: { id, sequence }})).toEqual(expectedState);
-      });
-
-      it('should move up and switch', () => {
-        sequence = 11;
-        initialState = { sortBy: { direction: 'asc' }, workflows: { data: [ wf(10), wf(11, id2) ]}};
-        const expectedState = { ...initialState, workflows: { data: [ wf(10, id2), wf(11) ]}};
-        expect(reducer(initialState, { type: MOVE_SEQUENCE, payload: { id, sequence }})).toEqual(expectedState);
-      });
-
-      it('should move down and switch', () => {
-        sequence = 10;
-        initialState = { sortBy: { direction: 'asc' }, workflows: { data: [ wf(10, id2), wf(11) ]}};
-        const expectedState = { ...initialState, workflows: { data: [ wf(10), wf(11, id2) ]}};
-        expect(reducer(initialState, { type: MOVE_SEQUENCE, payload: { id, sequence }})).toEqual(expectedState);
-      });
-    });
-
-    describe('direction = desc', () => {
-      it('should move up', () => {
-        sequence = 10;
-        initialState = { sortBy: { direction: 'desc' }, workflows: { data: [ wf(1) ]}};
-        const expectedState = { ...initialState, workflows: { data: [ wf(sequence) ]}};
-        expect(reducer(initialState, { type: MOVE_SEQUENCE, payload: { id, sequence }})).toEqual(expectedState);
-      });
-
-      it('should move down', () => {
-        sequence = 1;
-        initialState = { sortBy: { direction: 'desc' }, workflows: { data: [ wf(10) ]}};
-        const expectedState = { ...initialState, workflows: { data: [ wf(sequence) ]}};
-        expect(reducer(initialState, { type: MOVE_SEQUENCE, payload: { id, sequence }})).toEqual(expectedState);
-      });
-
-      it('should move up and switch', () => {
-        sequence = 11;
-        initialState = { sortBy: { direction: 'desc' }, workflows: { data: [ wf(11, id2), wf(10) ]}};
-        const expectedState = { ...initialState, workflows: { data: [ wf(11), wf(10, id2) ]}};
-        expect(reducer(initialState, { type: MOVE_SEQUENCE, payload: { id, sequence }})).toEqual(expectedState);
-      });
-
-      it('should move down and switch', () => {
-        sequence = 10;
-        initialState = { sortBy: { direction: 'desc' }, workflows: { data: [ wf(11), wf(10, id2) ]}};
-        const expectedState = { ...initialState, workflows: { data: [ wf(11, id2), wf(10) ]}};
-        expect(reducer(initialState, { type: MOVE_SEQUENCE, payload: { id, sequence }})).toEqual(expectedState);
-      });
-    });
   });
 });
