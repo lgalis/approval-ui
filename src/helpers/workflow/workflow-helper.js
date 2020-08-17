@@ -25,6 +25,10 @@ export function updateWorkflow(data) {
   return workflowApi.updateWorkflow(data.id, data);
 }
 
+export function repositionWorkflow(workflow, position) {
+  return workflowApi.reposition(workflow.id, { increment: position });
+}
+
 export  function addWorkflow(workflow) {
   return templateApi.listTemplates().then(({ data }) => {
     // workaround for v1. Need to pass template ID with the workflow. Assigning to first template

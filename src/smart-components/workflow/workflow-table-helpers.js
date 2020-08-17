@@ -7,16 +7,16 @@ import { useIntl } from 'react-intl';
 
 import WorkflowTableContext from './workflow-table-context';
 import worfklowMessages from '../../messages/workflows.messages';
-import { updateWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
+import { repositionWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
 import asyncDebounce from '../../utilities/async-debounce';
 
-const debouncedMove = (cache, id) => {
+const debouncedMove = (cache, id, position) => {
   if (cache[id]) {
     return cache[id];
   }
 
   cache[id] = asyncDebounce(
-    (workflow, dispatch, intl) => dispatch(updateWorkflow(workflow, intl))
+    (workflow, dispatch, intl) => dispatch(repositionWorkflow(workflow, position, intl))
     .then(() => dispatch(fetchWorkflows())),
     1500
   );
@@ -49,7 +49,7 @@ export const MoveButtons = ({ id, sequence }) => {
           variant="plain"
           aria-label={ intl.formatMessage(worfklowMessages.up) }
           id={ `up-${id}` }
-          onClick={ () => updateSequence(direction === 'asc' ? sequence - 1 : sequence + 1) }
+          onClick={ () => updateSequence(direction === 'asc' ? -1 : 1) }
           isDisabled={ direction === 'asc' && sequence === 1 || isUpdating }
         >
           <AngleUpIcon />
@@ -60,7 +60,7 @@ export const MoveButtons = ({ id, sequence }) => {
           variant="plain"
           aria-label={ intl.formatMessage(worfklowMessages.down) }
           id={ `down-${id}` }
-          onClick={ () => updateSequence(direction === 'asc' ? sequence + 1 : sequence - 1) }
+          onClick={ () => updateSequence(direction === 'asc' ? 1 : -1) }
           isDisabled={ direction === 'desc' && sequence === 1 || isUpdating }
         >
           <AngleDownIcon />

@@ -51,6 +51,20 @@ export const updateWorkflow = (workflowData, intl) => ({
   }
 });
 
+export const repositionWorkflow = (workflowData, position, intl) => ({
+  type: ActionTypes.UPDATE_WORKFLOW,
+  payload: WorkflowHelper.repositionWorkflow(workflowData, position),
+  meta: {
+    notifications: {
+      fulfilled: {
+        variant: 'success',
+        title: intl.formatMessage(worfklowMessages.updateProcessSuccessTitle),
+        description: intl.formatMessage(worfklowMessages.updateProcessSuccessDescription)
+      }
+    }
+  }
+});
+
 export const removeWorkflow = (workflow, intl) => ({
   type: ActionTypes.REMOVE_WORKFLOW,
   payload: WorkflowHelper.removeWorkflow(workflow),

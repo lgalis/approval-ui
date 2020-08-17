@@ -41,6 +41,9 @@ const App = () => {
     ]).then(() => setAuth(true));
 
     insights.chrome.identifyApp('approval');
+    console.log('Debug - getting user perms');
+    const perms = insights.chrome.getUserPermissions();
+    console.log('Debug - user perms', perms);
   }, []);
 
   if (!auth) {
