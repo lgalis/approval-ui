@@ -57,3 +57,7 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+.pf-c-table.vertical-align-inherit tbody > tr > * {
+  vertical-align: inherit !important;
+}

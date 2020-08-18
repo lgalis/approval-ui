@@ -89,7 +89,7 @@ export const TableToolbarView = ({
             rows={ rows }
             cells={ columns }
             actionResolver={ actionResolver }
-            className="pf-u-pt-0"
+            className="pf-u-pt-0 vertical-align-inherit"
             sortBy={ sortBy }
             onSort={ onSort }
           >
