@@ -8,14 +8,19 @@ import {
   EmptyStateBody,
   EmptyStatePrimary
 } from '@patternfly/react-core';
+import { IntlProvider } from 'react-intl';
 
 describe('<CommonApiError />', () => {
-  const ComponentWrapper = ({ children, initialEntry }) => <MemoryRouter
-    initialEntries={ [{ pathname: initialEntry, state: { from: { pathname: '/previous' }}}] }
-    initialIndex={ 0 }
-  >
-    { children }
-  </MemoryRouter>;
+  const ComponentWrapper = ({ children, initialEntry }) => (
+    <IntlProvider locale="en">
+      <MemoryRouter
+        initialEntries={ [{ pathname: initialEntry, state: { from: { pathname: '/previous' }}}] }
+        initialIndex={ 0 }
+      >
+        { children }
+      </MemoryRouter>
+    </IntlProvider>
+  );
 
   it('renders correctly on 401 error', () => {
     const wrapper = mount(

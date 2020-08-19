@@ -17,13 +17,15 @@ import { delay } from 'xhr-mock';
 import { FormItemLoader } from '../../../presentational-components/shared/loader-placeholders';
 
 const ComponentWrapper = ({ store, children, initialEntries = [ '/' ]}) => (
-  <Provider store={ store }>
-    <MemoryRouter initialEntries={ initialEntries } initialIndex={ 1 }>
-      <IntlProvider locale="en">
-        { children }
-      </IntlProvider>
-    </MemoryRouter>
-  </Provider>
+  <IntlProvider locale="en">
+    <Provider store={ store }>
+      <MemoryRouter initialEntries={ initialEntries } initialIndex={ 1 }>
+        <IntlProvider locale="en">
+          { children }
+        </IntlProvider>
+      </MemoryRouter>
+    </Provider>
+  </IntlProvider>
 );
 
 describe('<RemoveWorkflowModal />', () => {
@@ -35,7 +37,7 @@ describe('<RemoveWorkflowModal />', () => {
   beforeEach(() => {
     initialProps = {
       fetchData: jest.fn(),
-      setSelectedWorkflows: jest.fn()
+      resetSelectedWorkflows: jest.fn()
     };
     mockStore = configureStore(middlewares);
     initialState = {
@@ -62,13 +64,36 @@ describe('<RemoveWorkflowModal />', () => {
   it('should render approval process modal- single', () => {
     const store = mockStore(initialState);
     const wrapper = mount(
-      <ComponentWrapper store={ store } initialEntries={ [ '/?workflow=123' ] }>
+      <ComponentWrapper store={ store } initialEntries={ [ '?workflow=123' ] }>
         <RemoveWorkflowModal { ...initialProps } />
       </ComponentWrapper>
     );
     expect(wrapper.find(Modal)).toHaveLength(1);
     expect(wrapper.find(Title).first().text()).toEqual('Delete approval process?');
     expect(wrapper.find(Text).first().text()).toEqual('WfName will be removed.');
+  });
+
+  it('should render linked apps and resources', () => {
+    const initialStateWithLinks = {
+      workflowReducer: {
+        workflows: {
+          data: [{
+            id: '123', name: 'WfName',
+            metadata: { object_dependencies: { catalog: [ 'PortfolioItem', 'Portfolio' ], topology: [ 'ServiceInventory' ]}}
+          }]
+        }
+      }
+    };
+    const store = mockStore(initialStateWithLinks);
+    const wrapper = mount(
+      <ComponentWrapper store={ store } initialEntries={ [ '?workflow=123' ] }>
+        <RemoveWorkflowModal { ...initialProps } />
+      </ComponentWrapper>
+    );
+    expect(wrapper.find(Modal)).toHaveLength(1);
+    expect(wrapper.find(Title).first().text()).toEqual('Delete approval process?');
+    expect(wrapper.find(Text).first().text())
+    .toEqual('WfName will be removed from the following applications: Automation Services CatalogTopological inventory');
   });
 
   it('should render approval process modal - single - not in table', async () => {
@@ -149,7 +174,7 @@ describe('<RemoveWorkflowModal />', () => {
     );
     expect(wrapper.find(Modal)).toHaveLength(1);
     expect(wrapper.find(Title).first().text()).toEqual('Delete approval processes?');
-    expect(wrapper.find(Text).first().text()).toEqual('2 approval processes will be removed.');
+    expect(wrapper.find(Text).first().text()).toEqual('2 approval processes will be removed.');
   });
 
   it('should render approval process modal and call cancel callback', () => {

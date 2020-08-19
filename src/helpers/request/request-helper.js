@@ -24,12 +24,6 @@ const filterQuery = (filterValue) => {
     query.push(`filter[requester_name][contains_i]=${filterValue.requester}`);
   }
 
-  if (filterValue.status) {
-    filterValue.status.forEach(state => {
-      query.push(`filter[state][eq][]=${state}`);
-    });
-  }
-
   if (filterValue.decision) {
     filterValue.decision.forEach(dec => {
       query.push(`filter[decision][eq][]=${dec}`);
@@ -57,6 +51,7 @@ const requestTranscriptQuery = (parent_id) => `query {
     group_name
     number_of_finished_children
     state
+    requester_name
     actions {
       id
       operation

@@ -10,24 +10,29 @@ import {
 } from '@patternfly/react-core';
 import LockIcon from '@patternfly/react-icons/dist/js/icons/lock-icon';
 import { TopToolbar, TopToolbarTitle } from '../../presentational-components/shared/top-toolbar';
+import { useIntl } from 'react-intl';
+
+import commonApiErrorMessages from '../../messages/common-api-error.messages';
+import commonMessages from '../../messages/common.message';
 
 const TITLES = {
-  '/401': 'Unauthorized',
-  '/403': 'You do not have access to Approval'
+  '/401': commonApiErrorMessages.unathorizedTitle,
+  '/403': commonApiErrorMessages.forbiddenTitle
 };
 
 const MESSAGES = {
-  '/401': 'You are not authorized to access this section',
-  '/403': 'Contact your organization administrator for more information'
+  '/401': commonApiErrorMessages.unathorizedDescription,
+  '/403': commonApiErrorMessages.forbiddenDescription
 };
 
 const CommonApiError = () => {
+  const intl = useIntl();
   const { pathname } = useLocation();
   const { history } = useHistory();
   return (
     <Fragment>
       <TopToolbar className="pf-u-pb-md">
-        <TopToolbarTitle title="Approval"/>
+        <TopToolbarTitle title={ intl.formatMessage(commonMessages.approvalTitle) }/>
       </TopToolbar>
       <div className="pf-u-mb-xl">
         <EmptyState className="pf-u-ml-auto pf-u-mr-auto">
@@ -35,16 +40,16 @@ const CommonApiError = () => {
             <EmptyStateIcon icon={ LockIcon } />
           </div>
           <div>
-            <Title headingLevel="h1" size="lg">{ TITLES[pathname] }</Title>
+            <Title headingLevel="h1" size="lg">{ intl.formatMessage(TITLES[pathname]) }</Title>
           </div>
           <EmptyStateBody>
-            { MESSAGES[pathname] }
+            { intl.formatMessage(MESSAGES[pathname]) }
           </EmptyStateBody>
           <EmptyStatePrimary>
             {
               document.referrer ?
-                <Button variant="primary" onClick={ () => history.back() }>Return to previous page</Button> :
-                <Button variant="primary" component="a" href=".">Go to landing page</Button>
+                <Button variant="primary" onClick={ () => history.back() }>{ intl.formatMessage(commonApiErrorMessages.returnBack) }</Button> :
+                <Button variant="primary" component="a" href=".">{ intl.formatMessage(commonApiErrorMessages.goToLanding) }</Button>
             }
           </EmptyStatePrimary>
         </EmptyState>
