@@ -626,6 +626,12 @@ describe('<Workflows />', () => {
       wrapper.find(`button#down-${wf.id}`).simulate('click');
     });
     wrapper.update();
+
+    apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/${wf.id}`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ id: wf.id, sequence: wf.sequence + 1 });
+      return res.status(200).body({ foo: 'bar' });
+    }));
+
     await act(async () => {
       wrapper.find(`button#down-${wf.id}`).simulate('click');
     });

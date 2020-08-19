@@ -3,7 +3,6 @@ import {
   FETCH_WORKFLOWS,
   SORT_WORKFLOWS,
   SET_FILTER_WORKFLOWS,
-  MOVE_SEQUENCE,
   UPDATE_WORKFLOW
 } from '../../redux/action-types';
 
@@ -56,38 +55,6 @@ const setFilterValue = (state, { payload }) => ({
   }
 });
 
-const tranformWf = (wf, id, sequence, isMovingUp) => {
-  if (wf.id === id) {
-    return { ...wf, sequence };
-  }
-
-  if (wf.sequence === sequence && isMovingUp) {
-    return { ...wf, sequence: wf.sequence - 1 };
-  }
-
-  if (wf.sequence === sequence && !isMovingUp) {
-    return { ...wf, sequence: wf.sequence + 1 };
-  }
-
-  return wf;
-};
-
-const moveSequence = (state, { payload }) => {
-  const originalProcess = state.workflows.data.find(({ id }) => id === payload.id);
-
-  const isMovingUp = payload?.sequence > originalProcess?.sequence;
-
-  return ({
-    ...state,
-    workflows: {
-      ...state.workflows,
-      data: state.workflows.data
-      .map(wf => tranformWf(wf, payload.id, payload.sequence, isMovingUp))
-      .sort((a, b) => state.sortBy.direction === 'asc' ? a.sequence - b.sequence : b.sequence - a.sequence)
-    }
-  });
-};
-
 const setUpdatingWorkflow = (state) => ({
   ...state,
   isUpdating: state.isUpdating + 1
@@ -106,6 +73,5 @@ export default {
   [`${UPDATE_WORKFLOW}_FULFILLED`]: finishUpdatingWorkflow,
   [`${UPDATE_WORKFLOW}_REJECTED`]: finishUpdatingWorkflow,
   [SORT_WORKFLOWS]: setSortWorkflows,
-  [SET_FILTER_WORKFLOWS]: setFilterValue,
-  [MOVE_SEQUENCE]: moveSequence
+  [SET_FILTER_WORKFLOWS]: setFilterValue
 };

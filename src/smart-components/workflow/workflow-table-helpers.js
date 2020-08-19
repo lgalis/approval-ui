@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl';
 
 import WorkflowTableContext from './workflow-table-context';
 import worfklowMessages from '../../messages/workflows.messages';
-import { updateWorkflow, fetchWorkflows, moveSequence } from '../../redux/actions/workflow-actions';
+import { updateWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
 import asyncDebounce from '../../utilities/async-debounce';
 
 const debouncedMove = (cache, id) => {
@@ -35,8 +35,6 @@ export const MoveButtons = ({ id, sequence }) => {
   );
 
   const updateSequence = (sequence) => {
-    dispatch(moveSequence({ id, sequence }));
-
     return debouncedMove(cache, id)({ id, sequence }, dispatch, intl);
   };
 
