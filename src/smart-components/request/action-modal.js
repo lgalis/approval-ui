@@ -22,12 +22,12 @@ const ActionModal = ({
   actionType,
   createRequestAction,
   closeUrl,
-  postMethod
+  postMethod,
+  postMethodParameter
 }) => {
   const intl = useIntl();
   const { push } = useHistory();
   const [{ request: id }] = useQuery([ 'request' ]);
-
   const onSubmit = (data) => {
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
     const actionName = actionType === 'Add Comment'
@@ -40,7 +40,7 @@ const ActionModal = ({
         id,
         { operation: operationType[actionType], ...data },
         intl
-      ).then(() => postMethod()).then(() => push(closeUrl))
+      ).then(() => postMethod(postMethodParameter)).then(() => push(closeUrl))
       : createRequestAction(
         actionName,
         id,
@@ -78,6 +78,7 @@ ActionModal.propTypes = {
   createRequestAction: PropTypes.func.isRequired,
   postMethod: PropTypes.func,
   actionType: PropTypes.string,
+  postMethodParameter: PropTypes.string,
   closeUrl: PropTypes.oneOfType([ PropTypes.string, PropTypes.shape({ patname: PropTypes.string, search: PropTypes.string }) ])
 };
 
