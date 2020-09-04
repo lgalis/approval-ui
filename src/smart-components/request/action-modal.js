@@ -22,7 +22,8 @@ const ActionModal = ({
   actionType,
   createRequestAction,
   closeUrl,
-  postMethod
+  postMethod,
+  postMethohdParameter
 }) => {
   const intl = useIntl();
   const { push } = useHistory();
@@ -39,7 +40,7 @@ const ActionModal = ({
         id,
         { operation: operationType[actionType], ...data },
         intl
-      ).then(() => postMethod()).then(() => push(closeUrl))
+      ).then(() => postMethod(postMethohdParameter)).then(() => push(closeUrl))
       : createRequestAction(
         actionName,
         id,
@@ -77,6 +78,7 @@ ActionModal.propTypes = {
   createRequestAction: PropTypes.func.isRequired,
   postMethod: PropTypes.func,
   actionType: PropTypes.string,
+  postMethohdParameter: PropTypes.string,
   closeUrl: PropTypes.oneOfType([ PropTypes.string, PropTypes.shape({ patname: PropTypes.string, search: PropTypes.string }) ])
 };
 
