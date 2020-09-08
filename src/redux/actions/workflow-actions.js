@@ -3,7 +3,7 @@ import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
 import worfklowMessages from '../../messages/workflows.messages';
 
 export const fetchWorkflows = (pagination) => (dispatch, getState) => {
-  const { sortBy, workflows, filterValue } = getState().workflowReducer;
+  const { workflows, filterValue } = getState().workflowReducer;
 
   let finalPagination = pagination;
 
@@ -14,7 +14,7 @@ export const fetchWorkflows = (pagination) => (dispatch, getState) => {
 
   return dispatch ({
     type: ActionTypes.FETCH_WORKFLOWS,
-    payload: WorkflowHelper.fetchWorkflows(filterValue, finalPagination, sortBy)
+    payload: WorkflowHelper.fetchWorkflows(filterValue, finalPagination)
   });
 };
 
@@ -91,11 +91,6 @@ export const removeWorkflows = (workflows, intl) => ({
       }
     }
   }
-});
-
-export const sortWorkflows = (sortBy) => ({
-  type: ActionTypes.SORT_WORKFLOWS,
-  payload: sortBy
 });
 
 export const setFilterValueWorkflows = (filterValue) => ({

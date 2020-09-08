@@ -3,8 +3,8 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button, Checkbox } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
-import { sortable, truncate, cellWidth, wrappable } from '@patternfly/react-table';
-import { fetchWorkflows, sortWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
+import { truncate, cellWidth } from '@patternfly/react-table';
+import { fetchWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
@@ -27,12 +27,10 @@ import WorkflowTableContext from './workflow-table-context';
 const columns = (intl, selectedAll, selectAll) => [
   { title: '', transforms: [ cellWidth(1) ]},
   { title: <Checkbox onChange={ selectAll } isChecked={ selectedAll } id="select-all"/>, transforms: [ cellWidth(1) ]},
-  { title: intl.formatMessage(worfklowMessages.sequence), transforms: [ sortable, wrappable ]},
   {
-    title: intl.formatMessage(tableToolbarMessages.name),
-    transforms: [ sortable ]
+    title: intl.formatMessage(tableToolbarMessages.name)
   },
-  { title: intl.formatMessage(formMessages.description), transforms: [ sortable, cellWidth(35) ], cellTransforms: [ truncate ]},
+  { title: intl.formatMessage(formMessages.description), transforms: [ cellWidth(35) ], cellTransforms: [ truncate ]},
   { title: intl.formatMessage(formMessages.groups) }
 ];
 
@@ -120,8 +118,8 @@ export const workflowsListState = (state, action) => {
 
 const Workflows = () => {
   const moveFunctionsCache = useRef({});
-  const { workflows: { data, meta }, sortBy, filterValueRedux } = useSelector(
-    ({ workflowReducer: { workflows, sortBy, filterValue: filterValueRedux }}) => ({ workflows, sortBy, filterValueRedux })
+  const { workflows: { data, meta }, filterValueRedux } = useSelector(
+    ({ workflowReducer: { workflows, filterValue: filterValueRedux }}) => ({ workflows, filterValueRedux })
     , shallowEqual
   );
   const [{ filterValue, isFetching, isFiltering, selectedWorkflows, selectedAll, rows }, stateDispatch ] = useReducer(
@@ -159,11 +157,6 @@ const Workflows = () => {
       (isFiltering) => stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
       { ...meta, offset: 0 }
     );
-  };
-
-  const onSort = (_e, index, direction, { property }) => {
-    dispatch(sortWorkflows({ index, direction, property }));
-    return updateWorkflows();
   };
 
   const routes = () => <Fragment>
@@ -237,8 +230,6 @@ const Workflows = () => {
       </TopToolbar>
       <WorkflowTableContext.Provider value={ { selectedWorkflows, setSelectedWorkflows, cache: moveFunctionsCache.current } }>
         <TableToolbarView
-          sortBy={ sortBy }
-          onSort={ onSort }
           rows={ rows }
           columns={ columns(intl, selectedAll, selectAllFunction) }
           fetchData={ updateWorkflows }

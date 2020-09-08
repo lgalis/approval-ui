@@ -5,13 +5,12 @@ import { APPROVAL_API_BASE } from '../../utilities/constants';
 const workflowApi = getWorkflowApi();
 const templateApi = getTemplateApi();
 
-export function fetchWorkflows(filter = '', pagination = defaultSettings, sortBy) {
+export function fetchWorkflows(filter = '', pagination = defaultSettings) {
   const paginationQuery = `&limit=${Math.max(pagination.limit, 10)}&offset=${pagination.offset}`;
   const filterQuery = `&filter[name][contains_i]=${filter}`;
-  const sortQuery = sortBy ? `&sort_by=${sortBy.property}:${sortBy.direction}` : '';
 
   return getAxiosInstance().get(
-    `${APPROVAL_API_BASE}/workflows/?${filterQuery}${paginationQuery}${sortQuery}`
+    `${APPROVAL_API_BASE}/workflows/?${filterQuery}${paginationQuery}`
   );
 }
 
@@ -26,12 +25,10 @@ export function updateWorkflowOld(data) {
 }
 
 export function updateWorkflow(data) {
-  console.log('Debug - updateWorkflow: data', data);
-  return workflowApi.reposition(data.id, data);
+  return workflowApi.updateWorkflow(data.id, data);
 }
 
 export function repositionWorkflow(data) {
-  console.log('Debug - repositionWorkflow: data', data);
   return workflowApi.reposition(data.id, data.sequence);
 }
 

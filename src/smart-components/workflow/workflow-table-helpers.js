@@ -24,26 +24,21 @@ const debouncedMove = (cache, id) => {
   return cache[id];
 };
 
-export const MoveButtons = ({ id, sequence }) => {
+export const MoveButtons = ({ id }) => {
   const { cache } = useContext(WorkflowTableContext);
   const dispatch = useDispatch();
   const intl = useIntl();
-  const { isUpdating, direction, property } = useSelector(
-    ({ workflowReducer: { isUpdating, isLoading, sortBy: { direction, property }}}) => (
-      { isUpdating: isUpdating > 0 || isLoading, direction, property }
+  const { isUpdating, property } = useSelector(
+    ({ workflowReducer: { isUpdating, isLoading }}) => (
+      { isUpdating: isUpdating > 0 || isLoading, property }
     )
   );
 
   const updateSequence = (sequence) => {
-    console.log('Debug - updateSequence - sequence');
     dispatch(moveSequence({ id, sequence }));
 
     return debouncedMove(cache, id)({ id, sequence }, dispatch, intl);
   };
-
-  if (property !== 'sequence') {
-    return null;
-  }
 
   return (
     <Stack>
@@ -52,8 +47,8 @@ export const MoveButtons = ({ id, sequence }) => {
           variant="plain"
           aria-label={ intl.formatMessage(worfklowMessages.up) }
           id={ `up-${id}` }
-          onClick={ () => updateSequence({ increment: direction === 'asc' ? -1 : 1 }) }
-          isDisabled={ direction === 'asc' && sequence === 1 || isUpdating }
+          onClick={ () => updateSequence({ increment: -1 }) }
+          isDisabled={ isUpdating }
         >
           <AngleUpIcon />
         </Button>
@@ -63,8 +58,8 @@ export const MoveButtons = ({ id, sequence }) => {
           variant="plain"
           aria-label={ intl.formatMessage(worfklowMessages.down) }
           id={ `down-${id}` }
-          onClick={ () => updateSequence({ increment: direction === 'asc' ? 1 : -1 }) }
-          isDisabled={ direction === 'desc' && sequence === 1 || isUpdating }
+          onClick={ () => updateSequence({ increment: 1 }) }
+          isDisabled={ isUpdating }
         >
           <AngleDownIcon />
         </Button>
@@ -131,7 +126,6 @@ export const createRows = (data) => data.map((
     <React.Fragment key={ `${id}-checkbox` }>
       <SelectBox id={ id } />
     </React.Fragment>,
-    sequence,
     name,
     description,
     <React.Fragment key={ id }>
