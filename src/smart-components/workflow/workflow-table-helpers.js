@@ -7,16 +7,16 @@ import { useIntl } from 'react-intl';
 
 import WorkflowTableContext from './workflow-table-context';
 import worfklowMessages from '../../messages/workflows.messages';
-import { repositionWorkflow, fetchWorkflows } from '../../redux/actions/workflow-actions';
+import { updateWorkflow, fetchWorkflows, moveSequence } from '../../redux/actions/workflow-actions';
 import asyncDebounce from '../../utilities/async-debounce';
 
-const debouncedMove = (cache, id, position) => {
+const debouncedMove = (cache, id) => {
   if (cache[id]) {
     return cache[id];
   }
 
   cache[id] = asyncDebounce(
-    (workflow, dispatch, intl) => dispatch(repositionWorkflow(workflow, position, intl))
+    (workflow, dispatch, intl) => dispatch(updateWorkflow(workflow, intl))
     .then(() => dispatch(fetchWorkflows())),
     1500
   );
@@ -35,6 +35,9 @@ export const MoveButtons = ({ id, sequence }) => {
   );
 
   const updateSequence = (sequence) => {
+    console.log('Debug - updateSequence - sequence');
+    dispatch(moveSequence({ id, sequence }));
+
     return debouncedMove(cache, id)({ id, sequence }, dispatch, intl);
   };
 
@@ -49,7 +52,7 @@ export const MoveButtons = ({ id, sequence }) => {
           variant="plain"
           aria-label={ intl.formatMessage(worfklowMessages.up) }
           id={ `up-${id}` }
-          onClick={ () => updateSequence(direction === 'asc' ? -1 : 1) }
+          onClick={ () => updateSequence({ increment: direction === 'asc' ? -1 : 1 }) }
           isDisabled={ direction === 'asc' && sequence === 1 || isUpdating }
         >
           <AngleUpIcon />
@@ -60,7 +63,7 @@ export const MoveButtons = ({ id, sequence }) => {
           variant="plain"
           aria-label={ intl.formatMessage(worfklowMessages.down) }
           id={ `down-${id}` }
-          onClick={ () => updateSequence(direction === 'asc' ? 1 : -1) }
+          onClick={ () => updateSequence({ increment: direction === 'asc' ? 1 : -1 }) }
           isDisabled={ direction === 'desc' && sequence === 1 || isUpdating }
         >
           <AngleDownIcon />

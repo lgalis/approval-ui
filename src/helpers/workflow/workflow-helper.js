@@ -21,12 +21,13 @@ export function fetchWorkflowByName(name) {
   return fetchWorkflows(name);
 }
 
-export function updateWorkflow(data) {
-  return workflowApi.updateWorkflow(data.id, data);
+export function updateWorkflowOld(data) {
+  return workflowApi.reposition(data.id, data);
 }
 
-export function repositionWorkflow(workflow, position) {
-  return workflowApi.reposition(workflow.id, { increment: position });
+export function updateWorkflow(data) {
+  console.log('Debug - updateWorkflow: data', data);
+  return workflowApi.reposition(data.id, data.sequence);
 }
 
 export  function addWorkflow(workflow) {
