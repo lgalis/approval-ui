@@ -27,6 +27,11 @@ export function updateWorkflowOld(data) {
 
 export function updateWorkflow(data) {
   console.log('Debug - updateWorkflow: data', data);
+  return workflowApi.reposition(data.id, data);
+}
+
+export function repositionWorkflow(data) {
+  console.log('Debug - repositionWorkflow: data', data);
   return workflowApi.reposition(data.id, data.sequence);
 }
 
