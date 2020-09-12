@@ -86,19 +86,16 @@ const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
       <Switch>
         <Route exact path={ indexpath.addComment }>
           <ActionModal actionType={ 'Add Comment' }
-            postMethod={ updateRequest }
-            postMethodParameter={ selectedRequest.id }
+            postMethod={ () => updateRequest(selectedRequest.id) }
             closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } }/>
         </Route>
         <Route exact path={ indexpath.approve } render={ props =>
           <ActionModal { ...props } actionType={ 'Approve' }
-            postMethod={ updateRequest }
-            postMethodParameter={ selectedRequest.id }
+            postMethod={ () => updateRequest(selectedRequest.id) }
             closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } } /> } />
         <Route exact path={ indexpath.deny } render={ props =>
           <ActionModal { ...props } actionType={ 'Deny' }
-            postMethod={ updateRequest }
-            postMethodParameter={ selectedRequest.id }
+            postMethod={ () => updateRequest(selectedRequest.id) }
             closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } } /> } />
       </Switch>
       <TopToolbar
