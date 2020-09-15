@@ -482,6 +482,7 @@ describe('<Requests />', () => {
       wrapper.update();
 
       expect(wrapper.find(ActionModal).props().actionType).toEqual('Add Comment');
+      expect(wrapper.find(ActionModal).props().postMethod).toBeDefined();
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.addComment);
       expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=703');
     });
@@ -508,6 +509,7 @@ describe('<Requests />', () => {
       wrapper.update();
 
       expect(wrapper.find(ActionModal).props().actionType).toEqual('Approve');
+      expect(wrapper.find(ActionModal).props().postMethod).toBeDefined();
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.approve);
       expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=703');
     });
@@ -534,6 +536,7 @@ describe('<Requests />', () => {
       wrapper.update();
 
       expect(wrapper.find(ActionModal).props().actionType).toEqual('Deny');
+      expect(wrapper.find(ActionModal).props().postMethod).toBeDefined();
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.requests.deny);
       expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=703');
     });
