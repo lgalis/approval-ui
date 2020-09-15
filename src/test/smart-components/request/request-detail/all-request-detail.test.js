@@ -265,6 +265,7 @@ describe('<AllRequestDetail />', () => {
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.addComment);
       expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=123');
       expect(wrapper.find(ActionModal).props().actionType).toEqual('Add Comment');
+      expect(wrapper.find(ActionModal).props().postMethod).toBeDefined();
     });
 
     it('opens approve modal', async () => {
@@ -293,10 +294,10 @@ describe('<AllRequestDetail />', () => {
         wrapper.find('a#approve-123').first().simulate('click', { button: 0 });
       });
       wrapper.update();
-
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.approve);
       expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=123');
       expect(wrapper.find(ActionModal).props().actionType).toEqual('Approve');
+      expect(wrapper.find(ActionModal).props().postMethod).toBeDefined();
     });
 
     it('opens deny modal', async () => {
@@ -329,6 +330,7 @@ describe('<AllRequestDetail />', () => {
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.deny);
       expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=123');
       expect(wrapper.find(ActionModal).props().actionType).toEqual('Deny');
+      expect(wrapper.find(ActionModal).props().postMethod).toBeDefined();
     });
   });
 });

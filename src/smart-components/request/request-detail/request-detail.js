@@ -52,6 +52,13 @@ const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
     .then(() => stateDispatch({ type: 'setFetching', payload: false }));
   }, []);
 
+  const updateRequest = (id) => {
+    stateDispatch({ type: 'setFetching', payload: true });
+    return dispatch(fetchRequest(id, approvalPersona(userRoles))), dispatch(fetchRequestContent(id, approvalPersona(userRoles)))
+    .then(() => stateDispatch({ type: 'setFetching', payload: false }))
+    .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
+  };
+
   const renderRequestDetails = () => {
     if (isFetching || !selectedRequest || Object.keys(selectedRequest).length === 0) {
       return (
@@ -79,13 +86,16 @@ const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
       <Switch>
         <Route exact path={ indexpath.addComment }>
           <ActionModal actionType={ 'Add Comment' }
+            postMethod={ () => updateRequest(selectedRequest.id) }
             closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } }/>
         </Route>
         <Route exact path={ indexpath.approve } render={ props =>
           <ActionModal { ...props } actionType={ 'Approve' }
+            postMethod={ () => updateRequest(selectedRequest.id) }
             closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } } /> } />
         <Route exact path={ indexpath.deny } render={ props =>
           <ActionModal { ...props } actionType={ 'Deny' }
+            postMethod={ () => updateRequest(selectedRequest.id) }
             closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } } /> } />
       </Switch>
       <TopToolbar
