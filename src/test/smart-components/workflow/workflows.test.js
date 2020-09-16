@@ -45,8 +45,7 @@ describe('<Workflows />', () => {
           data: [{
             id: 'edit-id',
             name: 'foo',
-            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
-            sequence: 1
+            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
           }],
           meta: {
             count: 0,
@@ -57,12 +56,7 @@ describe('<Workflows />', () => {
         workflow: {},
         filterValue: '',
         isLoading: false,
-        isRecordLoading: false,
-        sortBy: {
-          index: 2,
-          property: 'sequence',
-          direction: 'asc'
-        }
+        isRecordLoading: false
       }
     };
   });
@@ -75,10 +69,9 @@ describe('<Workflows />', () => {
     const store = mockStore(stateWithData);
     let wrapper;
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
@@ -117,10 +110,9 @@ describe('<Workflows />', () => {
     let wrapper;
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
       }]}}));
 
@@ -153,10 +145,9 @@ describe('<Workflows />', () => {
     let wrapper;
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`, mockOnce({ body: { data: [{
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`, mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
         group_names: [ 'group-name-1' ]
       }]}}));
@@ -169,7 +160,6 @@ describe('<Workflows />', () => {
           data: [{
             id: 'edit-id',
             name: 'foo',
-            sequence: 1,
             group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
           }]
         }
@@ -211,11 +201,10 @@ describe('<Workflows />', () => {
     let wrapper;
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce({ body: { data: [{
         id: 'edit-id',
         name: 'foo',
-        sequence: 1,
         group_refs: [{ name: 'group-1', uuid: 'some-uuid' }],
         group_names: [ 'group-name-1' ]
       }]}})
@@ -237,95 +226,6 @@ describe('<Workflows />', () => {
     expect(wrapper.find(RemoveWorkflowModal)).toHaveLength(1);
   });
 
-  it('should sort', async () => {
-    expect.assertions(3);
-
-    const wf = {
-      id: 'so',
-      name: 'foo',
-      sequence: 1,
-      group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
-    };
-
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
-      mockOnce({
-        status: 200,
-        body: {
-          meta: { count: 1, limit: 50, offset: 0 },
-          data: [ wf ]
-        }
-      })
-    );
-
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
-    registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
-    const storeReal = registry.getStore();
-
-    let wrapper;
-    await act(async()=> {
-      wrapper = mount(
-        <ComponentWrapper store={ storeReal }>
-          <Route path={ routes.workflows.index } component={ Workflows } />
-        </ComponentWrapper>
-      );
-    });
-    wrapper.update();
-
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Aasc`,
-      mockOnce((req, res) => {
-        expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'name:asc'
-        });
-        return res.status(200).body({
-          meta: { count: 1, limit: 50, offset: 0 },
-          data: [ wf ]
-        });
-      })
-    );
-
-    await act(async () => {
-      wrapper.find('button').at(12).simulate('click'); // name column
-    });
-    wrapper.update();
-
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=name%3Adesc`,
-      mockOnce((req, res) => {
-        expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'name:desc'
-        });
-        return res.status(200).body({
-          meta: { count: 1, limit: 50, offset: 0 },
-          data: [ wf ]
-        });
-      })
-    );
-
-    await act(async () => {
-      wrapper.find('button').at(12).simulate('click'); // name column
-    });
-    wrapper.update();
-
-    apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=description%3Aasc`,
-      mockOnce((req, res) => {
-        expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'description:asc'
-        });
-        return res.status(200).body({
-          meta: { count: 1, limit: 50, offset: 0 },
-          data: [ wf ]
-        });
-      })
-    );
-
-    await act(async () => {
-      wrapper.find('button').at(13).simulate('click'); // description column
-    });
-    wrapper.update();
-  });
-
   it('should filter and clear the filter', async () => {
     jest.useFakeTimers();
     expect.assertions(2);
@@ -333,12 +233,11 @@ describe('<Workflows />', () => {
     const wf = {
       id: 'so',
       name: 'foo',
-      sequence: 1,
       group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
     };
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce({
         status: 200,
         body: {
@@ -362,10 +261,10 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=some-name&limit=50&offset=0&sort_by=sequence%3Aasc`,
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=some-name&limit=50&offset=0`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
-          'filter[name][contains_i]': 'some-name', limit: '50', offset: '0', sort_by: 'sequence:asc'
+          'filter[name][contains_i]': 'some-name', limit: '50', offset: '0'
         });
         return res.status(200).body({
           meta: { count: 1, limit: 50, offset: 0 },
@@ -385,10 +284,10 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
 
-    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'sequence:asc'
+          'filter[name][contains_i]': '', limit: '50', offset: '0'
         });
         return res.status(200).body({
           meta: { count: 1, limit: 50, offset: 0 },
@@ -412,7 +311,7 @@ describe('<Workflows />', () => {
 
   it('should render table empty state', async () => {
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce({
         status: 200,
         body: {
@@ -444,7 +343,7 @@ describe('<Workflows />', () => {
     expect.assertions(2);
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce({
         status: 200,
         body: {
@@ -469,10 +368,10 @@ describe('<Workflows />', () => {
     wrapper.update();
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=0`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '10', offset: '0', sort_by: 'sequence:asc'
+          'filter[name][contains_i]': '', limit: '10', offset: '0'
         });
         return res.status(200).body({
           meta: { count: 40, limit: 10, offset: 0 },
@@ -495,10 +394,10 @@ describe('<Workflows />', () => {
     wrapper.update();
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=10&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=10`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
-          'filter[name][contains_i]': '', limit: '10', offset: '10', sort_by: 'sequence:asc'
+          'filter[name][contains_i]': '', limit: '10', offset: '10'
         });
         return res.status(200).body({
           meta: { count: 40, limit: 10, offset: 10 },
@@ -526,12 +425,11 @@ describe('<Workflows />', () => {
     const wf = {
       id: '987',
       name: 'foo',
-      sequence: 10,
       group_refs: []
     };
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce({
         status: 200,
         body: {
@@ -560,15 +458,15 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
 
-    // PATCH WF
-    apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/${wf.id}`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual({ id: wf.id, sequence: wf.sequence + 1 });
+    // Update WF
+    apiClientMock.post(`${APPROVAL_API_BASE}/workflows/${wf.id}/reposition`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ increment: 1 });
       return res.status(200).body({ foo: 'bar' });
     }));
 
     // RELOAD WORKFLOWS
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce({
         status: 200,
         body: {
@@ -593,12 +491,11 @@ describe('<Workflows />', () => {
     const wf = {
       id: '987',
       name: 'foo',
-      sequence: 10,
       group_refs: []
     };
 
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce({
         status: 200,
         body: {
@@ -627,8 +524,8 @@ describe('<Workflows />', () => {
     });
     wrapper.update();
 
-    apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/${wf.id}`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual({ id: wf.id, sequence: wf.sequence + 1 });
+    apiClientMock.post(`${APPROVAL_API_BASE}/workflows/${wf.id}/reposition`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ increment: 1 });
       return res.status(200).body({ foo: 'bar' });
     }));
 
@@ -642,14 +539,14 @@ describe('<Workflows />', () => {
     wrapper.update();
 
     // PATCH WF
-    apiClientMock.patch(`${APPROVAL_API_BASE}/workflows/${wf.id}`, mockOnce((req, res) => {
-      expect(JSON.parse(req.body())).toEqual({ id: wf.id, sequence: wf.sequence + 3 });
+    apiClientMock.post(`${APPROVAL_API_BASE}/workflows/${wf.id}/reposition`, mockOnce((req, res) => {
+      expect(JSON.parse(req.body())).toEqual({ increment: 3 });
       return res.status(200).body({ foo: 'bar' });
     }));
 
     // RELOAD WORKFLOWS
     apiClientMock.get(
-      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce({
         status: 200,
         body: {
@@ -672,21 +569,18 @@ describe('<Workflows />', () => {
       id: '123',
       name: 'wf1',
       selected: true,
-      sequence: 1,
       group_refs: []
     };
     const wf2 = {
       id: '456',
       name: 'wf2',
       selected: true,
-      sequence: 1,
       group_refs: [ ]
     };
     const wf3 = {
       id: '789',
       name: 'wf',
       selected: true,
-      sequence: 1,
       group_refs: [ ]
     };
     let storeReal;
@@ -694,7 +588,7 @@ describe('<Workflows />', () => {
     beforeEach(() => {
       apiClientMock.reset();
       apiClientMock.get(
-        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
         mockOnce({
           status: 200,
           body: {
@@ -764,10 +658,10 @@ describe('<Workflows />', () => {
 
       // wf refresh
       apiClientMock.get(
-        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
         mockOnce((req, res) => {
           expect(req.url().query).toEqual({
-            'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'sequence:asc'
+            'filter[name][contains_i]': '', limit: '50', offset: '0'
           });
           return res.status(200).body({
             meta: { count: 0, limit: 50, offset: 0 },
@@ -848,10 +742,10 @@ describe('<Workflows />', () => {
 
       // wf refresh
       apiClientMock.get(
-        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0&sort_by=sequence%3Aasc`,
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
         mockOnce((req, res) => {
           expect(req.url().query).toEqual({
-            'filter[name][contains_i]': '', limit: '50', offset: '0', sort_by: 'sequence:asc'
+            'filter[name][contains_i]': '', limit: '50', offset: '0'
           });
           return res.status(200).body({
             meta: { count: 0, limit: 50, offset: 0 },

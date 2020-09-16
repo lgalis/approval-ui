@@ -69,6 +69,14 @@ const worfklowMessages = defineMessages({
     id: 'workflowMessages.updateProcessSuccessDescription',
     defaultMessage: 'The approval process was updated successfully.'
   },
+  repositionProcessSuccessTitle: {
+    id: 'workflowMessages.repositionProcessSuccessTitle',
+    defaultMessage: 'Success updating approval process sequence'
+  },
+  repositionProcessSuccessDescription: {
+    id: 'workflowMessages.repositionProcessSuccessDescription',
+    defaultMessage: `The approval process' sequence was updated successfully.`
+  },
   removeProcessSuccessTitle: {
     id: 'workflowMessages.removeProcessSuccessTitle',
     defaultMessage: 'Success removing approval process'

@@ -51,7 +51,6 @@ describe('<EditWorkflow />', () => {
       name: 'Foo',
       id: '123',
       description: 'description',
-      sequence: 16,
       group_refs: [{
         uuid: '123',
         name: 'SampleWorkflow'
@@ -69,7 +68,6 @@ describe('<EditWorkflow />', () => {
             id: '123',
             name: 'new_name',
             description: 'super description',
-            sequence: 98098,
             group_refs: [{
               uuid: '467',
               name: 'some new group'
@@ -107,13 +105,12 @@ describe('<EditWorkflow />', () => {
     expect(wrapper.find('input').first().props().value).toEqual(initialState.workflowReducer.workflows.data[0].name);
     expect(wrapper.find('textarea').first().props().value).toEqual(initialState.workflowReducer.workflows.data[0].description);
     expect(wrapper.find('SelectContainer').first().props().getValue()).toEqual([{ label: 'some new group', value: '467' }]);
-    expect(wrapper.find('input').last().props().value).toEqual(initialState.workflowReducer.workflows.data[0].sequence);
   });
 
   it('should fetch data from api and submit the form', async () => {
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/123`, mockOnce({ body: workflow }));
 
-    expect.assertions(9);
+    expect.assertions(8);
 
     wfHelper.fetchWorkflowByName = jest.fn().mockImplementationOnce(
       (value) => {
@@ -157,7 +154,6 @@ describe('<EditWorkflow />', () => {
     expect(wrapper.find('input').first().props().value).toEqual(workflow.name);
     expect(wrapper.find('textarea').first().props().value).toEqual(workflow.description);
     expect(wrapper.find('SelectContainer').first().props().getValue()).toEqual([{ label: 'SampleWorkflow', value: '123' }]);
-    expect(wrapper.find('input').last().props().value).toEqual(workflow.sequence);
 
     await act(async () => {
       const name = wrapper.find('input').first();

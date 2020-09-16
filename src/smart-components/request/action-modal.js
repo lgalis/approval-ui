@@ -27,7 +27,6 @@ const ActionModal = ({
   const intl = useIntl();
   const { push } = useHistory();
   const [{ request: id }] = useQuery([ 'request' ]);
-
   const onSubmit = (data) => {
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
     const actionName = actionType === 'Add Comment'

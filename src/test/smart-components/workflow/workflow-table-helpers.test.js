@@ -43,7 +43,6 @@ describe('approval process table helpers', () => {
         <React.Fragment key='1-checkbox'>
           <SelectBox id="1" />
         </React.Fragment>,
-        2,
         'foo',
         'bar',
         <React.Fragment key="1"><GroupsLabels key="1" group_refs={ [{ name: 'group_refs', uuid: 'group_uuid' }] } id="1" /></React.Fragment>
@@ -57,7 +56,6 @@ describe('approval process table helpers', () => {
         <React.Fragment key='2-checkbox'>
           <SelectBox id="2" />
         </React.Fragment>,
-        1,
         'should be in result',
         'baz',
         <React.Fragment key="2"><GroupsLabels key="2" group_refs={ [{ name: 'group_refs', uuid: 'group_uuid' }] } id="2"/></React.Fragment>
@@ -94,16 +92,12 @@ describe('approval process table helpers', () => {
       mockStore = configureStore(middlewares);
 
       store = mockStore({
-        workflowReducer: {
-          sortBy: {
-            property: 'sequence',
-            direction: 'asc'
-          }
-        }
+        workflowReducer: {}
       });
 
       asyncDebounce.default = jest.fn().mockImplementation((fn) => fn);
       helpers.updateWorkflow = jest.fn().mockImplementation(() => Promise.resolve({ wf: 'ok' }));
+      helpers.repositionWorkflow = jest.fn().mockImplementation(() => Promise.resolve({ wf: 'ok' }));
       actions.fetchWorkflows = jest.fn().mockImplementation(() => ({ type: 'fetch' }));
     });
 
@@ -117,29 +111,10 @@ describe('approval process table helpers', () => {
       expect(wrapper.find(AngleDownIcon)).toHaveLength(1);
     });
 
-    it('is hidden on sorting by not sequence', () => {
-      store = mockStore({
-        workflowReducer: {
-          sortBy: {
-            property: 'name',
-            direction: 'asc'
-          }
-        }
-      });
-
-      wrapper = mountComponent(initialProps, store);
-
-      expect(wrapper.find(Button)).toHaveLength(0);
-    });
-
     it('disabled on loading', () => {
       store = mockStore({
         workflowReducer: {
-          isLoading: true,
-          sortBy: {
-            property: 'sequence',
-            direction: 'asc'
-          }
+          isLoading: true
         }
       });
 
@@ -156,11 +131,7 @@ describe('approval process table helpers', () => {
       store = mockStore({
         workflowReducer: {
           isLoading: false,
-          isUpdating: 1,
-          sortBy: {
-            property: 'sequence',
-            direction: 'asc'
-          }
+          isUpdating: 1
         }
       });
 
@@ -181,10 +152,12 @@ describe('approval process table helpers', () => {
       });
       wrapper.update();
 
-      expect(helpers.updateWorkflow).toHaveBeenCalledWith({
-        id,
-        sequence: 10
-      });
+      expect(helpers.repositionWorkflow).toHaveBeenCalledWith(
+        {
+          id,
+          sequence: { increment: -1 }
+        }
+      );
       expect(actions.fetchWorkflows).toHaveBeenCalled();
     });
 
@@ -196,82 +169,11 @@ describe('approval process table helpers', () => {
       });
       wrapper.update();
 
-      expect(helpers.updateWorkflow).toHaveBeenCalledWith({
+      expect(helpers.repositionWorkflow).toHaveBeenCalledWith({
         id,
-        sequence: 12
+        sequence: { increment: 1 }
       });
       expect(actions.fetchWorkflows).toHaveBeenCalled();
-    });
-
-    it('moves up - desc', async () => {
-      store = mockStore({
-        workflowReducer: {
-          sortBy: {
-            property: 'sequence',
-            direction: 'desc'
-          }
-        }
-      });
-
-      wrapper = mountComponent(initialProps, store);
-
-      await act(async () => {
-        wrapper.find(Button).first().simulate('click');
-      });
-      wrapper.update();
-
-      expect(helpers.updateWorkflow).toHaveBeenCalledWith({
-        id,
-        sequence: 12
-      });
-      expect(actions.fetchWorkflows).toHaveBeenCalled();
-    });
-
-    it('moves down - desc', async () => {
-      store = mockStore({
-        workflowReducer: {
-          sortBy: {
-            property: 'sequence',
-            direction: 'desc'
-          }
-        }
-      });
-
-      wrapper = mountComponent(initialProps, store);
-
-      await act(async () => {
-        wrapper.find(Button).last().simulate('click');
-      });
-      wrapper.update();
-
-      expect(helpers.updateWorkflow).toHaveBeenCalledWith({
-        id,
-        sequence: 10
-      });
-      expect(actions.fetchWorkflows).toHaveBeenCalled();
-    });
-
-    it('up is disabled on first - asc', () => {
-      wrapper = mountComponent({ ...initialProps, sequence: 1 }, store);
-
-      expect(wrapper.find(Button).first().props().isDisabled).toEqual(true);
-      expect(wrapper.find(Button).last().props().isDisabled).toEqual(undefined);
-    });
-
-    it('down is disabled on first - desc', () => {
-      store = mockStore({
-        workflowReducer: {
-          sortBy: {
-            property: 'sequence',
-            direction: 'desc'
-          }
-        }
-      });
-
-      wrapper = mountComponent({ ...initialProps, sequence: 1 }, store);
-
-      expect(wrapper.find(Button).first().props().isDisabled).toEqual(undefined);
-      expect(wrapper.find(Button).last().props().isDisabled).toEqual(true);
     });
   });
 });
