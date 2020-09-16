@@ -27,6 +27,9 @@ import routes from '../../constants/routes';
 import tableToolbarMessages from '../../messages/table-toolbar.messages';
 import requestsMessages from '../../messages/requests.messages';
 import commonMessages from '../../messages/common.message';
+import { Route } from 'react-router-dom';
+import routesLinks from '../../constants/routes';
+import ActionModal from './action-modal';
 
 const columns = (intl) => [{
   title: intl.formatMessage(requestsMessages.requestsIdColumn),
@@ -77,7 +80,7 @@ const requestsListState = (state, action) => {
   }
 };
 
-const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
+const RequestsList = ({ persona, indexpath, actionResolver }) => {
   const { requests: { data, meta }, sortBy, filterValue } = useSelector(
     ({ requestReducer: { requests, sortBy, filterValue }}) => ({ requests, sortBy, filterValue }),
     shallowEqual
@@ -105,6 +108,19 @@ const RequestsList = ({ routes, persona, indexpath, actionResolver }) => {
     .then(() => stateDispatch({ type: 'setFetching', payload: false }))
     .catch(() => stateDispatch({ type: 'setFetching', payload: false }));
   };
+
+  const routes = () => <Fragment>
+    <Route exact path={ routesLinks.requests.addComment } render={ props => <ActionModal { ...props }
+      actionType={ 'Add Comment' }
+      postMethod={ () => updateRequests(meta) }
+    /> }/>
+    <Route exact path={ routesLinks.requests.approve } render={ props => <ActionModal { ...props } actionType={ 'Approve' }
+      postMethod={ () => updateRequests(meta) }
+    /> } />
+    <Route exact path={ routesLinks.requests.deny } render={ props => <ActionModal { ...props } actionType={ 'Deny' }
+      postMethod={ () => updateRequests(meta) }
+    /> } />
+  </Fragment>;
 
   const resetList = () => {
     dispatch(resetRequestList());

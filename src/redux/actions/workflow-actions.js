@@ -3,7 +3,7 @@ import * as WorkflowHelper from '../../helpers/workflow/workflow-helper';
 import worfklowMessages from '../../messages/workflows.messages';
 
 export const fetchWorkflows = (pagination) => (dispatch, getState) => {
-  const { sortBy, workflows, filterValue } = getState().workflowReducer;
+  const { workflows, filterValue } = getState().workflowReducer;
 
   let finalPagination = pagination;
 
@@ -14,7 +14,7 @@ export const fetchWorkflows = (pagination) => (dispatch, getState) => {
 
   return dispatch ({
     type: ActionTypes.FETCH_WORKFLOWS,
-    payload: WorkflowHelper.fetchWorkflows(filterValue, finalPagination, sortBy)
+    payload: WorkflowHelper.fetchWorkflows(filterValue, finalPagination)
   });
 };
 
@@ -51,6 +51,20 @@ export const updateWorkflow = (workflowData, intl) => ({
   }
 });
 
+export const repositionWorkflow = (workflowData, intl) => ({
+  type: ActionTypes.REPOSITION_WORKFLOW,
+  payload: WorkflowHelper.repositionWorkflow(workflowData),
+  meta: {
+    notifications: {
+      fulfilled: {
+        variant: 'success',
+        title: intl.formatMessage(worfklowMessages.repositionProcessSuccessTitle),
+        description: intl.formatMessage(worfklowMessages.repositionProcessSuccessDescription)
+      }
+    }
+  }
+});
+
 export const removeWorkflow = (workflow, intl) => ({
   type: ActionTypes.REMOVE_WORKFLOW,
   payload: WorkflowHelper.removeWorkflow(workflow),
@@ -79,12 +93,12 @@ export const removeWorkflows = (workflows, intl) => ({
   }
 });
 
-export const sortWorkflows = (sortBy) => ({
-  type: ActionTypes.SORT_WORKFLOWS,
-  payload: sortBy
-});
-
 export const setFilterValueWorkflows = (filterValue) => ({
   type: ActionTypes.SET_FILTER_WORKFLOWS,
   payload: filterValue
+});
+
+export const moveSequence = process => ({
+  type: ActionTypes.MOVE_SEQUENCE,
+  payload: process
 });
