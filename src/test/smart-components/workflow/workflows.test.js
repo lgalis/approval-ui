@@ -670,6 +670,19 @@ describe('<Workflows />', () => {
         })
       );
 
+      apiClientMock.get(
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=-3`,
+        mockOnce((req, res) => {
+          expect(req.url().query).toEqual({
+            'filter[name][contains_i]': '', limit: '50', offset: '-3'
+          });
+          return res.status(200).body({
+            meta: { count: 0, limit: 50, offset: 0 },
+            data: [ ]
+          });
+        })
+      );
+
       await act(async () => {
         wrapper.find('button#submit-remove-workflow').simulate('click');
       });
@@ -754,6 +767,44 @@ describe('<Workflows />', () => {
         })
       );
 
+      apiClientMock.get(
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=1`,
+        mockOnce((req, res) => {
+          expect(req.url().query).toEqual({
+            'filter[name][contains_i]': '', limit: '50', offset: '0'
+          });
+          return res.status(200).body({
+            meta: { count: 0, limit: 50, offset: 0 },
+            data: [ ]
+          });
+        })
+      );
+
+      apiClientMock.get(
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=-3`,
+        mockOnce((req, res) => {
+          expect(req.url().query).toEqual({
+            'filter[name][contains_i]': '', limit: '50', offset: '-3'
+          });
+          return res.status(200).body({
+            meta: { count: 0, limit: 50, offset: 0 },
+            data: [ ]
+          });
+        })
+      );
+
+      apiClientMock.get(
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=-1`,
+        mockOnce((req, res) => {
+          expect(req.url().query).toEqual({
+            'filter[name][contains_i]': '', limit: '50', offset: '-1'
+          });
+          return res.status(200).body({
+            meta: { count: 0, limit: 50, offset: 0 },
+            data: [ ]
+          });
+        })
+      );
       await act(async () => {
         wrapper.find('button#submit-remove-workflow').simulate('click');
       });
