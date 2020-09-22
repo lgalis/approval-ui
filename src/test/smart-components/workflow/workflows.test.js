@@ -670,19 +670,6 @@ describe('<Workflows />', () => {
         })
       );
 
-      apiClientMock.get(
-        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=-3`,
-        mockOnce((req, res) => {
-          expect(req.url().query).toEqual({
-            'filter[name][contains_i]': '', limit: '50', offset: '-3'
-          });
-          return res.status(200).body({
-            meta: { count: 0, limit: 50, offset: 0 },
-            data: [ ]
-          });
-        })
-      );
-
       await act(async () => {
         wrapper.find('button#submit-remove-workflow').simulate('click');
       });
@@ -767,44 +754,82 @@ describe('<Workflows />', () => {
         })
       );
 
+      await act(async () => {
+        wrapper.find('button#submit-remove-workflow').simulate('click');
+      });
+    });
+
+    it('should adjust offset if the last page is empty after delete', async () => {
+      expect.assertions(5);
+      const stateWithOffset = {
+        groupReducer: { ...groupsInitialState },
+        workflowReducer: {
+          ...workflowsInitialState,
+          workflows: {
+            data: [{
+              id: 'wf-id',
+              name: 'foo',
+              group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
+            }],
+            meta: {
+              count: 21,
+              limit: 10,
+              offset: 20
+            }
+          },
+          workflow: {},
+          filterValue: '',
+          isLoading: false,
+          isRecordLoading: false
+        }
+      };
+      const store = mockStore(stateWithOffset);
+      let wrapper;
+      await act(async()=> {
+        wrapper = mount(
+          <ComponentWrapper store={ store }>
+            <Route path={ routes.workflows.index } component={ Workflows } />
+          </ComponentWrapper>
+        );
+      });
+      wrapper.update();
+
+      await act(async () => {
+        wrapper.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true }});
+      });
+      wrapper.update();
+      await act(async () => {
+        wrapper.find('Link#remove-multiple-workflows').simulate('click', { button: 0 });
+      });
+      wrapper.update();
+
+      expect(wrapper.find('ModalBoxBody').find('p').text()).toEqual('foo will be removed.');
+      expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.remove);
+      expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('');
+
+      // Delete endpoints
+      apiClientMock.delete(
+        `${APPROVAL_API_BASE}/workflows/wf-id`,
+        mockOnce((_req, res) => {
+          expect(true).toEqual(true); // just check that it was called
+          return res.status(200);
+        })
+      );
+
+      // wf refresh
       apiClientMock.get(
-        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=1`,
+        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=10&offset=10`,
         mockOnce((req, res) => {
           expect(req.url().query).toEqual({
-            'filter[name][contains_i]': '', limit: '50', offset: '0'
+            'filter[name][contains_i]': '', limit: '10', offset: '10'
           });
           return res.status(200).body({
-            meta: { count: 0, limit: 50, offset: 0 },
+            meta: { count: 20, limit: 10, offset: 10 },
             data: [ ]
           });
         })
       );
 
-      apiClientMock.get(
-        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=-3`,
-        mockOnce((req, res) => {
-          expect(req.url().query).toEqual({
-            'filter[name][contains_i]': '', limit: '50', offset: '-3'
-          });
-          return res.status(200).body({
-            meta: { count: 0, limit: 50, offset: 0 },
-            data: [ ]
-          });
-        })
-      );
-
-      apiClientMock.get(
-        `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=-1`,
-        mockOnce((req, res) => {
-          expect(req.url().query).toEqual({
-            'filter[name][contains_i]': '', limit: '50', offset: '-1'
-          });
-          return res.status(200).body({
-            meta: { count: 0, limit: 50, offset: 0 },
-            data: [ ]
-          });
-        })
-      );
       await act(async () => {
         wrapper.find('button#submit-remove-workflow').simulate('click');
       });
