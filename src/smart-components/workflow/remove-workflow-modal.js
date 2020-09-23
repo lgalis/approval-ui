@@ -14,10 +14,12 @@ import worfklowMessages from '../../messages/workflows.messages';
 import commonMessages from '../../messages/common.message';
 import isEmpty from 'lodash/isEmpty';
 import { APP_DISPLAY_NAME } from '../../utilities/constants';
+import { defaultSettings, adjustedOffset } from '../../helpers/shared/pagination';
 
 const RemoveWorkflowModal = ({
   ids = [],
   fetchData,
+  pagination = defaultSettings,
   resetSelectedWorkflows
 }) => {
   const dispatch = useDispatch();
@@ -47,7 +49,7 @@ const RemoveWorkflowModal = ({
   .catch(() => setSubmitting(false))
   .then(() => push(routes.workflows.index))
   .then(() => resetSelectedWorkflows())
-  .then(() => fetchData());
+  .then(() => fetchData({ ...pagination, offset: adjustedOffset(pagination, finalId ? 1 : ids.length) }));
 
   const onCancel = () => push(routes.workflows.index);
 
@@ -130,7 +132,8 @@ const RemoveWorkflowModal = ({
 RemoveWorkflowModal.propTypes = {
   fetchData: PropTypes.func.isRequired,
   ids: PropTypes.array,
-  resetSelectedWorkflows: PropTypes.func.isRequired
+  resetSelectedWorkflows: PropTypes.func.isRequired,
+  pagination: PropTypes.shape({ limit: PropTypes.number, offset: PropTypes.number, count: PropTypes.number })
 };
 
 export default RemoveWorkflowModal;
