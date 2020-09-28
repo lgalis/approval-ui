@@ -273,17 +273,6 @@ describe('<Workflows />', () => {
       })
     );
 
-    await act(async () => {
-      wrapper.find('input').first().instance().value = 'some-name';
-      wrapper.find('input').first().simulate('change');
-    });
-    wrapper.update();
-
-    await act(async () => {
-      jest.runAllTimers();
-    });
-    wrapper.update();
-
     apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
       mockOnce((req, res) => {
         expect(req.url().query).toEqual({
@@ -296,15 +285,34 @@ describe('<Workflows />', () => {
       })
     );
 
-    await act(async () => {
-      wrapper.find('.ins-c-chip-filters').find('button').last().simulate('click');
-    });
-    wrapper.update();
+    apiClientMock.get(`${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=some-name&limit=50&offset=0`,
+      mockOnce((req, res) => {
+        expect(req.url().query).toEqual({
+          'filter[name][contains_i]': 'some-name', limit: '50', offset: '0'
+        });
+        return res.status(200).body({
+          meta: { count: 1, limit: 50, offset: 0 },
+          data: [ wf ]
+        });
+      })
+    );
 
     await act(async () => {
+      wrapper.update();
+    });
+
+    wrapper.find('input').first().instance().value = 'some-name';
+    wrapper.find('input').first().simulate('change');
+
+    await act(async () => {
+      wrapper.update();
       jest.runAllTimers();
     });
-    wrapper.update();
+    wrapper.find('.ins-c-chip-filters').find('button').last().simulate('click');
+    await act(async () => {
+      wrapper.update();
+      jest.runAllTimers();
+    });
 
     jest.useRealTimers();
   });
@@ -344,6 +352,17 @@ describe('<Workflows />', () => {
 
     apiClientMock.get(
       `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=&limit=50&offset=0`,
+      mockOnce({
+        status: 200,
+        body: {
+          meta: { count: 40, limit: 50, offset: 0 },
+          data: [ ]
+        }
+      })
+    );
+
+    apiClientMock.get(
+      `${APPROVAL_API_BASE}/workflows/?filter%5Bname%5D%5Bcontains_i%5D=some-name&limit=50&offset=0`,
       mockOnce({
         status: 200,
         body: {
@@ -795,7 +814,7 @@ describe('<Workflows />', () => {
       wrapper.update();
 
       await act(async () => {
-        wrapper.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true }});
+        return wrapper.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true }});
       });
       wrapper.update();
       await act(async () => {
