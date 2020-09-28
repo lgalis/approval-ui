@@ -5,7 +5,7 @@
   "dependencies": {
     "@data-driven-forms/pf4-component-mapper": "^2.5.3",
     "@data-driven-forms/react-form-renderer": "^2.5.3",
-    "@patternfly/react-core": "^4.50.2",
+    "@patternfly/react-core": "^4.47.0",
     "@patternfly/react-icons": "^4.7.4",
     "@patternfly/react-table": "^4.16.20",
     "@redhat-cloud-services/approval-client": "^1.0.75",
