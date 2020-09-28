@@ -30,7 +30,7 @@ const ComponentWrapper = ({ store, initialEntries = [ routes.workflows.index ], 
 );
 
 describe('<Workflows />', () => {
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
   let stateWithData;
 
@@ -247,7 +247,7 @@ describe('<Workflows />', () => {
       })
     );
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
     const storeReal = registry.getStore();
 
@@ -321,7 +321,7 @@ describe('<Workflows />', () => {
       })
     );
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
     const storeReal = registry.getStore();
 
@@ -353,7 +353,7 @@ describe('<Workflows />', () => {
       })
     );
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
     const storeReal = registry.getStore();
 
@@ -439,7 +439,7 @@ describe('<Workflows />', () => {
       })
     );
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
     const storeReal = registry.getStore();
 
@@ -505,7 +505,7 @@ describe('<Workflows />', () => {
       })
     );
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
     const storeReal = registry.getStore();
 
@@ -598,7 +598,7 @@ describe('<Workflows />', () => {
         })
       );
 
-      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
       registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
       storeReal = registry.getStore();
     });

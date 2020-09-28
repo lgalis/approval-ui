@@ -65,7 +65,7 @@ describe('<Requests />', () => {
       }
     }));
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
     const store = registry.getStore();
 
@@ -141,7 +141,7 @@ describe('<Requests />', () => {
       }
     }));
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
     const store = registry.getStore();
 
@@ -349,7 +349,7 @@ describe('<Requests />', () => {
       }
     }));
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
     const store = registry.getStore();
 
@@ -417,7 +417,7 @@ describe('<Requests />', () => {
       }
     }));
 
-    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+    const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
     const store = registry.getStore();
 
@@ -461,7 +461,7 @@ describe('<Requests />', () => {
     });
 
     it('should open comment modal', async () => {
-      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
@@ -488,7 +488,7 @@ describe('<Requests />', () => {
     });
 
     it('should open approve modal from the list', async () => {
-      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
@@ -515,7 +515,7 @@ describe('<Requests />', () => {
     });
 
     it('should open deny modal from the list', async () => {
-      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 

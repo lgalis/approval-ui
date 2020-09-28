@@ -24,7 +24,7 @@ const ComponentWrapper = ({ store, children }) => (
 
 describe('<ActionModal />', () => {
   let initialProps;
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
   let initialState;
 

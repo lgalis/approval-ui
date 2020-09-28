@@ -9,7 +9,7 @@ import { fetchRbacApprovalGroups } from '../../../redux/actions/group-actions';
 import { RBAC_API_BASE } from '../../../utilities/constants';
 
 describe('group redux action creators', () => {
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
 
   beforeEach(() => {

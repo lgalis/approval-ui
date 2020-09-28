@@ -18,7 +18,7 @@ import routes from '../../../../constants/routes';
 describe('<AddWorkflow />', () => {
   let initialProps;
   let initialState;
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
 
   const ComponentWrapper = ({ store, children }) => (

@@ -18,7 +18,7 @@ import routes from '../../../../constants/routes';
 describe('<EditWorkflow />', () => {
   let initialProps;
   let initialState;
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
   let workflow;
   let wrapper;

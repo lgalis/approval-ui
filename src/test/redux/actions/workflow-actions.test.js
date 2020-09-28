@@ -27,7 +27,7 @@ import {
 const INTL = { formatMessage: ({ defaultMessage }) => defaultMessage };
 
 describe('Approval process actions', () => {
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
 
   beforeEach(() => {
