@@ -30,7 +30,7 @@ const ComponentWrapper = ({ store, children, initialEntries = [ '/' ]}) => (
 
 describe('<RemoveWorkflowModal />', () => {
   let initialProps;
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
   let initialState;
 

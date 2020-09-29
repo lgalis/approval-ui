@@ -16,7 +16,7 @@ import {
 import { mockGraphql } from '../../__mocks__/user-login';
 
 describe('Request actions', () => {
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
 
   beforeEach(() => {

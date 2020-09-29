@@ -69,8 +69,7 @@ export const MoveButtons = ({ id }) => {
 };
 
 MoveButtons.propTypes = {
-  id: PropTypes.string.isRequired,
-  sequence: PropTypes.number.isRequired
+  id: PropTypes.string.isRequired
 };
 
 export const GroupsLabels = ({ group_refs, id }) => (

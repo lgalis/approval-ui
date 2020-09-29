@@ -40,7 +40,7 @@ describe('<App />', () => {
 
   it('renders correctly as administrator role', async () => {
     apiClientMock.get(
-      `${RBAC_API_BASE}/roles/?limit=50&offset=0&name=Approval%20&scope=principal`,
+      `${RBAC_API_BASE}/roles/?limit=50&offset=0&name=Approval%20&name_match=partial&scope=principal`,
       mockOnce({ body: {
         data: [{
           role: APPROVAL_ADMINISTRATOR_ROLE

@@ -14,7 +14,7 @@ const getStore = (middlewares = []) => {
     {},
     [
       thunk,
-      promiseMiddleware(),
+      promiseMiddleware,
       notificationsMiddleware({
         errorTitleKey: [ 'errors', 'message', 'statusText' ],
         errorDescriptionKey: [
