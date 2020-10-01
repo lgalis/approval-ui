@@ -5,9 +5,9 @@ const actionModalMessages = defineMessages({
     id: 'actionModal.requestTitle',
     defaultMessage: 'Request #{id}'
   },
-  requestActionTitle: {
-    id: 'actionModal.requestTitle',
-    defaultMessage: '{actionType} Request #{id}'
+  requestActionDescription: {
+    id: 'actionModal.requestDescription',
+    defaultMessage: '{actionMessage} #{id}'
   },
   actionName: {
     id: 'actionModal.actionName',

@@ -4,7 +4,7 @@ import FormRenderer from '../common/form-renderer';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Modal } from '@patternfly/react-core';
+import { Modal, Stack, Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
 import { createRequestAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 import useQuery from '../../utilities/use-query';
@@ -12,10 +12,41 @@ import routes from '../../constants/routes';
 import { useIntl } from 'react-intl';
 import actionModalMessages from '../../messages/action-modal.messages';
 import requestsMessages from '../../messages/requests.messages';
+import { ExclamationTriangleIcon } from '@patternfly/react-icons';
+import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
 
-const actionTypeToMsg = {
-  Approve: requestsMessages.approveTitle,
-  Deny: requestsMessages.denyTitle
+const actionTypeToDescription = (type) => {
+  switch (type) {
+    case 'Approve':
+      return requestsMessages.approveDescription;
+    case 'Deny':
+      return requestsMessages.denyDescription;
+    default:
+      return requestsMessages.commentDescription;
+  }
+};
+
+const actionTypeToTitle = (type) => {
+  switch (type) {
+    case 'Approve':
+      return requestsMessages.approveTitle;
+    case 'Deny':
+      return requestsMessages.denyTitle;
+    default:
+      return requestsMessages.addCommentTitle;
+  }
+};
+
+const actionTypeToSubmitLabel = (type) => {
+  console.log ('Debug - type', type, requestsMessages.approveLabel, requestsMessages.denyLabel, requestsMessages.approveLabel);
+  switch (type) {
+    case 'Approve':
+      return requestsMessages.approveLabel;
+    case 'Deny':
+      return requestsMessages.denyLabel;
+    default:
+      return requestsMessages.addCommentLabel;
+  }
 };
 
 const ActionModal = ({
@@ -31,7 +62,7 @@ const ActionModal = ({
     const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
     const actionName = actionType === 'Add Comment'
       ? intl.formatMessage(requestsMessages.addCommentTitle)
-      : intl.formatMessage(actionModalMessages.actionName, { actionType: intl.formatMessage(actionTypeToMsg[actionType]) }) ;
+      : intl.formatMessage(actionModalMessages.actionName, { actionType: intl.formatMessage(actionTypeToTitle(actionType)) }) ;
 
     return postMethod ?
       createRequestAction(
@@ -52,19 +83,34 @@ const ActionModal = ({
 
   return (
     <Modal
-      variant="large"
-      title={ actionType === 'Add Comment'
-        ? intl.formatMessage(actionModalMessages.requestTitle, { id })
-        : intl.formatMessage(actionModalMessages.requestActionTitle, { id, actionType: intl.formatMessage(actionTypeToMsg[actionType]) })
+      variant="small"
+      header={
+        <Title size="lg" headingLevel="h1">
+          { actionType === 'Deny' && <ExclamationTriangleIcon size="sm" fill="#f0ab00" className="pf-u-mr-sm" /> }
+          { intl.formatMessage(actionTypeToTitle(actionType)) }
+        </Title>
       }
       isOpen
       onClose={ onCancel }
     >
-      <FormRenderer
-        schema={ createRequestCommentSchema(actionType === 'Deny', intl) }
-        onSubmit={ onSubmit }
-        onCancel={ onCancel }
-      />
+      <Stack hasGutter>
+        <TextContent>
+          <Text component={ TextVariants.small }>
+            { intl.formatMessage(actionModalMessages.requestActionDescription,
+              { id, actionMessage: intl.formatMessage(actionTypeToDescription(actionType)) }) }
+          </Text>
+        </TextContent>
+
+        <FormRenderer
+          schema={ createRequestCommentSchema(actionType === 'Deny', intl) }
+          onSubmit={ onSubmit }
+          onCancel={ onCancel }
+          FormTemplate={ (props) => <FormTemplate
+            { ...props }
+            templateProps={ { submitLabel: intl.formatMessage(actionTypeToSubmitLabel(actionType)) } }
+          /> }
+        />
+      </Stack>
     </Modal>
   );
 };
