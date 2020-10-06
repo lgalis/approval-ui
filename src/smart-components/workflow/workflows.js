@@ -168,6 +168,7 @@ const Workflows = () => {
         { ...props }
         ids={ selectedWorkflows }
         fetchData={ updateWorkflows }
+        pagination={ meta }
         resetSelectedWorkflows={ () => stateDispatch({ type: 'resetSelected' }) }
       /> }
     />

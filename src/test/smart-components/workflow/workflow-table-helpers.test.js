@@ -70,7 +70,7 @@ describe('approval process table helpers', () => {
     let store;
     let mockStore;
 
-    const middlewares = [ thunk, promiseMiddleware() ];
+    const middlewares = [ thunk, promiseMiddleware ];
     const id = '425';
 
     const mountComponent = (props, store) => mount(

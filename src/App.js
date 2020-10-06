@@ -35,7 +35,7 @@ const App = () => {
       .getUser()
       .then(() =>
         getRbacRoleApi()
-        .listRoles(defaultSettings.limit, 0, 'Approval ', 'principal')
+        .listRoles(defaultSettings.limit, 0, 'Approval ', 'partial', 'principal')
         .then((result) => setUserRoles(approvalRoles(result?.data)))
       )
     ]).then(() => setAuth(true));

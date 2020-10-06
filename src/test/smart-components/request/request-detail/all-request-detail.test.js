@@ -34,7 +34,7 @@ const ComponentWrapper = ({ store, children, initialEntries = [ '/foo?request=12
 
 describe('<AllRequestDetail />', () => {
   let initialProps;
-  const middlewares = [ thunk, promiseMiddleware(), notificationsMiddleware() ];
+  const middlewares = [ thunk, promiseMiddleware, notificationsMiddleware() ];
   let mockStore;
   let initialState;
   let roles;
@@ -236,7 +236,7 @@ describe('<AllRequestDetail />', () => {
     };
 
     it('opens comment modal', async () => {
-      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
@@ -269,7 +269,7 @@ describe('<AllRequestDetail />', () => {
     });
 
     it('opens approve modal', async () => {
-      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
@@ -301,7 +301,7 @@ describe('<AllRequestDetail />', () => {
     });
 
     it('opens deny modal', async () => {
-      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware() ]);
+      const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
       registry.register({ requestReducer: applyReducerHash(requestReducer, requestsInitialState) });
       const store = registry.getStore();
 
