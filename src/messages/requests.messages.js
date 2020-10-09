@@ -7,7 +7,7 @@ const requestsMessages = defineMessages({
   },
   addCommentTitle: {
     id: 'requestsMessages.addCommentTitle',
-    defaultMessage: 'Add Comment'
+    defaultMessage: 'Add comment'
   },
   approveTitle: {
     id: 'requestsMessages.approveTitle',
@@ -19,7 +19,7 @@ const requestsMessages = defineMessages({
   },
   addCommentLabel: {
     id: 'requestsMessages.addCommentLabel',
-    defaultMessage: 'Add Comment'
+    defaultMessage: 'Add comment'
   },
   approveLabel: {
     id: 'requestsMessages.approveLabel',

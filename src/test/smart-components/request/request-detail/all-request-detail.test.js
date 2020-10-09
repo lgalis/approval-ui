@@ -264,7 +264,7 @@ describe('<AllRequestDetail />', () => {
 
       expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.addComment);
       expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=123');
-      expect(wrapper.find(ActionModal).props().actionType).toEqual('Add Comment');
+      expect(wrapper.find(ActionModal).props().actionType).toEqual('Add comment');
       expect(wrapper.find(ActionModal).props().postMethod).toBeDefined();
     });
 

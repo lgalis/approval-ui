@@ -13,7 +13,6 @@ import { useIntl } from 'react-intl';
 import actionModalMessages from '../../messages/action-modal.messages';
 import requestsMessages from '../../messages/requests.messages';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-import FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/cjs/form-template';
 
 const actionTypeToDescription = (type) => {
   switch (type) {
@@ -59,8 +58,8 @@ const ActionModal = ({
   const { push } = useHistory();
   const [{ request: id }] = useQuery([ 'request' ]);
   const onSubmit = (data) => {
-    const operationType = { 'Add Comment': 'memo', Approve: 'approve', Deny: 'deny' };
-    const actionName = actionType === 'Add Comment'
+    const operationType = { 'Add comment': 'memo', Approve: 'approve', Deny: 'deny' };
+    const actionName = actionType === 'Add comment'
       ? intl.formatMessage(requestsMessages.addCommentTitle)
       : intl.formatMessage(actionModalMessages.actionName, { actionType: intl.formatMessage(actionTypeToTitle(actionType)) }) ;
 
@@ -105,12 +104,16 @@ const ActionModal = ({
           schema={ createRequestCommentSchema(actionType === 'Deny', intl) }
           onSubmit={ onSubmit }
           onCancel={ onCancel }
-          FormTemplate={ (props) => <FormTemplate
-            { ...props }
-            templateProps={ { submitLabel: intl.formatMessage(actionTypeToSubmitLabel(actionType)) } }
-          /> }
-        />
-      </Stack>
+          isModal
+          templateProps={ { submitLabel: intl.formatMessage(actionTypeToSubmitLabel(actionType)) } }
+          modalProps={ {
+            title: <React.Fragment> { actionType === 'Deny' && <ExclamationTriangleIcon size="sm" fill="#f0ab00" className="pf-u-mr-sm" /> }
+              { intl.formatMessage(actionTypeToTitle(actionType)) } </React.Fragment>,
+            isOpen: true,
+            onClose: { onCancel },
+            variant: 'small'
+          } }
+        />      </Stack>
     </Modal>
   );
 };
