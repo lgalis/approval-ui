@@ -217,10 +217,18 @@ describe('<Workflows />', () => {
         </ComponentWrapper>
       );
     });
-    wrapper.update();
+
+    await act(async()=> {
+      wrapper.update();
+    });
+
     wrapper.find('input[type="checkbox"]').last().simulate('change', { target: { checked: true }});
     wrapper.find('Link#remove-multiple-workflows').simulate('click', { button: 0 });
-    wrapper.update();
+
+    await act(async()=> {
+      wrapper.update();
+    });
+
     expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.workflows.remove);
     expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('');
     expect(wrapper.find(RemoveWorkflowModal)).toHaveLength(1);
@@ -811,7 +819,10 @@ describe('<Workflows />', () => {
           </ComponentWrapper>
         );
       });
-      wrapper.update();
+
+      await act(async () => {
+        wrapper.update();
+      });
 
       await act(async () => {
         return wrapper.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true }});
