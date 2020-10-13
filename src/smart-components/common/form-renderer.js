@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import ReactFormRender from '@data-driven-forms/react-form-renderer/dist/cjs/form-renderer';
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/cjs/component-types';
 
@@ -10,10 +10,7 @@ import TextField from '@data-driven-forms/pf4-component-mapper/dist/cjs/text-fie
 import SubForm from '@data-driven-forms/pf4-component-mapper/dist/cjs/sub-form';
 
 const FormRenderer = ({
-  isModal,
   templateProps,
-  schema,
-  modalProps,
   ...rest
 }) => {
   console.log('Debug FR - templateProps', templateProps);
@@ -30,15 +27,17 @@ const FormRenderer = ({
           <FormTemplate
             { ...props }
             { ...templateProps }
-            modalProps={ modalProps }
-            isModal={ isModal }
           />
         ) }
-        schema={ schema }
         { ...rest }
       />
     </div>
   );
+};
+
+FormRenderer.propTypes = {
+  templateProps: PropTypes.object,
+  schema: PropTypes.object
 };
 
 export default FormRenderer;

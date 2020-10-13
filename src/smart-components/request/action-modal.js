@@ -4,7 +4,7 @@ import FormRenderer from '../common/form-renderer';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Button, Modal, Stack, Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
+import { Modal, Stack, Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
 import { createRequestAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 import useQuery from '../../utilities/use-query';
@@ -80,24 +80,11 @@ const ActionModal = ({
 
   const onCancel = () => push(closeUrl);
 
-  const renderFormButtons = (props) => {
-    return (
-      <div>
-        <Button type="submit" isDisabled={ props.pristine || !props.valid } variant="danger">
-            Submit
-        </Button>
-        <Button variant="link" onClick={ props.onCancel }>
-            Cancel
-        </Button>
-      </div>
-    );
-  };
-
   return (
     <Modal
       variant="small"
       header={
-        <Title size="lg" headingLevel="h1">
+        <Title size="xl" headingLevel="h4">
           { actionType === 'Deny' && <ExclamationTriangleIcon size="sm" fill="#f0ab00" className="pf-u-mr-sm" /> }
           { intl.formatMessage(actionTypeToTitle(actionType)) }
         </Title>
@@ -109,7 +96,7 @@ const ActionModal = ({
         <TextContent>
           <Text component={ TextVariants.p }>
             { intl.formatMessage(actionModalMessages.requestActionDescription,
-              { id, actionMessage: intl.formatMessage(actionTypeToDescription(actionType)) }) }
+              { id: <b>{ id }</b>, actionMessage: intl.formatMessage(actionTypeToDescription(actionType)) }) }
           </Text>
         </TextContent>
 
@@ -117,9 +104,7 @@ const ActionModal = ({
           schema={ createRequestCommentSchema(actionType === 'Deny', intl) }
           onSubmit={ onSubmit }
           onCancel={ onCancel }
-          isModal
           templateProps={ { submitLabel: intl.formatMessage(actionTypeToSubmitLabel(actionType)) } }
-          renderFormButtons={ props => renderFormButtons(props) }
         />
       </Stack>
     </Modal>
