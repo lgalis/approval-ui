@@ -13,7 +13,6 @@ const FormRenderer = ({
   templateProps,
   ...rest
 }) => {
-  console.log('Debug FR - templateProps', templateProps);
   return (
     <div>
       <ReactFormRender

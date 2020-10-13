@@ -37,7 +37,6 @@ const actionTypeToTitle = (type) => {
 };
 
 const actionTypeToSubmitLabel = (type) => {
-  console.log ('Debug - type', type, requestsMessages.approveLabel, requestsMessages.denyLabel, requestsMessages.approveLabel);
   switch (type) {
     case 'Approve':
       return requestsMessages.approveLabel;
