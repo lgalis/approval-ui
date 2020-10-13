@@ -4,7 +4,7 @@ import FormRenderer from '../common/form-renderer';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Modal, Stack, Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
+import { Button, Modal, Stack, Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
 import { createRequestAction } from '../../redux/actions/request-actions';
 import { createRequestCommentSchema } from '../../forms/request-comment-form.schema';
 import useQuery from '../../utilities/use-query';
@@ -32,7 +32,7 @@ const actionTypeToTitle = (type) => {
     case 'Deny':
       return requestsMessages.denyTitle;
     default:
-      return requestsMessages.addCommentTitle;
+      return requestsMessages.commentTitle;
   }
 };
 
@@ -58,9 +58,9 @@ const ActionModal = ({
   const { push } = useHistory();
   const [{ request: id }] = useQuery([ 'request' ]);
   const onSubmit = (data) => {
-    const operationType = { 'Add comment': 'memo', Approve: 'approve', Deny: 'deny' };
-    const actionName = actionType === 'Add comment'
-      ? intl.formatMessage(requestsMessages.addCommentTitle)
+    const operationType = { Comment: 'memo', Approve: 'approve', Deny: 'deny' };
+    const actionName = actionType === 'Comment'
+      ? intl.formatMessage(requestsMessages.commentTitle)
       : intl.formatMessage(actionModalMessages.actionName, { actionType: intl.formatMessage(actionTypeToTitle(actionType)) }) ;
 
     return postMethod ?
@@ -80,6 +80,19 @@ const ActionModal = ({
 
   const onCancel = () => push(closeUrl);
 
+  const renderFormButtons = (props) => {
+    return (
+      <div>
+        <Button type="submit" isDisabled={ props.pristine || !props.valid } variant="danger">
+            Submit
+        </Button>
+        <Button variant="link" onClick={ props.onCancel }>
+            Cancel
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <Modal
       variant="small"
@@ -94,7 +107,7 @@ const ActionModal = ({
     >
       <Stack hasGutter>
         <TextContent>
-          <Text component={ TextVariants.small }>
+          <Text component={ TextVariants.p }>
             { intl.formatMessage(actionModalMessages.requestActionDescription,
               { id, actionMessage: intl.formatMessage(actionTypeToDescription(actionType)) }) }
           </Text>
@@ -106,14 +119,9 @@ const ActionModal = ({
           onCancel={ onCancel }
           isModal
           templateProps={ { submitLabel: intl.formatMessage(actionTypeToSubmitLabel(actionType)) } }
-          modalProps={ {
-            title: <React.Fragment> { actionType === 'Deny' && <ExclamationTriangleIcon size="sm" fill="#f0ab00" className="pf-u-mr-sm" /> }
-              { intl.formatMessage(actionTypeToTitle(actionType)) } </React.Fragment>,
-            isOpen: true,
-            onClose: { onCancel },
-            variant: 'small'
-          } }
-        />      </Stack>
+          renderFormButtons={ props => renderFormButtons(props) }
+        />
+      </Stack>
     </Modal>
   );
 };

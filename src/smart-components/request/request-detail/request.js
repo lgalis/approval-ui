@@ -61,7 +61,7 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
               <RequestActions
                 approveLink={ indexpath.approve }
                 denyLink={ indexpath.deny }
-                commentLink={ indexpath.addComment }
+                commentLink={ indexpath.comment }
                 request={ item }
                 canApproveDeny={ checkCapability(item, 'approve') }
                 canComment={ checkCapability(item, 'memo') }

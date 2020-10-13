@@ -1,13 +1,9 @@
 const { defineMessages } = require('react-intl');
 
 const actionModalMessages = defineMessages({
-  requestTitle: {
-    id: 'actionModal.requestTitle',
-    defaultMessage: 'Request #{id}'
-  },
   requestActionDescription: {
     id: 'actionModal.requestDescription',
-    defaultMessage: '{actionMessage} #{id}'
+    defaultMessage: '{actionMessage} {id}'
   },
   actionName: {
     id: 'actionModal.actionName',

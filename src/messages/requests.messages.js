@@ -1,13 +1,13 @@
 const { defineMessages } = require('react-intl');
 
 const requestsMessages = defineMessages({
+  requestTitle: {
+    id: 'requestMessages.requestTitle',
+    defaultMessage: 'Request {id}'
+  },
   commentTitle: {
     id: 'requestsMessages.commentTitle',
     defaultMessage: 'Comment'
-  },
-  addCommentTitle: {
-    id: 'requestsMessages.addCommentTitle',
-    defaultMessage: 'Add comment'
   },
   approveTitle: {
     id: 'requestsMessages.approveTitle',
@@ -19,7 +19,7 @@ const requestsMessages = defineMessages({
   },
   addCommentLabel: {
     id: 'requestsMessages.addCommentLabel',
-    defaultMessage: 'Add comment'
+    defaultMessage: 'Submit'
   },
   approveLabel: {
     id: 'requestsMessages.approveLabel',
@@ -39,7 +39,7 @@ const requestsMessages = defineMessages({
   },
   commentDescription: {
     id: 'requestsMessages.commentDescription',
-    defaultMessage: 'submit a comment on request'
+    defaultMessage: 'Submit a comment on request'
   },
   reasonTitle: {
     id: 'requestsMessages.reasonTitle',
