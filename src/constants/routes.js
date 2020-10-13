@@ -4,19 +4,19 @@ const routes = {
   },
   requests: {
     index: '/requests',
-    addComment: '/requests/add-comment',
+    comment: '/requests/comment',
     approve: '/requests/approve',
     deny: '/requests/deny'
   },
   request: {
     index: '/request',
-    addComment: '/request/add-comment',
+    comment: '/request/comment',
     approve: '/request/approve',
     deny: '/request/deny'
   },
   allrequest: {
     index: '/allrequest',
-    addComment: '/allrequest/add-comment',
+    comment: '/allrequest/comment',
     approve: '/allrequest/approve',
     deny: '/allrequest/deny'
   },

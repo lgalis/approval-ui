@@ -84,8 +84,8 @@ const RequestDetail = ({ requestBreadcrumbs, indexpath }) => {
   return (
     <Fragment>
       <Switch>
-        <Route exact path={ indexpath.addComment }>
-          <ActionModal actionType={ 'Add Comment' }
+        <Route exact path={ indexpath.comment }>
+          <ActionModal actionType={ 'Comment' }
             postMethod={ () => updateRequest(selectedRequest.id) }
             closeUrl={ { pathname: indexpath.index, search: `?request=${selectedRequest.id}` } }/>
         </Route>

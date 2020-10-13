@@ -4,8 +4,8 @@ exports[`<Request /> should render correctly 1`] = `
 <Request
   indexpath={
     Object {
-      "addComment": "/request/add-comment",
       "approve": "/request/approve",
+      "comment": "/request/comment",
       "deny": "/request/deny",
       "index": "/request",
     }
@@ -159,7 +159,7 @@ exports[`<Request /> should render correctly 1`] = `
                     approveLink="/request/approve"
                     canApproveDeny={true}
                     canComment={true}
-                    commentLink="/request/add-comment"
+                    commentLink="/request/comment"
                     denyLink="/request/deny"
                     request={
                       Object {
@@ -239,7 +239,7 @@ exports[`<Request /> should render correctly 1`] = `
                     approveLink="/request/approve"
                     canApproveDeny={true}
                     canComment={true}
-                    commentLink="/request/add-comment"
+                    commentLink="/request/comment"
                     denyLink="/request/deny"
                     request={
                       Object {
