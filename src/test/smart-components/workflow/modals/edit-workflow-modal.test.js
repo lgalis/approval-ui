@@ -104,7 +104,7 @@ describe('<EditWorkflow />', () => {
 
     expect(wrapper.find('input').first().props().value).toEqual(initialState.workflowReducer.workflows.data[0].name);
     expect(wrapper.find('textarea').first().props().value).toEqual(initialState.workflowReducer.workflows.data[0].description);
-    expect(wrapper.find('SelectContainer').first().props().getValue()).toEqual([{ label: 'some new group', value: '467' }]);
+    expect(wrapper.find('Select').last().props().value).toEqual([{ label: 'some new group', value: '467' }]);
   });
 
   it('should fetch data from api and submit the form', async () => {
@@ -153,7 +153,7 @@ describe('<EditWorkflow />', () => {
 
     expect(wrapper.find('input').first().props().value).toEqual(workflow.name);
     expect(wrapper.find('textarea').first().props().value).toEqual(workflow.description);
-    expect(wrapper.find('SelectContainer').first().props().getValue()).toEqual([{ label: 'SampleWorkflow', value: '123' }]);
+    expect(wrapper.find('Select').last().props().value).toEqual([{ label: 'SampleWorkflow', value: '123' }]);
 
     await act(async () => {
       const name = wrapper.find('input').first();

@@ -110,8 +110,8 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
   };
 
   const routes = () => <Fragment>
-    <Route exact path={ routesLinks.requests.addComment } render={ props => <ActionModal { ...props }
-      actionType={ 'Add Comment' }
+    <Route exact path={ routesLinks.requests.comment } render={ props => <ActionModal { ...props }
+      actionType={ 'Comment' }
       postMethod={ () => updateRequests(meta) }
     /> }/>
     <Route exact path={ routesLinks.requests.approve } render={ props => <ActionModal { ...props } actionType={ 'Approve' }
