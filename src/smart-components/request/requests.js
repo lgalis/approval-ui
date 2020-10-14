@@ -25,7 +25,7 @@ const Requests = () => {
     request && request.id && actionsDisabled(request)
       ? null
       : <RequestActions
-        commentLink={ routesLinks.requests.addComment }
+        commentLink={ routesLinks.requests.comment }
         approveLink={ routesLinks.requests.approve }
         denyLink={ routesLinks.requests.deny }
         request={ request }
