@@ -69,7 +69,7 @@ const RequestInfoBar = ({ request, requestContent }) => {
               <StackItem key={ 'request-order' }>
                 <TextContent>
                   <Text className={ 'font-14' }>{ intl.formatMessage(requestsMessages.orderNumber) }</Text>
-                  <Text id='order_id' component={ TextVariants.p }>
+                  <Text id='requester_name' component={ TextVariants.p }>
                     { requestContent ? requestContent.order_id : '' }
                   </Text>
                 </TextContent>

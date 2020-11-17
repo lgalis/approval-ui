@@ -169,7 +169,7 @@ describe('<Request />', () => {
     wrapper.find('a#comment-111').first().simulate('click', { button: 0 });
     wrapper.update();
 
-    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.comment);
+    expect(wrapper.find(MemoryRouter).instance().history.location.pathname).toEqual(routes.request.addComment);
     expect(wrapper.find(MemoryRouter).instance().history.location.search).toEqual('?request=111');
   });
 

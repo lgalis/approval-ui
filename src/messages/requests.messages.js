@@ -1,45 +1,21 @@
 const { defineMessages } = require('react-intl');
 
 const requestsMessages = defineMessages({
-  requestTitle: {
-    id: 'requestMessages.requestTitle',
-    defaultMessage: 'Request {id}'
-  },
   commentTitle: {
     id: 'requestsMessages.commentTitle',
     defaultMessage: 'Comment'
   },
+  addCommentTitle: {
+    id: 'requestsMessages.addCommentTitle',
+    defaultMessage: 'Add Comment'
+  },
   approveTitle: {
     id: 'requestsMessages.approveTitle',
-    defaultMessage: 'Approve request'
+    defaultMessage: 'Approve'
   },
   denyTitle: {
     id: 'requestsMessages.denyTitle',
-    defaultMessage: 'Deny request'
-  },
-  addCommentLabel: {
-    id: 'requestsMessages.addCommentLabel',
-    defaultMessage: 'Submit'
-  },
-  approveLabel: {
-    id: 'requestsMessages.approveLabel',
-    defaultMessage: 'Approve'
-  },
-  denyLabel: {
-    id: 'requestsMessages.denyLabel',
     defaultMessage: 'Deny'
-  },
-  approveDescription: {
-    id: 'requestsMessages.approveDescription',
-    defaultMessage: 'Provide approval for request'
-  },
-  denyDescription: {
-    id: 'requestsMessages.denyDescription',
-    defaultMessage: 'Provide a reason for denying request'
-  },
-  commentDescription: {
-    id: 'requestsMessages.commentDescription',
-    defaultMessage: 'Submit a comment on request'
   },
   reasonTitle: {
     id: 'requestsMessages.reasonTitle',
@@ -161,8 +137,8 @@ const requestsMessages = defineMessages({
     id: 'requestsMessages.parameters',
     defaultMessage: 'Parameters'
   },
-  requestDescription: {
-    id: 'requestsMessages.requestDescription',
+  requestTitle: {
+    id: 'requestsMessages.requestTitle',
     defaultMessage: 'Request {id}'
   },
   commentFrom: {

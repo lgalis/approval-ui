@@ -32,7 +32,7 @@ describe('<ActionModal />', () => {
     apiClientMock.reset();
     initialProps = {
       postMethod: jest.fn(),
-      actionType: 'Comment'
+      actionType: 'Add Comment'
     };
     mockStore = configureStore(middlewares);
     initialState = {

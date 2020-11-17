@@ -57,10 +57,10 @@ const EditWorkflow = () => {
 
   const onCancel = () => push(routes.workflows.index);
 
-  const onSave = ({ group_refs = [], description = '', ...values }) => {
+  const onSave = ({ group_refs = [], ...values }) => {
     onCancel();
 
-    const workflowData = { ...values, description, group_refs: group_refs.map(group => ({ name: group.label, uuid: group.value })) };
+    const workflowData = { ...values, group_refs: group_refs.map(group => ({ name: group.label, uuid: group.value })) };
 
     return dispatch(updateWorkflow(workflowData, intl))
     .then(() => dispatch(fetchWorkflows()));
