@@ -8,6 +8,8 @@ const setGroupSelectSchema = (intl) => ({
   name: 'group_refs',
   label: intl.formatMessage(formMessages.setGroups),
   loadOptions,
+  initialValue: [],
+  clearedValue: [],
   noValueUpdates: true,
   isMulti: true,
   isSearchable: true,
