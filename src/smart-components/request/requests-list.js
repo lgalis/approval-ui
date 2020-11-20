@@ -97,6 +97,9 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
   const isApprovalApprover = useIsApprovalApprover(userRoles);
 
+  const noRequestsMessage = () => (indexpath === routes.allrequest) ?
+    intl.formatMessage(requestsMessages.emptyAllRequestsDescription) : intl.formatMessage(requestsMessages.emptyRequestsDescription);
+
   const updateRequests = (pagination) => {
     if (!isApprovalApprover && persona === APPROVAL_APPROVER_PERSONA) {
       stateDispatch({ type: 'setFetching', payload: false });
@@ -202,12 +205,12 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
         renderEmptyState={ () => (
           <TableEmptyState
             title={ isEmpty(filterValue)
-              ? intl.formatMessage(tableToolbarMessages.noResultsFound, { results: intl.formatMessage(requestsMessages.requests) })
+              ? intl.formatMessage(requestsMessages.emptyRequestsTitle)
               : intl.formatMessage(tableToolbarMessages.noResultsFound)
             }
             Icon={ SearchIcon }
             PrimaryAction={ () =>
-              isEmpty(filterValue) ? null : (
+              isEmpty(filterValue) ? noRequestsMessage() : (
                 <Button onClick={ clearFilters } variant="link">
                   { intl.formatMessage(tableToolbarMessages.clearAllFilters) }
                 </Button>

@@ -141,6 +141,10 @@ const requestsMessages = defineMessages({
     id: 'requestsMessages.emptyRequestsDescription',
     defaultMessage: 'Requests that need your attention will appear here.'
   },
+  emptyAllRequestsDescription: {
+    id: 'requestsMessages.emptyRequestsDescription',
+    defaultMessage: 'Requests will appear here when an approval process has been initiated.'
+  },
   toogleDetailsFor: {
     id: 'requestsMessages.toogleDetailsFor',
     defaultMessage: 'Toggle details for'
