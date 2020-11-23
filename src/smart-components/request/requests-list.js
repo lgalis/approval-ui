@@ -97,7 +97,7 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
   const isApprovalAdmin = useIsApprovalAdmin(userRoles);
   const isApprovalApprover = useIsApprovalApprover(userRoles);
 
-  const noRequestsMessage = () => (indexpath === routes.allrequest) ?
+  const noRequestsMessage = () => (indexpath === routesLinks.allrequest) ?
     intl.formatMessage(requestsMessages.emptyAllRequestsDescription) : intl.formatMessage(requestsMessages.emptyRequestsDescription);
 
   const updateRequests = (pagination) => {

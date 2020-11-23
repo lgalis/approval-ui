@@ -45,7 +45,7 @@ export const Request = ({ item, isExpanded, toggleExpand, indexpath }) => {
           isExpanded={ isExpanded }
           id={ `request-${item.id}` }
           aria-labelledby={ `request-${item.id} request-${item.id}` }
-          aria-label={ intl.formatMessage(requestsMessages.toogleDetailsFor) }
+          aria-label={ intl.formatMessage(requestsMessages.toggleDetailsFor) }
         />
         <DataListItemCells
           dataListCells={ [
