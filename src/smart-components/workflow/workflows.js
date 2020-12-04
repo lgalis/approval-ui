@@ -231,6 +231,7 @@ const Workflows = () => {
       </TopToolbar>
       <WorkflowTableContext.Provider value={ { selectedWorkflows, setSelectedWorkflows, cache: moveFunctionsCache.current } }>
         <TableToolbarView
+          ouiaId={ 'approval-process-table' }
           rows={ rows }
           columns={ columns(intl, selectedAll, selectAllFunction) }
           fetchData={ updateWorkflows }

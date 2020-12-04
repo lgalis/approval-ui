@@ -189,6 +189,7 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
         { isApprovalAdmin && <AppTabs/> }
       </TopToolbar>
       <TableToolbarView
+        ouiaId={ 'requests-table' }
         sortBy={ sortBy }
         onSort={ onSort }
         rows={ rows }
