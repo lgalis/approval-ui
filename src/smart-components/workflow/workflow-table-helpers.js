@@ -44,6 +44,7 @@ export const MoveButtons = ({ id }) => {
     <Stack>
       <StackItem>
         <Button
+          ouiaId={ `up-${id}` }
           variant="plain"
           aria-label={ intl.formatMessage(worfklowMessages.up) }
           id={ `up-${id}` }
@@ -60,6 +61,7 @@ export const MoveButtons = ({ id }) => {
           id={ `down-${id}` }
           onClick={ () => updateSequence({ increment: 1 }) }
           isDisabled={ isUpdating }
+          ouiaId={ `down-${id}` }
         >
           <AngleDownIcon />
         </Button>
@@ -120,7 +122,7 @@ export const createRows = (data) => data.map((
   id,
   cells: [
     <React.Fragment key={ `${id}-buttons` }>
-      <MoveButtons id={ id } sequence={ sequence } />
+      <MoveButtons id={ id } ouiaId={ `${id}-buttons` } sequence={ sequence } />
     </React.Fragment>,
     <React.Fragment key={ `${id}-checkbox` }>
       <SelectBox id={ id } />

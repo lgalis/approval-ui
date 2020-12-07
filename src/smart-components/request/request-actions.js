@@ -30,6 +30,7 @@ const RequestActions = ({
           id={ `approve-${request.id}` }
         >
           <Button
+            ouiaId={ `approve-request-${id}` }
             variant="primary"
             aria-label={ intl.formatMessage(requestsMessages.approveRequest) }
           >
@@ -42,6 +43,7 @@ const RequestActions = ({
           id={ `deny-${request.id}` }
         >
           <Button
+            ouiaId={ `deny-request-${id}` }
             variant="danger"
             aria-label={ intl.formatMessage(requestsMessages.denyTitle) }
           >
@@ -54,6 +56,7 @@ const RequestActions = ({
         id={ `comment-${request.id}` }
       >
         <Button
+          ouiaId={ `comment-request-${id}` }
           variant="secondary"
           aria-label={ intl.formatMessage(requestsMessages.commentTitle) }
         >

@@ -98,13 +98,25 @@ const RemoveWorkflowModal = ({
       }
       onClose={ onCancel }
       actions={ [
-        <Button id="submit-remove-workflow" key="submit" variant="danger" type="button" isDisabled={ submitting } onClick={ onSubmit }>
+        <Button id="submit-remove-workflow"
+          ouiaId={ 'submit-remove-workflow' }
+          key="submit"
+          variant="danger"
+          type="button"
+          isDisabled={ submitting }
+          onClick={ onSubmit }>
           { submitting
             ? <React.Fragment><Spinner size="sm" className="pf-u-mr-md"/>{ intl.formatMessage(commonMessages.deleting) }</React.Fragment>
             : intl.formatMessage(commonMessages.delete)
           }
         </Button>,
-        <Button id="cancel-remove-workflow" key="cancel" variant="link" type="button" isDisabled={ submitting } onClick={ onCancel }>
+        <Button id="cancel-remove-workflow"
+          ouiaId={ 'cancel-remove-workflow' }
+          key="cancel"
+          variant="link"
+          type="button"
+          isDisabled={ submitting }
+          onClick={ onCancel }>
           { intl.formatMessage(commonMessages.cancel) }
         </Button>
       ] }

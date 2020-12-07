@@ -199,6 +199,7 @@ const Workflows = () => {
     <ToolbarItem>
       <Link id="add-workflow-link" to={ { pathname: routesLinks.workflows.add } }>
         <Button
+          ouiaId={ 'add-workflow-link' }
           variant="primary"
           aria-label={ intl.formatMessage(formMessages.create) }
         >
@@ -231,6 +232,7 @@ const Workflows = () => {
       </TopToolbar>
       <WorkflowTableContext.Provider value={ { selectedWorkflows, setSelectedWorkflows, cache: moveFunctionsCache.current } }>
         <TableToolbarView
+          ouiaId={ 'approval-process-table' }
           rows={ rows }
           columns={ columns(intl, selectedAll, selectAllFunction) }
           fetchData={ updateWorkflows }

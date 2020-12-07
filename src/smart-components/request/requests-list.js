@@ -189,6 +189,7 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
         { isApprovalAdmin && <AppTabs/> }
       </TopToolbar>
       <TableToolbarView
+        ouiaId={ 'requests-table' }
         sortBy={ sortBy }
         onSort={ onSort }
         rows={ rows }
@@ -211,7 +212,7 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
             Icon={ SearchIcon }
             PrimaryAction={ () =>
               isEmpty(filterValue) ? noRequestsMessage() : (
-                <Button onClick={ clearFilters } variant="link">
+                <Button onClick={ clearFilters } variant="link" ouiaId={ `clear-filter-requests` }>
                   { intl.formatMessage(tableToolbarMessages.clearAllFilters) }
                 </Button>
               )

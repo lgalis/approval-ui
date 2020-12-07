@@ -13,7 +13,7 @@ export const createRows = (actionResolver, data, indexpath = routes.request, int
     state: request.state,
     number_of_children: request.number_of_children,
     cells: [
-      <Fragment key={ request.id }>
+      <Fragment key={ request.id } ouiaId={ request.id }>
         <Link to={
           { pathname: indexpath.index, search: `?request=${request.id}` } }>
           { request.id }
@@ -22,7 +22,7 @@ export const createRows = (actionResolver, data, indexpath = routes.request, int
       request.name,
       request.requester_name,
       request.finished_at ? timeAgo(request.finished_at) : (request.notified_at ? timeAgo(request.notified_at) : timeAgo(request.created_at)),
-      <Fragment key={ `decision-${request.id}` }>
+      <Fragment key={ `decision-${request.id}` } ouiaId={ `decision-${request.id}` }>
         { actionResolver(request) || (<Label
           variant="outline"
           icon={ decisionValues[request.decision]?.icon }
