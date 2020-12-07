@@ -38,7 +38,7 @@ describe('approval process table helpers', () => {
       id: '1',
       cells: [
         <React.Fragment key='1-buttons'>
-          <MoveButtons id="1" sequence={ 2 } />
+          <MoveButtons id="1" ouiaId={ '1-buttons' } sequence={ 2 } />
         </React.Fragment>,
         <React.Fragment key='1-checkbox'>
           <SelectBox id="1" />
@@ -51,7 +51,7 @@ describe('approval process table helpers', () => {
       id: '2',
       cells: [
         <React.Fragment key='2-buttons'>
-          <MoveButtons id="2" sequence={ 1 } />
+          <MoveButtons id="2" ouiaId={ '2-buttons' } sequence={ 1 } />
         </React.Fragment>,
         <React.Fragment key='2-checkbox'>
           <SelectBox id="2" />
