@@ -634,7 +634,7 @@ describe('<Workflows />', () => {
     });
 
     it('should select all workflows and delete them', async () => {
-      expect.assertions(3);
+      expect.assertions(7);
 
       let wrapper;
       await act(async()=> {
@@ -735,7 +735,7 @@ describe('<Workflows />', () => {
     });
 
     it('should select only one workflow and delete it', async () => {
-      expect.assertions(3);
+      expect.assertions(5);
 
       let wrapper;
       await act(async()=> {
