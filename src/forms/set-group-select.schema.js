@@ -17,6 +17,11 @@ const setGroupSelectSchema = (intl) => ({
   menuIsPortal: true,
   isClearable: true,
   placeholder: intl.formatMessage(formMessages.selectPlaceholder)
+},
+{
+  component: 'initial-chips',
+  name: 'initial-groups',
+  label: intl.formatMessage(formMessages.existingGroupsMessage)
 });
 
 export default setGroupSelectSchema;
