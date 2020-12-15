@@ -6,13 +6,14 @@ import { AppTabs } from '../../smart-components/app-tabs/app-tabs';
 import UserContext from '../../user-context';
 import {
   EmptyState,
-  EmptyStateBody,
   EmptyStateIcon,
+  EmptyStateBody,
   EmptyStateSecondaryActions,
   Text,
   TextContent,
   TextVariants
 } from '@patternfly/react-core';
+import { EmptyTable } from '@redhat-cloud-services/frontend-components/components/cjs/EmptyTable';
 import { useIntl } from 'react-intl';
 import requestsMessages from '../../messages/requests.messages';
 import commonMessages from '../../messages/common.message';
@@ -28,7 +29,7 @@ const EmptyRequestList = () => {
         <TopToolbarTitle title={ intl.formatMessage(commonMessages.approvalTitle) }/>
         { isApprovalAdmin && <AppTabs/> }
       </TopToolbar>
-      <div className="pf-u-mt-xl">
+      <EmptyTable centered aria-label="No records">
         <EmptyState className="pf-u-ml-auto pf-u-mr-auto">
           <EmptyStateIcon icon={ SearchIcon } />
           <TextContent>
@@ -42,7 +43,7 @@ const EmptyRequestList = () => {
         </EmptyState>
         <EmptyStateSecondaryActions>
         </EmptyStateSecondaryActions>
-      </div>
+      </EmptyTable>
     </Fragment>);
 };
 
