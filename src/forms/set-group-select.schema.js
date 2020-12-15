@@ -8,7 +8,6 @@ const setGroupSelectSchema = (intl) => ({
   name: 'group_refs',
   label: intl.formatMessage(formMessages.setGroups),
   loadOptions,
-  initialValue: [],
   clearedValue: [],
   noValueUpdates: true,
   isMulti: true,
@@ -17,11 +16,6 @@ const setGroupSelectSchema = (intl) => ({
   menuIsPortal: true,
   isClearable: true,
   placeholder: intl.formatMessage(formMessages.selectPlaceholder)
-},
-{
-  component: 'initial-chips',
-  name: 'initial-groups',
-  label: intl.formatMessage(formMessages.existingGroupsMessage)
 });
 
 export default setGroupSelectSchema;

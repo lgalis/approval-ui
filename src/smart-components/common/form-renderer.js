@@ -8,6 +8,7 @@ import Select from '@data-driven-forms/pf4-component-mapper/dist/cjs/select';
 import Textarea from '@data-driven-forms/pf4-component-mapper/dist/cjs/textarea';
 import TextField from '@data-driven-forms/pf4-component-mapper/dist/cjs/text-field';
 import SubForm from '@data-driven-forms/pf4-component-mapper/dist/cjs/sub-form';
+import InitialChips from '../../forms/initial-chips';
 
 const FormRenderer = ({
   templateProps,
@@ -20,7 +21,8 @@ const FormRenderer = ({
           [componentTypes.SELECT]: Select,
           [componentTypes.TEXTAREA]: Textarea,
           [componentTypes.TEXT_FIELD]: TextField,
-          [componentTypes.SUB_FORM]: SubForm
+          [componentTypes.SUB_FORM]: SubForm,
+          'initial-chips': InitialChips
         } }
         FormTemplate={ (props) => (
           <FormTemplate
