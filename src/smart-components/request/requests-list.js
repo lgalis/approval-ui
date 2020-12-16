@@ -5,7 +5,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button } from '@patternfly/react-core';
 import { sortable, wrappable, cellWidth, breakWord } from '@patternfly/react-table';
 import { useIntl } from 'react-intl';
-import {CubesIcon, SearchIcon} from '@patternfly/react-icons';
+import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import isEmpty from 'lodash/isEmpty';
 
 import { fetchRequests,

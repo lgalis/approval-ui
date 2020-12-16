@@ -115,8 +115,8 @@ export const TableToolbarView = ({
             />
           ) }
         </Fragment>
-      }
-      </Section>);
+      </Section>
+  );
 };
 
 TableToolbarView.propTypes = {
