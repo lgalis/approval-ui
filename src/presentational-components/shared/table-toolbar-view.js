@@ -47,43 +47,47 @@ export const TableToolbarView = ({
     isDisabled: isLoading
   };
 
-  const renderToolbar = () => (
-    <PrimaryToolbar
-      className="pf-u-p-lg ins__approval__primary_toolbar"
-      pagination={ paginationConfig }
-      { ...(toolbarButtons && { actionsConfig: {
-        dropdownProps: {
-          position: 'right'
-        },
-        actions: [ toolbarButtons() ]}
-      }) }
-      filterConfig={ {
-        items: [{
-          label: intl.formatMessage(tableToolbarMessages.name),
-          filterValues: {
-            id: 'filter-by-name',
-            placeholder: intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
-            'aria-label': intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
-            onChange: (_event, value) => onFilterChange(value),
-            value: filterValue
+  const renderToolbar = () => {
+    return (
+      <PrimaryToolbar
+        className="pf-u-p-lg ins__approval__primary_toolbar"
+        pagination={ paginationConfig }
+        { ...(toolbarButtons && {
+          actionsConfig: {
+            dropdownProps: {
+              position: 'right'
+            },
+            actions: [ toolbarButtons() ]
           }
-        },
-        ...filterConfig
-        ]
-      } }
-      activeFiltersConfig={ activeFiltersConfig }
-    />
-  );
+        }) }
+        filterConfig={ {
+          items: [{
+            label: intl.formatMessage(tableToolbarMessages.name),
+            filterValues: {
+              id: 'filter-by-name',
+              placeholder: intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
+              'aria-label': intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
+              onChange: (_event, value) => onFilterChange(value),
+              value: filterValue
+            }
+          },
+          ...filterConfig
+          ]
+        } }
+        activeFiltersConfig={ activeFiltersConfig }
+      />
+    );
+  };
 
   return (
-    <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
-      { routes() }
-      { renderToolbar(isLoading) }
-      { isLoading && <DataListLoader/> }
-      { !isLoading && rows.length === 0 ? (
-        renderEmptyState()
-      ) :
+    !isLoading && rows.length === 0 ? (
+      renderEmptyState()
+    ) :
+      <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
+        { routes() }
+        { isLoading && <DataListLoader/> }
         <Fragment>
+          { renderToolbar(isLoading) }
           { !isLoading &&
           <Table
             aria-label={ intl.formatMessage(tableToolbarMessages.ariaLabel, { title: titlePlural }) }
@@ -112,7 +116,7 @@ export const TableToolbarView = ({
           ) }
         </Fragment>
       }
-    </Section>);
+      </Section>);
 };
 
 TableToolbarView.propTypes = {
