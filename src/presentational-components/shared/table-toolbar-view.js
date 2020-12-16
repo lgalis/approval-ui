@@ -82,13 +82,12 @@ export const TableToolbarView = ({
   return (
     !isLoading && rows.length === 0 ? (
       renderEmptyState()
-    ) :
-      <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
-        { routes() }
-        { isLoading && <DataListLoader/> }
-        <Fragment>
-          { renderToolbar(isLoading) }
-          { !isLoading &&
+    ) : <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
+      { routes() }
+      { isLoading && <DataListLoader/> }
+      <Fragment>
+        { renderToolbar(isLoading) }
+        { !isLoading &&
           <Table
             aria-label={ intl.formatMessage(tableToolbarMessages.ariaLabel, { title: titlePlural }) }
             rows={ rows }
@@ -102,20 +101,20 @@ export const TableToolbarView = ({
             <TableHeader />
             <TableBody/>
           </Table> }
-          { pagination.count > 0 && (
-            <PrimaryToolbar
-              className="pf-u-pl-lg pf-u-pr-lg ins__approval__primary_toolbar"
-              pagination={ {
-                ...paginationConfig,
-                dropDirection: 'up',
-                variant: 'bottom',
-                isCompact: false,
-                className: 'pf-u-pr-0'
-              } }
-            />
-          ) }
-        </Fragment>
-      </Section>
+        { pagination.count > 0 && (
+          <PrimaryToolbar
+            className="pf-u-pl-lg pf-u-pr-lg ins__approval__primary_toolbar"
+            pagination={ {
+              ...paginationConfig,
+              dropDirection: 'up',
+              variant: 'bottom',
+              isCompact: false,
+              className: 'pf-u-pr-0'
+            } }
+          />
+        ) }
+      </Fragment>
+    </Section>
   );
 };
 
