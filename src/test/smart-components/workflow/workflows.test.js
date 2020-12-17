@@ -374,18 +374,34 @@ describe('<Workflows />', () => {
 
     const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
-    const storeReal = registry.getStore();
-
-    let wrapper;
-    const wf = {
-      id: '123',
-      name: 'foo',
-      group_refs: []
+    const stateWithOffset = {
+      groupReducer: { ...groupsInitialState },
+      workflowReducer: {
+        ...workflowsInitialState,
+        workflows: {
+          data: [{
+            id: 'wf-id',
+            name: 'foo',
+            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
+          }],
+          meta: {
+            count: 21,
+            limit: 10,
+            offset: 20
+          }
+        },
+        workflow: {},
+        filterValue: '',
+        isLoading: false,
+        isRecordLoading: false
+      }
     };
+    const store = mockStore(stateWithOffset);
+    let wrapper;
 
     await act(async()=> {
       wrapper = mount(
-        <ComponentWrapper store={ storeReal }>
+        <ComponentWrapper store={ store }>
           <Route path={ routes.workflows.index } component={ Workflows } />
         </ComponentWrapper>
       );
@@ -398,7 +414,11 @@ describe('<Workflows />', () => {
         status: 200,
         body: {
           meta: { count: 40, limit: 50, offset: 0 },
-          data: [ ]
+          data: [{
+            id: 'edit-id',
+            name: 'foo',
+            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
+          }]
         }
       })
     );
@@ -411,7 +431,11 @@ describe('<Workflows />', () => {
         });
         return res.status(200).body({
           meta: { count: 40, limit: 10, offset: 0 },
-          data: [ wf ]
+          data: [{
+            id: 'edit-id',
+            name: 'foo',
+            group_refs: [{ name: 'group-1', uuid: 'some-uuid' }]
+          }]
         });
       })
     );
@@ -796,7 +820,7 @@ describe('<Workflows />', () => {
 
     it('should adjust offset if the last page is empty after delete', async () => {
       expect.assertions(3);
-      const stateWithOffset = {
+      const stateWithData = {
         groupReducer: { ...groupsInitialState },
         workflowReducer: {
           ...workflowsInitialState,
@@ -809,7 +833,7 @@ describe('<Workflows />', () => {
             meta: {
               count: 21,
               limit: 10,
-              offset: 20
+              offset: 0
             }
           },
           workflow: {},
@@ -818,7 +842,7 @@ describe('<Workflows />', () => {
           isRecordLoading: false
         }
       };
-      const store = mockStore(stateWithOffset);
+      const store = mockStore(stateWithData);
       let wrapper;
       await act(async()=> {
         wrapper = mount(
