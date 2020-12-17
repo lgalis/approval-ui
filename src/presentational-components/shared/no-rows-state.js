@@ -9,13 +9,12 @@ import {
   TextContent,
   TextVariants
 } from '@patternfly/react-core';
-import { EmptyTable } from '@redhat-cloud-services/frontend-components/components/cjs/EmptyTable';
 
-const NoRowsState = ({title,
+const NoRowsState = ({ title,
   icon,
   description,
   PrimaryAction,
-  renderDescription)} =>
+  renderDescription }) =>
   (<EmptyState className="pf-u-ml-auto pf-u-mr-auto">
     <EmptyStateIcon icon={ icon } />
     <TextContent>
@@ -31,6 +30,12 @@ const NoRowsState = ({title,
   </EmptyState>
   );
 
+NoRowsState.propTypes = {
+  title: PropTypes.string.isRequired,
+  icon: PropTypes.any.isRequired,
+  isSearch: PropTypes.bool,
+  description: PropTypes.string.isRequired,
+  PrimaryAction: PropTypes.any,
   renderDescription: PropTypes.func
 };
 
