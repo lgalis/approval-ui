@@ -374,7 +374,7 @@ describe('<Workflows />', () => {
 
     const registry = new ReducerRegistry({}, [ thunk, promiseMiddleware ]);
     registry.register({ workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState) });
-    const stateWithOffset = {
+    const stateWithData = {
       groupReducer: { ...groupsInitialState },
       workflowReducer: {
         ...workflowsInitialState,
@@ -387,7 +387,7 @@ describe('<Workflows />', () => {
           meta: {
             count: 21,
             limit: 10,
-            offset: 20
+            offset: 0
           }
         },
         workflow: {},
@@ -396,7 +396,7 @@ describe('<Workflows />', () => {
         isRecordLoading: false
       }
     };
-    const store = mockStore(stateWithOffset);
+    const store = mockStore(stateWithData);
     let wrapper;
 
     await act(async()=> {
@@ -820,7 +820,7 @@ describe('<Workflows />', () => {
 
     it('should adjust offset if the last page is empty after delete', async () => {
       expect.assertions(3);
-      const stateWithData = {
+      const stateWithOffset = {
         groupReducer: { ...groupsInitialState },
         workflowReducer: {
           ...workflowsInitialState,
@@ -833,7 +833,7 @@ describe('<Workflows />', () => {
             meta: {
               count: 21,
               limit: 10,
-              offset: 0
+              offset: 20
             }
           },
           workflow: {},
@@ -842,7 +842,7 @@ describe('<Workflows />', () => {
           isRecordLoading: false
         }
       };
-      const store = mockStore(stateWithData);
+      const store = mockStore(stateWithOffset);
       let wrapper;
       await act(async()=> {
         wrapper = mount(
