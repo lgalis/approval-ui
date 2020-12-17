@@ -1,35 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateBody,
-  EmptyStateSecondaryActions,
-  Text,
-  TextContent,
-  TextVariants
-} from '@patternfly/react-core';
 import { EmptyTable } from '@redhat-cloud-services/frontend-components/components/cjs/EmptyTable';
-
-const noRows = (title,
-  icon,
-  description,
-  PrimaryAction,
-  renderDescription) =>
-  (<EmptyState className="pf-u-ml-auto pf-u-mr-auto">
-    <EmptyStateIcon icon={ icon } />
-    <TextContent>
-      <Text component={ TextVariants.h1 }>{ title }</Text>
-    </TextContent>
-    <EmptyStateBody>
-      { description }
-      { renderDescription && renderDescription() }
-    </EmptyStateBody>
-    <EmptyStateSecondaryActions>
-      { PrimaryAction && <PrimaryAction /> }
-    </EmptyStateSecondaryActions>
-  </EmptyState>
-  );
+import NoRowsState from './no-rows-state';
 
 const TableEmptyState = ({
   title,
@@ -39,18 +11,17 @@ const TableEmptyState = ({
   PrimaryAction,
   renderDescription
 }) => {
-  return isSearch ? <EmptyTable centered aria-label={ 'No records' }>{ noRows(title,
-    icon,
-    description,
-    PrimaryAction,
-    renderDescription
-  ) }</EmptyTable> : noRows(
-    title,
-    icon,
-    description,
-    PrimaryAction,
-    renderDescription
-  );
+  return isSearch ? <EmptyTable centered aria-label={ 'No records' }>
+    <NoRowsState title={ title }
+      icon={ icon }
+      description={ description }
+      PrimaryAction={ PrimaryAction }
+      renderDescription={ renderDescription } />
+  </EmptyTable> : <NoRowsState title={ title }
+    icon={ icon }
+    description={ description }
+    PrimaryAction={ PrimaryAction }
+    renderDescription={ renderDescription } />;
 };
 
 TableEmptyState.propTypes = {
