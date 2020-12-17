@@ -222,6 +222,7 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
                 ? ''
                 : intl.formatMessage(tableToolbarMessages.clearAllFiltersDescription)
             }
+            isSearch={ !isEmpty(filterValue) }
           />
         ) }
         activeFiltersConfig={ {

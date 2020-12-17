@@ -85,9 +85,13 @@ describe('<TableToolbarView />', () => {
   it('should call filtering callback', async done => {
     const onFilterChange = jest.fn();
     let wrapper;
+    const rows = [{
+      id: 1,
+      cells: [ 'name', 'description' ]
+    }];
 
     await act(async() => {
-      wrapper = mount(<TableToolbarView { ...initialProps } onFilterChange={ onFilterChange } />);
+      wrapper = mount(<TableToolbarView { ...initialProps } onFilterChange={ onFilterChange } rows={ rows }/>);
     });
     const input = wrapper.find('input').first();
     input.getDOMNode().value = 'foo';
@@ -99,9 +103,13 @@ describe('<TableToolbarView />', () => {
   it('should send async requests on pagination', async done => {
     const request = jest.fn().mockImplementation(() => new Promise(resolve => resolve([])));
     let wrapper;
+    const rows = [{
+      id: 1,
+      cells: [ 'name', 'description' ]
+    }];
 
     await act(async() => {
-      wrapper = mount(<TableToolbarView { ...initialProps } fetchData={ request } />);
+      wrapper = mount(<TableToolbarView { ...initialProps } fetchData={ request } rows={ rows }/>);
     });
 
     const paginationInput = wrapper.find('button').last();

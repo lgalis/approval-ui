@@ -47,47 +47,44 @@ export const TableToolbarView = ({
     isDisabled: isLoading
   };
 
-  const renderToolbar = () => {
-    return (
-      <PrimaryToolbar
-        className="pf-u-p-lg ins__approval__primary_toolbar"
-        pagination={ paginationConfig }
-        { ...(toolbarButtons && {
-          actionsConfig: {
-            dropdownProps: {
-              position: 'right'
-            },
-            actions: [ toolbarButtons() ]
+  const renderToolbar = () => (
+    <PrimaryToolbar
+      className="pf-u-p-lg ins__approval__primary_toolbar"
+      pagination={ paginationConfig }
+      { ...(toolbarButtons && { actionsConfig: {
+        dropdownProps: {
+          position: 'right'
+        },
+        actions: [ toolbarButtons() ]}
+      }) }
+      filterConfig={ {
+        items: [{
+          label: intl.formatMessage(tableToolbarMessages.name),
+          filterValues: {
+            id: 'filter-by-name',
+            placeholder: intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
+            'aria-label': intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
+            onChange: (_event, value) => onFilterChange(value),
+            value: filterValue
           }
-        }) }
-        filterConfig={ {
-          items: [{
-            label: intl.formatMessage(tableToolbarMessages.name),
-            filterValues: {
-              id: 'filter-by-name',
-              placeholder: intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
-              'aria-label': intl.formatMessage(tableToolbarMessages.filterByTitle, { title: titleSingular }),
-              onChange: (_event, value) => onFilterChange(value),
-              value: filterValue
-            }
-          },
-          ...filterConfig
-          ]
-        } }
-        activeFiltersConfig={ activeFiltersConfig }
-      />
-    );
-  };
+        },
+        ...filterConfig
+        ]
+      } }
+      activeFiltersConfig={ activeFiltersConfig }
+    />
+  );
 
   return (
-    !isLoading && rows.length === 0 ? (
-      renderEmptyState()
-    ) : <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
+    <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
       { routes() }
+      { (rows.length !== 0 || filterValue) && renderToolbar(isLoading) }
       { isLoading && <DataListLoader/> }
-      <Fragment>
-        { renderToolbar(isLoading) }
-        { !isLoading &&
+      { !isLoading && rows.length === 0 ? (
+        renderEmptyState()
+      ) :
+        <Fragment>
+          { !isLoading &&
           <Table
             aria-label={ intl.formatMessage(tableToolbarMessages.ariaLabel, { title: titlePlural }) }
             rows={ rows }
@@ -101,21 +98,21 @@ export const TableToolbarView = ({
             <TableHeader />
             <TableBody/>
           </Table> }
-        { pagination.count > 0 && (
-          <PrimaryToolbar
-            className="pf-u-pl-lg pf-u-pr-lg ins__approval__primary_toolbar"
-            pagination={ {
-              ...paginationConfig,
-              dropDirection: 'up',
-              variant: 'bottom',
-              isCompact: false,
-              className: 'pf-u-pr-0'
-            } }
-          />
-        ) }
-      </Fragment>
-    </Section>
-  );
+          { pagination.count > 0 && (
+            <PrimaryToolbar
+              className="pf-u-pl-lg pf-u-pr-lg ins__approval__primary_toolbar"
+              pagination={ {
+                ...paginationConfig,
+                dropDirection: 'up',
+                variant: 'bottom',
+                isCompact: false,
+                className: 'pf-u-pr-0'
+              } }
+            />
+          ) }
+        </Fragment>
+      }
+    </Section>);
 };
 
 TableToolbarView.propTypes = {

@@ -377,6 +377,12 @@ describe('<Workflows />', () => {
     const storeReal = registry.getStore();
 
     let wrapper;
+    const wf = {
+      id: '123',
+      name: 'foo',
+      group_refs: []
+    };
+
     await act(async()=> {
       wrapper = mount(
         <ComponentWrapper store={ storeReal }>
@@ -405,7 +411,7 @@ describe('<Workflows />', () => {
         });
         return res.status(200).body({
           meta: { count: 40, limit: 10, offset: 0 },
-          data: [ ]
+          data: [ wf ]
         });
       })
     );
