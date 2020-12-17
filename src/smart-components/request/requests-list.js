@@ -5,7 +5,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Button } from '@patternfly/react-core';
 import { sortable, wrappable, cellWidth, breakWord } from '@patternfly/react-table';
 import { useIntl } from 'react-intl';
-import { SearchIcon } from '@patternfly/react-icons';
+import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import isEmpty from 'lodash/isEmpty';
 
 import { fetchRequests,
@@ -209,7 +209,7 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
               ? intl.formatMessage(requestsMessages.emptyRequestsTitle)
               : intl.formatMessage(tableToolbarMessages.noResultsFound)
             }
-            Icon={ SearchIcon }
+            icon={ isEmpty(filterValue) ? CubesIcon : SearchIcon }
             PrimaryAction={ () =>
               isEmpty(filterValue) ? noRequestsMessage() : (
                 <Button onClick={ clearFilters } variant="link" ouiaId={ `clear-filter-requests` }>
@@ -222,6 +222,7 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
                 ? ''
                 : intl.formatMessage(tableToolbarMessages.clearAllFiltersDescription)
             }
+            isSearch={ !isEmpty(filterValue) }
           />
         ) }
         activeFiltersConfig={ {

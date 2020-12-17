@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useReducer, useRef } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button, Checkbox } from '@patternfly/react-core';
-import { SearchIcon } from '@patternfly/react-icons';
+import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import { truncate, cellWidth } from '@patternfly/react-table';
 import { fetchWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
@@ -23,7 +23,7 @@ import formMessages from '../../messages/form.messages';
 import tableToolbarMessages from '../../messages/table-toolbar.messages';
 import EditWorkflow from './edit-workflow-modal';
 import WorkflowTableContext from './workflow-table-context';
-
+import isEmpty from 'lodash/isEmpty';
 const columns = (intl, selectedAll, selectAll) => [
   { title: '', transforms: [ cellWidth(1) ]},
   { title: <Checkbox onChange={ selectAll } isChecked={ selectedAll } id="select-all"/>, transforms: [ cellWidth(1) ]},
@@ -251,7 +251,7 @@ const Workflows = () => {
                 ? intl.formatMessage(worfklowMessages.noApprovalProcesses)
                 : intl.formatMessage(tableToolbarMessages.noResultsFound)
               }
-              Icon={ SearchIcon }
+              icon={ isEmpty(filterValue) ? CubesIcon : SearchIcon }
               PrimaryAction={ () =>
                 filterValue !== '' ? (
                   <Button onClick={ () => handleFilterChange('') } variant="link">
@@ -264,6 +264,7 @@ const Workflows = () => {
                   ? intl.formatMessage(worfklowMessages.noApprovalProcesses)
                   : intl.formatMessage(tableToolbarMessages.clearAllFiltersDescription)
               }
+              isSearch={ !isEmpty(filterValue) }
             />
           ) }
           activeFiltersConfig={ {
