@@ -9,16 +9,14 @@ const InitialChips = ({ name, label }) => {
   } = useFieldApi({ name });
 
   const handleRemove = (id) => {
-    console.log('debug handleRemove: id, value', id, value);
     onChange(value.filter((item) => item.value !== id));
     if (value?.length === 0) {
       return null;
     }
   };
 
-  console.log('Initial chips: value, name, label', value, name, label);
   return (
-    <FormGroup fieldId={ name } label={ label }>
+    value && value.length ? <FormGroup fieldId={ name } label={ label }>
       <ChipGroup>
         { value.map(({ label, value }) => (
           <Chip key={ value.value } onClick={ () => handleRemove(value) }>
@@ -26,7 +24,7 @@ const InitialChips = ({ name, label }) => {
           </Chip>
         )) }
       </ChipGroup>
-    </FormGroup>
+    </FormGroup> : ''
   );
 };
 

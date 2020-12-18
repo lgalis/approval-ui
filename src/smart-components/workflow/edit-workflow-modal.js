@@ -59,10 +59,10 @@ const EditWorkflow = () => {
 
   const onSave = ({ group_refs = [], description = '', ...values }) => {
     onCancel();
-    console.log('Debug onSave - values', values);
-    const groups = values.current_groups.concat(group_refs.filter((item) => values.current_groups.indexOf(item) < 0));
+    const groups = values.current_groups ?
+      values.current_groups.concat(group_refs?.filter((item) => values.current_groups.indexOf(item) < 0)) : group_refs;
     const workflowData = { ...values, description, group_refs: groups.map(group => ({ name: group.label, uuid: group.value })) };
-
+    delete workflowData.current_groups;
     return dispatch(updateWorkflow(workflowData, intl))
     .then(() => dispatch(fetchWorkflows()));
   };
