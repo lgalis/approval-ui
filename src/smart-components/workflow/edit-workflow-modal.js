@@ -34,7 +34,7 @@ const prepareInitialValues = (wfData) => {
   const groupOptions = wfData.group_refs.map((group) =>
     ({ label: group.name, value: group.uuid })
   );
-  return { ...wfData, current_groups: groupOptions };
+  return { ...wfData, group_refs: [], current_groups: groupOptions };
 };
 
 const EditWorkflow = () => {
@@ -59,8 +59,9 @@ const EditWorkflow = () => {
 
   const onSave = ({ group_refs = [], description = '', ...values }) => {
     onCancel();
-
-    const workflowData = { ...values, description, group_refs: group_refs.map(group => ({ name: group.label, uuid: group.value })) };
+    console.log('Debug onSave - values', values);
+    const groups = values.current_groups.concat(group_refs.filter((item) => values.current_groups.indexOf(item) < 0));
+    const workflowData = { ...values, description, group_refs: groups.map(group => ({ name: group.label, uuid: group.value })) };
 
     return dispatch(updateWorkflow(workflowData, intl))
     .then(() => dispatch(fetchWorkflows()));
