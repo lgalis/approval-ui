@@ -11,7 +11,7 @@ const formMessages = defineMessages({
   },
   setGroups: {
     id: 'formMessages.setGroups',
-    defaultMessage: 'Set groups'
+    defaultMessage: 'Add groups'
   },
   enterInfo: {
     id: 'formMessages.enterInfo',
@@ -48,6 +48,10 @@ const formMessages = defineMessages({
   create: {
     id: 'formMessages.create',
     defaultMessage: 'Create'
+  },
+  existingGroupsMessage: {
+    id: 'formMessages.existingGroups',
+    defaultMessage: 'Current groups'
   }
 });
 

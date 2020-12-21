@@ -14,6 +14,7 @@ import { RBAC_API_BASE, APPROVAL_API_BASE } from '../../../../utilities/constant
 import * as wfHelper from '../../../../helpers/workflow/workflow-helper';
 import { Button } from '@patternfly/react-core';
 import routes from '../../../../constants/routes';
+import { Chip } from '@patternfly/react-core';
 
 describe('<EditWorkflow />', () => {
   let initialProps;
@@ -104,7 +105,7 @@ describe('<EditWorkflow />', () => {
 
     expect(wrapper.find('input').first().props().value).toEqual(initialState.workflowReducer.workflows.data[0].name);
     expect(wrapper.find('textarea').first().props().value).toEqual(initialState.workflowReducer.workflows.data[0].description);
-    expect(wrapper.find('Select').last().props().value).toEqual([{ label: 'some new group', value: '467' }]);
+    expect(wrapper.find(Chip).last().props().children).toEqual('some new group');
   });
 
   it('should fetch data from api and submit the form', async () => {
@@ -153,7 +154,7 @@ describe('<EditWorkflow />', () => {
 
     expect(wrapper.find('input').first().props().value).toEqual(workflow.name);
     expect(wrapper.find('textarea').first().props().value).toEqual(workflow.description);
-    expect(wrapper.find('Select').last().props().value).toEqual([{ label: 'SampleWorkflow', value: '123' }]);
+    expect(wrapper.find(Chip).last().props().children).toEqual('SampleWorkflow');
 
     await act(async () => {
       const name = wrapper.find('input').first();
