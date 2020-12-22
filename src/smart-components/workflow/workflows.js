@@ -4,7 +4,7 @@ import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button, Checkbox } from '@patternfly/react-core';
 import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import { truncate, cellWidth } from '@patternfly/react-table';
-import {clearFilterValueWorkflows, fetchWorkflows, setFilterValueWorkflows} from '../../redux/actions/workflow-actions';
+import { clearFilterValueWorkflows, fetchWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
@@ -24,7 +24,7 @@ import tableToolbarMessages from '../../messages/table-toolbar.messages';
 import EditWorkflow from './edit-workflow-modal';
 import WorkflowTableContext from './workflow-table-context';
 import isEmpty from 'lodash/isEmpty';
-import {clearFilterValueRequests} from '../../redux/actions/request-actions';
+
 const columns = (intl, selectedAll, selectAll) => [
   { title: '', transforms: [ cellWidth(1) ]},
   { title: <Checkbox onChange={ selectAll } isChecked={ selectedAll } id="select-all"/>, transforms: [ cellWidth(1) ]},
