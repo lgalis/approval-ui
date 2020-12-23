@@ -67,7 +67,7 @@ const finishUpdatingWorkflow = (state) => ({
 
 const clearFilterValue = (state) => ({
   ...state,
-  filterValue: {}
+  filterValue: ''
 });
 
 export default {

@@ -152,20 +152,21 @@ const Workflows = () => {
     stateDispatch({ type: 'setRows', payload: createRows(data) });
   }, [ data ]);
 
+  const clearFilters = () => {
+    stateDispatch({ type: 'clearFilters' });
+    dispatch(clearFilterValueWorkflows());
+    return updateWorkflows(meta);
+  };
+
   const handleFilterChange = (value) => {
-    stateDispatch({ type: 'setFilterValue', payload: value });
+    (!value || value === '') ? clearFilters() :
+      stateDispatch({ type: 'setFilterValue', payload: value });
     debouncedFilter(
       value,
       dispatch,
       (isFiltering) => stateDispatch({ type: 'setFilteringFlag', payload: isFiltering }),
       { ...meta, offset: 0 }
     );
-  };
-
-  const clearFilters = () => {
-    stateDispatch({ type: 'clearFilters' });
-    dispatch(clearFilterValueWorkflows());
-    return updateWorkflows();
   };
 
   const routes = () => <Fragment>
