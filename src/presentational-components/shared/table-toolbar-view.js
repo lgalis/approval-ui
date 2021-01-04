@@ -78,7 +78,7 @@ export const TableToolbarView = ({
   return (
     <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
       { routes() }
-      { (rows.length !== 0 || filterValue) && renderToolbar(isLoading) }
+      { (rows.length !== 0 || filterValue || isLoading) && renderToolbar(isLoading) }
       { isLoading && <DataListLoader/> }
       { !isLoading && rows.length === 0 ? (
         renderEmptyState()

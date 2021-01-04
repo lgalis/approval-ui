@@ -4,7 +4,7 @@ import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button, Checkbox } from '@patternfly/react-core';
 import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
 import { truncate, cellWidth } from '@patternfly/react-table';
-import { fetchWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
+import { clearFilterValueWorkflows, fetchWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
 import RemoveWorkflow from './remove-workflow-modal';
 import { createRows } from './workflow-table-helpers';
@@ -24,6 +24,7 @@ import tableToolbarMessages from '../../messages/table-toolbar.messages';
 import EditWorkflow from './edit-workflow-modal';
 import WorkflowTableContext from './workflow-table-context';
 import isEmpty from 'lodash/isEmpty';
+
 const columns = (intl, selectedAll, selectAll) => [
   { title: '', transforms: [ cellWidth(1) ]},
   { title: <Checkbox onChange={ selectAll } isChecked={ selectedAll } id="select-all"/>, transforms: [ cellWidth(1) ]},
@@ -111,6 +112,8 @@ export const workflowsListState = (state, action) => {
         ...state,
         isFiltering: action.payload
       };
+    case 'clearFilters':
+      return { ...state, filterValue: '', isFetching: true };
     default:
       return state;
   }
@@ -149,8 +152,15 @@ const Workflows = () => {
     stateDispatch({ type: 'setRows', payload: createRows(data) });
   }, [ data ]);
 
+  const clearFilters = () => {
+    stateDispatch({ type: 'clearFilters' });
+    dispatch(clearFilterValueWorkflows());
+    return updateWorkflows(meta);
+  };
+
   const handleFilterChange = (value) => {
-    stateDispatch({ type: 'setFilterValue', payload: value });
+    (!value || value === '') ? clearFilters() :
+      stateDispatch({ type: 'setFilterValue', payload: value });
     debouncedFilter(
       value,
       dispatch,
@@ -254,7 +264,7 @@ const Workflows = () => {
               icon={ isEmpty(filterValue) ? CubesIcon : SearchIcon }
               PrimaryAction={ () =>
                 filterValue !== '' ? (
-                  <Button onClick={ () => handleFilterChange('') } variant="link">
+                  <Button onClick={ () => clearFilters() } variant="link">
                     { intl.formatMessage(tableToolbarMessages.clearAllFilters) }
                   </Button>
                 ) : null
