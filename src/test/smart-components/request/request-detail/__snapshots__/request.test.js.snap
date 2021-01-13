@@ -275,7 +275,49 @@ exports[`<Request /> should render correctly 1`] = `
                           "display": "flex",
                         }
                       }
-                    />
+                    >
+                      <Link
+                        id="comment-111"
+                        to={
+                          Object {
+                            "pathname": "/request/comment",
+                            "search": "request=111",
+                          }
+                        }
+                      >
+                        <LinkAnchor
+                          href="/request/comment?request=111"
+                          id="comment-111"
+                          navigate={[Function]}
+                        >
+                          <a
+                            href="/request/comment?request=111"
+                            id="comment-111"
+                            onClick={[Function]}
+                          >
+                            <Button
+                              aria-label="Comment"
+                              ouiaId="comment-request-111"
+                              variant="secondary"
+                            >
+                              <button
+                                aria-disabled={false}
+                                aria-label="Comment"
+                                className="pf-c-button pf-m-secondary"
+                                data-ouia-component-id="comment-request-111"
+                                data-ouia-component-type="PF4/Button"
+                                data-ouia-safe={true}
+                                disabled={false}
+                                role={null}
+                                type="button"
+                              >
+                                Comment
+                              </button>
+                            </Button>
+                          </a>
+                        </LinkAnchor>
+                      </Link>
+                    </div>
                   </RequestActions>
                 </div>
               </DataListCell>
