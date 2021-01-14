@@ -100,7 +100,7 @@ const ActionModal = ({
         </TextContent>
 
         <FormRenderer
-          schema={ createRequestCommentSchema(actionType === 'Deny', intl) }
+          schema={ createRequestCommentSchema(actionType === 'Deny' || actionType === 'Comment', intl) }
           onSubmit={ onSubmit }
           onCancel={ onCancel }
           templateProps={ { submitLabel: intl.formatMessage(actionTypeToSubmitLabel(actionType)) } }
