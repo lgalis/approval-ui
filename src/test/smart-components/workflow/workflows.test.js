@@ -9,7 +9,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { IntlProvider } from 'react-intl';
 import Workflows, { workflowsListState } from '../../../smart-components/workflow/workflows';
 import workflowReducer, { workflowsInitialState } from '../../../redux/reducers/workflow-reducer';
-import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
+import notificationsMiddleware from '@redhat-cloud-services/frontend-components-notifications/notificationsMiddleware';
 import { groupsInitialState } from '../../../redux/reducers/group-reducer';
 import { APPROVAL_API_BASE, RBAC_API_BASE } from '../../../utilities/constants';
 import RemoveWorkflowModal from '../../../smart-components/workflow/remove-workflow-modal';

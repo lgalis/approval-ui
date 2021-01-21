@@ -1,8 +1,8 @@
 
 import promiseMiddleware from 'redux-promise-middleware';
 import ReducerRegistry, { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/cjs/ReducerRegistry';
-import notifications from '@redhat-cloud-services/frontend-components-notifications/cjs/notifications';
-import notificationsMiddleware from '@redhat-cloud-services/frontend-components-notifications/cjs/notificationsMiddleware';
+import { notificationsReducer } from '@redhat-cloud-services/frontend-components-notifications/redux';
+import notificationsMiddleware from '@redhat-cloud-services/frontend-components-notifications/notificationsMiddleware';
 
 import thunk from 'redux-thunk';
 import requestReducer, { requestsInitialState } from '../redux/reducers/request-reducer';
@@ -36,7 +36,7 @@ const getStore = (middlewares = []) => {
     requestReducer: applyReducerHash(requestReducer, requestsInitialState),
     workflowReducer: applyReducerHash(workflowReducer, workflowsInitialState),
     groupReducer: applyReducerHash(groupReducer, groupsInitialState),
-    notifications
+    notifications: notificationsReducer
   });
 
   return registry.getStore();
