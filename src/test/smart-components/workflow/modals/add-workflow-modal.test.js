@@ -7,7 +7,7 @@ import { act } from 'react-dom/test-utils';
 
 import { MemoryRouter, Route } from 'react-router-dom';
 import promiseMiddleware from 'redux-promise-middleware';
-import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications/';
+import notificationsMiddleware from '@redhat-cloud-services/frontend-components-notifications/notificationsMiddleware';
 import AddWorkflow from '../../../../smart-components/workflow/add-workflow-modal';
 import { IntlProvider } from 'react-intl';
 import { RBAC_API_BASE } from '../../../../utilities/constants';

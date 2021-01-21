@@ -7,7 +7,7 @@ import { RBAC_API_BASE } from '../utilities/constants';
 import { APPROVAL_ADMINISTRATOR_ROLE } from '../helpers/shared/helpers';
 import { AppPlaceholder } from '../presentational-components/shared/loader-placeholders';
 import { BrowserRouter } from 'react-router-dom';
-import NotificationsPortal from '@redhat-cloud-services/frontend-components-notifications/cjs/NotificationPortal';
+import NotificationsPortal from '@redhat-cloud-services/frontend-components-notifications/NotificationPortal';
 import { Main } from '@redhat-cloud-services/frontend-components/components/cjs/Main';
 
 jest.mock('../Routes', () => ({

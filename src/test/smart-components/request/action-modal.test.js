@@ -6,7 +6,7 @@ import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
-import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
+import notificationsMiddleware from '@redhat-cloud-services/frontend-components-notifications/notificationsMiddleware';
 import ActionModal from '../../../smart-components/request/action-modal';
 import { APPROVAL_API_BASE } from '../../../utilities/constants';
 import routes from '../../../constants/routes';
