@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useReducer, useRef } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { Route, Link, useHistory } from 'react-router-dom';
 import { ToolbarGroup, ToolbarItem, Button, Checkbox } from '@patternfly/react-core';
-import { CubesIcon, SearchIcon } from '@patternfly/react-icons';
+import { PlusCircleIcon, SearchIcon } from '@patternfly/react-icons';
 import { truncate, cellWidth } from '@patternfly/react-table';
 import { clearFilterValueWorkflows, fetchWorkflows, setFilterValueWorkflows } from '../../redux/actions/workflow-actions';
 import AddWorkflow from './add-workflow-modal';
@@ -261,13 +261,21 @@ const Workflows = () => {
                 ? intl.formatMessage(worfklowMessages.noApprovalProcesses)
                 : intl.formatMessage(tableToolbarMessages.noResultsFound)
               }
-              icon={ isEmpty(filterValue) ? CubesIcon : SearchIcon }
+              icon={ isEmpty(filterValue) ? PlusCircleIcon : SearchIcon }
               PrimaryAction={ () =>
                 filterValue !== '' ? (
                   <Button onClick={ () => clearFilters() } variant="link">
                     { intl.formatMessage(tableToolbarMessages.clearAllFilters) }
                   </Button>
-                ) : null
+                ) : <Link id="create-workflow-link" to={ { pathname: routesLinks.workflows.add } }>
+                  <Button
+                    ouiaId={ 'create-workflow-link' }
+                    variant="primary"
+                    aria-label={ intl.formatMessage(worfklowMessages.createApprovalProcess) }
+                  >
+                    { intl.formatMessage(worfklowMessages.createApprovalProcess) }
+                  </Button>
+                </Link>
               }
               description={
                 filterValue === ''
