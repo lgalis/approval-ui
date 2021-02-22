@@ -25,6 +25,10 @@ const worfklowMessages = defineMessages({
     id: 'worfklowMessages.noApprovalProcesses',
     defaultMessage: 'No approval processes'
   },
+  createApprovalProcess: {
+    id: 'worfklowMessages.createApprovalProcess',
+    defaultMessage: 'Create approval process'
+  },
   sequence: {
     id: 'workflowMessages.sequence',
     defaultMessage: 'Sequence'
