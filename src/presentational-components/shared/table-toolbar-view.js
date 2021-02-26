@@ -74,7 +74,6 @@ export const TableToolbarView = ({
       activeFiltersConfig={ activeFiltersConfig }
     />
   );
-  console.log('Debug - activeFiltersConfig, activeFiltersConfig.filters.length', activeFiltersConfig, activeFiltersConfig.filters.length);
   return (
     <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
       { routes() }
