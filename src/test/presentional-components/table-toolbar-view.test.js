@@ -6,6 +6,7 @@ import { IntlProvider } from 'react-intl';
 
 import { TableToolbarView as TableToolbarViewOriginal } from '../../presentational-components/shared/table-toolbar-view';
 import { DataListLoader } from '../../presentational-components/shared/loader-placeholders';
+import { TextInput, Chip } from '@patternfly/react-core';
 
 describe('<TableToolbarView />', () => {
   let initialProps;
@@ -24,7 +25,8 @@ describe('<TableToolbarView />', () => {
         limit: 50,
         offset: 0,
         count: 51
-      }
+      },
+      activeFiltersConfig: { filters: []}
     };
   });
 
@@ -68,6 +70,25 @@ describe('<TableToolbarView />', () => {
     expect(wrapper.find(Table)).toHaveLength(0);
     expect(wrapper.find(TableHeader)).toHaveLength(0);
     expect(wrapper.find(TableBody)).toHaveLength(0);
+    done();
+  });
+
+  it('should display the filter box state', async done => {
+    let wrapper;
+    const renderEmptyState = jest.fn();
+    await act(async() => {
+      wrapper = mount(<TableToolbarView { ...initialProps } activeFiltersConfig={ { filters: [{ category: 'Name',
+        chips: [{ name: 'val', key: 'val' }],
+        key: 'name' }]} }
+      isLoading={ false } renderEmptyState={ renderEmptyState } />);
+    });
+
+    act(() => {
+      wrapper.update();
+    });
+    expect(wrapper.find(TextInput)).toHaveLength(1);
+    expect(wrapper.find(Chip)).toHaveLength(1);
+    expect(wrapper.find(Table)).toHaveLength(0);
     done();
   });
 
