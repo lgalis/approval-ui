@@ -74,13 +74,13 @@ export const TableToolbarView = ({
       activeFiltersConfig={ activeFiltersConfig }
     />
   );
-
+  console.log('Debug - activeFiltersConfig, activeFiltersConfig.filters.length', activeFiltersConfig, activeFiltersConfig.filters.length);
   return (
     <Section type="content" page-type={ `tab-${titlePlural}` } id={ `tab-${titlePlural}` }>
       { routes() }
-      { (rows.length !== 0 || filterValue || isLoading) && renderToolbar(isLoading) }
+      { (rows.length !== 0 || activeFiltersConfig.filters.length > 0) && renderToolbar(isLoading) }
       { isLoading && <DataListLoader/> }
-      { !isLoading && rows.length === 0 ? (
+      { (rows.length === 0 && !isLoading) ? (
         renderEmptyState()
       ) :
         <Fragment>
