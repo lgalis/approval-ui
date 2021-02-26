@@ -126,6 +126,8 @@ const RequestsList = ({ persona, indexpath, actionResolver }) => {
   </Fragment>;
 
   const resetList = () => {
+    stateDispatch({ type: 'clearFilters' });
+    dispatch(clearFilterValueRequests());
     dispatch(resetRequestList());
   };
 
